@@ -2,7 +2,7 @@
 
 绿联 UGOS Pro 应用打包 monorepo，参考 [conversun/fnos-apps](https://github.com/conversun/fnos-apps)（飞牛OS同类项目）的 CI 架构改造而来，用 GitHub Actions 自动跟踪各应用的上游新版本、下载/构建、`ugcli` 打包、发布 GitHub Release。
 
-包含：metatube（元数据刮削）、qbittorrent（Enhanced Edition）、natfrp（SakuraFrp 内网穿透客户端）、lucky（网络工具箱：DDNS/反代/端口转发等）、magicpush（多渠道消息推送平台）。这些原本是桌面上各自独立的手工维护项目，现在合并成一个仓库统一自动化。
+包含：metatube（元数据刮削）、qbittorrent（Enhanced Edition）、natfrp（SakuraFrp 内网穿透客户端）、lucky（网络工具箱：DDNS/反代/端口转发等）、magicpush（多渠道消息推送平台）、picoclaw（Sipeed 超轻量个人 AI Agent）。这些原本是桌面上各自独立的手工维护项目，现在合并成一个仓库统一自动化。
 
 ## 目录结构
 
@@ -32,6 +32,7 @@ apps/<app>/com.xxx.xxx/
 | natfrp | 无版本化URL，无GitHub仓库，`nya.globalslb.net` 的 `/latest/` 目录永远指向最新 | 用 HTTP `Last-Modified` 响应头转成 `YYYY.M.D` 当伪版本号 | 没法用"查最新release"方式探测新版本，细节见 `scripts/apps/natfrp/get-latest-version.sh` 注释 |
 | lucky | `gdy666/lucky` | GitHub Releases API，tag 格式 `vX.Y.Z` | 官方静态编译二进制直接打包；start.sh 是收养式守护循环（扛 Lucky 网页里"重启"的自我重启行为）+ TMPDIR 重定向（沙箱无 /tmp） |
 | magicpush | `magiccode1412/magicpush` | 上游无 releases 无 tag，读 main 分支 `version.json` 的 `.version` | Node.js 应用：CI 里现场 vite 构建前端、npm 装服务端生产依赖（`--ignore-scripts`）、better-sqlite3 按目标架构直接下载官方预编译 `.node`（带 ELF 架构校验）、捆绑 nodejs.org 官方 Node 20 运行时 |
+| picoclaw | `sipeed/picoclaw` | GitHub Releases API，tag 格式 `vX.Y.Z` | 官方静态编译二进制（picoclaw + picoclaw-launcher）直接打包，带 ELF 架构校验；tab 应用直连 launcher 自带 WebUI 管理台（18800）；start.sh 用 `PICOCLAW_HOME` 把全部数据钉到应用 data 目录 + TMPDIR 重定向（沙箱无 /tmp）+ 崩溃循环保护 |
 
 ## 本地验证过什么（不需要真机、不需要GitHub仓库）
 
