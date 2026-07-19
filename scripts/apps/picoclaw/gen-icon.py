@@ -1,112 +1,151 @@
 #!/usr/bin/env python3
-"""Generate rootfs_common/icon.png for the PicoClaw app.
+"""Generate rootfs_common/icon.png for the PicoClaw app from the official logo.
 
-Pure stdlib (zlib + struct) PNG encoder — no PIL/ImageMagick needed.
-Design: light rounded card, orange paw print with claw tips ("Claw"),
-white lightning bolt on the palm pad (ultra-light / fast).
-Rendered at 4x supersampling for anti-aliasing.
+Pure stdlib (zlib + struct) PNG decode + encode — no PIL/ImageMagick needed.
+Reads logo.png (official PicoClaw crawfish mascot, RGBA), crops to its
+content alpha bounding box, bilinearly upscales, and composites it centered
+onto a light rounded card. (Never rasterize via qlmanage — it ignores
+declared scaling; see the UGOS dev notes.)
+
+Usage: gen-icon.py [output.png]   (logo.png is expected next to this script)
 """
+import os
 import struct
 import sys
 import zlib
 
 SIZE = 256
-SS = 4  # supersample factor
+SS = 3  # supersample factor for card-edge anti-aliasing
 
-# Colors (RGBA)
-BG = (252, 246, 238, 255)
-BORDER = (236, 226, 214, 255)
-ORANGE = (245, 122, 32, 255)
-WHITE = (255, 255, 255, 255)
+# Card design (same family as the other apps in this repo)
+BG = (247, 249, 252, 255)
+BORDER = (228, 233, 240, 255)
 CLEAR = (0, 0, 0, 0)
-
-# Geometry in 256-space
 CARD_MARGIN = 8.0
 CARD_RADIUS = 56.0
 BORDER_W = 2.0
 
-# Palm pad: ellipse
-PAD_CX, PAD_CY = 128.0, 163.0
-PAD_A, PAD_B = 52.0, 42.0
-
-# Toes: (cx, cy, r) — center toe higher, side toes lower and splayed
-TOES = [(70.0, 112.0, 24.0), (128.0, 92.0, 25.0), (186.0, 112.0, 24.0)]
-
-# Claw tips: wide triangles growing out of each toe circle (base spans the
-# toe's diameter at its center), so toe+claw merge into one pointed shape.
-CLAW_LEN = 22.0
-
-# Lightning bolt on the palm pad (local units ~78x105, scaled + centered)
-_BOLT = [(45, 0), (68, 0), (50, 42), (78, 42), (28, 105), (38, 58), (15, 58)]
-BOLT_SCALE = 0.62
-_bw = 78 * BOLT_SCALE
-_bh = 105 * BOLT_SCALE
-BOLT_OX = PAD_CX - _bw / 2 - 2.0
-BOLT_OY = PAD_CY - _bh / 2
-BOLT_PTS = [(x * BOLT_SCALE + BOLT_OX, y * BOLT_SCALE + BOLT_OY) for x, y in _BOLT]
+CONTENT = 182.0  # target size (px) of the logo's content bbox on the card
+CX = CY = SIZE / 2.0
 
 
-def _claw_tris():
-    tris = []
-    # Claw directions: mostly upward, splayed slightly outward (y axis is
-    # down, so "up" is negative y) — radial-from-pad looks too horizontal
-    # for the side toes.
-    dirs = [(-0.42, -0.91), (0.0, -1.0), (0.42, -0.91)]
-    for (cx, cy, r), (ux, uy) in zip(TOES, dirs):
-        px, py = -uy, ux                 # perpendicular
-        half_w = r - 2.0
-        tip = (cx + ux * (r + CLAW_LEN), cy + uy * (r + CLAW_LEN))
-        b1 = (cx + px * half_w, cy + py * half_w)
-        b2 = (cx - px * half_w, cy - py * half_w)
-        tris.append([tip, b1, b2])
-    return tris
+def decode_png_rgba(path):
+    d = open(path, "rb").read()
+    assert d[:8] == b"\x89PNG\r\n\x1a\n", "not a PNG"
+    pos, w, h, idat = 8, 0, 0, b""
+    while pos < len(d):
+        (ln,) = struct.unpack(">I", d[pos:pos + 4])
+        tag = d[pos + 4:pos + 8]
+        data = d[pos + 8:pos + 8 + ln]
+        if tag == b"IHDR":
+            w, h, bitd, ct, comp, filt, inter = struct.unpack(">IIBBBBB", data)
+            assert (bitd, ct, inter) == (8, 6, 0), \
+                f"expected 8-bit RGBA non-interlaced, got depth={bitd} colortype={ct} interlace={inter}"
+        elif tag == b"IDAT":
+            idat += data
+        elif tag == b"IEND":
+            break
+        pos += 12 + ln
+    raw = zlib.decompress(idat)
+    stride = w * 4
+    px = bytearray(w * h * 4)
+    prev = bytearray(stride)
+    off = 0
+    for y in range(h):
+        f = raw[off]
+        line = bytearray(raw[off + 1:off + 1 + stride])
+        off += 1 + stride
+        if f == 1:  # Sub
+            for i in range(4, stride):
+                line[i] = (line[i] + line[i - 4]) & 0xFF
+        elif f == 2:  # Up
+            for i in range(stride):
+                line[i] = (line[i] + prev[i]) & 0xFF
+        elif f == 3:  # Average
+            for i in range(stride):
+                a = line[i - 4] if i >= 4 else 0
+                line[i] = (line[i] + ((a + prev[i]) >> 1)) & 0xFF
+        elif f == 4:  # Paeth
+            for i in range(stride):
+                a = line[i - 4] if i >= 4 else 0
+                b = prev[i]
+                c = prev[i - 4] if i >= 4 else 0
+                p = a + b - c
+                pa, pb, pc = abs(p - a), abs(p - b), abs(p - c)
+                pr = a if (pa <= pb and pa <= pc) else (b if pb <= pc else c)
+                line[i] = (line[i] + pr) & 0xFF
+        px[y * stride:(y + 1) * stride] = line
+        prev = line
+    return w, h, px
 
 
-CLAWS = _claw_tris()
+LOGO_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "logo.png")
+LW, LH, LPX = decode_png_rgba(LOGO_PATH)
+
+# Content alpha bounding box (don't trust canvas centering — logos often
+# have asymmetric padding).
+x0, y0, x1, y1 = LW, LH, -1, -1
+for y in range(LH):
+    row = y * LW * 4
+    for x in range(LW):
+        if LPX[row + x * 4 + 3] > 8:
+            if x < x0: x0 = x
+            if x > x1: x1 = x
+            if y < y0: y0 = y
+            if y > y1: y1 = y
+assert x1 >= x0 and y1 >= y0, "logo is fully transparent?"
+BW, BH = x1 - x0 + 1, y1 - y0 + 1
+SCALE = CONTENT / max(BW, BH)
+DW, DH = BW * SCALE, BH * SCALE  # drawn size on card
 
 
-def in_poly(pts, x, y):
-    inside = False
-    n = len(pts)
-    for i in range(n):
-        x1, y1 = pts[i]
-        x2, y2 = pts[(i + 1) % n]
-        if (y1 > y) != (y2 > y):
-            if x < (x2 - x1) * (y - y1) / (y2 - y1) + x1:
-                inside = not inside
-    return inside
+def logo_sample(u, v):
+    """Bilinear RGBA sample of the logo at source-space float coords."""
+    if u < 0: u = 0.0
+    if v < 0: v = 0.0
+    if u > LW - 1: u = float(LW - 1)
+    if v > LH - 1: v = float(LH - 1)
+    ix, iy = int(u), int(v)
+    fx, fy = u - ix, v - iy
+    ix2 = min(ix + 1, LW - 1)
+    iy2 = min(iy + 1, LH - 1)
+    out = []
+    for c in range(4):
+        p00 = LPX[(iy * LW + ix) * 4 + c]
+        p10 = LPX[(iy * LW + ix2) * 4 + c]
+        p01 = LPX[(iy2 * LW + ix) * 4 + c]
+        p11 = LPX[(iy2 * LW + ix2) * 4 + c]
+        out.append((p00 * (1 - fx) + p10 * fx) * (1 - fy)
+                   + (p01 * (1 - fx) + p11 * fx) * fy)
+    return out
 
 
 def card_sdf(x, y):
     """Signed distance to rounded-rect edge (negative = inside)."""
     hw = (SIZE - 2 * CARD_MARGIN) / 2
-    cx, cy = SIZE / 2, SIZE / 2
-    qx = abs(x - cx) - (hw - CARD_RADIUS)
-    qy = abs(y - cy) - (hw - CARD_RADIUS)
+    qx = abs(x - CX) - (hw - CARD_RADIUS)
+    qy = abs(y - CY) - (hw - CARD_RADIUS)
     ax, ay = max(qx, 0.0), max(qy, 0.0)
     outside = (ax * ax + ay * ay) ** 0.5
     return outside + min(max(qx, qy), 0.0) - CARD_RADIUS
 
 
 def sample(x, y):
-    # z-order top -> down
-    if in_poly(BOLT_PTS, x, y):
-        return WHITE
-    dx, dy = (x - PAD_CX) / PAD_A, (y - PAD_CY) / PAD_B
-    if dx * dx + dy * dy <= 1.0:
-        return ORANGE
-    for cx, cy, r in TOES:
-        if (x - cx) ** 2 + (y - cy) ** 2 <= r * r:
-            return ORANGE
-    for tri in CLAWS:
-        if in_poly(tri, x, y):
-            return ORANGE
     sd = card_sdf(x, y)
-    if sd <= -BORDER_W:
-        return BG
-    if sd <= 0:
-        return BORDER
-    return CLEAR
+    if sd > 0:
+        return CLEAR
+    base = BG if sd <= -BORDER_W else BORDER
+    # Map card coords -> logo source coords (content bbox centered at CX,CY)
+    lx = x0 + (x - (CX - DW / 2)) / SCALE
+    ly = y0 + (y - (CY - DH / 2)) / SCALE
+    if -1 <= lx <= LW and -1 <= ly <= LH:
+        r, g, b, a = logo_sample(lx, ly)
+        if a > 0:
+            af = a / 255.0
+            return (r * af + base[0] * (1 - af),
+                    g * af + base[1] * (1 - af),
+                    b * af + base[2] * (1 - af), 255)
+    return base
 
 
 def main(out_path):
@@ -116,12 +155,12 @@ def main(out_path):
     for py in range(SIZE):
         row = bytearray()
         for px in range(SIZE):
-            rs = gs = bs = as_ = 0
+            rs = gs = bs = as_ = 0.0
             for sy in range(SS):
                 for sx in range(SS):
                     c = sample(px + (sx + 0.5) * inv, py + (sy + 0.5) * inv)
                     rs += c[0]; gs += c[1]; bs += c[2]; as_ += c[3]
-            row += bytes((rs // n2, gs // n2, bs // n2, as_ // n2))
+            row += bytes((int(rs / n2), int(gs / n2), int(bs / n2), int(as_ / n2)))
         rows.append(bytes(row))
 
     raw = b"".join(b"\x00" + r for r in rows)
@@ -136,7 +175,8 @@ def main(out_path):
            + chunk(b"IEND", b""))
     with open(out_path, "wb") as f:
         f.write(png)
-    print(f"wrote {out_path}: {len(png)} bytes")
+    print(f"wrote {out_path}: {len(png)} bytes "
+          f"(logo bbox {BW}x{BH} @ scale {SCALE:.3f} -> {DW:.0f}x{DH:.0f})")
 
 
 if __name__ == "__main__":
