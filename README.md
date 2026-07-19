@@ -32,7 +32,7 @@ apps/<app>/com.xxx.xxx/
 | natfrp | 无版本化URL，无GitHub仓库，`nya.globalslb.net` 的 `/latest/` 目录永远指向最新 | 用 HTTP `Last-Modified` 响应头转成 `YYYY.M.D` 当伪版本号 | 没法用"查最新release"方式探测新版本，细节见 `scripts/apps/natfrp/get-latest-version.sh` 注释 |
 | lucky | `gdy666/lucky` | GitHub Releases API，tag 格式 `vX.Y.Z` | 官方静态编译二进制直接打包；start.sh 是收养式守护循环（扛 Lucky 网页里"重启"的自我重启行为）+ TMPDIR 重定向（沙箱无 /tmp） |
 | magicpush | `magiccode1412/magicpush` | 上游无 releases 无 tag，读 main 分支 `version.json` 的 `.version` | Node.js 应用：CI 里现场 vite 构建前端、npm 装服务端生产依赖（`--ignore-scripts`）、better-sqlite3 按目标架构直接下载官方预编译 `.node`（带 ELF 架构校验）、捆绑 nodejs.org 官方 Node 20 运行时 |
-| picoclaw | `sipeed/picoclaw` | GitHub Releases API，tag 格式 `vX.Y.Z` | 官方静态编译二进制（picoclaw + picoclaw-launcher）直接打包，带 ELF 架构校验；tab 应用直连 launcher 自带 WebUI 管理台（18800）；start.sh 用 `PICOCLAW_HOME` 把全部数据钉到应用 data 目录 + TMPDIR 重定向（沙箱无 /tmp）+ 崩溃循环保护 |
+| picoclaw | `sipeed/picoclaw` | GitHub Releases API，tag 格式 `vX.Y.Z` | 官方静态编译二进制（picoclaw + picoclaw-launcher）直接打包，带 ELF 架构校验；tab 应用直连 launcher 自带 WebUI 管理台（18800）；start.sh 用 `PICOCLAW_HOME` 把全部数据钉到应用 data 目录 + TMPDIR 重定向（沙箱无 /tmp）+ 崩溃循环保护；监听用 `-host 0.0.0.0` 而非 `-public`（沙箱解析不了 localhost，`-public` 会让 launcher 用主机名 localhost 探活 gateway 而全挂，显式 IPv4-any 绑定时探活走字面量 127.0.0.1） |
 
 ## 本地验证过什么（不需要真机、不需要GitHub仓库）
 
