@@ -11,7 +11,7 @@ APP_DIR="${INSTALL_DIR}/app"
 SERVER_DIR="${APP_DIR}/server"
 NODE_BIN="${INSTALL_DIR}/bin/node"
 
-WEBUI_PORT="${PORT:-3000}"
+WEBUI_PORT="${PORT:-23000}"
 
 mkdir -p "${DATA_DIR}" "${LOG_DIR}" "${CACHE_DIR}" 2>/dev/null
 

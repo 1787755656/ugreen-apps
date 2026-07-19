@@ -14,7 +14,7 @@ supports:
 
 # start_cmd 首段必须存在于 rootfs_<arch>/bin/
 start_cmd: bin/start.sh
-port: 3000
+port: 23000
 open_type: tab
 
 tag_types:
