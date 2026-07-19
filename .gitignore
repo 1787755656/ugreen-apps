@@ -10,6 +10,10 @@ apps/*/*/rootfs_arm64/
 # uploaded to GitHub Releases, never committed.
 apps/*/*/build_dir/
 
+# Locally packed upk files ready for manual install on the NAS — same
+# artifacts CI publishes to GitHub Releases, so never committed either.
+dist/
+
 .DS_Store
 
 # 打包成品只进 GitHub Releases，不进 git（根目录的本地手工构建产物）

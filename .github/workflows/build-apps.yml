@@ -16,7 +16,7 @@ on:
   workflow_dispatch:
     inputs:
       app:
-        description: "App slug to build (jellyfin, metatube, qbittorrent, natfrp, lucky, magicpush, adguardhome)"
+        description: "App slug to build (metatube, qbittorrent, natfrp, lucky, magicpush)"
         required: true
         type: string
       version:
