@@ -1,0 +1,16 @@
+# Backend binaries are downloaded/assembled fresh by CI
+# (scripts/apps/*/build.sh) into these directories — never commit them.
+# Keeps the repo small regardless of how many upstream releases we track
+# over time. See README.md for the reasoning (borrowed from conversun/fnos-apps,
+# whose .fpk output likewise never enters git — only GitHub Releases).
+apps/*/*/rootfs_amd64/
+apps/*/*/rootfs_arm64/
+
+# ugcli packaging output (upk files + intermediate tar/config) — only ever
+# uploaded to GitHub Releases, never committed.
+apps/*/*/build_dir/
+
+.DS_Store
+
+# 打包成品只进 GitHub Releases，不进 git（根目录的本地手工构建产物）
+*.upk

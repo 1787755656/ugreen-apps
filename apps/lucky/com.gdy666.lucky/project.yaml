@@ -1,0 +1,89 @@
+# ============================================================
+# Lucky — UGOS Pro 原生应用配置
+# 基于 gdy666/lucky 官方静态编译二进制 (自带 WebUI, 默认端口 16601)
+# ============================================================
+
+# 配置规范版本
+spec_version: "2.1"
+
+# 应用ID（上架后不可修改）
+app_id: com.gdy666.lucky
+
+# 应用版本号 x.y.z（打包时 --build 追加构建号）
+version: 2.27.2
+
+# 支持的 CPU 架构
+support_arch:
+  - amd64
+  - arm64
+
+# 支持的客户端类型
+supports:
+  - pc
+  - app
+
+# 启动命令：调用封装脚本（准备配置目录后 exec lucky -cd）
+start_cmd: bin/start.sh
+
+# WebUI 服务端口（Lucky 默认管理端口 16601，供系统探测启动状态；
+# 请勿在 Lucky 后台修改管理端口，否则应用图标将打不开管理页）
+port: 16601
+
+# 打开方式：Lucky 自带完整 WebUI，浏览器新标签直连
+open_type: tab
+
+# 应用类别
+tag_types:
+  - utility
+
+# 依赖的最低固件版本
+depend_fw_version: 1.13.0.0000
+
+# 允许用户在应用设置中授权访问共享/个人文件夹
+# （供 FTP/WebDAV/文件浏览 模块共享 NAS 目录使用，可授权多个）
+allow_add_access_path: true
+
+# 支持迁移安装目录
+support_migration: true
+
+# 声明权限：DDNS/内网穿透/反代必须联网；启动脚本与 cron/WOL 等模块需执行系统命令
+permissions:
+  - NETWORK.ACCESS_INTERNET
+  - SYSTEM.EXEC_SYSTEM_COMMAND
+
+# 开源合规信息（使用开源代码必填）
+license_agreement_link:
+  - https://github.com/gdy666/lucky/blob/master/LICENSE
+source_code_link:
+  - https://github.com/gdy666/lucky
+technical_support_link:
+  - https://github.com/gdy666/lucky/issues
+
+# 应用展示信息（多语言）
+i18n:
+  en-US:
+    name: Lucky
+    description: >-
+      Lucky — an all-in-one network toolbox: IPv6/IPv4 port forwarding,
+      reverse proxy, DDNS, Wake-on-LAN, STUN NAT traversal, cron tasks,
+      ACME certificates, FTP/WebDAV/file browser and more, with a built-in
+      Web UI. Default login: 666 / 666 — please change it after first login.
+      Note: running as a non-root app user, ports below 1024 cannot be bound.
+    author: gdy666
+    official: https://lucky666.cn
+    help: https://lucky666.cn
+    publisher: gdy666
+    publisher_link: https://github.com/gdy666
+  zh-CN:
+    name: Lucky
+    description: >-
+      Lucky —— 软硬路由公网神器/网络工具箱：IPv6/IPv4 端口转发、反向代理、
+      DDNS 动态域名、网页唤醒(WOL)、STUN 内网穿透、计划任务、ACME 证书自动申请、
+      FTP/WebDAV/文件浏览等，自带 Web 管理界面。默认登录账号 666，密码 666，
+      首次登录后请及时修改。注意：应用以普通用户运行，无法监听 1024 以下端口；
+      请勿在 Lucky 后台修改管理端口(16601)，否则应用图标将无法打开管理页。
+    author: gdy666
+    official: https://lucky666.cn
+    help: https://lucky666.cn
+    publisher: gdy666
+    publisher_link: https://github.com/gdy666
