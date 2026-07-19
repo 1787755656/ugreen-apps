@@ -1,0 +1,102 @@
+# ============================================================
+# PicoClaw — UGOS Pro 原生应用配置
+# 基于 sipeed/picoclaw 官方静态编译二进制
+# (picoclaw + picoclaw-launcher WebUI 管理台, 端口 18800)
+# ============================================================
+
+# 配置规范版本
+spec_version: "2.1"
+
+# 应用ID（上架后不可修改）
+app_id: com.sipeed.picoclaw
+
+# 应用版本号 x.y.z（打包时 --build 追加构建号）
+version: 0.3.1
+
+# 支持的 CPU 架构
+support_arch:
+  - amd64
+  - arm64
+
+# 支持的客户端类型
+supports:
+  - pc
+  - app
+
+# 启动命令：封装脚本（设 PICOCLAW_HOME/TMPDIR 后守护 picoclaw-launcher）
+start_cmd: bin/start.sh
+
+# WebUI 管理台端口（picoclaw-launcher 默认 18800，供系统探测启动状态；
+# 与 start.sh 里的 PORT 保持一致，改动要两处同步）
+port: 18800
+
+# 打开方式：launcher 自带完整 WebUI 管理台，浏览器新标签直连
+open_type: tab
+
+# 应用类别
+tag_types:
+  - utility
+
+# 依赖的最低固件版本
+depend_fw_version: 1.13.0.0000
+
+# 允许用户在应用设置中授权访问共享/个人文件夹
+# （供 AI Agent 的文件工具读写 NAS 目录使用，可授权多个）
+allow_add_access_path: true
+
+# 支持迁移安装目录
+support_migration: true
+
+# 声明权限：调用 LLM API / 聊天渠道必须联网；
+# launcher 需 fork gateway 子进程，Agent 的 shell 工具需执行系统命令
+permissions:
+  - NETWORK.ACCESS_INTERNET
+  - SYSTEM.EXEC_SYSTEM_COMMAND
+
+# 开源合规信息（使用开源代码必填）
+license_agreement_link:
+  - https://github.com/sipeed/picoclaw/blob/main/LICENSE
+source_code_link:
+  - https://github.com/sipeed/picoclaw
+technical_support_link:
+  - https://github.com/sipeed/picoclaw/issues
+
+# 应用展示信息（多语言）
+i18n:
+  en-US:
+    name: PicoClaw
+    description: >-
+      PicoClaw — ultra-lightweight personal AI agent by Sipeed (<10MB RAM,
+      single static binary). Connect your own LLM API key (Claude, GPT,
+      DeepSeek, Qwen, Kimi, Ollama and any OpenAI-compatible endpoint) and
+      chat through Telegram, Discord and more, with MCP tools, skills,
+      scheduled tasks and persistent memory. First run: open the app, then
+      in the WebUI 1) configure a Provider (LLM API key), 2) configure a
+      Channel, 3) start the Gateway. All data is kept in the app data
+      directory. Note: the agent can run shell commands on the NAS inside
+      the app sandbox — only connect channels you trust. The software is
+      free; you pay only your own LLM API usage. PicoClaw has no official
+      cryptocurrency; any token claiming affiliation is a scam.
+    author: Sipeed
+    official: https://picoclaw.io
+    help: https://github.com/sipeed/picoclaw#readme
+    publisher: Sipeed
+    publisher_link: https://github.com/sipeed
+  zh-CN:
+    name: PicoClaw
+    description: >-
+      PicoClaw —— Sipeed 出品的超轻量个人 AI 助理/Agent（内存占用 <10MB，
+      单一静态二进制）。接入你自己的 LLM API Key（Claude、GPT、DeepSeek、
+      通义千问、Kimi、豆包、Ollama 及任意 OpenAI 兼容接口），即可通过
+      Telegram、Discord 等渠道对话，支持 MCP 工具、技能、定时任务和持久记忆。
+      首次使用：打开应用进入 WebUI 管理台，1) 配置 Provider（填 LLM API Key）
+      → 2) 配置 Channel（聊天渠道）→ 3) 启动 Gateway 即可开聊。全部数据
+      保存在应用数据目录，卸载保留数据/迁移安装目录均可跟随。注意：Agent
+      可在应用沙箱内执行 NAS 上的 shell 命令，请只接入你本人使用的聊天渠道。
+      软件免费，仅需自付 LLM API 费用；PicoClaw 未发行任何加密货币，
+      声称关联的代币均为诈骗。
+    author: Sipeed
+    official: https://picoclaw.io
+    help: https://github.com/sipeed/picoclaw#readme
+    publisher: Sipeed
+    publisher_link: https://github.com/sipeed
