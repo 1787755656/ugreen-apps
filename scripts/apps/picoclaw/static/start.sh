@@ -36,6 +36,16 @@ LAUNCHER="${INSTALL_DIR}/bin/picoclaw-launcher"
 # 否则应用图标打不开管理页。
 PORT=18800
 
+# 监听地址用显式 -host 0.0.0.0，不用 -public（真机实测踩坑）：
+# 沙箱里没有可解析 localhost 的 /etc/hosts，纯 Go 静态二进制的内置解析器
+# 会把 "localhost" 丢给路由器 DNS → no such host。而 -public 走 "*" 绑定，
+# launcher 探活 gateway(18790)/代理 WebSocket 的目标主机在双栈环境下会
+# "自适应"成主机名 localhost → 全部失败（WebUI 里 gateway 起不来、聊天
+# WebSocket 断连）。显式 0.0.0.0 精确绑定时，上游 probeHostForGroups 对
+# IPv4-any 直接返回字面量 127.0.0.1，全程不需要 DNS；局域网访问不受影响
+# （代价仅是不监听 IPv6，NAS 场景可接受）。
+LISTEN_HOST=0.0.0.0
+
 # ---- 崩溃循环保护（时间限制） ----
 FAST_EXIT_SECS=30
 MAX_FAST_EXITS=5
@@ -66,7 +76,7 @@ trap on_term TERM INT
 fast_exits=0
 while [ "${STOPPING}" = "0" ]; do
   start_ts=$(date +%s)
-  "${LAUNCHER}" -console -no-browser -public -port "${PORT}" -lang zh &
+  "${LAUNCHER}" -console -no-browser -host "${LISTEN_HOST}" -port "${PORT}" -lang zh &
   CHILD_PID=$!
   wait "${CHILD_PID}" 2>/dev/null
   CHILD_PID=0
