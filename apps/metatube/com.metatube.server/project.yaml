@@ -1,0 +1,92 @@
+# ============================================================
+# MetaTube Server — UGOS Pro 原生应用配置
+# 影视媒体元数据刮削 API 服务 (Go 静态编译, v1.4.0)
+# ============================================================
+
+spec_version: "2.1"
+app_id: com.metatube.server
+version: 1.4.0
+
+support_arch:
+  - amd64
+  - arm64
+
+supports:
+  - pc
+  - app
+
+# 启动脚本(首段须存在于 rootfs_<arch>/bin/ 下)
+start_cmd: bin/start.sh
+
+# 服务端口(须与 start.sh 中 SERVER_PORT 一致, 供系统探活)
+port: 28173
+
+# 打开方式: 服务提供 HTTP API, 浏览器新标签直连
+open_type: tab
+
+# 应用类别
+tag_types:
+  - media
+  - utility
+
+# 最低固件版本(占位值, 正式上架前请联系绿联开发确认真实版本号)
+depend_fw_version: 1.13.0.0000
+
+# 支持迁移安装目录
+support_migration: true
+
+# 权限: 刮削需访问互联网; 启动脚本执行系统命令
+permissions:
+  - NETWORK.ACCESS_INTERNET
+  - SYSTEM.EXEC_SYSTEM_COMMAND
+
+# 开源合规(Apache-2.0)
+license_agreement_link:
+  - https://github.com/metatube-community/metatube-sdk-go/blob/main/LICENSE
+source_code_link:
+  - https://github.com/metatube-community/metatube-sdk-go
+technical_support_link:
+  - https://github.com/metatube-community/metatube-sdk-go/issues
+
+# 用户自定义配置: 访问令牌(Token)
+parameters:
+  - key: TOKEN
+    type: password
+    required: false
+    changeable: true
+    i18n:
+      en-US:
+        name: API Token
+        description: >-
+          Access token for the API server. Fill the same token in the
+          Emby/Jellyfin MetaTube plugin. Leave empty to disable auth
+          (LAN/gateway isolation only).
+      zh-CN:
+        name: 访问令牌 (Token)
+        description: >-
+          API 服务的访问令牌。请在 Emby/Jellyfin 的 MetaTube 插件中填入相同令牌。
+          留空则不启用鉴权（仅依赖局域网/网关隔离）。
+
+i18n:
+  en-US:
+    name: MetaTube Server
+    description: >-
+      A metadata scraping API server for media libraries. Works as a metadata
+      backend for Emby / Jellyfin via the MetaTube plugin. Provides a RESTful
+      API with 20+ providers; no standalone user interface.
+    author: metatube-community
+    official: https://github.com/metatube-community/metatube-sdk-go
+    help: https://github.com/metatube-community/metatube-sdk-go/wiki
+    publisher: metatube-community
+    publisher_link: https://github.com/metatube-community
+  zh-CN:
+    name: MetaTube 元数据服务
+    description: >-
+      影视媒体库的元数据刮削 API 服务，作为 Emby / Jellyfin 的元数据后端使用
+      （需在 Emby/Jellyfin 中安装 MetaTube 插件对接）。提供 RESTful API，
+      内置 20+ 数据源；本服务为后台 API，无独立操作界面。
+    author: metatube-community
+    official: https://github.com/metatube-community/metatube-sdk-go
+    help: https://github.com/metatube-community/metatube-sdk-go/wiki
+    publisher: metatube-community
+    publisher_link: https://github.com/metatube-community

@@ -1,0 +1,113 @@
+name: Build UGOS Pro App Packages
+
+permissions:
+  contents: write
+  actions: write
+
+on:
+  push:
+    paths:
+      - "apps/**"
+      - "scripts/apps/**"
+      - "scripts/ci/**"
+      - "!**/*.md"
+  schedule:
+    - cron: "0 8 * * *"
+  workflow_dispatch:
+    inputs:
+      app:
+        description: "App slug to build (jellyfin, metatube, qbittorrent, natfrp, lucky, magicpush, adguardhome)"
+        required: true
+        type: string
+      version:
+        description: "Version override (leave empty for latest)"
+        required: false
+        default: ""
+      revision:
+        description: "Revision suffix (e.g. r2 for a re-release with no version bump)"
+        required: false
+        default: ""
+
+jobs:
+  detect:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.detect.outputs.matrix }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect apps to build
+        id: detect
+        run: |
+          EVENT="${{ github.event_name }}"
+
+          buildable_only() {
+            while IFS= read -r app; do
+              [ -f "scripts/apps/$app/meta.env" ] && echo "$app"
+            done
+          }
+
+          all_apps() {
+            ls -d apps/*/ 2>/dev/null | xargs -n1 basename | buildable_only \
+              | jq -R -s -c 'split("\n") | map(select(. != ""))'
+          }
+
+          if [ "$EVENT" = "workflow_dispatch" ]; then
+            APP="${{ inputs.app }}"
+            if [ ! -d "apps/$APP" ]; then
+              echo "::error::App '$APP' not found in apps/ directory"
+              exit 1
+            fi
+            if [ ! -f "scripts/apps/$APP/meta.env" ]; then
+              echo "::error::App '$APP' has no scripts/apps/$APP/meta.env build contract"
+              exit 1
+            fi
+            MATRIX="[\"$APP\"]"
+
+          elif [ "$EVENT" = "schedule" ]; then
+            MATRIX=$(all_apps)
+
+          else
+            # push: only rebuild apps whose files actually changed
+            BEFORE="${{ github.event.before }}"
+            if [ "$BEFORE" = "0000000000000000000000000000000000000000" ]; then
+              MATRIX=$(all_apps)
+            else
+              CHANGED=$(git diff --name-only "$BEFORE" "${{ github.sha }}" 2>/dev/null || true)
+              # scripts/ci/** changes affect every app's tagging/build logic
+              # — rebuild all apps in that case.
+              if echo "$CHANGED" | grep -qE '^scripts/ci/'; then
+                MATRIX=$(all_apps)
+              else
+                APP_CHANGES=$(echo "$CHANGED" | grep '^apps/' | cut -d/ -f2 || true)
+                CONTRACT_CHANGES=$(echo "$CHANGED" | grep '^scripts/apps/' | cut -d/ -f3 || true)
+                APPS=$(printf '%s\n%s\n' "$APP_CHANGES" "$CONTRACT_CHANGES" | sort -u | grep -v '^$' | buildable_only || true)
+                if [ -z "$APPS" ]; then
+                  MATRIX="[]"
+                else
+                  MATRIX=$(echo "$APPS" | jq -R -s -c 'split("\n") | map(select(. != ""))')
+                fi
+              fi
+            fi
+          fi
+
+          echo "matrix=$MATRIX" >> "$GITHUB_OUTPUT"
+          echo "Apps to build: $MATRIX"
+
+  build:
+    needs: detect
+    if: needs.detect.outputs.matrix != '[]'
+    strategy:
+      fail-fast: false
+      matrix:
+        app: ${{ fromJson(needs.detect.outputs.matrix) }}
+    uses: ./.github/workflows/reusable-build-app.yml
+    with:
+      app: ${{ matrix.app }}
+      version: ${{ github.event.inputs.version || '' }}
+      revision: ${{ github.event.inputs.revision || '' }}
+      event_name: ${{ github.event_name }}
+    secrets: inherit

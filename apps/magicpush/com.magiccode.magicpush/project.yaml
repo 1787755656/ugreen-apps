@@ -1,0 +1,57 @@
+# MagicPush 魔法推送 — UGOS Pro 原生应用
+spec_version: "2.1"
+
+app_id: com.magiccode.magicpush
+version: 1.13.0
+
+support_arch:
+  - amd64
+  - arm64
+
+supports:
+  - pc
+  - app
+
+# start_cmd 首段必须存在于 rootfs_<arch>/bin/
+start_cmd: bin/start.sh
+port: 3000
+open_type: tab
+
+tag_types:
+  - utility
+  - devtool
+
+# 占位值，正式上架前请联系绿联确认真实固件版本号
+depend_fw_version: 1.13.0.0000
+
+allow_add_access_path: false
+support_migration: true
+
+permissions:
+  - NETWORK.ACCESS_INTERNET
+  - SYSTEM.EXEC_SYSTEM_COMMAND
+
+license_agreement_link:
+  - https://github.com/magiccode1412/magicpush/blob/main/LICENSE
+source_code_link:
+  - https://github.com/magiccode1412/magicpush
+technical_support_link:
+  - https://github.com/magiccode1412/magicpush/issues
+
+i18n:
+  zh-CN:
+    name: 魔法推送
+    description: 支持多渠道消息推送的统一管理平台，通过标准 REST API 将消息推送到企业微信、钉钉、飞书、Telegram、Bark 等渠道。
+    author: magiccode1412
+    official: https://github.com/magiccode1412/magicpush
+    help: https://www.160621.xyz/magicpush/guide/dev/overview.html
+    publisher: magiccode1412
+    publisher_link: https://github.com/magiccode1412/magicpush
+  en-US:
+    name: MagicPush
+    description: A multi-channel push notification platform with a standard REST API for WeCom, DingTalk, Feishu, Telegram, Bark and more.
+    author: magiccode1412
+    official: https://github.com/magiccode1412/magicpush
+    help: https://www.160621.xyz/magicpush/guide/dev/overview.html
+    publisher: magiccode1412
+    publisher_link: https://github.com/magiccode1412/magicpush

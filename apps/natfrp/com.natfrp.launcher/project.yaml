@@ -1,0 +1,68 @@
+# ============================================================
+# SakuraFrp 启动器 (樱花FRP 内网穿透客户端) — UGOS Pro 原生应用
+# natfrp-service 3.1.8, 静态 Go 二进制, 自带本地 WebUI
+# ============================================================
+
+spec_version: "2.1"
+app_id: com.natfrp.launcher
+version: 3.1.8
+
+support_arch:
+  - amd64
+  - arm64
+
+supports:
+  - pc
+  - app
+
+# 启动脚本(首段须存在于 rootfs_<arch>/bin/ 下)
+start_cmd: bin/start.sh
+
+# WebUI 端口(须与 start.sh 的 WEBUI_PORT 一致, 供系统探活)
+port: 7102
+
+# 打开方式: 启动器自带完整 WebUI, 浏览器新标签直连(自签名 HTTPS)
+open_type: tab
+
+# 应用类别
+tag_types:
+  - utility
+
+# 最低固件版本(占位值, 正式上架前请联系绿联开发确认真实版本号)
+depend_fw_version: 1.13.0.0000
+
+# 支持迁移安装目录
+support_migration: true
+
+# 权限: 内网穿透必须联网; 启动脚本/服务需执行 frpc 子进程
+permissions:
+  - NETWORK.ACCESS_INTERNET
+  - SYSTEM.EXEC_SYSTEM_COMMAND
+
+# 合规信息(樱花FRP 为闭源商业服务客户端; 提供官方链接)
+technical_support_link:
+  - https://doc.natfrp.com/launcher/usage.html
+
+i18n:
+  en-US:
+    name: SakuraFrp Launcher
+    description: >-
+      SakuraFrp (natfrp) intranet penetration client with a built-in Web UI.
+      Expose your NAS services to the internet through SakuraFrp tunnels.
+      Default Web UI password is admin; please change it after first login.
+    author: NatFrp / SakuraFrp
+    official: https://www.natfrp.com
+    help: https://doc.natfrp.com/launcher/usage.html
+    publisher: NatFrp
+    publisher_link: https://www.natfrp.com
+  zh-CN:
+    name: 樱花FRP 启动器
+    description: >-
+      樱花 FRP（SakuraFrp）内网穿透客户端，自带本地 Web UI 管理界面。
+      通过樱花 FRP 隧道将 NAS 服务映射到公网访问。
+      Web UI 默认密码为 admin，请在首次登录后及时修改。
+    author: NatFrp / SakuraFrp
+    official: https://www.natfrp.com
+    help: https://doc.natfrp.com/launcher/usage.html
+    publisher: NatFrp
+    publisher_link: https://www.natfrp.com

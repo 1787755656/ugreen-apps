@@ -1,0 +1,85 @@
+# ============================================================
+# qBittorrent Enhanced Edition — UGOS Pro 原生应用配置
+# 基于 qbittorrent-nox 5.2.1.10 (musl 静态编译, 自带 WebUI)
+# ============================================================
+
+# 配置规范版本
+spec_version: "2.1"
+
+# 应用ID（上架后不可修改）
+app_id: com.qbee.qbittorrent
+
+# 应用版本号 x.y.z（打包时 --build 追加构建号）
+version: 5.2.1
+
+# 支持的 CPU 架构
+support_arch:
+  - amd64
+  - arm64
+
+# 支持的客户端类型
+supports:
+  - pc
+  - app
+
+# 启动命令：调用封装脚本（处理首次初始化、profile、WebUI 端口）
+start_cmd: bin/start.sh
+
+# WebUI 服务端口（须与 start.sh 中 WEBUI_PORT 一致，供系统探测启动状态）
+port: 28080
+
+# 打开方式：qbittorrent-nox 自带完整 WebUI，浏览器新标签直连
+open_type: tab
+
+# 应用类别
+tag_types:
+  - download
+  - utility
+
+# 依赖的最低固件版本（正式上架前请联系绿联开发确认可用版本号）
+depend_fw_version: 1.13.0.0000
+
+# 允许用户在应用设置中授权访问共享/个人文件夹（用作下载保存目录，可授权多个）
+allow_add_access_path: true
+
+# 支持迁移安装目录
+support_migration: true
+
+# 声明权限：BT 需要访问互联网；启动脚本需执行系统命令(/bin/sh, mkdir 等)
+permissions:
+  - NETWORK.ACCESS_INTERNET
+  - SYSTEM.EXEC_SYSTEM_COMMAND
+
+# 开源合规信息（使用开源代码必填）
+license_agreement_link:
+  - https://github.com/c0re100/qBittorrent-Enhanced-Edition/blob/master/LICENSE
+source_code_link:
+  - https://github.com/c0re100/qBittorrent-Enhanced-Edition
+technical_support_link:
+  - https://github.com/c0re100/qBittorrent-Enhanced-Edition/issues
+
+# 应用展示信息（多语言）
+i18n:
+  en-US:
+    name: qBittorrent Enhanced
+    description: >-
+      qBittorrent Enhanced Edition — a free and open-source BitTorrent client
+      with a built-in Web UI, based on qbittorrent-nox. Supports automatic
+      IP filtering of leechers and other enhanced features.
+    author: c0re100
+    official: https://github.com/c0re100/qBittorrent-Enhanced-Edition
+    help: https://github.com/c0re100/qBittorrent-Enhanced-Edition/wiki
+    publisher: qBittorrent Enhanced Edition
+    publisher_link: https://github.com/c0re100/qBittorrent-Enhanced-Edition
+  zh-CN:
+    name: qBittorrent 增强版
+    description: >-
+      qBittorrent 增强版 —— 免费开源的 BitTorrent 下载客户端，内置 Web UI，
+      基于 qbittorrent-nox 无头版。在官方版基础上增加了自动屏蔽迅雷等吸血客户端、
+      自动 Ban 违规 Peer 等增强功能。首次登录账号 admin，密码 adminadmin，
+      登录后请及时修改密码。
+    author: c0re100
+    official: https://github.com/c0re100/qBittorrent-Enhanced-Edition
+    help: https://github.com/c0re100/qBittorrent-Enhanced-Edition/wiki
+    publisher: qBittorrent Enhanced Edition
+    publisher_link: https://github.com/c0re100/qBittorrent-Enhanced-Edition
