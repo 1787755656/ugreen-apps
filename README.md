@@ -63,5 +63,5 @@ apps/<app>/com.xxx.xxx/
 - **natfrp 没有 `license_agreement_link`/`source_code_link`**：因为它是第三方商业服务客户端，不是开源代码，`project.yaml` 现状就没配这两项。如果以后要正式上架，需要单独确认合规要求，这不是CI能解决的事。
 - **`ugcli` 版本锁定在 1.1.0.13**（`reusable-build-app.yml` 里的 `UGCLI_VERSION`）：故意锁死，避免绿联出新版 `ugcli` 后行为变化影响所有应用的打包，需要升级时手动改这一处。
 - **每个 app 的 ugcli `--build` 号**是"这个 app 目前为止发布过多少次 + 1"（见 `resolve-release-tag.sh` 里 `build_num` 的计算方式），跟上游版本号无关，纯粹是为了满足 ugcli 要求"同一版本号下构建号必须递增"这条规则。
-- **magicpush 钉死 3000 端口**（`project.yaml` 的 `port` 与 start.sh 里的端口一致）：与其它同样监听 3000 的应用（如曾打包过的 adguardhome）同装会端口冲突，需要改掉其中一个的端口（project.yaml 和 start.sh 一起改）。
+- **magicpush 钉死 23000 端口**（`project.yaml` 的 `port` 与 start.sh 里的兜底端口一致，改端口时两处要同步）：原本用 3000，为避开其它常占 3000 的应用（如曾打包过的 adguardhome 管理页）改成了高位端口 23000。
 - **jellyfin / adguardhome / smartdns 暂时移出了仓库**：真机发现问题待排查，项目目录和打包脚本先挪到仓库外保存（`../<应用名>/`），修复后迁回，并把上面表格和 workflow 手动触发说明里的应用列表补回来。
