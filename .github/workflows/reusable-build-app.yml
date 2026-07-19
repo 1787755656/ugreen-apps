@@ -48,7 +48,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -103,11 +103,11 @@ jobs:
         arch: ${{ fromJson(needs.check-version.outputs.arch_matrix) }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Cache ugcli
         id: ugcli-cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: /usr/local/bin/ugcli
           key: ugcli-linux-amd64-${{ env.UGCLI_VERSION }}
@@ -157,7 +157,7 @@ jobs:
           ls -lh "$UPK_REL"
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: upk-${{ inputs.app }}-${{ matrix.arch }}
           path: ${{ steps.pack.outputs.upk_path }}
@@ -169,10 +169,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Download all artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           pattern: upk-${{ inputs.app }}-*
           path: artifacts
