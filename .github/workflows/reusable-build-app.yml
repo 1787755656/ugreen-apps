@@ -38,6 +38,7 @@ jobs:
     outputs:
       version: ${{ steps.version.outputs.version }}
       project_version: ${{ steps.version.outputs.project_version }}
+      upstream_tag: ${{ steps.version.outputs.upstream_tag }}
       release_tag: ${{ steps.tag.outputs.release_tag }}
       should_build: ${{ steps.tag.outputs.should_build }}
       build_num: ${{ steps.tag.outputs.build_num }}
@@ -181,28 +182,89 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          set -euo pipefail
+          APP="${{ inputs.app }}"
           RELEASE_TAG="${{ needs.check-version.outputs.release_tag }}"
           VERSION="${{ needs.check-version.outputs.version }}"
+          UPSTREAM_TAG="${{ needs.check-version.outputs.upstream_tag }}"
           TITLE="${{ needs.check-version.outputs.release_title }} ${VERSION} for UGOS Pro"
+          BUILD_NUM="${{ needs.check-version.outputs.build_num }}"
+
+          # shellcheck disable=SC1090
+          source "scripts/apps/${APP}/meta.env"
 
           if [[ "$RELEASE_TAG" == *-r* ]]; then
-            REVISION_NOTE="
-
-          - **打包修订**: ${RELEASE_TAG##*-}
-          - 如果当前安装的版本运行正常，无需更新此修订版；需先卸载再重新安装。"
+            REVISION_NOTE=$'\n\n- **打包修订**: '"${RELEASE_TAG##*-}"$'\n- 如果当前安装的版本运行正常，无需更新此修订版；需先卸载再重新安装。'
           else
             REVISION_NOTE=""
           fi
 
-          NOTES="上游版本: ${VERSION}
-          ugcli build 号: ${{ needs.check-version.outputs.build_num }}
-          ${REVISION_NOTE}
+          # 拉取上游 GitHub Release 正文（changelog / 更新内容）
+          UPSTREAM_BODY=""
+          UPSTREAM_LINK=""
+          if [ -n "${UPSTREAM_GITHUB:-}" ]; then
+            TAG_CANDIDATE="${UPSTREAM_TAG:-}"
+            if [ -z "$TAG_CANDIDATE" ]; then
+              TAG_CANDIDATE="v${VERSION}"
+            fi
+            UPSTREAM_BODY=$(bash scripts/ci/fetch-upstream-notes.sh "$UPSTREAM_GITHUB" "$TAG_CANDIDATE" || true)
+            UPSTREAM_LINK="https://github.com/${UPSTREAM_GITHUB}/releases/tag/${TAG_CANDIDATE}"
+            # 若 tag 实际无 v 前缀，链接仍可点到 releases 列表
+            if [ -z "$UPSTREAM_BODY" ]; then
+              # 再试一次用 version 本身
+              UPSTREAM_BODY=$(bash scripts/ci/fetch-upstream-notes.sh "$UPSTREAM_GITHUB" "$VERSION" || true)
+            fi
+          fi
 
-          手动安装：应用中心 → 手动安装 → 选择对应架构的 .upk 文件（需要先获得绿联开发者授权 ugdev.sig）。"
+          NOTES_FILE=$(mktemp)
+          {
+            echo "## 绿联 UGOS Pro 打包"
+            echo ""
+            echo "- **上游版本**: \`${VERSION}\`"
+            echo "- **ugcli build 号**: \`${BUILD_NUM}\`"
+            if [ -n "${UPSTREAM_GITHUB:-}" ]; then
+              echo "- **上游仓库**: https://github.com/${UPSTREAM_GITHUB}"
+              if [ -n "${UPSTREAM_LINK}" ]; then
+                echo "- **上游 Release**: ${UPSTREAM_LINK}"
+              fi
+            fi
+            if [ -n "${HOMEPAGE_URL:-}" ]; then
+              echo "- **主页**: ${HOMEPAGE_URL}"
+            fi
+            printf '%s\n' "$REVISION_NOTE"
+            echo ""
+            echo "### 安装"
+            echo ""
+            echo "应用中心 → 手动安装 → 选择对应架构的 \`.upk\`（需绿联开发者授权 \`ugdev.sig\`）。"
+            echo ""
+            if [ -n "$UPSTREAM_BODY" ]; then
+              echo "---"
+              echo ""
+              echo "## 上游更新内容"
+              echo ""
+              # 保持上游 markdown 原样
+              printf '%s\n' "$UPSTREAM_BODY"
+              echo ""
+            else
+              echo "---"
+              echo ""
+              echo "## 上游更新内容"
+              echo ""
+              if [ -n "${UPSTREAM_GITHUB:-}" ]; then
+                echo "_未能自动获取该版本的 Release 说明，请到上游仓库查看：https://github.com/${UPSTREAM_GITHUB}/releases_"
+              else
+                echo "_此应用无 GitHub Release 说明源（或未配置 UPSTREAM_GITHUB）。_"
+              fi
+              echo ""
+            fi
+          } > "$NOTES_FILE"
+
+          echo "---- release notes preview ----"
+          head -n 80 "$NOTES_FILE" || true
 
           gh release create "$RELEASE_TAG" \
             --title "$TITLE" \
-            --notes "$NOTES" \
+            --notes-file "$NOTES_FILE" \
             artifacts/upk-${{ inputs.app }}-*/*.upk
 
       - name: Cleanup old revisions and versions

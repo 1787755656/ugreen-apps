@@ -12,10 +12,12 @@ INPUT_VERSION="${1:-}"
 
 if [ -n "$INPUT_VERSION" ]; then
   VERSION="$INPUT_VERSION"
+  UPSTREAM_TAG="v${VERSION}"
 else
   TAG=$(curl -sL "https://api.github.com/repos/metatube-community/metatube-server-releases/releases/latest" | \
     jq -r '.tag_name')
   VERSION=$(echo "$TAG" | sed 's/^v//')
+  UPSTREAM_TAG="$TAG"
 fi
 
 if [ -z "$VERSION" ] || [ "$VERSION" = "null" ]; then
@@ -29,8 +31,10 @@ PROJECT_VERSION="$VERSION"
 
 echo "VERSION=$VERSION"
 echo "PROJECT_VERSION=$PROJECT_VERSION"
+echo "UPSTREAM_TAG=${UPSTREAM_TAG:-v$VERSION}"
 
 if [ -n "${GITHUB_OUTPUT:-}" ]; then
   echo "version=$VERSION" >> "$GITHUB_OUTPUT"
   echo "project_version=$PROJECT_VERSION" >> "$GITHUB_OUTPUT"
+  echo "upstream_tag=${UPSTREAM_TAG:-v$VERSION}" >> "$GITHUB_OUTPUT"
 fi
