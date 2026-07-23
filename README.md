@@ -33,6 +33,7 @@ apps/<app>/com.xxx.xxx/
 | lucky | `gdy666/lucky` | GitHub Releases API，tag 格式 `vX.Y.Z` | 官方静态编译二进制直接打包；start.sh 是收养式守护循环（扛 Lucky 网页里"重启"的自我重启行为）+ TMPDIR 重定向（沙箱无 /tmp） |
 | magicpush | `magiccode1412/magicpush` | 上游无 releases 无 tag，读 main 分支 `version.json` 的 `.version` | Node.js 应用：CI 里现场 vite 构建前端、npm 装服务端生产依赖（`--ignore-scripts`）、better-sqlite3 按目标架构直接下载官方预编译 `.node`（带 ELF 架构校验）、捆绑 nodejs.org 官方 Node 20 运行时 |
 | picoclaw | `sipeed/picoclaw` | GitHub Releases API，tag 格式 `vX.Y.Z` | 官方静态编译二进制（picoclaw + picoclaw-launcher）直接打包，带 ELF 架构校验；tab 应用直连 launcher 自带 WebUI 管理台（18800）；start.sh 用 `PICOCLAW_HOME` 把全部数据钉到应用 data 目录 + TMPDIR 重定向（沙箱无 /tmp）+ 崩溃循环保护；监听用 `-host 0.0.0.0` 而非 `-public`（沙箱解析不了 localhost，`-public` 会让 launcher 用主机名 localhost 探活 gateway 而全挂，显式 IPv4-any 绑定时探活走字面量 127.0.0.1） |
+| ani-rss（显示名 **ass**） | `wushuo894/ani-rss` | GitHub Releases API，tag `vX.Y.Z`，资产 `ani-rss.jar` | 捆绑 Temurin **JRE**（非 JDK）+ Debian `C.utf8` locale（修中文路径）；start.sh + java 包装需 `SYSTEM.EXEC_SYSTEM_COMMAND`；发布 Release 附带上游 changelog |
 
 ## 本地验证过什么（不需要真机、不需要GitHub仓库）
 
@@ -66,3 +67,14 @@ apps/<app>/com.xxx.xxx/
 - **每个 app 的 ugcli `--build` 号**是"这个 app 目前为止发布过多少次 + 1"（见 `resolve-release-tag.sh` 里 `build_num` 的计算方式），跟上游版本号无关，纯粹是为了满足 ugcli 要求"同一版本号下构建号必须递增"这条规则。
 - **magicpush 钉死 23000 端口**（`project.yaml` 的 `port` 与 start.sh 里的兜底端口一致，改端口时两处要同步）：原本用 3000，为避开其它常占 3000 的应用（如曾打包过的 adguardhome 管理页）改成了高位端口 23000。
 - **jellyfin / adguardhome / smartdns 暂时移出了仓库**：真机发现问题待排查，项目目录和打包脚本先挪到仓库外保存（`../<应用名>/`），修复后迁回，并把上面表格和 workflow 手动触发说明里的应用列表补回来。
+
+
+## Release 说明里的上游更新内容
+
+每次 `gh release create` 会：
+
+1. 读 `scripts/apps/<app>/meta.env` 里的 `UPSTREAM_GITHUB=owner/repo`（若有）
+2. 用 `scripts/ci/fetch-upstream-notes.sh` 拉取该 tag 的 GitHub Release body
+3. 写进本仓库 Release 的 **「上游更新内容」** 一节
+
+没有 GitHub Release 的应用（如 natfrp）会显示占位说明。

@@ -1,0 +1,64 @@
+# ass (ANI-RSS) — UGOS Pro 原生应用
+# 内置 Eclipse Temurin JRE + 官方 ani-rss.jar；显示名 ass
+spec_version: "2.1"
+
+app_id: com.wushuo.anirss
+version: 0.0.0
+
+support_arch:
+  - amd64
+  - arm64
+
+supports:
+  - pc
+  - app
+
+start_cmd: bin/start.sh
+port: 7789
+open_type: tab
+
+tag_types:
+  - download
+  - media
+  - utility
+
+depend_fw_version: 1.13.0.0000
+
+allow_add_access_path: true
+support_migration: true
+
+# start.sh + jre/bin/java 均为 shell，必须保留 EXEC
+permissions:
+  - NETWORK.ACCESS_INTERNET
+  - SYSTEM.EXEC_SYSTEM_COMMAND
+
+license_agreement_link:
+  - https://github.com/wushuo894/ani-rss/blob/master/LICENSE
+source_code_link:
+  - https://github.com/wushuo894/ani-rss
+technical_support_link:
+  - https://club.ugnas.com/forum.php?mod=viewthread&tid=5623
+
+i18n:
+  en-US:
+    name: ass
+    description: >-
+      Auto subscribe, download and scrape anime via RSS (ANI-RSS). Bundles
+      Eclipse Temurin JRE so no system Java is required. Default login admin/admin.
+    author: wushuo894
+    official: https://github.com/wushuo894/ani-rss
+    help: https://docs.wushuo.top
+    publisher: 穿斯帕沃特
+    publisher_link: https://club.ugnas.com/forum.php?mod=viewthread&tid=5623
+  zh-CN:
+    name: ass
+    description: >-
+      基于 RSS 自动追番、订阅、下载、刮削与洗版（上游 ANI-RSS）。应用内置
+      Eclipse Temurin JRE，无需 NAS 安装系统 Java。默认账号 admin / admin，
+      登录后请及时修改密码。请在应用设置中授权媒体/下载共享目录，并在 WebUI
+      中配置下载路径与下载器。
+    author: wushuo894
+    official: https://github.com/wushuo894/ani-rss
+    help: https://docs.wushuo.top
+    publisher: 穿斯帕沃特
+    publisher_link: https://club.ugnas.com/forum.php?mod=viewthread&tid=5623
