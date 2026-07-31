@@ -274,7 +274,10 @@ jobs:
           APP="${{ inputs.app }}"
           VERSION="${{ needs.check-version.outputs.version }}"
           RELEASE_TAG="${{ needs.check-version.outputs.release_tag }}"
-          MAX_VERSIONS=5
+          # 每个应用只保留最近 2 个上游版本（-rN 修订版归到各自的基础版本下）。
+          # 每个包都上百 MB，留太多纯粹占空间；要装旧版可以用 workflow_dispatch
+          # 指定 version 重新构建。
+          MAX_VERSIONS=2
           BASE_TAG="${APP}/v${VERSION}"
 
           # Delete other revisions of the exact same version (keep only the

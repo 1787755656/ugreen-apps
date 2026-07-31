@@ -21,11 +21,35 @@ CONF_FILE_FLAT="${CONF_DIR_FLAT}/qBittorrent.conf"
 CONF_VER=2
 MARKER="${PROFILE_DIR}/.ugreen_conf_v${CONF_VER}"
 
-# 默认下载目录：优先用用户已授权的共享目录，否则退回 data/downloads
-if [ -n "${UGAPP_SHARED_DIR:-}" ] && [ -d "${UGAPP_SHARED_DIR}" ]; then
+# 默认下载目录：优先用安装时选的目录（project.yaml 的 DOWNLOAD_PATH 参数）。
+#
+# 为什么不再用 UGAPP_SHARED_DIR：那是个【三层的合成视图】
+# (shared/volume1/<共享文件夹>/<授权目录>)，只有最里面那层叶子目录是真正的可写挂载，
+# 根目录本身写入会 EACCES。把它当 SavePath，qb 一下载就是 permission denied，
+# 用户得自己去 WebUI 改路径才能用。DOWNLOAD_PATH 拿到的是真实叶子路径，可以直接写。
+#
+# 多值参数塞进一个环境变量的编码形状没有文档（可能是 [a b] 切片字面量、JSON 数组、
+# 或逗号/分号分隔），所以不去解析整体，而是把几种常见拆法产生的候选逐个探测，
+# 取第一个真实存在的目录。猜错也不至于坏事：退回原来的兜底。
+DEFAULT_SAVE=""
+if [ -n "${DOWNLOAD_PATH:-}" ]; then
+    # 末尾那个 \n 不能省：没有它最后一项后面没换行，while read 会整个丢掉
+    DEFAULT_SAVE=$(printf '%s\n' "${DOWNLOAD_PATH}" | tr -d '[]"' | tr ',;' '  ' | tr ' ' '\n' \
+        | while IFS= read -r d; do
+              [ -n "$d" ] && [ -d "$d" ] && { echo "$d"; break; }
+          done)
+fi
+
+if [ -n "${DEFAULT_SAVE}" ]; then
+    echo "下载目录取自安装时选择的 DOWNLOAD_PATH: ${DEFAULT_SAVE}"
+elif [ -n "${UGAPP_SHARED_DIR:-}" ] && [ -d "${UGAPP_SHARED_DIR}" ]; then
+    # 旧行为保留作兜底（老版本装上来、或用户只走了「访问路径」授权没填参数）。
+    # 注意这个路径不可写，用户仍需在 WebUI 里指到具体的子目录。
     DEFAULT_SAVE="${UGAPP_SHARED_DIR}"
+    echo "警告：未选择下载目录，暂用共享目录根 ${DEFAULT_SAVE}（该目录不可写，请在 WebUI 里改成具体的子目录）"
 else
     DEFAULT_SAVE="${DATA_DIR}/downloads"
+    echo "未选择下载目录，退回应用数据目录: ${DEFAULT_SAVE}"
 fi
 
 WEBUI_PORT=28080

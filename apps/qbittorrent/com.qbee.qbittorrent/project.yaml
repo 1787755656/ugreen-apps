@@ -45,6 +45,39 @@ allow_add_access_path: true
 # 支持迁移安装目录
 support_migration: true
 
+# 安装时就把下载目录选好。
+#
+# 这个参数干两件事，第二件才是重点：
+#   1. 在应用中心的安装/设置弹窗里渲染出文件夹选择器
+#      （那个弹窗里的控件【只由 parameters 生成】，不声明就是个空弹窗）
+#   2. 【顺带授权】—— 选中的目录被记进平台的 path_permissions 表（from_type=1），
+#      进而生成 systemd unit 里的 BindPaths=，沙箱里直接读写得到。
+#      不用再让用户装完之后去「访问路径」补一遍。
+#
+# start.sh 会把第一个目录写进 qBittorrent 首次生成的配置的 SavePath ——
+# 装完打开 WebUI 就是对的下载目录，不用先去改设置。
+#
+# 刻意【不设 required】：留空照样能装能跑（退回应用数据目录下的 downloads）。
+parameters:
+  - key: DOWNLOAD_PATH
+    type: path
+    multi: true
+    max_values_count: 8
+    changeable: true
+    i18n:
+      zh-CN:
+        name: 下载保存目录
+        description: >-
+          选择下载文件要保存到的共享文件夹，可添加多个。选好即完成授权，
+          第一个会被设为 qBittorrent 的默认保存路径。留空也能安装，
+          装好后在应用「访问路径」里授权、再到 WebUI 里改保存路径同样可以。
+      en-US:
+        name: Download folders
+        description: >-
+          Pick the shared folders downloads are saved to; several are allowed.
+          Picking them also grants access, and the first one becomes
+          qBittorrent's default save path. Leaving this empty is fine.
+
 # 声明权限：BT 需要访问互联网；启动脚本需执行系统命令(/bin/sh, mkdir 等)
 permissions:
   - NETWORK.ACCESS_INTERNET
