@@ -19,6 +19,21 @@ else
     mkdir -p "${MEDIA_HINT}/番剧" "${MEDIA_HINT}/剧场版" "${MEDIA_HINT}/已完结番剧" 2>/dev/null
 fi
 
+# 安装时选的媒体目录（project.yaml 的 MEDIA_PATH 参数）。ani-rss 自己不读这个变量，
+# 打出来是给用户看的：WebUI 里的下载路径要填绝对路径，而"到底该填哪个"是最容易卡住的一步。
+#
+# 多值参数塞进一个环境变量的编码形状没有文档（可能是 [a b] 这样的切片字面量、
+# JSON 数组、或逗号分隔），所以这里不去解析，原样打印 + 逐个探测常见拆法里
+# 确实存在的目录。反正只是提示信息，猜错了也不影响启动。
+if [ -n "${MEDIA_PATH:-}" ]; then
+    echo "MEDIA_PATH(原始值)=${MEDIA_PATH}"
+    # printf 末尾那个 \n 不能省：没有它最后一项后面没有换行，while read 会把它整个丢掉
+    printf '%s\n' "${MEDIA_PATH}" | tr -d '[]"' | tr ',;' '  ' | tr ' ' '\n' | while IFS= read -r d; do
+        [ -n "$d" ] || continue
+        [ -d "$d" ] && echo "  已授权媒体目录: $d"
+    done
+fi
+
 # ---- 强制 UTF-8（locale + JVM 双保险）----
 if [ -d "${INSTALL_DIR}/locale" ]; then
     export LOCPATH="${INSTALL_DIR}/locale"

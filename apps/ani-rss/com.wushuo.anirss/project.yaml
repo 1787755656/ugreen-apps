@@ -27,6 +27,40 @@ depend_fw_version: 1.13.0.0000
 allow_add_access_path: true
 support_migration: true
 
+# 安装时就把媒体/下载目录选好。
+#
+# 这个参数干的是两件事，第二件才是重点：
+#   1. 在应用中心的安装/设置弹窗里渲染出文件夹选择器
+#      （那个弹窗里的控件【只由 parameters 生成】，不声明就是个空弹窗）
+#   2. 【顺带授权】—— 选中的目录会被记进平台的 path_permissions 表（from_type=1），
+#      进而生成 systemd unit 里的 BindPaths=，沙箱里就直接读写得到了。
+#      所以不用再让用户装完之后去「访问路径」里补一遍。
+#
+# ani-rss 是上游的第三方 jar，不会读这个环境变量——值本身用不上，
+# 但 start.sh 会把解析出的目录打进启动日志，方便用户照着填 WebUI 里的下载路径。
+# allow_add_access_path 保持开着：用户之后想加/换目录，走那条路仍然有效。
+#
+# 刻意【不设 required】：留空也能装、能跑（媒体目录退回应用数据目录下的 Media），
+# 装不上比少个便捷入口糟得多。
+parameters:
+  - key: MEDIA_PATH
+    type: path
+    multi: true
+    max_values_count: 8
+    changeable: true
+    i18n:
+      zh-CN:
+        name: 媒体与下载目录
+        description: >-
+          选择存放番剧的共享文件夹，可添加多个。选好即完成授权，之后在 WebUI 的
+          下载路径里填这些目录即可。留空也能安装，装好后在应用「访问路径」里授权同样可以。
+      en-US:
+        name: Media & download folders
+        description: >-
+          Pick the shared folders where anime is stored; several are allowed.
+          Picking them also grants access, so you can use these paths directly as
+          the download path in the WebUI. Leaving this empty is fine.
+
 # start.sh + jre/bin/java 均为 shell，必须保留 EXEC
 permissions:
   - NETWORK.ACCESS_INTERNET
