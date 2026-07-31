@@ -28,14 +28,20 @@ MARKER="${PROFILE_DIR}/.ugreen_conf_v${CONF_VER}"
 # 根目录本身写入会 EACCES。把它当 SavePath，qb 一下载就是 permission denied，
 # 用户得自己去 WebUI 改路径才能用。DOWNLOAD_PATH 拿到的是真实叶子路径，可以直接写。
 #
-# 多值参数塞进一个环境变量的编码形状没有文档（可能是 [a b] 切片字面量、JSON 数组、
-# 或逗号/分号分隔），所以不去解析整体，而是把几种常见拆法产生的候选逐个探测，
-# 取第一个真实存在的目录。猜错也不至于坏事：退回原来的兜底。
+# 多值参数的编码是 JSON 数组（真机实测），.env 里那行长这样：
+#   DOWNLOAD_PATH='["/volume1/test/课程","/volume1/test/nas"]'
+# 用户一个都没选、以及【首次安装那一次】，值是字面量 null —— 平台先起服务、
+# 约 3 秒后才写 .env，而进程环境是 exec 那一刻的快照，所以首启必然拿不到。
+# 安装时选的目录要下一次重启才生效，这里退回兜底即可，不是错误。
+#
+# 没有 jq，用 tr 拆：路径里的逗号会被误切，但下面只取第一个【真实存在】的目录，
+# 切坏的那些会因为不是目录而被跳过，不至于选错。
 DEFAULT_SAVE=""
-if [ -n "${DOWNLOAD_PATH:-}" ]; then
+if [ -n "${DOWNLOAD_PATH:-}" ] && [ "${DOWNLOAD_PATH}" != "null" ]; then
     # 末尾那个 \n 不能省：没有它最后一项后面没换行，while read 会整个丢掉
-    DEFAULT_SAVE=$(printf '%s\n' "${DOWNLOAD_PATH}" | tr -d '[]"' | tr ',;' '  ' | tr ' ' '\n' \
+    DEFAULT_SAVE=$(printf '%s\n' "${DOWNLOAD_PATH}" | tr -d '[]"' | tr ',' '\n' \
         | while IFS= read -r d; do
+              d=$(printf '%s' "$d" | sed 's/^ *//; s/ *$//')
               [ -n "$d" ] && [ -d "$d" ] && { echo "$d"; break; }
           done)
 fi

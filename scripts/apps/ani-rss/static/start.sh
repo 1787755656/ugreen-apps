@@ -22,16 +22,24 @@ fi
 # 安装时选的媒体目录（project.yaml 的 MEDIA_PATH 参数）。ani-rss 自己不读这个变量，
 # 打出来是给用户看的：WebUI 里的下载路径要填绝对路径，而"到底该填哪个"是最容易卡住的一步。
 #
-# 多值参数塞进一个环境变量的编码形状没有文档（可能是 [a b] 这样的切片字面量、
-# JSON 数组、或逗号分隔），所以这里不去解析，原样打印 + 逐个探测常见拆法里
-# 确实存在的目录。反正只是提示信息，猜错了也不影响启动。
-if [ -n "${MEDIA_PATH:-}" ]; then
+# 多值参数的编码是 JSON 数组（真机实测），.env 里那行长这样：
+#   MEDIA_PATH='["/volume1/test/课程","/volume1/test/nas"]'
+# 用户一个都没选、以及【首次安装那一次】，值是字面量 null —— 平台先起服务、
+# 约 3 秒后才写 .env，而进程环境是 exec 那一刻的快照，所以首启必然拿不到，
+# 要下一次重启才有。这里只是打提示信息，没有也不影响启动。
+#
+# 没有 jq，用 tr 拆：路径里的逗号会被误切，但下面只打印【真实存在】的目录，
+# 切坏的那些会被跳过。
+if [ -n "${MEDIA_PATH:-}" ] && [ "${MEDIA_PATH}" != "null" ]; then
     echo "MEDIA_PATH(原始值)=${MEDIA_PATH}"
     # printf 末尾那个 \n 不能省：没有它最后一项后面没有换行，while read 会把它整个丢掉
-    printf '%s\n' "${MEDIA_PATH}" | tr -d '[]"' | tr ',;' '  ' | tr ' ' '\n' | while IFS= read -r d; do
+    printf '%s\n' "${MEDIA_PATH}" | tr -d '[]"' | tr ',' '\n' | while IFS= read -r d; do
+        d=$(printf '%s' "$d" | sed 's/^ *//; s/ *$//')
         [ -n "$d" ] || continue
         [ -d "$d" ] && echo "  已授权媒体目录: $d"
     done
+else
+    echo "未选择媒体目录（MEDIA_PATH=${MEDIA_PATH:-未设置}）；若安装时选过，重启一次应用即可生效"
 fi
 
 # ---- 强制 UTF-8（locale + JVM 双保险）----
