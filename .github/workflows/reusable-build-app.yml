@@ -186,6 +186,9 @@ jobs:
           APP="${{ inputs.app }}"
           RELEASE_TAG="${{ needs.check-version.outputs.release_tag }}"
           VERSION="${{ needs.check-version.outputs.version }}"
+          # 上游版本号可能比 project.yaml 的 x.y.z 多一段（qbittorrent 就是），
+          # 从 changelog 里找小节时两个都试一遍
+          PROJECT_VERSION="${{ needs.check-version.outputs.project_version }}"
           UPSTREAM_TAG="${{ needs.check-version.outputs.upstream_tag }}"
           TITLE="${{ needs.check-version.outputs.release_title }} ${VERSION} for UGOS Pro"
           BUILD_NUM="${{ needs.check-version.outputs.build_num }}"
@@ -213,6 +216,25 @@ jobs:
             if [ -z "$UPSTREAM_BODY" ]; then
               # 再试一次用 version 本身
               UPSTREAM_BODY=$(bash scripts/ci/fetch-upstream-notes.sh "$UPSTREAM_GITHUB" "$VERSION" || true)
+            fi
+            # 上游那个 tag 的 Release 页并不一定存在（拿不到正文基本就说明不存在），
+            # 与其放个 404 链接，不如不放。
+            if [ -z "$UPSTREAM_BODY" ]; then
+              UPSTREAM_LINK=""
+            fi
+          fi
+
+          # 有些上游根本不发 Release、也不打 tag，更新说明只写在仓库的 CHANGELOG.md 里
+          # （magicpush 就是）。这时按版本号从那个文件里切出对应小节。
+          NOTES_SOURCE_LINK=""
+          if [ -z "$UPSTREAM_BODY" ] && [ -n "${CHANGELOG_URL:-}" ]; then
+            UPSTREAM_BODY=$(bash scripts/ci/fetch-changelog-section.sh "$CHANGELOG_URL" "$VERSION" || true)
+            if [ -z "$UPSTREAM_BODY" ] && [ "$VERSION" != "${PROJECT_VERSION:-}" ]; then
+              # 上游版本号可能比 x.y.z 多一段，changelog 里写的是短的那个
+              UPSTREAM_BODY=$(bash scripts/ci/fetch-changelog-section.sh "$CHANGELOG_URL" "${PROJECT_VERSION}" || true)
+            fi
+            if [ -n "$UPSTREAM_BODY" ]; then
+              NOTES_SOURCE_LINK="${CHANGELOG_HTML_URL:-$CHANGELOG_URL}"
             fi
           fi
 
@@ -245,12 +267,18 @@ jobs:
               # 保持上游 markdown 原样
               printf '%s\n' "$UPSTREAM_BODY"
               echo ""
+              if [ -n "$NOTES_SOURCE_LINK" ]; then
+                echo "_以上摘自上游更新日志：${NOTES_SOURCE_LINK}_"
+                echo ""
+              fi
             else
               echo "---"
               echo ""
               echo "## 上游更新内容"
               echo ""
-              if [ -n "${UPSTREAM_GITHUB:-}" ]; then
+              if [ -n "${CHANGELOG_HTML_URL:-}${CHANGELOG_URL:-}" ]; then
+                echo "_未能从上游更新日志中找到 \`${VERSION}\` 这一节，请直接查看：${CHANGELOG_HTML_URL:-$CHANGELOG_URL}_"
+              elif [ -n "${UPSTREAM_GITHUB:-}" ]; then
                 echo "_未能自动获取该版本的 Release 说明，请到上游仓库查看：https://github.com/${UPSTREAM_GITHUB}/releases_"
               else
                 echo "_此应用无 GitHub Release 说明源（或未配置 UPSTREAM_GITHUB）。_"
