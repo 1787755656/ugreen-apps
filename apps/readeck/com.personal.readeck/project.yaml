@@ -1,0 +1,112 @@
+# ============================================================
+# Readeck — UGOS Pro 原生应用配置
+# 基于 readeck 0.22.3 (Codeberg, Go 单二进制, AGPL-3.0, 自带 WebUI)
+# ============================================================
+
+spec_version: "2.1"
+
+# 应用ID（上架后不可修改）
+app_id: com.personal.readeck
+
+# 应用版本号 x.y.z（打包时 --build 追加构建号）
+version: 0.22.3
+
+# 支持的 CPU 架构
+support_arch:
+  - amd64
+  - arm64
+
+# 支持的客户端类型
+supports:
+  - pc
+  - app
+
+# 启动命令：封装脚本（处理数据目录解析 + 注入 Readeck 环境变量）
+start_cmd: bin/start.sh
+
+# WebUI 服务端口（须与 start.sh 中 WEBUI_PORT 一致，供系统探测启动状态）
+port: 28180
+
+# 打开方式：Readeck 自带完整 WebUI，浏览器新标签直连
+open_type: tab
+
+# 应用类别
+tag_types:
+  - utility
+
+# 依赖的最低固件版本（正式上架前请联系绿联开发确认可用版本号）
+depend_fw_version: 1.13.0.0000
+
+# 允许用户在应用设置中授权访问共享/个人文件夹
+allow_add_access_path: true
+
+# 支持迁移安装目录
+support_migration: true
+
+# 安装/设置时把数据保存目录选好。
+#
+# type: path 参数做两件事：
+#   1. 在应用中心的安装/设置弹窗里渲染出文件夹选择器；
+#   2. 顺带授权 —— 选中的目录被记进 path_permissions 表（from_type=1），
+#      进而生成 systemd unit 的 BindPaths=，沙箱内读写得到。
+#
+# 注意：全新安装首启时平台 2~3 秒后才写入参数与授权目录（首启 READEK_DATA_DIR 为空），
+#       start.sh 会兜底到应用数据目录下的 data/；重启一次即生效到所选目录。
+parameters:
+  - key: READEK_DATA_DIR
+    type: path
+    multi: false
+    changeable: true
+    i18n:
+      zh-CN:
+        name: 数据保存目录
+        description: >-
+          选择 Readeck 保存书签、阅读内容与数据库的共享文件夹。
+          选好即完成授权，数据会存到该目录。          留空也能安装，
+          数据存到应用数据目录；装好后可在应用「设置」里改。
+      en-US:
+        name: Data directory
+        description: >-
+          Pick the shared folder where Readeck stores bookmarks, content
+          and the database. Choosing it also grants access. Leaving this
+          empty is fine — data goes to the app data directory, and you can
+          change it later in app settings.
+
+# 权限声明：Readeck 需联网抓取网页内容；启动脚本需执行系统命令(/bin/sh 等)
+permissions:
+  - NETWORK.ACCESS_INTERNET
+  - SYSTEM.EXEC_SYSTEM_COMMAND
+
+# 开源合规信息（AGPL-3.0）
+license_agreement_link:
+  - https://codeberg.org/readeck/readeck/raw/branch/main/LICENSE
+source_code_link:
+  - https://codeberg.org/readeck/readeck
+technical_support_link:
+  - https://community.readeck.org/
+
+# 应用展示信息（多语言）
+i18n:
+  en-US:
+    name: Readeck
+    description: >-
+      Readeck is a self-hosted, open-source bookmark and read-it-later
+      service. Save articles, highlight text, tag, archive and organize
+      your reading list with a clean Web UI. Data is stored in the folder
+      you choose at install time.
+    author: Readeck
+    official: https://readeck.org/
+    help: https://readeck.org/en/docs/
+    publisher: 穿斯帕沃特
+    publisher_link: https://club.ugnas.com/forum.php?mod=viewthread&tid=5820
+  zh-CN:
+    name: Readeck
+    description: >-
+      Readeck 是一款开源自托管的书签与「稍后读」服务。保存文章、高亮、
+      打标签、归档并整理你的阅读列表，Web 界面清爽。数据保存在
+      安装时选择的目录中。
+    author: Readeck
+    official: https://readeck.org/
+    help: https://readeck.org/en/docs/
+    publisher: 穿斯帕沃特
+    publisher_link: https://club.ugnas.com/forum.php?mod=viewthread&tid=5820

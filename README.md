@@ -2,7 +2,7 @@
 
 绿联 UGOS Pro 应用打包 monorepo，参考 [conversun/fnos-apps](https://github.com/conversun/fnos-apps)（飞牛OS同类项目）的 CI 架构改造而来，用 GitHub Actions 自动跟踪各应用的上游新版本、下载/构建、`ugcli` 打包、发布 GitHub Release。
 
-包含：metatube（元数据刮削）、qbittorrent（Enhanced Edition）、natfrp（SakuraFrp 内网穿透客户端）、lucky（网络工具箱：DDNS/反代/端口转发等）、magicpush（多渠道消息推送平台）、picoclaw（Sipeed 超轻量个人 AI Agent）。这些原本是桌面上各自独立的手工维护项目，现在合并成一个仓库统一自动化。
+包含：metatube（元数据刮削）、qbittorrent（Enhanced Edition）、natfrp（SakuraFrp 内网穿透客户端）、lucky（网络工具箱：DDNS/反代/端口转发等）、magicpush（多渠道消息推送平台）、picoclaw（Sipeed 超轻量个人 AI Agent）、readeck（开源书签/稍后读）。这些原本是桌面上各自独立的手工维护项目，现在合并成一个仓库统一自动化。
 
 ## 目录结构
 
@@ -34,6 +34,7 @@ apps/<app>/com.xxx.xxx/
 | magicpush | `magiccode1412/magicpush` | 上游无 releases 无 tag，读 main 分支 `version.json` 的 `.version` | Node.js 应用：CI 里现场 vite 构建前端、npm 装服务端生产依赖（`--ignore-scripts`）、better-sqlite3 按目标架构直接下载官方预编译 `.node`（带 ELF 架构校验）、捆绑 nodejs.org 官方 Node 20 运行时 |
 | picoclaw | `sipeed/picoclaw` | GitHub Releases API，tag 格式 `vX.Y.Z` | 官方静态编译二进制（picoclaw + picoclaw-launcher）直接打包，带 ELF 架构校验；tab 应用直连 launcher 自带 WebUI 管理台（18800）；start.sh 用 `PICOCLAW_HOME` 把全部数据钉到应用 data 目录 + TMPDIR 重定向（沙箱无 /tmp）+ 崩溃循环保护；监听用 `-host 0.0.0.0` 而非 `-public`（沙箱解析不了 localhost，`-public` 会让 launcher 用主机名 localhost 探活 gateway 而全挂，显式 IPv4-any 绑定时探活走字面量 127.0.0.1） |
 | ani-rss（显示名 **ass**） | `wushuo894/ani-rss` | GitHub Releases API，tag `vX.Y.Z`，资产 `ani-rss.jar` | 捆绑 Temurin **JRE**（非 JDK）+ Debian `C.utf8` locale（修中文路径）；start.sh + java 包装需 `SYSTEM.EXEC_SYSTEM_COMMAND`；发布 Release 附带上游 changelog |
+| readeck | 上游在 Codeberg `readeck/readeck`（GitHub 镜像**无 Releases**，tags 也只同步到 0.3.x） | Codeberg Gitea API `releases/latest`，tag 无 v 前缀（如 `0.22.3`） | Go 单二进制静态编译；`parameters` 的 `type: path` 安装时选数据目录（`READEK_DATA_DIR`），start.sh 兜底应用数据目录；更新说明从 Codeberg 的 `CHANGELOG.md` 按版本号切出（`fetch-changelog-section.sh`）；端口 28180（避开 qBittorrent 的 28080） |
 
 ## 本地验证过什么（不需要真机、不需要GitHub仓库）
 
