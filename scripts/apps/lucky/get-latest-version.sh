@@ -11,8 +11,8 @@ if [ -n "$INPUT_VERSION" ]; then
   VERSION="$INPUT_VERSION"
   UPSTREAM_TAG="v${VERSION}"
 else
-  UPSTREAM_TAG=$(curl -sL "https://api.github.com/repos/gdy666/lucky/releases/latest" | \
-    jq -r '.tag_name')
+  CI_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../ci" && pwd)"
+  UPSTREAM_TAG=$(bash "$CI_DIR/github-latest-release-tag.sh" "gdy666/lucky")
   VERSION=$(echo "$UPSTREAM_TAG" | sed -E 's/^v//')
 fi
 

@@ -14,8 +14,8 @@ if [ -n "$INPUT_VERSION" ]; then
   VERSION="$INPUT_VERSION"
   UPSTREAM_TAG="v${VERSION}"
 else
-  TAG=$(curl -sL "https://api.github.com/repos/metatube-community/metatube-server-releases/releases/latest" | \
-    jq -r '.tag_name')
+  CI_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../ci" && pwd)"
+  TAG=$(bash "$CI_DIR/github-latest-release-tag.sh" "metatube-community/metatube-server-releases")
   VERSION=$(echo "$TAG" | sed 's/^v//')
   UPSTREAM_TAG="$TAG"
 fi

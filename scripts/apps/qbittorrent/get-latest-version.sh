@@ -15,31 +15,8 @@ if [ -n "$INPUT_VERSION" ]; then
   VERSION="$INPUT_VERSION"
   UPSTREAM_TAG="release-${VERSION}"
 else
-  API_URL="https://api.github.com/repos/c0re100/qBittorrent-Enhanced-Edition/releases/latest"
-  CURL_ARGS=(
-    --fail
-    --silent
-    --show-error
-    --location
-    --retry 3
-    --retry-all-errors
-    --retry-delay 2
-    --connect-timeout 10
-    --max-time 30
-    -H "Accept: application/vnd.github+json"
-  )
-  if [ -n "${GH_TOKEN:-}" ]; then
-    CURL_ARGS+=(-H "Authorization: Bearer ${GH_TOKEN}")
-  fi
-
-  if ! API_RESPONSE=$(curl "${CURL_ARGS[@]}" "$API_URL"); then
-    echo "Failed to query the qBittorrent latest-release API: $API_URL" >&2
-    exit 1
-  fi
-  if ! UPSTREAM_TAG=$(jq -er '.tag_name // empty' <<<"$API_RESPONSE"); then
-    echo "qBittorrent latest-release API returned no tag_name" >&2
-    exit 1
-  fi
+  CI_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../ci" && pwd)"
+  UPSTREAM_TAG=$(bash "$CI_DIR/github-latest-release-tag.sh" "c0re100/qBittorrent-Enhanced-Edition")
   VERSION=$(echo "$UPSTREAM_TAG" | sed -E 's/^release-//')
 fi
 
