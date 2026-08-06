@@ -2,7 +2,7 @@
 
 绿联 UGOS Pro 应用打包 monorepo，参考 [conversun/fnos-apps](https://github.com/conversun/fnos-apps)（飞牛OS同类项目）的 CI 架构改造而来，用 GitHub Actions 自动跟踪各应用的上游新版本、下载/构建、`ugcli` 打包、发布 GitHub Release。
 
-包含：metatube（元数据刮削）、qbittorrent（Enhanced Edition）、natfrp（SakuraFrp 内网穿透客户端）、lucky（网络工具箱：DDNS/反代/端口转发等）、magicpush（多渠道消息推送平台）、picoclaw（Sipeed 超轻量个人 AI Agent）、readeck（开源书签/稍后读）、litepan（网盘聚合挂载 + STRM 刮削）。这些原本是桌面上各自独立的手工维护项目，现在合并成一个仓库统一自动化。
+包含：metatube（元数据刮削）、qbittorrent（Enhanced Edition）、natfrp（SakuraFrp 内网穿透客户端）、lucky（网络工具箱：DDNS/反代/端口转发等）、magicpush（多渠道消息推送平台）、picoclaw（Sipeed 超轻量个人 AI Agent）、readeck（开源书签/稍后读）、litepan（网盘聚合挂载 + STRM 刮削）、openlist（AList 接续分支：多存储文件列表）。这些原本是桌面上各自独立的手工维护项目，现在合并成一个仓库统一自动化。
 
 ## 目录结构
 
@@ -36,6 +36,7 @@ apps/<app>/com.xxx.xxx/
 | ani-rss（显示名 **ass**） | `wushuo894/ani-rss` | GitHub Releases API，tag `vX.Y.Z`，资产 `ani-rss.jar` | 捆绑 Temurin **JRE**（非 JDK）+ Debian `C.utf8` locale（修中文路径）；start.sh + java 包装需 `SYSTEM.EXEC_SYSTEM_COMMAND`；发布 Release 附带上游 changelog |
 | readeck | 上游在 Codeberg `readeck/readeck`（GitHub 镜像**无 Releases**，tags 也只同步到 0.3.x） | Codeberg Gitea API `releases/latest`，tag 无 v 前缀（如 `0.22.3`） | Go 单二进制静态编译；`parameters` 的 `type: path` 安装时选数据目录（`READEK_DATA_DIR`），start.sh 兜底应用数据目录；更新说明从 Codeberg 的 `CHANGELOG.md` 按版本号切出（`fetch-changelog-section.sh`）；端口 28180（避开 qBittorrent 的 28080） |
 | litepan | `Ponphil/LitePan`（Go 版；上游**无 Release**、tag 停在 v0.3.0-beta，发布渠道是 Docker Hub） | 读 main 分支 `internal/httpx/user_agent.go` 里的 `AppVersion` 常量（如 `v0.4.6-Beta`） | **本仓库唯一需要 Go 工具链现场交叉编译的 app**（magicpush 也从源码构建，但那是 Node）：CI 里下载钉死版本的 Go 工具链交叉编译（前端已由上游预构建并 `go:embed`，不需要 Node）；**不带 `fuse` build tag**（原生沙箱打不开 `/dev/fuse`）；编译前注入 `static/ugos_env.go`（一个只设环境变量的 `init()`，把数据目录/STRM 目录/`TMPDIR` 对到 `UGAPP_*`），上游仓库不打 patch；`parameters` 的 `type: path` 安装时选 STRM 输出目录；端口 **25211**（上游默认的 5211 会和用户自己跑的 Docker 版 LitePan 撞车，真机踩过） |
+| openlist | `OpenListTeam/OpenList`（AList 的社区接续分支） | GitHub Releases API，tag `vX.Y.Z`（正好是 project.yaml 要的 x.y.z，无需映射） | 用 **musl 版**资产 `openlist-linux-musl-<arch>.tar.gz`：它是**静态链接**的（默认的 glibc 版是动态链接，`file` 实测确认），沙箱里零运行时依赖最稳；不用 `-lite`（那个把前端剥掉去 CDN 拉）。start.sh：`type: path` 参数选数据目录 + 本机存储目录（顺带授权，启动时逐个自检可访问性并检查父子嵌套）、管理员密码经 `OPENLIST_ADMIN_PASSWORD`/`admin set` 双路径设置（留空则首启生成随机密码写进数据目录的文本文件）、端口/日志/临时目录用 `OPENLIST_*` 环境变量钉死（注意 Scheme 那组**没有子前缀**，是 `OPENLIST_HTTP_PORT` 不是 `OPENLIST_SCHEME_HTTP_PORT`）；端口 **28244**（上游默认 5244，5xxx 段容易和用户自己跑的容器撞） |
 
 ## 本地验证过什么（不需要真机、不需要GitHub仓库）
 
@@ -69,6 +70,8 @@ apps/<app>/com.xxx.xxx/
 - **每个 app 的 ugcli `--build` 号**是"这个 app 目前为止发布过多少次 + 1"（见 `resolve-release-tag.sh` 里 `build_num` 的计算方式），跟上游版本号无关，纯粹是为了满足 ugcli 要求"同一版本号下构建号必须递增"这条规则。
 - **magicpush 钉死 23000 端口**（`project.yaml` 的 `port` 与 start.sh 里的兜底端口一致，改端口时两处要同步）：原本用 3000，为避开其它常占 3000 的应用（如曾打包过的 adguardhome 管理页）改成了高位端口 23000。
 - **litepan 的 Go 版本钉死在 `build.sh` 的 `GO_VERSION`**：上游 `go.mod` 要求 go 1.26.4，脚本用 `GOTOOLCHAIN=local` 禁止 go 自己去拉工具链（网络抖动会变成难懂的失败）。上游哪天提高 go.mod 的要求，这里要跟着抬。另外 litepan 的版本探测读的是 main 分支的 `AppVersion` 常量，所以**上游改了内容但没 bump 这个常量不会触发重建**（和 magicpush 同一个取舍）。
+- **openlist 的图标用的是官方 logo，而那个 logo 是 CC BY-NC-SA 4.0（非商业）**：素材来自 `OpenListTeam/Logo`，合成脚本在 `scripts/apps/openlist/make-icon.py`。本仓库是免费的社区打包，用它标识应用没问题；但**如果哪天要正式提交到绿联应用中心，这条 NC 条款需要单独确认**（必要时换成自绘图标）。
+- **openlist 装好后必须重启一次才能用上所选目录**：这是平台通病（先起服务、2~3 秒后才写参数与授权），不是这个应用的 bug。start.sh 会在日志里逐条打出哪些目录还不可访问，看到就去应用中心「停止 → 启动」。
 - **jellyfin / adguardhome / smartdns 暂时移出了仓库**：真机发现问题待排查，项目目录和打包脚本先挪到仓库外保存（`../<应用名>/`），修复后迁回，并把上面表格和 workflow 手动触发说明里的应用列表补回来。
 
 

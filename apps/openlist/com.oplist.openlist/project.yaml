@@ -1,0 +1,165 @@
+# ============================================================
+# OpenList — UGOS Pro 原生应用配置
+# 基于 OpenList 4.2.4（AList 的社区接续分支，Go 单二进制，AGPL-3.0，
+# 自带完整 WebUI 与管理后台）
+# ============================================================
+
+spec_version: "2.1"
+
+# 应用ID（上架后不可修改）
+app_id: com.oplist.openlist
+
+# 应用版本号 x.y.z（打包时 --build 追加构建号；CI 会按上游版本改写这一行）
+version: 4.2.4
+
+# 支持的 CPU 架构
+support_arch:
+  - amd64
+  - arm64
+
+# 支持的客户端类型
+supports:
+  - pc
+  - app
+
+# 启动命令：封装脚本（数据目录解析 + 授权自检 + 管理员密码 + 端口钉死）
+start_cmd: bin/start.sh
+
+# WebUI 服务端口（须与 start.sh 中 WEBUI_PORT 一致，供系统探测启动状态）
+# 上游默认 5244，这里改成 28244：5xxx 段容易和用户自己跑的容器撞
+# （真机上 5211 就已经被一个 Docker 应用占着了）。
+port: 28244
+
+# 打开方式：OpenList 自带完整 WebUI，浏览器新标签直连
+open_type: tab
+
+# 应用类别
+tag_types:
+  - utility
+
+# 依赖的最低固件版本（正式上架前请联系绿联开发确认可用版本号）
+depend_fw_version: 1.13.0.0000
+
+# 允许用户在应用设置中追加授权共享/个人文件夹
+# （装好之后想再加几个目录挂进 OpenList，走这条）
+allow_add_access_path: true
+
+# 支持迁移安装目录
+support_migration: true
+
+# 安装/设置时选目录、填密码。
+#
+# type: path 的参数做两件事：① 在应用中心的安装/设置弹窗里渲染出文件夹选择器；
+# ② 顺带授权 —— 选中的目录进 path_permissions 表，进而生成 systemd unit 的
+# BindPaths=，沙箱里才读写得到。
+#
+# ⚠ 两个 path 参数不要选成嵌套关系（数据目录选进存储目录里面）：平台只授权你
+#   显式选中的目录，父子都在列表里时父目录反而不会被挂载，表现为"目录里的文件
+#   都不见了"。start.sh 启动时会检查并在日志里报警。
+#
+# ⚠ 全新安装/升级后的第一次启动，参数值和授权目录【都】还没写进来（平台先起
+#   服务、2~3 秒后才写配置），所以首启一定走兜底路径 —— 在应用中心「停止 →
+#   启动」一次即可生效，这不是故障。
+parameters:
+  - key: OL_DATA_DIR
+    type: path
+    multi: false
+    changeable: true
+    i18n:
+      zh-CN:
+        name: 数据目录
+        description: >-
+          OpenList 存放配置、数据库、搜索索引的目录。选好即完成授权。
+          留空也能安装，数据会放在应用自己的数据目录里（跟随应用卸载一起删除）。
+          注意别选在下面「本机存储目录」的里面。
+      en-US:
+        name: Data directory
+        description: >-
+          Where OpenList keeps its config, database and search index.
+          Choosing a folder also grants access to it. Leaving this empty is
+          fine — data goes to the app's own data directory (removed when the
+          app is uninstalled). Do not pick a folder inside the local storage
+          folders below.
+
+  - key: OL_STORAGE_PATHS
+    type: path
+    multi: true
+    max_values_count: 8
+    changeable: true
+    i18n:
+      zh-CN:
+        name: 本机存储目录
+        description: >-
+          想通过 OpenList 访问的 NAS 本机目录，可以选多个。选好即完成授权，
+          之后在 OpenList 后台「存储 → 添加 → 本机存储」里填同样的路径即可。
+          只挂网盘等远程存储的话，这里可以不选。
+      en-US:
+        name: Local storage folders
+        description: >-
+          NAS folders you want to serve through OpenList; several allowed.
+          Choosing them also grants access — then add the same paths in
+          OpenList's admin panel under Storage → Add → Local. Leave empty if
+          you only mount remote cloud drives.
+
+  - key: OL_ADMIN_PASSWORD
+    type: password
+    multi: false
+    changeable: true
+    i18n:
+      zh-CN:
+        name: 管理员密码
+        description: >-
+          管理员账号 admin 的密码。留空则首次启动时自动生成一个随机密码，
+          写在数据目录下的「openlist-初始管理员密码.txt」里。
+          忘记密码时在这里填一个新的，重启应用即可改回来。
+      en-US:
+        name: Admin password
+        description: >-
+          Password for the admin account. If left empty, a random one is
+          generated on first start and written to
+          "openlist-初始管理员密码.txt" in the data directory. Forgot it?
+          Set a new one here and restart the app.
+
+# 权限声明：
+#   NETWORK.ACCESS_INTERNET   —— OpenList 的核心功能就是对接各家网盘，要出公网
+#   SYSTEM.EXEC_SYSTEM_COMMAND —— start_cmd 是 shell 脚本，没有这条沙箱里连
+#                                 /bin/sh 都不存在（报 ENOENT）
+permissions:
+  - NETWORK.ACCESS_INTERNET
+  - SYSTEM.EXEC_SYSTEM_COMMAND
+
+# 开源合规信息（AGPL-3.0）
+license_agreement_link:
+  - https://raw.githubusercontent.com/OpenListTeam/OpenList/main/LICENSE
+source_code_link:
+  - https://github.com/OpenListTeam/OpenList
+technical_support_link:
+  - https://doc.oplist.org/
+
+# 应用展示信息（多语言）
+i18n:
+  en-US:
+    name: OpenList
+    description: >-
+      OpenList is an open-source file list program that supports many storage
+      backends — local NAS folders, WebDAV, S3, FTP/SFTP and dozens of cloud
+      drives — and exposes them all through one clean web interface. It can
+      preview documents, images, audio and video, share links, and re-export
+      everything over WebDAV. A community-maintained fork of AList.
+    author: OpenListTeam
+    official: https://doc.oplist.org/
+    help: https://doc.oplist.org/guide/
+    publisher: 穿斯帕沃特
+    publisher_link: https://club.ugnas.com/forum.php?mod=viewthread&tid=5820
+  zh-CN:
+    name: OpenList
+    description: >-
+      OpenList 是一款开源的文件列表程序，把 NAS 本机目录、WebDAV、S3、
+      FTP/SFTP 以及几十家网盘统一挂进同一个网页界面，支持文档/图片/音视频在线
+      预览、生成分享链接，并可再通过 WebDAV 对外提供。AList 的社区接续分支。
+      安装时选好数据目录与要挂载的本机目录即可使用。
+    author: OpenListTeam
+    official: https://doc.oplist.org/
+    help: https://doc.oplist.org/guide/
+    publisher: 穿斯帕沃特
+    publisher_link: https://club.ugnas.com/forum.php?mod=viewthread&tid=5820
