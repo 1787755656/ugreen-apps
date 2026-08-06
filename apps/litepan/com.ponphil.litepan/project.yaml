@@ -1,0 +1,141 @@
+# ============================================================
+# LitePan — UGOS Pro 原生应用配置
+# 基于 Ponphil/LitePan（Go 版，单二进制 + go:embed 前端）
+#
+# 与官方 Docker 部署的差异（原生沙箱做不到的部分）：
+#   - 不含 FUSE 本地挂载：沙箱里 /dev/fuse 打不开（设备节点可见但 open 被拒），
+#     也没有 privileged / pid:host。编译时不带 fuse tag，该功能整体不可用。
+#     需要 FUSE 请改用官方 Docker 部署。
+#   - WebDAV / 302 直链 / STRM / 刮削 / 跨盘秒传 / 目录整理 均正常。
+# ============================================================
+
+spec_version: "2.1"
+
+# 应用ID（上架后不可修改）
+app_id: com.ponphil.litepan
+
+# 应用版本号 x.y.z（打包时 --build 追加构建号），对应上游 v0.4.6-Beta
+version: 0.4.6
+
+# 支持的 CPU 架构
+support_arch:
+  - amd64
+  - arm64
+
+# 支持的客户端类型（tab 应用在手机上会用浏览器打开）
+supports:
+  - pc
+  - app
+
+# 启动命令：LitePan 自带完整 Web 服务，直接跑二进制即可。
+# 数据目录 / STRM 目录 / TMPDIR 由编译进去的 UGOS 适配层按平台环境变量解析，
+# 见 overlay/cmd/litepan/ugos_env.go。
+start_cmd: bin/litepan --listen=:25211
+
+# 服务端口（与 --listen 一致，供系统探测启动状态）
+#
+# 刻意【不用】上游默认的 5211：很多人已经在同一台 NAS 上跑着 Docker 版 LitePan，
+# 那边发布的就是 5211，原生应用抢不到会 bind: address already in use 直接退出
+# （2026-08-06 真机撞到过）。25211 与上游默认端口对得上、又不打架。
+port: 25211
+
+# 打开方式：tab —— LitePan 自己 serve 前端 + API + WebDAV + 直链，
+# 路由遍布 /、/api、/dav、/d 等多个前缀，走 inner 网关只反代单个
+# proxy_path 前缀会把它拆散；而且 inner 网关有 20MB 上传体积上限。
+open_type: tab
+
+# 应用分类
+tag_types:
+  - utility
+  - media
+
+# 依赖的最低固件版本（正式上架前请联系绿联开发确认可用版本号）
+depend_fw_version: 1.13.0.0000
+
+# 允许用户在应用设置中授权访问共享/个人文件夹
+# （STRM 目录之外还想让 LitePan 读写别的目录时用这个加）
+allow_add_access_path: true
+
+# 支持迁移安装目录（数据目录靠 UGAPP_DATA_DIR 解析，迁移后自动跟上）
+support_migration: true
+
+# 安装/设置时选好 STRM 输出目录。
+#
+# type: path 参数做两件事：
+#   1. 在应用中心的安装/设置弹窗里渲染出文件夹选择器；
+#   2. 顺带授权 —— 选中的目录进 path_permissions 表（from_type=1），
+#      进而生成 systemd unit 的 BindPaths=，沙箱内读写得到。
+#
+# 注意：全新安装/升级后的首次启动，平台要 2~3 秒后才写入参数值与授权目录，
+#       首启读到的是空值（适配层会兜底到应用数据目录下的 strm/）。
+#       在应用中心「停止 → 启动」一次即可用上所选目录。
+parameters:
+  - key: LITEPAN_STRM_DIR
+    type: path
+    multi: false
+    changeable: true
+    i18n:
+      zh-CN:
+        name: STRM 输出目录
+        description: >-
+          选择 LitePan 生成 .strm 文件、nfo 与海报的共享文件夹，
+          再把它加进 Emby / Jellyfin 的媒体库即可直连播放。
+          选好即完成授权。留空也能安装，文件会写到应用数据目录，
+          但 Emby / Jellyfin 读不到；装好后可在应用「设置」里改。
+      en-US:
+        name: STRM output folder
+        description: >-
+          Pick the shared folder where LitePan writes .strm files, nfo
+          metadata and posters, then add it to your Emby / Jellyfin
+          library for direct playback. Choosing it also grants access.
+          Leaving it empty is fine — files go to the app data directory
+          (not visible to Emby / Jellyfin); you can change it later in
+          app settings.
+
+# 权限声明：LitePan 需要访问各网盘的公网 API、TMDB 刮削接口。
+# 不需要 SYSTEM.EXEC_SYSTEM_COMMAND —— 启动命令直接指向单个 Go 二进制，
+# 不经 shell，也不 fork 任何子进程。
+permissions:
+  - NETWORK.ACCESS_INTERNET
+
+# 开源合规信息（PolyForm Noncommercial 1.0.0 —— 仅限个人学习与非商业使用）
+license_agreement_link:
+  - https://github.com/Ponphil/LitePan/blob/main/LICENSE
+source_code_link:
+  - https://github.com/Ponphil/LitePan
+technical_support_link:
+  - https://www.litepan.top
+
+# 应用展示信息（多语言）
+i18n:
+  zh-CN:
+    name: LitePan
+    description: >-
+      网盘聚合挂载工具，把多个网盘账号统一到一个界面管理。支持跨盘秒传、
+      302 直链播放、WebDAV 共享，可生成 .strm 文件并自动刮削 nfo 与海报，
+      对接 Emby / Jellyfin 直连播放；另有 TMDB 目录整理、命名对齐、
+      缓存保持、离线下载与自动联动。默认管理员密码 admin，登录后请立即修改。
+      原生版不含 FUSE 本地挂载（沙箱无法访问 /dev/fuse），需要该功能请用
+      官方 Docker 部署。
+    author: Ponphil
+    official: https://www.litepan.top
+    help: https://www.litepan.top
+    publisher: 穿斯帕沃特
+    publisher_link: https://space.bilibili.com/1501989416
+  en-US:
+    name: LitePan
+    description: >-
+      A cloud-drive aggregator that brings several drive accounts into one
+      interface. Supports cross-drive instant transfer, 302 direct-link
+      playback and WebDAV sharing; generates .strm files and scrapes nfo
+      metadata and posters for direct playback in Emby / Jellyfin. Also
+      includes TMDB-based library organizing, name alignment, cache
+      retention, offline download and automation. Default admin password is
+      admin — change it right after your first login. This native build has
+      no FUSE mounting (the app sandbox cannot open /dev/fuse); use the
+      official Docker deployment if you need it.
+    author: Ponphil
+    official: https://www.litepan.top
+    help: https://www.litepan.top
+    publisher: 穿斯帕沃特
+    publisher_link: https://space.bilibili.com/1501989416

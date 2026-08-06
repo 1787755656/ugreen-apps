@@ -2,7 +2,7 @@
 
 绿联 UGOS Pro 应用打包 monorepo，参考 [conversun/fnos-apps](https://github.com/conversun/fnos-apps)（飞牛OS同类项目）的 CI 架构改造而来，用 GitHub Actions 自动跟踪各应用的上游新版本、下载/构建、`ugcli` 打包、发布 GitHub Release。
 
-包含：metatube（元数据刮削）、qbittorrent（Enhanced Edition）、natfrp（SakuraFrp 内网穿透客户端）、lucky（网络工具箱：DDNS/反代/端口转发等）、magicpush（多渠道消息推送平台）、picoclaw（Sipeed 超轻量个人 AI Agent）、readeck（开源书签/稍后读）。这些原本是桌面上各自独立的手工维护项目，现在合并成一个仓库统一自动化。
+包含：metatube（元数据刮削）、qbittorrent（Enhanced Edition）、natfrp（SakuraFrp 内网穿透客户端）、lucky（网络工具箱：DDNS/反代/端口转发等）、magicpush（多渠道消息推送平台）、picoclaw（Sipeed 超轻量个人 AI Agent）、readeck（开源书签/稍后读）、litepan（网盘聚合挂载 + STRM 刮削）。这些原本是桌面上各自独立的手工维护项目，现在合并成一个仓库统一自动化。
 
 ## 目录结构
 
@@ -35,6 +35,7 @@ apps/<app>/com.xxx.xxx/
 | picoclaw | `sipeed/picoclaw` | GitHub Releases API，tag 格式 `vX.Y.Z` | 官方静态编译二进制（picoclaw + picoclaw-launcher）直接打包，带 ELF 架构校验；tab 应用直连 launcher 自带 WebUI 管理台（18800）；start.sh 用 `PICOCLAW_HOME` 把全部数据钉到应用 data 目录 + TMPDIR 重定向（沙箱无 /tmp）+ 崩溃循环保护；监听用 `-host 0.0.0.0` 而非 `-public`（沙箱解析不了 localhost，`-public` 会让 launcher 用主机名 localhost 探活 gateway 而全挂，显式 IPv4-any 绑定时探活走字面量 127.0.0.1） |
 | ani-rss（显示名 **ass**） | `wushuo894/ani-rss` | GitHub Releases API，tag `vX.Y.Z`，资产 `ani-rss.jar` | 捆绑 Temurin **JRE**（非 JDK）+ Debian `C.utf8` locale（修中文路径）；start.sh + java 包装需 `SYSTEM.EXEC_SYSTEM_COMMAND`；发布 Release 附带上游 changelog |
 | readeck | 上游在 Codeberg `readeck/readeck`（GitHub 镜像**无 Releases**，tags 也只同步到 0.3.x） | Codeberg Gitea API `releases/latest`，tag 无 v 前缀（如 `0.22.3`） | Go 单二进制静态编译；`parameters` 的 `type: path` 安装时选数据目录（`READEK_DATA_DIR`），start.sh 兜底应用数据目录；更新说明从 Codeberg 的 `CHANGELOG.md` 按版本号切出（`fetch-changelog-section.sh`）；端口 28180（避开 qBittorrent 的 28080） |
+| litepan | `Ponphil/LitePan`（Go 版；上游**无 Release**、tag 停在 v0.3.0-beta，发布渠道是 Docker Hub） | 读 main 分支 `internal/httpx/user_agent.go` 里的 `AppVersion` 常量（如 `v0.4.6-Beta`） | **本仓库唯一需要 Go 工具链现场交叉编译的 app**（magicpush 也从源码构建，但那是 Node）：CI 里下载钉死版本的 Go 工具链交叉编译（前端已由上游预构建并 `go:embed`，不需要 Node）；**不带 `fuse` build tag**（原生沙箱打不开 `/dev/fuse`）；编译前注入 `static/ugos_env.go`（一个只设环境变量的 `init()`，把数据目录/STRM 目录/`TMPDIR` 对到 `UGAPP_*`），上游仓库不打 patch；`parameters` 的 `type: path` 安装时选 STRM 输出目录；端口 **25211**（上游默认的 5211 会和用户自己跑的 Docker 版 LitePan 撞车，真机踩过） |
 
 ## 本地验证过什么（不需要真机、不需要GitHub仓库）
 
@@ -67,6 +68,7 @@ apps/<app>/com.xxx.xxx/
 - **`ugcli` 版本锁定在 1.1.0.13**（`reusable-build-app.yml` 里的 `UGCLI_VERSION`）：故意锁死，避免绿联出新版 `ugcli` 后行为变化影响所有应用的打包，需要升级时手动改这一处。
 - **每个 app 的 ugcli `--build` 号**是"这个 app 目前为止发布过多少次 + 1"（见 `resolve-release-tag.sh` 里 `build_num` 的计算方式），跟上游版本号无关，纯粹是为了满足 ugcli 要求"同一版本号下构建号必须递增"这条规则。
 - **magicpush 钉死 23000 端口**（`project.yaml` 的 `port` 与 start.sh 里的兜底端口一致，改端口时两处要同步）：原本用 3000，为避开其它常占 3000 的应用（如曾打包过的 adguardhome 管理页）改成了高位端口 23000。
+- **litepan 的 Go 版本钉死在 `build.sh` 的 `GO_VERSION`**：上游 `go.mod` 要求 go 1.26.4，脚本用 `GOTOOLCHAIN=local` 禁止 go 自己去拉工具链（网络抖动会变成难懂的失败）。上游哪天提高 go.mod 的要求，这里要跟着抬。另外 litepan 的版本探测读的是 main 分支的 `AppVersion` 常量，所以**上游改了内容但没 bump 这个常量不会触发重建**（和 magicpush 同一个取舍）。
 - **jellyfin / adguardhome / smartdns 暂时移出了仓库**：真机发现问题待排查，项目目录和打包脚本先挪到仓库外保存（`../<应用名>/`），修复后迁回，并把上面表格和 workflow 手动触发说明里的应用列表补回来。
 
 
