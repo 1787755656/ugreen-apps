@@ -1,0 +1,119 @@
+# ============================================================
+# Sub2API —— UGOS Pro 原生应用配置
+#
+# 二进制来自官方 GitHub Release（sub2api_<ver>_linux_*），Go 静态编译，
+# `-tags=embed` 内嵌 Vue 前端，沙箱里无需任何动态库 / shell。
+# start_cmd 指向一个 sh 包装（supervisor 循环 + 注入环境变量），
+# 真正的服务进程是 bin/sub2api。
+#
+# 依赖：PostgreSQL 15+（如 postgresql-ugreen-app，PG 监听 5432）与
+# Redis 7+（如 redis-ugreen-app，Redis 监听 16379）。
+# 首次启动会进入网页 setup wizard，引导填写数据库/Redis/管理员账号，
+# 写盘 config.yaml 后自动重启进入正常模式。
+#
+# ⚠ version 行由 CI 覆写（scripts/apps/sub2api/get-latest-version.sh 解析
+#   上游 release 并做末两位压缩映射，见该文件注释），这里只作占位。
+# ============================================================
+
+spec_version: "2.1"
+
+app_id: com.personal.sub2api
+
+version: 0.1.0
+
+support_arch:
+  - amd64
+  - arm64
+
+supports:
+  - pc
+  - app
+
+# 启动命令：sh 包装（supervisor 循环拉起 bin/sub2api）。
+# 因 start_cmd 本身就是 shell 脚本，必须声明 SYSTEM.EXEC_SYSTEM_COMMAND。
+start_cmd: bin/start.sh
+
+# 管理界面/API 的 HTTP 端口。
+# 避开 UGOS 系统占用的端口：5432(PG) 6379(Redis) 25432(PG管理壳) 26379(Redis管理壳) 5211(LitePan) 等。
+# 系统用这个端口探活；open_type: tab 时浏览器直连该端口。
+port: 25435
+
+# 浏览器直连后端端口：sub2api 自带账号体系与管理员登录，
+# 不依赖 UGOS 网关注入的用户身份头，不需要 inner。
+open_type: tab
+
+tag_types:
+  - utility
+
+depend_fw_version: 1.13.0.0000
+
+# 允许用户之后手动添加访问路径。
+allow_add_access_path: true
+
+# 数据保存目录。
+#
+# type: path 参数一次办两件事：在安装/设置弹窗里渲染文件夹选择器，并把选中的
+# 目录记进 path_permissions（from_type=1）→ 生成 systemd unit 的 BindPaths=
+# → 沙箱里直接读写得到，不用再去「访问路径」里补一遍。
+#
+# ⚠ 全新安装的首启读到的值一定是空的（平台先起服务、2~3 秒后才写进 init.d/*.env）。
+#   所以 start.sh 的策略：首启用应用数据目录跑起来；一旦参数就绪且目标目录为空、
+#   默认目录里已有 config/.installed，就把数据复制过去 —— 自动完成"首启配置迁移"。
+parameters:
+  - key: SUB2API_DATA_DIR
+    type: path
+    multi: false
+    changeable: true
+    i18n:
+      zh-CN:
+        name: 数据保存目录
+        description: >-
+          选择存放 Sub2API 配置与数据的共享文件夹，选好即完成授权。
+          数据会存到该目录下的 sub2api-data 子目录。留空也能安装，数据存到应用数据目录。
+      en-US:
+        name: Data directory
+        description: >-
+          Pick the shared folder for Sub2API config and data; choosing it also
+          grants access. Data goes into a sub2api-data subfolder there.
+          May be left empty — data then lives in the app data directory.
+
+# 两条权限都是真实需要：
+#  - SYSTEM.EXEC_SYSTEM_COMMAND：start_cmd 是 /bin/sh 脚本，脚本里要 cd/mkdir，
+#    沙箱默认没有 /bin /usr/bin，不加这条连脚本都起不来。
+#  - NETWORK.ACCESS_INTERNET：sub2api 的核心功能是把请求转发到公网的
+#    LLM 服务商。沙箱默认公网出站被 DROP，只放行私网；不声明这条，转发一律失败。
+permissions:
+  - SYSTEM.EXEC_SYSTEM_COMMAND
+  - NETWORK.ACCESS_INTERNET
+
+license_agreement_link:
+  - https://github.com/Wei-Shaw/sub2api/blob/main/LICENSE
+source_code_link:
+  - https://github.com/Wei-Shaw/sub2api
+technical_support_link:
+  - https://github.com/Wei-Shaw/sub2api
+
+i18n:
+  zh-CN:
+    name: Sub2API
+    description: >-
+      AI 接口中转站（API Gateway）。把你的各大 LLM 服务商 key 统一管起来，
+      通过一个 OpenAI 兼容的地址对外提供接入，内置用量统计、配额限制、
+      多用户管理、WebAuthn 登录等。自带管理界面与账号体系。
+      需要本机已安装 PostgreSQL 15+ 与 Redis 7+。首次启动请在浏览器中完成初始化向导。
+    author: Wei-Shaw
+    official: https://github.com/Wei-Shaw/sub2api
+    help: https://github.com/Wei-Shaw/sub2api/blob/main/README_CN.md
+    publisher: 穿斯帕沃特
+  en-US:
+    name: Sub2API
+    description: >-
+      An AI API gateway that aggregates your LLM provider keys behind one
+      OpenAI-compatible endpoint, with usage stats, quotas, multi-user
+      management and WebAuthn. Ships its own admin UI and account system.
+      Requires PostgreSQL 15+ and Redis 7+ already installed on this NAS.
+      On first start, finish the setup wizard in your browser.
+    author: Wei-Shaw
+    official: https://github.com/Wei-Shaw/sub2api
+    help: https://github.com/Wei-Shaw/sub2api
+    publisher: 穿斯帕沃特
