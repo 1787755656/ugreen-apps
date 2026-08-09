@@ -62,7 +62,7 @@ echo "==> sha256 OK: $EXPECTED"
 
 # ---- 3. 解压 + 装入 rootfs ----------------------------------------------
 mkdir -p "$ROOTFS/bin"
-tar xzf "$WORK_DIR/$TARBALL" -C "$WORK_DIR" ./sub2api
+tar xzf "$WORK_DIR/$TARBALL" -C "$WORK_DIR" sub2api
 chmod +x "$WORK_DIR/sub2api"
 cp "$WORK_DIR/sub2api" "$ROOTFS/bin/sub2api"
 
