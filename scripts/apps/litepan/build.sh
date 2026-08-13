@@ -62,6 +62,25 @@ fi
   exit 1
 }
 
+# 上游把一部分驱动（目前是 drivers/115）写进了 .gitignore，只存在于作者本机：
+# Docker 镜像用 `COPY . .` 从工作树构建，带得上；而公开仓库/源码 tarball 里没有，
+# drivers/all.go 里那行空导入就成了 `package litepan/drivers/115 is not in std`
+# —— 从 0c613b9「fuse及驱动优化」起 main 分支对外一直编译不过（2026-08-12 起
+# 每晚定时构建连挂）。上游随时可能再私藏一个驱动，所以这里做成自愈：
+# 导入了但目录不存在的驱动直接摘掉，只打 warning，不让整个应用停止更新。
+# 代价：成品缺这个驱动（115 开放平台的 115_Open 是另一个目录，不受影响）。
+ALL_GO="$WORK_DIR/src/drivers/all.go"
+[ -f "$ALL_GO" ] || {
+  echo "::error::drivers/all.go 不存在 —— 上游驱动聚合方式可能变了，需要复核本段逻辑" >&2
+  exit 1
+}
+for drv in $(sed -nE 's|^[[:space:]]*_ "litepan/drivers/([^"]+)".*|\1|p' "$ALL_GO"); do
+  [ -d "$WORK_DIR/src/drivers/$drv" ] && continue
+  echo "::warning::drivers/${drv} 未随源码发布（上游 .gitignore 排除），已从 all.go 摘除，成品不含该驱动"
+  grep -vF "\"litepan/drivers/${drv}\"" "$ALL_GO" > "$ALL_GO.tmp"
+  mv "$ALL_GO.tmp" "$ALL_GO"
+done
+
 # ---- 2. Go 工具链 ----
 # 按【宿主】的 OS/架构取工具链（目标架构由下面的 GOARCH 决定，两者无关）。
 # CI 上宿主永远是 linux-amd64；这里做自动探测纯粹是为了在 macOS 上也能
