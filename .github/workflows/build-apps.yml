@@ -16,7 +16,7 @@ on:
   workflow_dispatch:
     inputs:
       app:
-        description: "App slug to build (metatube, qbittorrent, natfrp, lucky, magicpush, picoclaw, ani-rss, readeck, litepan, openlist)"
+        description: "App slug to build (metatube, qbittorrent, natfrp, lucky, magicpush, picoclaw, ani-rss, readeck, litepan, openlist, sub2api, fastnet)"
         required: true
         type: string
       version:

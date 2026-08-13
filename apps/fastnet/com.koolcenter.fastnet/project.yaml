@@ -1,0 +1,100 @@
+# ============================================================
+# FastNet — UGOS Pro 原生应用配置
+# KoolCenter 出品的全平台网络测速/诊断工具（闭源，官方只发预编译二进制）
+# 这里跑的是它的 `web` 子命令：本地 Web 控制台，端口 28190
+# ============================================================
+
+# 配置规范版本
+spec_version: "2.1"
+
+# 应用ID（上架后不可修改）
+app_id: com.koolcenter.fastnet
+
+# 应用版本号 x.y.z（打包时 --build 追加构建号；CI 会按上游 version.txt 覆写）
+version: 0.7.6
+
+# 支持的 CPU 架构（上游还发 armv7，但 UGOS Pro 没有这种机型）
+support_arch:
+  - amd64
+  - arm64
+
+# 支持的客户端类型
+supports:
+  - pc
+  - app
+
+# 启动命令：封装脚本（设 TMPDIR/cwd 后 exec FastNet 的 web 子命令）
+start_cmd: bin/start.sh
+
+# Web 控制台端口（供系统探活；与 start.sh 的 LISTEN_PORT 一致，改动要两处同步）
+port: 28190
+
+# 打开方式：FastNet 自带完整 Web 服务，根路径会 302 到它自己的 /webui/，
+# 网关只反代 proxy_path 那一条前缀、根路径只 serve 静态 www/，所以 inner 走不通。
+open_type: tab
+
+# 应用类别
+tag_types:
+  - utility
+  - system
+
+# 依赖的最低固件版本
+depend_fw_version: 1.13.0.0000
+
+# 支持迁移安装目录
+support_migration: true
+
+# 声明权限：
+#   NETWORK.ACCESS_INTERNET —— 测速的本体就是跑公网流量（下载/上传打点、
+#     STUN 做 NAT 类型判定走公网 UDP、IPv6 可达性探测）。零权限沙箱下公网
+#     TCP 被 DROP、公网 UDP 直接 EPERM，这条不声明整个应用没有意义。
+#   SYSTEM.EXEC_SYSTEM_COMMAND —— start_cmd 是 #!/bin/sh 脚本，未声明时
+#     沙箱里字面没有 /bin/sh（见 ugos-pro-app-dev skill），起不来。
+permissions:
+  - NETWORK.ACCESS_INTERNET
+  - SYSTEM.EXEC_SYSTEM_COMMAND
+
+# 合规信息：FastNet 为 KoolCenter 的闭源软件（官方只提供预编译二进制，
+# 无源码仓库、无独立许可证文件），因此不填 license_agreement_link /
+# source_code_link，只给官方支持入口。做法与本仓库的 natfrp 一致。
+technical_support_link:
+  - https://www.koolcenter.com/t/topic/9148
+
+# 应用展示信息（多语言）
+i18n:
+  en-US:
+    name: FastNet
+    description: >-
+      FastNet is a network speed test and diagnostics tool by KoolCenter.
+      Open the app to get a browser console that runs a full check-up from
+      the NAS itself: latency, download and upload throughput over multiple
+      CDN sources, NAT type detection (RFC 5780 STUN) and IPv6 readiness.
+      Useful for telling apart "my NAS uplink is slow" from "this one
+      download is slow", and for checking whether your broadband really
+      delivers what you pay for. No account, no configuration and nothing
+      is written to your storage — results are shown in the browser only.
+      Note: the console listens on port 28190 and is reachable from
+      anyone on your LAN; it holds no credentials or personal data, but
+      running a test does consume real bandwidth. Requires Internet access.
+    author: KoolCenter
+    official: https://www.koolcenter.com/t/topic/9148
+    help: https://www.koolcenter.com/t/topic/9148
+    publisher: KoolCenter
+    publisher_link: https://www.koolcenter.com
+  zh-CN:
+    name: FastNet 网络测速
+    description: >-
+      FastNet 是 KoolCenter（原 KoolShare）出品的全平台网络测速与诊断工具。
+      打开应用即可在浏览器里对 NAS 本机做一次完整体检：延迟、多源 CDN
+      下载/上传速度、NAT 类型检测（RFC 5780 STUN）以及 IPv6 可用性评分。
+      适合用来分辨"是 NAS 的宽带慢"还是"只有这一个下载慢"，也可以核对
+      运营商给的带宽有没有跑满。无需注册、无需配置，不向存储空间写入任何
+      文件，测试结果只显示在浏览器里。
+      注意：控制台监听 28190 端口，同局域网内的任何设备都能打开（页面本身
+      不含任何凭据或个人数据，但每跑一次测速都会真实消耗上下行带宽）。
+      本应用需要访问互联网才能工作。
+    author: KoolCenter
+    official: https://www.koolcenter.com/t/topic/9148
+    help: https://www.koolcenter.com/t/topic/9148
+    publisher: KoolCenter
+    publisher_link: https://www.koolcenter.com
