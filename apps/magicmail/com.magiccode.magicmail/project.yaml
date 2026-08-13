@@ -1,0 +1,75 @@
+# Magicmail 魔法邮箱 — UGOS Pro 原生应用
+# 上游：https://github.com/magiccode1412/magicmail （AGPLv3）
+spec_version: "2.1"
+
+app_id: com.magiccode.magicmail
+version: 1.1.1
+
+support_arch:
+  - amd64
+  - arm64
+
+supports:
+  - pc
+  - app
+
+# 上游只认 MAGICMAIL_PORT 环境变量，而 start_cmd 不经 shell 没法设环境变量；
+# 由适配层 ugos_env.go 解析这里的 --port= 转成环境变量，让端口只有这一个来源。
+# 端口不用上游默认的 8080：8080 被占的概率极高（用户很可能已经在同一台 NAS 上
+# 跑着别的东西），抢不到端口的表现是应用中心一直显示"未启动"。
+start_cmd: bin/magicmail --port=23232
+port: 23232
+
+# tab：浏览器直接打开应用端口，由 Magicmail 自己 serve 前端 + API。
+# 不用 inner 的三个理由：
+#   1. 它是 PWA，Service Worker 在网关的跨站 iframe 里注册不可靠；
+#   2. 实时收信走 SSE 长连接，经网关 nginx 反代会被缓冲/超时（未验证，不赌）；
+#   3. inner 的请求要过网关，而网关全局 client_max_body_size 只有 20m，
+#      发带附件的邮件会 413。
+# 代价是端口对局域网直接可达 —— Magicmail 自带账号登录（单用户模式），
+# 和 phpMyAdmin 那类"应用自带完整 Web 服务"的形态一致。
+open_type: tab
+
+tag_types:
+  - utility
+
+# 占位值，正式上架前请联系绿联确认真实固件版本号
+depend_fw_version: 1.13.0.0000
+
+# 只有管理员能在桌面看到并打开
+only_admin: true
+
+# 邮件、附件、数据库全部落在应用自己的数据目录里，不需要用户授权任何共享文件夹
+allow_add_access_path: false
+support_migration: true
+
+# 收信要连外部邮件服务商的 IMAP/SMTP，Webhook 与 Web Push 也要出公网。
+# 不声明 SYSTEM.EXEC_SYSTEM_COMMAND：start_cmd 直接指向包内的 Go 二进制，
+# 全程不 fork 任何子进程、也不需要 /bin/sh。
+permissions:
+  - NETWORK.ACCESS_INTERNET
+
+license_agreement_link:
+  - https://github.com/magiccode1412/magicmail/blob/main/LICENSE
+source_code_link:
+  - https://github.com/magiccode1412/magicmail
+technical_support_link:
+  - https://github.com/magiccode1412/magicmail/issues
+
+i18n:
+  zh-CN:
+    name: 魔法邮箱
+    description: 跑在自己 NAS 上的邮件代收客户端。通过 IMAP 协议把多个邮箱账号的邮件统一收取到本地数据库，用一个现代化的 PWA 界面集中阅读、搜索与管理，收件箱再多也只用打开一个页面。支持 IMAP IDLE 实时推送新邮件、SSE 页面即时刷新、Web Push 浏览器通知与 Webhook 回调；可发信、存草稿、管理附件（支持自动缓存与磁盘空间保护）、批量已读与删除、邮件自动去重；Outlook 等邮箱可用 OAuth2 授权登录，无需填写密码。邮箱密码以 AES-256-GCM 加密存储，邮件与附件全部留在自己的 NAS 上，不经任何第三方服务器中转。首次打开需要在页面里注册管理员账号，建议装好后立即完成注册。
+    author: magiccode1412
+    official: https://github.com/magiccode1412/magicmail
+    help: https://magiccode1412.github.io/magicmail/
+    publisher: 穿斯帕沃特
+    publisher_link: https://club.ugnas.com/home.php?mod=space&uid=10131
+  en-US:
+    name: Magicmail
+    description: A self-hosted mail aggregation client for your NAS. It collects mail from several IMAP accounts into one local database and presents it in a modern PWA client, so no matter how many inboxes you have, you only open one page. Features IMAP IDLE for instant delivery, SSE live refresh, Web Push notifications and webhooks; sending, drafts, attachment handling with auto-caching and disk-space guards, bulk read/delete and automatic de-duplication. Outlook and similar providers can sign in via OAuth2 instead of a password. Mailbox credentials are stored AES-256-GCM encrypted, and your mail never leaves your NAS. On first launch, register the administrator account in the web UI right away.
+    author: magiccode1412
+    official: https://github.com/magiccode1412/magicmail
+    help: https://magiccode1412.github.io/magicmail/
+    publisher: 穿斯帕沃特
+    publisher_link: https://club.ugnas.com/home.php?mod=space&uid=10131
