@@ -79,8 +79,9 @@ i18n:
     author: KoolCenter
     official: https://www.koolcenter.com/t/topic/9148
     help: https://www.koolcenter.com/t/topic/9148
-    publisher: KoolCenter
-    publisher_link: https://www.koolcenter.com
+    # 发布者 = 做这个绿联打包的人（不是软件作者，author 那栏才是）
+    publisher: 穿斯帕沃特
+    publisher_link: https://club.ugnas.com/forum.php?mod=viewthread&tid=5990
   zh-CN:
     name: FastNet 网络测速
     description: >-
@@ -96,5 +97,6 @@ i18n:
     author: KoolCenter
     official: https://www.koolcenter.com/t/topic/9148
     help: https://www.koolcenter.com/t/topic/9148
-    publisher: KoolCenter
-    publisher_link: https://www.koolcenter.com
+    # 发布者 = 做这个绿联打包的人（不是软件作者，author 那栏才是）
+    publisher: 穿斯帕沃特
+    publisher_link: https://club.ugnas.com/forum.php?mod=viewthread&tid=5990
