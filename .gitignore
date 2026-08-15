@@ -14,6 +14,10 @@ apps/*/*/build_dir/
 # artifacts CI publishes to GitHub Releases, so never committed either.
 dist/
 
+# 自带的 IP 地理数据库由 CI 现场下载（DB-IP 按月发布，4MB 二进制不进 git）；
+# 同目录的 ATTRIBUTION.txt 是要提交的（CC BY 4.0 要求署名）。
+apps/*/*/rootfs_common/geoip/*.mmdb.gz
+
 .DS_Store
 
 # 打包成品只进 GitHub Releases，不进 git（根目录的本地手工构建产物）

@@ -2,7 +2,7 @@
 
 绿联 UGOS Pro 应用打包 monorepo，参考 [conversun/fnos-apps](https://github.com/conversun/fnos-apps)（飞牛OS同类项目）的 CI 架构改造而来，用 GitHub Actions 自动跟踪各应用的上游新版本、下载/构建、`ugcli` 打包、发布 GitHub Release。
 
-包含：metatube（元数据刮削）、qbittorrent（Enhanced Edition）、natfrp（SakuraFrp 内网穿透客户端）、lucky（网络工具箱：DDNS/反代/端口转发等）、magicpush（多渠道消息推送平台）、picoclaw（Sipeed 超轻量个人 AI Agent）、readeck（开源书签/稍后读）、litepan（网盘聚合挂载 + STRM 刮削）、openlist（AList 接续分支：多存储文件列表）、magicmail（多邮箱 IMAP 代收客户端）。这些原本是桌面上各自独立的手工维护项目，现在合并成一个仓库统一自动化。
+包含：metatube（元数据刮削）、qbittorrent（Enhanced Edition）、qbittorrent-ng6（superng6 版，官方 qBittorrent + 国内网络调优配置）、natfrp（SakuraFrp 内网穿透客户端）、lucky（网络工具箱：DDNS/反代/端口转发等）、magicpush（多渠道消息推送平台）、picoclaw（Sipeed 超轻量个人 AI Agent）、readeck（开源书签/稍后读）、litepan（网盘聚合挂载 + STRM 刮削）、openlist（AList 接续分支：多存储文件列表）、magicmail（多邮箱 IMAP 代收客户端）。这些原本是桌面上各自独立的手工维护项目，现在合并成一个仓库统一自动化。
 
 ## 目录结构
 
@@ -29,6 +29,7 @@ apps/<app>/com.xxx.xxx/
 |---|---|---|---|
 | metatube | `metatube-community/metatube-server-releases`（不是 sdk-go 源码仓库！这是上游自己发布预编译二进制的仓库） | GitHub Releases API | 已从"本地go build"改成直接下载预编译zip，产物等价 |
 | qbittorrent | `c0re100/qBittorrent-Enhanced-Edition` | GitHub Releases API，tag格式 `release-X.Y.Z.W`（4段） | project.yaml 的 version 字段只要前3段（ugcli要求x.y.z），第4段仅用于版本比对去重，不写进project.yaml |
+| qbittorrent-ng6 | Docker Hub 镜像 `superng6/qbittorrent`（`SuperNG6/docker-qbittorrent` 仓库里只有 Dockerfile，**没有 Release**） | Docker Hub tags API，tag 形如 `5.2.3_v2.0.14`（qBittorrent 版本 + libtorrent 版本）；取和 `latest` **同一个 manifest 摘要**的那个版本 tag，比按时间取最新准（上游偶尔补发旧分支镜像） | **本仓库唯一从 Docker 镜像扒内容的 app**：`docker create`+`docker export` 对异架构镜像照样可用（只是不能 run），所以 amd64 runner 能出两个架构的包。取三样：`qbittorrent-nox`（**static-pie 全静态**，build.sh 有硬断言盯着，一旦上游改成动态链接就当场失败）、国内调优的默认配置、33 个搜索插件——后两样 `go:embed` 进自写的 Go 管理壳（复刻镜像里那套 s6 脚本：铺配置/启动前更新 tracker/守护进程，外加沙箱适配）。另外 CI 现场下载 DB-IP 地理库打进包（否则首启日志里必有一条「无法加载 IP 地理数据库」，且自愈依赖能连上 db-ip.com）。端口 **18081**（上游 8080 必撞；BT 端口默认 26881，上游的 6881 常被 Docker 版占用）；首启写死一个已知密码 `admin/adminadmin`——qBittorrent 5.x 不设密码时每次随机生成临时密码**只打进日志**，原生应用用户看不到就等于进不去 |
 | natfrp | 无版本化URL，无GitHub仓库，`nya.globalslb.net` 的 `/latest/` 目录永远指向最新 | 用 HTTP `Last-Modified` 响应头转成 `YYYY.M.D` 当伪版本号 | 没法用"查最新release"方式探测新版本，细节见 `scripts/apps/natfrp/get-latest-version.sh` 注释 |
 | lucky | `gdy666/lucky` | GitHub Releases API，tag 格式 `vX.Y.Z` | 官方静态编译二进制直接打包；start.sh 是收养式守护循环（扛 Lucky 网页里"重启"的自我重启行为）+ TMPDIR 重定向（沙箱无 /tmp） |
 | magicpush | `magiccode1412/magicpush` | 上游无 releases 无 tag，读 main 分支 `version.json` 的 `.version` | Node.js 应用：CI 里现场 vite 构建前端、npm 装服务端生产依赖（`--ignore-scripts`）、better-sqlite3 按目标架构直接下载官方预编译 `.node`（带 ELF 架构校验）、捆绑 nodejs.org 官方 Node 20 运行时 |

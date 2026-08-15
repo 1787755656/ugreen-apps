@@ -1,0 +1,15 @@
+dbip-country-lite.mmdb.gz
+=========================
+
+IP 地理数据库，用于在 qBittorrent 里显示 Peer 的国家/地区。
+
+来源：DB-IP <https://db-ip.com>
+产品：IP to Country Lite
+许可：Creative Commons Attribution 4.0 International (CC BY 4.0)
+      https://creativecommons.org/licenses/by/4.0/
+
+本文件为 DB-IP 免费数据库的未修改副本，随应用一并分发，以便首次启动时
+无需联网即可加载地理数据库。qBittorrent 自身的月度更新机制照常工作，
+会在后续把它替换为更新的版本。
+
+IP Geolocation by DB-IP (https://db-ip.com)

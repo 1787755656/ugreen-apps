@@ -1,0 +1,186 @@
+# ============================================================
+# qBittorrent（superng6 版）—— UGOS Pro 原生应用
+#
+# 内容取自 docker.io/superng6/qbittorrent：
+#   - qbittorrent-nox 5.2.3（static-pie，零动态库依赖，两个架构各一份）
+#   - 针对国内网络调过的默认配置（内置 tracker 列表、中文界面、队列参数）
+#   - 33 个搜索引擎插件
+# 镜像里那套 s6 启动脚本由包内的 Go 管理壳（bin/launcher）复刻。
+# ============================================================
+
+spec_version: "2.1"
+
+app_id: com.superng6.qbittorrent
+
+# 跟随上游 qbittorrent-nox 的版本
+version: 5.2.3
+
+support_arch:
+  - amd64
+  - arm64
+
+supports:
+  - pc
+  - app
+
+# 管理壳负责铺配置、更新 tracker、拉起并守护 qbittorrent-nox
+start_cmd: bin/launcher --port=18081
+
+# ⚠ 不照抄上游的 8080：这台 NAS 上很可能已经跑着 Docker 版 qBittorrent
+#（绿联应用中心那个用的就是 28080），原生应用抢不到端口起来就退，
+#   应用中心只会显示"未启动"。此处的值必须和 start_cmd 里的 --port 一致。
+port: 18081
+
+# qbittorrent-nox 自带完整 WebUI，浏览器新标签直连
+open_type: tab
+
+tag_types:
+  - download
+  - utility
+
+depend_fw_version: 1.13.0.0000
+
+# 下载器要写用户的共享目录，装完之后还能再加/换目录
+allow_add_access_path: true
+
+support_migration: true
+
+# 只对管理员显示：这个应用能往共享目录里写文件、还带一个对局域网开放的 WebUI
+only_admin: true
+
+# 【权限画像】只要一条：BT 和 tracker 更新都要访问互联网。
+# 不需要 SYSTEM.EXEC_SYSTEM_COMMAND —— 管理壳 exec 的是包内自带的绝对路径，
+# 一步都不碰 /bin（沙箱里没有 seccomp，execve 本身不受限）。
+permissions:
+  - NETWORK.ACCESS_INTERNET
+
+parameters:
+  # 在安装对话框里选一次，既拿到路径、又顺带把这个目录授权进沙箱
+  #（平台把 path 型参数写进 path_permissions 表 → unit 的 BindPaths=）。
+  #
+  # ⚠ 不设 required：全新安装/升级后【第一次启动读到的参数是空的】，
+  #   平台先起服务、2~3 秒后才写 <appid>.env 和 unit。
+  #
+  # ⚠ 只留这一个目录参数。别再加"临时目录/完成目录"之类的子目录参数 ——
+  #   父子目录同时出现在参数里时，平台反而不会授权父目录（踩过）。
+  - key: QB_DOWNLOAD_PATH
+    type: path
+    multi: false
+    changeable: true
+    required: false
+    i18n:
+      zh-CN:
+        name: 下载保存目录
+        description: >-
+          下载的文件放在哪。选一个你在文件管理器里看得到的目录即可，选中的同时
+          这个目录就被授权给本应用读写了。留空也能装，文件会先落在应用私有数据
+          目录里。装好或改完之后请在应用中心「停止 → 启动」一次，新目录才生效。
+      en-US:
+        name: Download folder
+        description: >-
+          Where downloaded files are written. Picking a folder here also grants
+          this app read/write access to it. May be left empty. After installing
+          or changing this, stop and start the app once for it to take effect.
+
+  # ⚠ 这里【没有】WebUI 密码参数，是有意去掉的：
+  #   安装时填的值要等下一次启动才生效（平台先起服务、几秒后才写 .env），
+  #   而用户在 WebUI 里改过密码之后，这个参数还会在某次重启时把它覆盖回去。
+  #   密码统一由 qBittorrent 自己的界面管：首启写一个已知的默认密码
+  #   （admin / adminadmin），之后一律在 WebUI 里改。
+  - key: QB_BT_PORT
+    type: number
+    changeable: true
+    required: false
+    i18n:
+      zh-CN:
+        name: BT 监听端口
+        description: >-
+          BT 连接的监听端口，留空为 26881。想要更好的下载速度，请在路由器上把这个
+          端口（TCP 和 UDP）转发到 NAS。上游默认的 6881 常被 Docker 版占用，
+          所以这里没有沿用。
+      en-US:
+        name: BT listening port
+        description: >-
+          Port used for incoming BitTorrent connections; defaults to 26881.
+          Forward this port (TCP and UDP) to the NAS on your router for better
+          speeds.
+
+  - key: QB_TRACKER_UPDATE
+    type: string
+    changeable: true
+    required: false
+    i18n:
+      zh-CN:
+        name: 启动时更新 Tracker 列表
+        description: >-
+          填 true 或 false，留空为 true。开启后每次启动会拉取一份公共 tracker
+          列表写进配置（和上游镜像的行为一致）。只在启动时更新一次 ——
+          qBittorrent 运行中会整体重写自己的配置文件，跑着的时候改会被覆盖。
+      en-US:
+        name: Update tracker list on start
+        description: >-
+          true or false, defaults to true. Fetches a public tracker list into the
+          configuration on every start, matching the upstream image behaviour.
+
+  - key: QB_TRACKER_URL
+    type: string
+    changeable: true
+    required: false
+    i18n:
+      zh-CN:
+        name: Tracker 列表地址
+        description: >-
+          自定义 tracker 列表的下载地址，留空使用上游镜像内置的那个
+          （XIU2/TrackersListCollection 的 best.txt）。地址要以 http:// 或
+          https:// 开头，内容为一行一个 tracker。
+      en-US:
+        name: Tracker list URL
+        description: >-
+          Custom URL for the tracker list; leave empty to use the one built into
+          the upstream image. One tracker per line.
+
+# 开源合规：qBittorrent 是 GPL-2.0+，必须给出可获取的源码地址
+license_agreement_link:
+  - https://github.com/qbittorrent/qBittorrent/blob/master/COPYING
+source_code_link:
+  - https://github.com/qbittorrent/qBittorrent
+  - https://github.com/SuperNG6/docker-qbittorrent
+technical_support_link:
+  - https://github.com/SuperNG6/docker-qbittorrent/issues
+
+i18n:
+  zh-CN:
+    name: qBittorrent
+    description: >-
+      免费开源的 BitTorrent 下载客户端，内置网页控制界面，支持磁力链接、种子文件、
+      RSS 订阅自动下载、下载队列与限速、做种比例控制。默认配置针对国内网络做过调整：
+      中文界面、内置一大批公共 tracker 并可在每次启动时自动更新、放开队列上限，
+      并自带 IP 地理数据库（无需联网即可显示 Peer 归属地）。
+      首次登录用户名 admin、密码 adminadmin，登录后请立即在「工具 → 选项 → Web UI」里修改。
+      需要在设置里选一个下载保存目录；想要更好的速度，请在路由器上把 BT 监听端口
+      转发到 NAS。注意：网页界面的端口对局域网开放，请务必设置一个强密码。
+      搜索插件需要 Python，本应用的运行环境里没有 Python，因此搜索功能不可用。
+    author: SuperNG6
+    official: https://github.com/SuperNG6/docker-qbittorrent
+    help: https://github.com/qbittorrent/qBittorrent/wiki
+    publisher: 穿斯帕沃特
+    publisher_link: https://club.ugnas.com/home.php?mod=space&uid=10131
+  en-US:
+    name: qBittorrent
+    description: >-
+      A free and open-source BitTorrent client with a built-in web interface.
+      Supports magnet links, torrent files, RSS auto-downloading, queueing,
+      speed limits and share-ratio management. Ships with a China-tuned default
+      configuration: a large built-in public tracker list that can refresh on
+      every start, relaxed queue limits and a bundled IP geolocation database.
+      The default login is admin / adminadmin — change it immediately after
+      logging in. Pick a download folder in the settings, and
+      forward the BT listening port to the NAS on your router for better speeds.
+      Note that the web interface is reachable from your LAN, so set a strong
+      password. The search plugins require Python, which is not available in
+      this runtime, so search is unavailable.
+    author: SuperNG6
+    official: https://github.com/SuperNG6/docker-qbittorrent
+    help: https://github.com/qbittorrent/qBittorrent/wiki
+    publisher: 穿斯帕沃特
+    publisher_link: https://club.ugnas.com/home.php?mod=space&uid=10131
