@@ -1,0 +1,199 @@
+# ============================================================
+# 知音音乐（Zhiyin Music）— UGOS Pro 原生应用
+#
+# 上游：Docker 镜像 qwex333/zhiyin-music:0.8.1
+#       （Rust + Axum + SQLite + TagLib，自带前端、JWT 登录和 Subsonic API）
+# 本工程把它从容器里解出来打成原生应用，**上游二进制一个字节都没改**——
+# 所有沙箱适配都在 launcher/（一个 Go 管理壳）里。
+#
+# 改动前务必先读的注释：
+#   launcher/config.go   —— config.toml 是相对 cwd 解析的，以及哪几个键归我们管
+#   launcher/env.go      —— 那几个环境变量分别在填哪个坑
+#   scripts/build.sh 顶部 —— 上游产物是从哪个镜像 digest 里解出来的
+# ============================================================
+
+spec_version: "2.1"
+
+app_id: com.personal.zhiyinmusic
+
+# 跟随上游镜像 tag。build.sh 会从主程序的 ELF 里 grep 出版本串核对。
+version: 0.8.1
+
+# 上游两个架构都发了镜像，主程序直接取用，不用自己编译。
+# 其余随包的东西（ffmpeg/ffprobe/curl/libtag/libstdc++）也都按架构各取一份，
+# 构建脚本会断言包里每个 ELF 的架构都对。
+support_arch:
+  - amd64
+  - arm64
+
+# 手机上是重要场景：既能用浏览器开网页版，也能用音流/Symfonium 这类
+# Subsonic 客户端直连（见下面 open_type 那段）。
+supports:
+  - app
+  - pc
+
+# 起的是 Go 管理壳，不是上游二进制 —— 它要在 exec 之前生成 config.toml
+# （上游几乎所有配置都只认这个文件，而默认值里的 /data、/covers、/app/web
+# 在绿联沙箱里都不存在或不可写），并把 PATH / LD_LIBRARY_PATH / TMPDIR 摆好。
+# project.yaml 没有"设置环境变量"这种字段，只能由管理壳来做。
+#
+# 管理壳最后用 syscall.Exec 把自己换成上游进程（pid 不变），
+# 所以 systemd 盯的 MainPID、SIGTERM、日志重定向全都直接落在上游身上。
+start_cmd: bin/zhiyin-launcher --port=28085
+
+# 上游自己监听的端口，浏览器和 Subsonic 客户端直连。
+#
+# ⚠ 上游默认是 8080，【故意没有照抄】：用户很可能已经在同一台 NAS 上跑着
+#   Docker 版的知音音乐，那边发布的就是 8080。原生应用抢不到，起来就退，
+#   应用中心只显示"未启动"。也没用 28080 —— 那个被同一批打包的 qBittorrent
+#   占了。管理壳在 exec 之前会自己探一次端口，撞上了会在日志里点名说明。
+port: 28085
+
+# tab：浏览器直接打开这个端口，应用自己 serve 前端和 API。
+#
+# ⚠ 这里【不能用 inner】，三个独立的硬理由：
+#   ① 上游的路由散在 /api、/rest（Subsonic）、/swagger-ui、以及前端的静态资源
+#      好几个前缀下，而 inner 的网关只把 proxy_path 那一个前缀反代到应用端口，
+#      其余的会去找 www/ 下的静态文件然后 404。
+#   ② Subsonic 客户端（音流、Symfonium、DSub）要用【自己的账号密码】直连
+#      服务器地址，它们不可能穿过 UGOS 的网关登录态 —— 走 inner 就等于
+#      把这个应用最大的卖点关掉了。
+#   ③ inner 的请求要过网关，而网关全局写死 client_max_body_size 20m。
+#
+#   代价是端口在局域网上直接可达 —— 所以装好之后要【立刻】打开应用，
+#   在上游自己的引导页里把管理员账号创建掉（在那之前谁都能抢先创建）。
+open_type: tab
+
+# 这是给全家人用的音乐播放器，不是管理工具，普通用户也该看到图标。
+# （注意 only_admin 管的只是桌面图标对谁显示，本来也挡不住端口。）
+only_admin: false
+
+tag_types:
+  - media
+
+depend_fw_version: 1.13.0.0000
+
+# 装完之后想再加/换音乐目录走这条。
+allow_add_access_path: true
+
+support_migration: true
+
+# 【权限：只要联网这一条】
+#
+# - NETWORK.ACCESS_INTERNET 是【必须的】，这个应用有两个功能真的要出公网：
+#     刮削（从网易云 / QQ 音乐 / 酷狗 / 酷我 / 咪咕 抓元数据、封面、歌词）；
+#     STRM 网盘直链（阿里云盘等的音频流，代理或重定向）。
+#   零权限沙箱只放行私网，这两样会全部超时失败。
+#   代价要知道：声明之后 unit 里那两行 IPAddressDeny=any / IPAddressAllow=私网
+#   会整个消失，也就是不再有任何 IP 过滤。
+#
+# - 不需要 SYSTEM.EXEC_SYSTEM_COMMAND：管理壳 exec 的是包内自带的主程序，
+#   主程序再 spawn 的 ffmpeg / ffprobe / curl 也都在包内，全是绝对路径或
+#   PATH 首位命中，不经过 shell。沙箱里没有 seccomp，execve 本身不受限；
+#   那条权限的全部作用是把 /bin /usr/bin 挂进来，我们一步都不碰。
+#   （而且就算挂进来也没用：那份白名单里根本没有 ffmpeg 和 curl。）
+permissions:
+  - NETWORK.ACCESS_INTERNET
+
+# 【只有音乐目录这一个参数】
+#
+# ⚠ 刻意【不做】"安装时设置管理员账号密码"：上游首次打开就有引导页让用户创建管理员，
+#   再加一份安装参数是画蛇添足 —— 而且首启参数是空的，那份参数注定要到第二次启动
+#   才生效，反而制造出"我明明在安装时填了却没用"的困惑。
+parameters:
+  # 在安装对话框里选一次，既拿到路径、又顺带把目录授权进沙箱
+  # （平台把 path 型参数写进 path_permissions 表 → unit 的 BindPaths=）。
+  #
+  # ⚠ 不设 required：全新安装/升级后【第一次启动读到的参数是空的】——
+  #   平台先起服务、2~3 秒后才写 <appid>.env 和 unit。留空能装、
+  #   读到空值不报错，用户重启一次就用上了。
+  #
+  # ⚠ 只留这一个目录参数，别再加"封面目录/转码缓存目录"之类的子目录参数：
+  #   父子目录同时出现在参数里时，平台反而【不会】授权父目录。
+  #   （封面库和转码缓存都落在平台给的数据/缓存目录里，不占用户目录。）
+  - key: ZHIYIN_MUSIC_PATHS
+    type: path
+    multi: true
+    max_values_count: 8
+    changeable: true
+    required: false
+    i18n:
+      zh-CN:
+        name: 音乐文件夹
+        description: >-
+          存放音乐的文件夹，可以选多个。选中的同时这些目录就被授权给本应用读写了，
+          应用会自动把它们加进扫描目录。留空也能装，装好后在应用中心
+          「停止 → 启动」一次再来补选。之后在这里去掉某个目录，它也会被移出扫描范围；
+          你在应用内自己添加的目录不受影响。
+      en-US:
+        name: Music folders
+        description: >-
+          Folders holding your music; several are allowed. Picking them here also
+          grants this app read/write access, and they are added to the scan list
+          automatically. May be left empty — add them later, then stop and start
+          the app once.
+
+# 上游在 GitHub 上是 MIT 许可证，但那个仓库里【只有文档和配置示例，没有 Rust
+# 源码】—— 实际发布形式只有 Docker 镜像。这两个字段指向上游仓库，
+# 那是目前能提供的唯一权威出处。
+#
+# ⚠ 想拿去上架应用中心的话，这一条大概率过不了审：审核要求开源软件给出
+#   真实可获取的源码地址。先联系上游作者拿授权或让他把源码放出来。
+license_agreement_link:
+  - https://github.com/qwex888/zhiyin-music/blob/main/LICENSE
+
+source_code_link:
+  - https://github.com/qwex888/zhiyin-music
+
+technical_support_link:
+  - https://github.com/qwex888/zhiyin-music/issues
+
+i18n:
+  zh-CN:
+    name: 知音音乐
+    description: >-
+      把 NAS 上的音乐做成一个自己的流媒体服务。
+
+      选好音乐文件夹后自动扫描，读取内嵌标签、封面和歌词，按艺术家、专辑归档，
+      支持 MP3 / FLAC / WAV / M4A / OGG / OPUS / APE。可以从网易云、QQ 音乐、
+      酷狗、酷我、咪咕刮削元数据和封面，也能按播放历史给出推荐。
+
+      除了网页版，它还提供一层 Subsonic API：手机上用音流、Symfonium、DSub
+      这类客户端填上 NAS 地址和账号就能直接听，不必开着浏览器。
+
+      播放支持无缝拖动和多档音质（128k / 192k / 320k / 无损），转码由应用自带的
+      ffmpeg 完成。另外支持 .strm 网盘直链文件，把阿里云盘等网盘里的音乐
+      一并纳入音乐库。
+
+      ⚠ 本应用的端口在局域网上直接可达（Subsonic 客户端正是靠这个直连），
+      装好后请立刻打开应用，在首次进入的引导页里把管理员账号创建掉。
+    # author 是【应用开发者】，填上游作者；official 是他的项目地址。
+    # 打包成绿联应用的是 publisher，那才是我。
+    author: qwex888
+    official: https://github.com/qwex888/zhiyin-music
+    publisher: 穿斯帕沃特
+    publisher_link: https://club.ugnas.com/home.php?mod=space&uid=10131
+  en-US:
+    name: Zhiyin Music
+    description: >-
+      Turns the music on your NAS into your own streaming service.
+
+      Point it at your music folders and it scans them, reading embedded tags,
+      cover art and lyrics, and filing everything by artist and album. MP3, FLAC,
+      WAV, M4A, OGG, OPUS and APE are supported. Metadata and covers can be
+      scraped from several Chinese music services, and it recommends tracks from
+      your listening history.
+
+      Besides the web player it exposes a Subsonic API, so phone apps such as
+      Symfonium or DSub can connect straight to your NAS.
+
+      Playback supports seeking and several quality tiers (128k / 192k / 320k /
+      lossless) via the bundled ffmpeg, plus .strm files pointing at cloud drives.
+
+      Note: this app's port is reachable from your local network — that is how
+      Subsonic clients connect — so open the app right after installing and
+      create the administrator account on the first-run page.
+    author: qwex888
+    official: https://github.com/qwex888/zhiyin-music
+    publisher: 穿斯帕沃特
+    publisher_link: https://club.ugnas.com/home.php?mod=space&uid=10131

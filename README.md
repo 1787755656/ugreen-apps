@@ -2,7 +2,7 @@
 
 绿联 UGOS Pro 应用打包 monorepo，参考 [conversun/fnos-apps](https://github.com/conversun/fnos-apps)（飞牛OS同类项目）的 CI 架构改造而来，用 GitHub Actions 自动跟踪各应用的上游新版本、下载/构建、`ugcli` 打包、发布 GitHub Release。
 
-包含：metatube（元数据刮削）、qbittorrent（Enhanced Edition）、qbittorrent-ng6（superng6 版，官方 qBittorrent + 国内网络调优配置）、natfrp（SakuraFrp 内网穿透客户端）、lucky（网络工具箱：DDNS/反代/端口转发等）、magicpush（多渠道消息推送平台）、picoclaw（Sipeed 超轻量个人 AI Agent）、readeck（开源书签/稍后读）、litepan（网盘聚合挂载 + STRM 刮削）、openlist（AList 接续分支：多存储文件列表）、magicmail（多邮箱 IMAP 代收客户端）。这些原本是桌面上各自独立的手工维护项目，现在合并成一个仓库统一自动化。
+包含：metatube（元数据刮削）、qbittorrent（Enhanced Edition）、qbittorrent-ng6（superng6 版，官方 qBittorrent + 国内网络调优配置）、natfrp（SakuraFrp 内网穿透客户端）、lucky（网络工具箱：DDNS/反代/端口转发等）、magicpush（多渠道消息推送平台）、picoclaw（Sipeed 超轻量个人 AI Agent）、readeck（开源书签/稍后读）、litepan（网盘聚合挂载 + STRM 刮削）、openlist（AList 接续分支：多存储文件列表）、magicmail（多邮箱 IMAP 代收客户端）、zhiyinmusic（NAS 音乐流媒体 + Subsonic API）。这些原本是桌面上各自独立的手工维护项目，现在合并成一个仓库统一自动化。
 
 ## 目录结构
 
@@ -40,6 +40,7 @@ apps/<app>/com.xxx.xxx/
 | openlist | `OpenListTeam/OpenList`（AList 的社区接续分支） | GitHub Releases API，tag `vX.Y.Z`（正好是 project.yaml 要的 x.y.z，无需映射） | 用 **musl 版**资产 `openlist-linux-musl-<arch>.tar.gz`：它是**静态链接**的（默认的 glibc 版是动态链接，`file` 实测确认），沙箱里零运行时依赖最稳；不用 `-lite`（那个把前端剥掉去 CDN 拉）。start.sh：`type: path` 参数选数据目录 + 本机存储目录（顺带授权，启动时逐个自检可访问性并检查父子嵌套）、管理员密码经 `OPENLIST_ADMIN_PASSWORD`/`admin set` 双路径设置（留空则首启生成随机密码写进数据目录的文本文件）、端口/日志/临时目录用 `OPENLIST_*` 环境变量钉死（注意 Scheme 那组**没有子前缀**，是 `OPENLIST_HTTP_PORT` 不是 `OPENLIST_SCHEME_HTTP_PORT`）；端口 **28244**（上游默认 5244，5xxx 段容易和用户自己跑的容器撞） |
 | fastnet | KoolCenter 的固件下载服务器目录 `fw.kspeeder.com`（主）/ `fw.koolcenter.com`（备）的 `/binary/fastnet/`，闭源、无 GitHub 仓库、无 Release | 读同目录 `version.txt` 的 `VERSION=` 字段（天然就是 x.y.z，无需映射），带 `no-cache` 头防 CDN 缓存住旧版 | 只打包上游发布的裸二进制 `FastNet-<版本>.<amd64\|arm64>`（armv7 不打，UGOS 没这种机型），按 `version.txt` 里的 sha256 校验；**amd64 那个是 UPX 加壳的、arm64 的不是**，构建时统一解壳（沙箱里自解压要 W→X 未验证 + 加壳是上架审核的"检测规避"特征，见 skill），注意 sha 是加壳文件的所以顺序必须"先校验后解壳"；amd64 那一路在 runner 上真跑一次 `FastNet version` 冒烟。tab 应用直连它自带的 Web 控制台，端口 **28190**；**不启用 `--token`**（加了之后根路径也 401，而 tab 打开时没地方带 token，点开就是个 401 页面）；start.sh 只做 TMPDIR/cwd 重定向后 `exec`（实测跑完整测速一个文件都不落盘） |
 | magicmail | `magiccode1412/magicmail` | GitHub Releases API，tag `vX.Y.Z`（正好是 x.y.z，无需映射） | **需要 Go 工具链现场交叉编译**（同 litepan），但**上游没把前端产物提交进仓库**，CI 里要先跑一遍 vite 构建再放到 `server/embedfs/dist`（`go:embed` 嵌空目录不报错，会静默打出前端为空的包 —— build.sh 对此有硬断言）；SQLite 用的是 `glebarez/sqlite`（纯 Go），`CGO_ENABLED=0` 交叉编译成立，产物是单个静态二进制。编译前注入 `static/ugos_env.go`（只设环境变量的 `init()`：把 `--port=` 转成 `MAGICMAIL_PORT`、`chdir` 到数据目录、`MAGICMAIL_DSN`、`TMPDIR`），上游仓库不打 patch；`chdir` 那条是必须的 —— 附件落盘走硬编码的相对路径 `./data/attachments`（三处、无环境变量可覆盖），不切走会写进只读的安装目录。tab 应用（PWA + SSE 长连接 + 附件上传会撞网关的 20MB 上限，都不适合 inner），端口 **23232**（上游默认 8080 被占概率极高） |
+| zhiyinmusic | Docker Hub 镜像 `qwex333/zhiyin-music`（`qwex888/zhiyin-music` 仓库里只有 README、config.toml.example 和 docker-compose，**Rust 源码一行都没有**，也无 Release/tag） | Docker Hub tags API，取版本号最大的纯 `x.y.z` tag（滤掉 `latest` 和 CI 中间产物 `build-<arch>-<sha>`）；**按版本号排序而不是按 last_updated**，否则上游重推旧版修补镜像会让版本回退 | **本仓库唯一"解包 Docker 镜像"的 app**：按 tag 查出本架构的 manifest digest 再逐层拉 blob 解开（每层都用 manifest 里的 digest 复核，digest 是内容寻址的，所以不必把 digest 写死在脚本里）。上游主程序是**动态链接**的，`libtag`/`libtag_c` 在镜像里装在 `/usr/lib` 下 —— 沙箱里没有 `/usr/lib`，所以连同 `libstdc++`/`libgcc_s`/`libz` 一并解出来随包带走，靠 `LD_LIBRARY_PATH` 让包内那份优先；另外随包带 **ffmpeg/ffprobe**（转码，上游按 PATH 查找）和 **curl**（STRM 网盘直链是 spawn 系统 curl 转发的，不带就一律 `remote_unavailable`）。Go 管理壳负责生成/合并 `config.toml`（上游配置**相对 cwd** 解析，只接管路径/端口/扫描目录那几个键，用户在应用里改的一律保留）、首次生成持久 `jwt_secret`（否则每次重启全体登出）、启动时诊断扫描目录，最后 `syscall.Exec` 换成上游进程。tab 应用（Subsonic 客户端要用自己的账号直连，穿不过网关登录态），端口 **28085** |
 
 ## 本地验证过什么（不需要真机、不需要GitHub仓库）
 
@@ -75,6 +76,7 @@ apps/<app>/com.xxx.xxx/
 - **litepan 的 Go 版本钉死在 `build.sh` 的 `GO_VERSION`**：上游 `go.mod` 要求 go 1.26.4，脚本用 `GOTOOLCHAIN=local` 禁止 go 自己去拉工具链（网络抖动会变成难懂的失败）。上游哪天提高 go.mod 的要求，这里要跟着抬。另外 litepan 的版本探测读的是 main 分支的 `AppVersion` 常量，所以**上游改了内容但没 bump 这个常量不会触发重建**（和 magicpush 同一个取舍）。
 - **openlist 的图标用的是官方 logo，而那个 logo 是 CC BY-NC-SA 4.0（非商业）**：素材来自 `OpenListTeam/Logo`，合成脚本在 `scripts/apps/openlist/make-icon.py`。本仓库是免费的社区打包，用它标识应用没问题；但**如果哪天要正式提交到绿联应用中心，这条 NC 条款需要单独确认**（必要时换成自绘图标）。
 - **openlist 装好后必须重启一次才能用上所选目录**：这是平台通病（先起服务、2~3 秒后才写参数与授权），不是这个应用的 bug。start.sh 会在日志里逐条打出哪些目录还不可访问，看到就去应用中心「停止 → 启动」。
+- **zhiyinmusic 装好后要「停止 → 启动」一次，并立刻创建管理员**：安装参数（音乐文件夹）第一次启动是空的（平台先起服务、两三秒后才写 `.env`），不重启的话扫描一定是零首 —— 管理壳会把这件事写进启动日志。管理员账号走上游自己的引导页（不做成安装参数：首启参数为空，那份参数注定要到第二次启动才生效，只会制造"我明明填了却没用"的困惑），而端口对局域网直接可达，先创建先得（建过之后 `/api/setup` 返回 403）。
 - **magicmail 装好后要立刻注册管理员账号**：它是 tab 应用，端口对局域网直接可达，而上游的注册接口在"还没有任何用户"时是开放的（之后拒绝）——先注册先得。这是上游设计，Docker 部署也一样，已写进应用描述里。
 - **jellyfin / adguardhome / smartdns 暂时移出了仓库**：真机发现问题待排查，项目目录和打包脚本先挪到仓库外保存（`../<应用名>/`），修复后迁回，并把上面表格和 workflow 手动触发说明里的应用列表补回来。
 
