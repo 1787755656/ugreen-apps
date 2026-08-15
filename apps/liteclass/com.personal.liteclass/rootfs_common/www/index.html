@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>轻课堂 LiteClass</title>
+</head>
+<body>
+<p>正在跳转到轻课堂……</p>
+<p><a id="go" href="/">如果没有自动跳转，请点这里</a></p>
+<script>
+// open_type: tab —— 应用由自身端口 18083 提供完整 Web 服务，正常情况下桌面
+// 直接打开那个端口，本页用不到。仅当有人从网关地址打开这个入口时兜底跳转。
+var url = 'http://' + location.hostname + ':18083/';
+document.getElementById('go').href = url;
+location.replace(url);
+</script>
+</body>
+</html>

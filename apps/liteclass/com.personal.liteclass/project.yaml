@@ -1,0 +1,114 @@
+# ============================================================
+# LiteClass（轻课堂）— UGOS Pro 原生应用配置
+#
+# 上游：Docker Hub luodichanagn/liteclass（Node 22 + Fastify + SQLite），
+# 【只发镜像、只有 amd64、无公开源码仓库、业务 JS 是混淆过的】。
+# arm64 的包是补出来的：应用本体是纯 JS，分架构的只有 Node 运行时和 sqlite3
+# 原生模块两样，各取官方对应架构的产物即可（见 scripts/apps/liteclass/build.sh）。
+#
+# 原生沙箱适配（不动上游混淆代码，全在 server/ugos-launcher.js 里）：
+#   - 安装目录只读 → DATA_DIR / UPLOAD_DIR / 转码缓存重定向到 UGAPP_DATA_DIR
+#   - 沙箱没有 /tmp → TMPDIR 指向可写缓存目录
+#   - 课程媒体库目录由 DEFAULT_SHARE_PATH 参数在安装时授权（type: path 顺带授权）
+#   - 修上游一个真 bug：混淆后的 helpers/media 没导出 getAccessiblePaths，
+#     导致"新增课程时选挂载目录"必 500（官方 Docker 镜像同样坏），适配层补了实现
+# ============================================================
+
+spec_version: "2.1"
+
+app_id: com.personal.liteclass
+
+# 跟随上游镜像 tag（CI 会把这行改写成探测到的版本，打包时 --build 追加构建号）
+version: 1.1.5
+
+support_arch:
+  - amd64
+  - arm64
+
+# tab 应用在手机上会用浏览器打开
+supports:
+  - pc
+  - app
+
+# 启动命令：node 直接跑 UGOS 适配层，适配层 require 上游 index.js。
+# ⚠ 不能用相对路径（bin/node server/ugos-launcher.js）：平台把服务 cwd 设成
+#   数据目录 /volume1/@appdata/<appid>，相对脚本会按 cwd 解析导致 MODULE_NOT_FOUND。
+#   这里用 -e 从 process.execPath（平台拼的安装目录绝对路径）反推 server/ 位置，
+#   与 cwd/挂载点无关。
+# ⚠ -e 那串必须用双引号包裹：服务的 ExecStart 走 shell 风格分词，裸单引号会被
+#   剥掉变成 require(require(path)...) 的 SyntaxError；双引号组内单引号是字面量，
+#   会原样传给 node。（node:22-bookworm 模拟 shell 分词验证过）
+start_cmd: bin/node -e "require(require('path').join(require('path').dirname(process.execPath),'..','server','ugos-launcher.js'))"
+
+# 服务端口（与适配层默认 PORT 一致，供系统探测启动状态）。
+# 刻意不用上游默认 8083：用户很可能已经在同一台 NAS 上跑着 Docker 版轻课堂。
+port: 18083
+
+# tab —— 轻课堂自己 serve 前端 + /api + 上传封面等动态静态资源，
+# 路由遍布 /、/api、/uploads、/covers 等多前缀，走 inner 网关反代会拆散。
+open_type: tab
+
+tag_types:
+  - media
+  - utility
+
+depend_fw_version: 1.13.0.0000
+
+# 数据目录靠 UGAPP_DATA_DIR 解析，迁移安装目录后自动跟上
+support_migration: true
+
+# 允许用户之后在应用设置里追加授权其他文件夹（适配层会把它们并进可访问路径）
+allow_add_access_path: true
+
+# 课程的 AI 问答 / 在线资源导入需要访问外网。
+# （局域网与回环出站零权限本来就放行，这条只管"互联网"。）
+permissions:
+  - NETWORK.ACCESS_INTERNET
+
+# ⚠ 不设 required: true —— 全新安装的首次启动读到的参数一定是空的
+#   （平台先起服务、几秒后才写 .env 和授权目录），required 会让应用装完起不来。
+#   适配层留空时退回数据目录下的 media，用户重启一次自然用上真实目录。
+parameters:
+  - key: DEFAULT_SHARE_PATH
+    type: path
+    multi: false
+    changeable: true
+    i18n:
+      zh-CN:
+        name: 课程媒体库目录
+        description: >-
+          存放课程视频/资料的文件夹（选好即完成授权）。留空则使用应用数据目录下的
+          media。⚠ 刚安装或升级后请在应用中心「停止」再「启动」一次，参数和目录
+          授权才会生效。
+      en-US:
+        name: Course library folder
+        description: >-
+          Folder that holds course media (picking it also grants access). Empty
+          means a media dir under app data. After installing or upgrading, Stop
+          then Start the app once for the parameter and folder grant to apply.
+
+i18n:
+  zh-CN:
+    name: 轻课堂
+    description: >-
+      专为 NAS 用户打造的轻量级、多用户私有云学习管理系统。管理课程库、在线播放、
+      章节识别与自动封面、断点续播、倍速与字幕、带时间戳的课程笔记、学习时长统计、
+      考试与答题、AI 问答，支持多人一起看。数据只保存在自己的 NAS 上。
+      初始管理员为 admin / admin123，装好后请立刻在应用内改密码。
+    author: luodichanagn
+    official: https://hub.docker.com/r/luodichanagn/liteclass
+    publisher: 穿斯帕沃特
+    publisher_link: https://club.ugnas.com/home.php?mod=space&uid=10131
+  en-US:
+    name: LiteClass
+    description: >-
+      A lightweight multi-user private cloud learning management system for NAS
+      users. Course library management, in-browser playback, chapter detection
+      with auto thumbnails, resume, speed and subtitles, timestamped notes,
+      study-time stats, exams, AI Q&A and watch parties. Everything stays on
+      your own NAS. The initial admin is admin / admin123 — change it in the app
+      right after installing.
+    author: luodichanagn
+    official: https://hub.docker.com/r/luodichanagn/liteclass
+    publisher: 穿斯帕沃特
+    publisher_link: https://club.ugnas.com/home.php?mod=space&uid=10131
