@@ -19,10 +19,10 @@ set -euo pipefail
 VERSION="${1:?VERSION is required}"
 ARCH="${2:?ARCH is required (amd64|arm64)}"
 
-# 钉死 Go 版本：上游 go.mod 要求 go 1.26.4，且我们用 GOTOOLCHAIN=local
+# 钉死 Go 版本：上游 go.mod 要求 go 1.26.6，且我们用 GOTOOLCHAIN=local
 # 禁止 go 自己去拉工具链（网络抖动时会变成难懂的失败）。
 # 升级时改这一处，同时确认 >= 上游 go.mod 的要求。
-GO_VERSION="1.26.5"
+GO_VERSION="1.26.6"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
