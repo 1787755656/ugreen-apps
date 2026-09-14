@@ -30,7 +30,7 @@ permissions:
 env:
   # Pinned so a new ugcli release doesn't silently change packaging
   # behavior for every app at once — bump deliberately when needed.
-  UGCLI_VERSION: "1.1.0.13"
+  UGCLI_VERSION: "1.1.0.25"
 
 jobs:
   check-version:

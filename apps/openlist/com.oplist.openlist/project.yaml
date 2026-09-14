@@ -10,7 +10,7 @@ spec_version: "2.1"
 app_id: com.oplist.openlist
 
 # 应用版本号 x.y.z（打包时 --build 追加构建号；CI 会按上游版本改写这一行）
-version: 4.2.4
+version: 4.2.6
 
 # 支持的 CPU 架构
 support_arch:

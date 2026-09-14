@@ -4,7 +4,9 @@
 # 由系统以应用独立的非 root 用户身份运行。OpenList 是 Go 单二进制（这里用的是
 # musl 静态版），配置/数据库/索引都落在 --data 指定的目录里。
 #
-# 这个脚本干四件事：
+# 这个脚本干五件事：
+#   0. GODEBUG 消毒 —— 剥掉 UGOS 全局注入的已移除项(tlskyber=0 等)，
+#      否则 Go 1.27 编译的二进制直接 fatal(见下面第 0 节注释)
 #   1. 解析数据目录（安装时选的 OL_DATA_DIR，没选就退回应用数据目录）
 #   2. 检查存储目录的授权是否已经生效，没生效就在日志里说清楚要重启一次
 #   3. 管理员密码：安装时填了就应用它，没填就在首次安装时生成一个随机密码
@@ -34,6 +36,48 @@ mkdir -p "${LOG_DIR}" "${CACHE_DIR}" 2>/dev/null
 TMPDIR="${CACHE_DIR}/tmp"
 export TMPDIR
 mkdir -p "${TMPDIR}" 2>/dev/null
+
+# ---------------------------------------------------------------
+# 0. GODEBUG 消毒（Go 1.27 fatal 防护）
+# ---------------------------------------------------------------
+# UGOS 的 systemd 全局配置(/etc/systemd/system.conf)给【所有】服务注入了
+# DefaultEnvironment="GODEBUG=tlskyber=0"。Go 1.24 起陆续移除旧 GODEBUG 项，
+# 到 Go 1.27 已移除 8 项(x509sha1/tlskyber/gotypesalias/tlsunsafeekm/tlsrsakex/
+# tls3des/tls10server/x509keypairleaf/asynctimerchan)，规则是:环境里出现已移除
+# 项【且值等于旧默认值】时进程直接 fatal(https://go.dev/doc/godebug#go-124)。
+# tlskyber=0 正中枪口 —— OpenList 4.2.6(go1.27 编译)在 UGOS 上必崩就是这个。
+# 修复:启动前把 GODEBUG 里所有已移除项剥掉,其余项原样保留。
+SANITIZE_GODEBUG() {
+    (   # 子 shell 里改,不影响外层
+        SAN_RAW="${GODEBUG:-}"
+        [ -n "${SAN_RAW}" ] || return 0
+        SAN_OUT=""
+        SAN_IFS="${IFS}"
+        IFS=','
+        for SAN_ITEM in ${SAN_RAW}; do
+            case "${SAN_ITEM}" in
+                x509sha1=*|tlskyber=*|gotypesalias=*|tlsunsafeekm=*|tlsrsakex=*|tls3des=*|tls10server=*|x509keypairleaf=*|asynctimerchan=*)
+                    echo "已剥离已移除的 GODEBUG 项: ${SAN_ITEM}（Go 1.27 运行时不再接受）" >&2
+                    continue
+                    ;;
+            esac
+            [ -n "${SAN_ITEM}" ] || continue
+            if [ -z "${SAN_OUT}" ]; then SAN_OUT="${SAN_ITEM}"; else SAN_OUT="${SAN_OUT},${SAN_ITEM}"; fi
+        done
+        IFS="${SAN_IFS}"
+        # 输出处理后的值;读到空串就 unset
+        if [ -n "${SAN_OUT}" ]; then
+            printf '%s' "${SAN_OUT}"
+        fi
+    )
+}
+SANITIZED="$(SANITIZE_GODEBUG)"
+if [ -n "${SANITIZED}" ]; then
+    export GODEBUG="${SANITIZED}"
+else
+    unset GODEBUG
+fi
+unset SANITIZED
 
 echo "==== OpenList for UGOS Pro ===="
 
