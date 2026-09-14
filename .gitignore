@@ -22,3 +22,10 @@ apps/*/*/rootfs_common/geoip/*.mmdb.gz
 
 # 打包成品只进 GitHub Releases，不进 git（根目录的本地手工构建产物）
 *.upk
+
+# clouddl 的前端 (rootfs_common/www) 由 build.sh 现场从上游生成（上游 static
+# 拷贝 + UGOS 认证适配层 + 文案 patch），跟着上游 tag 走，不进 git。
+apps/clouddl/com.personal.clouddl/rootfs_common/www/
+
+# 本地调试 clouddl build.sh 时落在脚本旁的下载缓存（CI 上用 RUNNER_TEMP）。
+scripts/apps/clouddl/.build-cache/

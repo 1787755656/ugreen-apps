@@ -1,0 +1,190 @@
+# ============================================================
+# 多网盘下载器（clouddl）— UGOS Pro 原生应用
+#
+# 上游：https://github.com/xiaocheng154/nas-cloud-downloader（作者 xiaocheng154）
+# 上游是飞牛 fnOS 的 .fpk 原生应用，本工程把它搬到绿联，未改上游业务代码。
+#
+# 改动前务必先读的源码注释：
+#   launcher/auth.go     —— 为什么光有网关认证不够，两道闸分别挡什么
+#   launcher/supervise.go —— 为什么 Python 是用管理壳 fork 的，而不是 start_cmd 直接指过去
+#   launcher/config.go   —— 下载目录为什么"不跟安装参数每次漂移"
+# ============================================================
+
+spec_version: "2.1"
+
+app_id: com.personal.clouddl
+
+# 跟随上游版本号（上游 manifest 的 version = 1.5.9）。
+version: 1.5.9
+
+# 两个架构各出一个包。两边的组装方式完全一样，只是 CPython 运行时和
+# pydantic_core 轮子按架构各取一份（都钉了校验和，见 scripts/build.sh）。
+#
+# ⚠ arm64 在真机（RK3588C）上跑通过；**amd64 没有机器可验证，是盲打的**。
+#   构建脚本会断言包里每个 ELF 的架构都对，但"能不能在 amd64 的绿联上跑起来"
+#   只能装上去才知道。真机 unit 里有 `BindReadOnlyPaths=-/lib64`，
+#   所以动态加载器那一关理论上没问题。
+support_arch:
+  - amd64
+  - arm64
+
+# 只声明 pc。inner 应用在手机上是跳转手机浏览器打开的，页面能用，
+# 但这个界面（文件浏览 + 下载队列 + 设置三栏）是按桌面宽度设计的。
+supports:
+  - pc
+
+# --port 必须和下面的 port 一致。
+# 这里起的是 Go 管理壳，不是 Python 本体：Python 只监听 127.0.0.1 上的内部端口，
+# 由管理壳鉴权后反代过去。理由见 launcher/auth.go。
+start_cmd: bin/clouddl --port=28686
+
+# 管理壳的 HTTP 端口，平台靠它探活。
+#
+# ⚠ 上游默认端口是 8686，【故意没有照抄】：用户很可能已经在同一台 NAS 上
+#   跑着别的东西占了它。选端口前在真机上 `sudo ss -lntp | grep :28686` 查过（空闲），
+#   也 grep 过本机其它自研应用的 project.yaml。
+port: 28686
+
+# inner：根路径由网关从 www/ 直接 serve 静态页面，只有 /api/ 反代到本应用端口。
+# 上游的路由恰好是"除了 / 和 /static/ 之外全在 /api/ 下面"，天然对得上这个模型。
+open_type: inner
+
+# 网关转发时不会剥掉这个前缀，上游 FastAPI 注册的就是 /api/xxx，正好。
+proxy_path: api
+
+# 网盘凭据（BDUSS/STOKEN/Cookie/refresh_token）等于账号本身，
+# 只有管理员该看到。注意 only_admin 挡的是桌面图标，【挡不住端口】——
+# 端口那一侧靠 launcher/auth.go 的两道闸。
+only_admin: true
+
+tag_types:
+  - download
+
+depend_fw_version: 1.13.0.0000
+
+# 下载目录首选用下面的 path 参数选，这里留着是给"装完之后想再换一个目录"用。
+allow_add_access_path: true
+
+support_migration: true
+
+# 【权限画像】只要一条：访问互联网。
+#
+# 百度网盘 / 夸克 / 阿里云盘的接口都在公网上，而零权限沙箱对公网出站是 DROP 的
+# （局域网和 loopback 零权限就能通，用不着这条）。
+#
+# 不需要 SYSTEM.EXEC_SYSTEM_COMMAND：管理壳 fork 的是包内自带的 Python 解释器
+# （绝对路径、不经过 shell），沙箱里没有 seccomp，execve 本身不受限。
+permissions:
+  - NETWORK.ACCESS_INTERNET
+
+parameters:
+  # 在安装对话框里选一次，既拿到路径、又顺带把这个目录授权进沙箱
+  # （平台把 path 型参数写进 path_permissions 表 → unit 的 BindPaths=）。
+  #
+  # ⚠ 不设 required：全新安装/升级后【第一次启动读到的参数是空的】，
+  #   平台先起服务、2~3 秒后才写 <appid>.env 和 unit。所以留空能装、
+  #   读到空值不报错，先落到应用私有数据目录里，用户重启一次就用上真目录。
+  #
+  # ⚠ 只留这一个目录参数。别再加"临时目录/完成目录"之类的子目录参数 ——
+  #   父子目录同时出现在参数里时，平台反而不会授权父目录（踩过）。
+  #   需要子目录让应用自己在里面建。
+  - key: CLOUDDL_DOWNLOAD_DIR
+    type: path
+    multi: false
+    changeable: true
+    required: false
+    i18n:
+      zh-CN:
+        name: 下载保存目录
+        description: >-
+          从网盘下载下来的文件放在哪。选一个你在文件管理器里看得到的目录即可，
+          选中的同时这个目录就被授权给本应用读写了。留空也能装，
+          文件会先落在应用私有数据目录里，之后可以在这里补选。
+          装好或改完之后请在应用中心「停止 → 启动」一次，新目录才会生效。
+      en-US:
+        name: Download folder
+        description: >-
+          Where files fetched from the cloud drives are written. Picking a folder
+          here also grants this app read/write access to it. May be left empty —
+          downloads then land in the app's private data directory. After
+          installing or changing this, stop and start the app once.
+
+# 所有对外链接一律指向上游原项目 —— 应用本身是 xiaocheng154 的作品，
+# 署名和求助入口都应该落到他那里（上游许可证也要求保留原项目链接）。
+license_agreement_link:
+  - https://github.com/xiaocheng154/nas-cloud-downloader/blob/main/LICENSE
+
+source_code_link:
+  - https://github.com/xiaocheng154/nas-cloud-downloader
+
+# ⚠ official / help / publisher_link 是 external_links 的【子字段】，
+#   不是顶层字段，而且是【单个 URL】不是列表。写成顶层时
+#   `ugcli check` 照样过、`ugcli pack` 直接拒：
+#     field official not found in type project.PrjConfig
+#   ugcli 1.1.0.13 顶层只认这四个 URL 字段：license_agreement_link /
+#   privacy_policy_link / source_code_link / technical_support_link。
+technical_support_link:
+  - https://github.com/xiaocheng154/nas-cloud-downloader/issues
+
+i18n:
+  zh-CN:
+    name: 多网盘下载器
+    description: >-
+      把百度网盘、夸克网盘和阿里云盘里的文件直接下载到 NAS 上，不经过电脑中转。
+
+      在应用里浏览网盘目录、搜索文件，单个文件或整个文件夹都能下载，
+      文件夹会保持原有的多级目录结构。下载走标准 HTTP 分片，
+      分片大小、每个文件的连接数、同时下载的任务数、总限速都可以自己调，
+      任务列表实时显示速度和预计剩余时间。
+
+      还有一些省心的小设计：可以只在指定时段下载；磁盘可用空间低于设定值时
+      任务自动暂停、空间恢复后继续；重名文件可以选择报错、重命名、覆盖或跳过；
+      日志能在界面上直接看，导出诊断包时会自动抹掉凭据和下载链接。
+
+      使用前需要在「设置 - 账号与凭据」里填入对应网盘的登录凭据
+      （百度是 BDUSS + STOKEN，夸克是 Cookie，阿里云盘可以直接 App 扫码）。
+      凭据只保存在这台 NAS 上。
+
+      注意：本应用不是百度网盘、夸克网盘或阿里云盘的官方产品，用的是第三方接口，
+      对方随时可能调整限速或风控策略，请自行承担账号风险，
+      并确保下载的内容你有合法的使用权。
+
+      本应用由 xiaocheng154 的开源项目 nas-cloud-downloader 移植而来（已修改：
+      适配绿联的应用沙箱与登录认证），原项目地址见"源代码"链接。
+    author: xiaocheng154
+    publisher: 穿斯帕沃特
+    # ⚠ official / help / publisher_link 属于【i18n 语言块】，不是顶层字段，
+    #   而且是单个 URL 不是列表。写到顶层的话 `ugcli check` 照样过、
+    #   `ugcli pack` 直接拒（field official not found in type project.PrjConfig）。
+    #   ugcli 1.1.0.13 顶层只认这四个 URL 字段：license_agreement_link /
+    #   privacy_policy_link / source_code_link / technical_support_link。
+    #   实测这三个会落进 config.json 的 official / appHelpManualLink / publisherLink。
+    official: https://github.com/xiaocheng154/nas-cloud-downloader
+    help: https://github.com/xiaocheng154/nas-cloud-downloader#readme
+    publisher_link: https://club.ugnas.com/forum.php?mod=viewthread&tid=6003
+  en-US:
+    name: Cloud Drive Downloader
+    # ⚠ 这段有 1000【字符】的上限，超了 `ugcli check` 照样过、`pack` 直接拒。
+    #   中文按字符算，所以上面那段能写得比这里长不少。构建脚本里有断言。
+    description: >-
+      Download files from Baidu Netdisk, Quark Drive and Aliyun Drive straight
+      onto the NAS, without routing them through a PC.
+
+      Browse and search a drive inside the app, then fetch a single file or a
+      whole folder — folders keep their structure. Chunk size, connections per
+      file, concurrent tasks and a global speed limit are all adjustable, and
+      the task list shows live speed and time remaining. Downloads can be
+      limited to a time window, and pause automatically when free disk space
+      runs low.
+
+      You supply your own credentials (BDUSS + STOKEN for Baidu, a Cookie for
+      Quark, QR-code login for Aliyun); they never leave this NAS.
+
+      Not an official product of any of those services — it relies on
+      third-party APIs that may change or throttle at any time. Ported with
+      modifications from nas-cloud-downloader by xiaocheng154.
+    author: xiaocheng154
+    publisher: 穿斯帕沃特
+    official: https://github.com/xiaocheng154/nas-cloud-downloader
+    help: https://github.com/xiaocheng154/nas-cloud-downloader#readme
+    publisher_link: https://club.ugnas.com/forum.php?mod=viewthread&tid=6003
