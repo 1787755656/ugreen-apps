@@ -1,0 +1,52 @@
+spec_version: "2.1"
+
+app_id: com.ashc776.piggybank
+version: 1.2.0
+
+support_arch:
+  - amd64
+  - arm64
+
+supports:
+  - pc
+  - app
+
+# start_cmd 首段必须存在于 rootfs_<arch>/bin/
+start_cmd: bin/start.sh
+# 上游默认 3000，用户可能已跑同软件 Docker 版，改用 23000 避让
+port: 23010
+open_type: tab
+
+tag_types:
+  - utility
+
+depend_fw_version: 1.13.0.0000
+
+allow_add_access_path: false
+support_migration: true
+
+permissions:
+  - SYSTEM.EXEC_SYSTEM_COMMAND
+
+license_agreement_link:
+  - https://github.com/ASH-C776/piggy-bank/blob/main/LICENSE
+source_code_link:
+  - https://github.com/ASH-C776/piggy-bank
+technical_support_link:
+  - https://github.com/ASH-C776/piggy-bank/issues
+
+i18n:
+  zh-CN:
+    name: 存钱罐
+    description: 面向家庭的自托管积分管理系统。孩子完成任务、领取家长发布的临时任务获得积分，用积分在商店兑换商品或现金，所有申请由家长审核。内置积分项管理、任务发布、商店商品、积分流水与兑换审核，支持孩子 PIN 码登录、12 生肖头像和实时刷新。数据保存在 NAS 本机 SQLite 单文件，不上传任何云端。默认管理员账号 admin，初始密码 admin123，登录后可在应用内修改。
+    author: ASH-C776
+    official: https://github.com/ASH-C776/piggy-bank
+    publisher: 穿斯帕沃特
+    publisher_link: https://club.ugnas.com/home.php?mod=space&uid=10131
+  en-US:
+    name: Piggy Bank
+    description: A self-hosted family points management system. Kids earn points by completing daily and ad-hoc tasks, then exchange them for products or cash in the shop, with all requests reviewed by parents. Data is stored locally in a single SQLite file on your NAS. Default admin account admin / admin123 (change it in the app after login).
+    author: ASH-C776
+    official: https://github.com/ASH-C776/piggy-bank
+    publisher: xw
+    publisher_link: https://club.ugnas.com/home.php?mod=space&uid=10131

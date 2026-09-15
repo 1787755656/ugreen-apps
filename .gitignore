@@ -33,3 +33,6 @@ scripts/apps/clouddl/.build-cache/
 # LunaTV 采集源配置 —— 本地留存不上传（用户要求），导入脚本见同目录
 scripts/apps/lunatv/sources.local.json
 scripts/apps/lunatv/.build-cache/
+
+# piggybank 本地调试缓存（CI 用 RUNNER_TEMP）
+scripts/apps/piggybank/.build-cache/
