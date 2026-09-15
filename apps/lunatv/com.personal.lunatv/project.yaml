@@ -1,0 +1,103 @@
+# ============================================================
+# LunaTV 影视聚合 — UGOS Pro 原生应用
+#
+# 上游：https://github.com/MoonTechLab/LunaTV（v6.6.4，CC BY-NC-SA 4.0）
+# 本工程打包的是 SzeMeng76/LunaTV fork 的 main 分支。
+# 应用本体是 Next.js 16 standalone（前后端一体），无原生模块，
+# 每个架构捆绑一份官方 Node 24（glibc）。
+#
+# 打包要点（改代码前先读）：
+# - src/lib/sqlite.db.ts 有 UGOS 补丁：Turbopack 会把 require('node:sqlite')
+#   编译成运行时抛错的 stub，必须用 process.getBuiltinModule 绕开。
+# - src/app/layout.tsx 弃用了 next/font/google（构建机无法访问 Google Fonts）。
+# - public/screenshot*.png（19MB README 截图）已删除，不进包。
+# ============================================================
+
+spec_version: "2.1"
+
+app_id: com.personal.lunatv
+
+# 跟随上游 package.json 的 version（6.6.4）
+version: 6.6.4
+
+support_arch:
+  - amd64
+  - arm64
+
+supports:
+  - app
+  - pc
+
+# start.sh 是 shell 脚本 -> 需要 SYSTEM.EXEC_SYSTEM_COMMAND；
+# 影视聚合要抓取豆瓣/TMDB/采集站资源 -> 需要 NETWORK.ACCESS_INTERNET
+# （零权限沙箱对公网出站是 DROP 的）。
+# start_cmd 端口与 port 字段必须一致（28300 已在真机确认空闲）。
+start_cmd: bin/start.sh
+port: 28300
+
+# LunaTV 的路由是全站形态（/ /search /play /douban ...），
+# 不是「/api 之外全是静态页」的模型，没法用 inner + proxy_path: api 的反代约定，
+# 只能 tab 浏览器直连。tab 应用端口直接暴露给局域网，认证靠应用自带登录。
+open_type: tab
+
+tag_types:
+  - media
+
+depend_fw_version: 1.13.0.0000
+
+# 观看记录/收藏存在应用私有数据目录（SQLite），不需要访问用户共享目录
+allow_add_access_path: false
+
+support_migration: true
+
+permissions:
+  - NETWORK.ACCESS_INTERNET
+  - SYSTEM.EXEC_SYSTEM_COMMAND
+
+# 无 path 参数：数据全在私有 data 目录，免掉「授权目录父子嵌套冲突」的坑
+parameters: []
+
+license_agreement_link:
+  - https://github.com/MoonTechLab/LunaTV/blob/main/LICENSE
+
+source_code_link:
+  - https://github.com/MoonTechLab/LunaTV
+
+technical_support_link:
+  - https://github.com/MoonTechLab/LunaTV/issues
+
+privacy_policy_link:
+  - https://github.com/MoonTechLab/LunaTV
+
+i18n:
+  zh-CN:
+    name: LunaTV 影视聚合
+    description: >-
+      在 NAS 上部署自己的影视聚合站：多个采集源聚合搜索、豆瓣/TMDB 条目详情、
+      播放记录与收藏同步、弹幕播放器、直播源、短剧和预告片日历。
+
+      内置 SQLite 存储（免配置外部数据库），支持多用户注册与站点管理。
+
+      首次使用：浏览器打开应用，用站长账号登录（admin / 安装时设置的密码），
+      其他用户可在登录页自行注册。
+
+      注意：应用本身不提供任何影视资源，播放内容来自你配置的采集源，
+      请遵守所在地区法律法规，仅用于个人学习目的（上游采用 CC BY-NC-SA 禁止商用）。
+    author: MoonTechLab & contributors
+  en-US:
+    name: LunaTV
+    description: >-
+      Self-hosted video aggregation site on your NAS: multi-source search,
+      Douban/TMDB metadata, play records & favorites sync, danmaku player,
+      live TV, short drama and trailer calendar.
+
+      Uses built-in SQLite storage (no external database needed), supports
+      multi-user registration and site administration.
+
+      First run: open the app in a browser and sign in with the owner account
+      (admin / the password set at install time). Other users can register
+      on the login page.
+
+      Note: the app hosts no video content itself; playback comes from the
+      sources you configure. Non-commercial use only (CC BY-NC-SA upstream).
+    author: MoonTechLab & contributors

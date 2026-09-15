@@ -1,0 +1,75 @@
+{
+  "cache_time": 7200,
+  "api_site": {
+    "dyttzy": {
+      "name": "电影天堂资源",
+      "api": "http://caiji.dyttzyapi.com/api.php/provide/vod",
+      "detail": ""
+    },
+    "bfzy": {
+      "name": "暴风资源",
+      "api": "https://bfzyapi.com/api.php/provide/vod",
+      "detail": ""
+    },
+    "ffzy": {
+      "name": "非凡资源",
+      "api": "http://cj.ffzyapi.com/api.php/provide/vod",
+      "detail": ""
+    },
+    "lziapi": {
+      "name": "量子资源",
+      "api": "http://cj.lziapi.com/api.php/provide/vod",
+      "detail": ""
+    },
+    "jszy": {
+      "name": "极速资源",
+      "api": "https://jszyapi.com/api.php/provide/vod",
+      "detail": ""
+    },
+    "360zy": {
+      "name": "360资源",
+      "api": "https://360zy.com/api.php/provide/vod",
+      "detail": ""
+    },
+    "mdzy": {
+      "name": "魔都资源",
+      "api": "https://www.mdzyapi.com/api.php/provide/vod",
+      "detail": ""
+    },
+    "subo": {
+      "name": "速播资源",
+      "api": "https://subocj.com/api.php/provide/vod",
+      "detail": ""
+    },
+    "hongniu": {
+      "name": "红牛资源",
+      "api": "http://hongniuzy2.com/api.php/provide/vod",
+      "detail": ""
+    },
+    "zuida": {
+      "name": "最大资源",
+      "api": "http://zuidazy.me/api.php/provide/vod",
+      "detail": ""
+    },
+    "dbzy": {
+      "name": "豆瓣资源",
+      "api": "https://caiji.dbzy5.com/api.php/provide/vod",
+      "detail": ""
+    },
+    "guangsu": {
+      "name": "光速资源",
+      "api": "https://api.guangsuapi.com/api.php/provide/vod",
+      "detail": ""
+    },
+    "jinying": {
+      "name": "金鹰资源",
+      "api": "https://jyzyapi.com/provide/vod",
+      "detail": ""
+    },
+    "maoyan": {
+      "name": "猫眼资源",
+      "api": "https://api.maoyanapi.top/api.php/provide/vod",
+      "detail": ""
+    }
+  }
+}
