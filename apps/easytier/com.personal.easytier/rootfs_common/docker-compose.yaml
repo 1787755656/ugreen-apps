@@ -1,0 +1,58 @@
+# ============================================================
+# EasyTier — Docker Compose 编排（UGOS Pro Docker 应用）
+#
+# ⚠ 这个文件是 Go text/template，不是 compose 的美元大括号变量语法（真机实测）。
+#   parameters 声明的值一律是列表，取值要用 index 取第 0 项；选填参数必须套
+#   if 判空（index 作用在空列表上会让安装渲染直接失败）。
+#   模板控制语句挂在井号注释位：YAML 当注释、模板照样执行，渲染后剩下的
+#   井号行仍是合法注释。注释里不要写双花括号字面量（会被模板当真执行）。
+#   TZ 是 Docker 套件注入的内置变量，标量，可以直接整页引用。
+#
+# 编排与上游镜像用法一致：Core + Web 控制台一体。
+# 数据目录：安装/设置时可选一个文件夹（沿用旧部署数据）；留空则用应用安装
+# 目录内的 data 文件夹。
+# ============================================================
+
+name: easytier
+
+services:
+  easytier:
+    # 镜像随包内置（rootfs_<arch>/images/easytier-2.6.4-<arch>.tar，安装时 docker load，
+    # 离线可装、不依赖 Docker Hub 镜像源）。内容即 majosissi/easytier:latest
+    # （easytier-core 2.6.4-8428a89d，上游仅提供 latest/pre/ci 三个浮动 tag，
+    # 平台禁止 latest，故按 aigw 惯例改标 personal/easytier:2.6.4）。
+    image: personal/easytier:2.6.4
+    container_name: easytier
+    restart: unless-stopped
+    # VPN 组网硬需求：对端直连本机监听端口 + 创建 TUN 虚拟网卡。
+    # ugcli 对 host 网络 / cap_add / devices 只告警不拦截。
+    network_mode: host
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    environment:
+      TZ: "{{.TZ}}"
+      # Web 控制台：内置账号 admin / admin，注册关闭，登录后可改密码
+      WEB_ENABLE: "true"
+      WEB_DISABLE_REGISTRATION: "true"
+      WEB_USERNAME: admin
+      # 控制台访问端口与配置服务器（RPC）端口，端口语义见镜像 /run.sh：
+      # WEB_PORT 走 --api-server-port，WEB_SERVER_PORT 走 --config-server-port
+      WEB_PORT: "11211"
+      WEB_SERVER_PORT: "22020"
+      WEB_SERVER_PROTOCOL: udp
+      WEB_DEFAULT_API_HOST: http://127.0.0.1:11211
+      WEB_LOG_LEVEL: warn
+    volumes:
+      # 数据目录（容器内 /app/data）：选了文件夹就绑它，留空用应用目录内 data/
+      #{{ if .EASYTIER_DATA }}
+      - type: bind
+        source: "{{ index .EASYTIER_DATA 0 }}"
+        target: /app/data
+      #{{ else }}
+      - type: bind
+        source: ./data
+        target: /app/data
+      #{{ end }}
