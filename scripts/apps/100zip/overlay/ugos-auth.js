@@ -132,7 +132,8 @@
       return origFetch(input, opts).then(function (res) {
         // 401 多半是 token 过期或应用重启把会话丢了 —— 重新走一遍再试一次。
         // 只重试一次，避免认证真的坏掉时变成死循环打满请求。
-        if (res.status === 401 && !retried) {
+        // 没有 token（无桥环境，如手机浏览器）时重试没有意义，直接返回。
+        if (res.status === 401 && !retried && state.token) {
           return reboot().then(function () {
             return send(true);
           });
@@ -149,13 +150,78 @@
     try {
       var bar = document.createElement("div");
       bar.style.cssText =
-        "position:fixed;left:0;right:0;top:0;z-index:99999;padding:10px 16px;" +
+        "position:fixed;left:0;right:0;top:0;z-index:99999;padding:12px 16px;" +
         "background:#c0392b;color:#fff;font-size:13px;line-height:1.6;" +
         'font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif';
-      bar.textContent =
-        "未通过 UGOS 登录认证：" +
-        state.diag +
-        "。请从 NAS 桌面的应用图标打开本应用（直接敲 IP:端口 是不行的）。";
+      bar.appendChild(document.createTextNode(
+        "未通过 UGOS 登录认证：" + state.diag + "。"));
+      var tip = document.createElement("div");
+      tip.style.cssText = "opacity:.9;margin-top:2px";
+      tip.textContent = "在 NAS 桌面里打开本应用可自动认证；手机等无桥环境可用 NAS 账号密码登录（仅经网关 HTTPS 提交）：";
+      bar.appendChild(tip);
+
+      var form = document.createElement("div");
+      form.style.cssText = "display:flex;gap:6px;margin-top:8px;flex-wrap:wrap";
+      function mkInput(type, ph) {
+        var i = document.createElement("input");
+        i.type = type;
+        i.placeholder = ph;
+        i.style.cssText =
+          "flex:1;min-width:120px;padding:6px 8px;border:1px solid rgba(255,255,255,.5);" +
+          "border-radius:4px;background:rgba(255,255,255,.12);color:#fff;font-size:13px";
+        return i;
+      }
+      var user = mkInput("text", "NAS 用户名");
+      var pass = mkInput("password", "NAS 密码");
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.textContent = "登录";
+      btn.style.cssText =
+        "padding:6px 14px;border:1px solid #fff;border-radius:4px;" +
+        "background:#fff;color:#c0392b;font-size:13px;font-weight:600;cursor:pointer";
+      var msg = document.createElement("span");
+      msg.style.cssText = "flex-basis:100%;font-size:12px;opacity:.95";
+      btn.addEventListener("click", function () {
+        btn.disabled = true;
+        btn.textContent = "验证中…";
+        msg.textContent = "";
+        origFetch("/api/session", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ username: user.value, password: pass.value }),
+        })
+          .then(function (res) {
+            if (res.ok) {
+              msg.textContent = "登录成功，正在刷新…";
+              setTimeout(function () {
+                location.reload();
+              }, 400);
+              return;
+            }
+            return res
+              .json()
+              .catch(function () {
+                return null;
+              })
+              .then(function (b) {
+                msg.textContent =
+                  (b && b.error && b.error.message) || ("登录失败（HTTP " + res.status + "）");
+                btn.disabled = false;
+                btn.textContent = "登录";
+              });
+          })
+          .catch(function (e) {
+            msg.textContent = "登录请求失败：" + ((e && e.message) || e);
+            btn.disabled = false;
+            btn.textContent = "登录";
+          });
+      });
+      form.appendChild(user);
+      form.appendChild(pass);
+      form.appendChild(btn);
+      form.appendChild(msg);
+      bar.appendChild(form);
       document.body.appendChild(bar);
     } catch (e) {
       /* 界面提示失败不影响主流程 */

@@ -37,8 +37,10 @@ type Server struct {
 	paths     Paths
 	child     *Supervisor
 	proxy     *httputil.ReverseProxy
-	sessions  *sessionStore
-	devNoAuth bool
+	sessions     *sessionStore
+	devNoAuth    bool
+	loginLimiter *loginRateLimiter
+	ugosLogin    func(username, password string) error
 	roots     []string
 	rootsNote string
 	startedAt time.Time
@@ -86,11 +88,13 @@ func main() {
 	proxy.FlushInterval = 200 * time.Millisecond
 
 	srv := &Server{
-		paths:     paths,
-		child:     child,
-		proxy:     proxy,
-		sessions:  newSessionStore(),
-		devNoAuth: *devNoAuth,
+		paths:        paths,
+		child:        child,
+		proxy:        proxy,
+		sessions:     newSessionStore(),
+		loginLimiter: &loginRateLimiter{},
+		ugosLogin:    newUgosLoginClient("https://127.0.0.1:9443").Login,
+		devNoAuth:    *devNoAuth,
 		roots:     roots,
 		rootsNote: note,
 		startedAt: time.Now(),
@@ -147,9 +151,9 @@ func (s *Server) routes() http.Handler {
 	// 自查：不要求网关认证，但要求来自本机。鉴权链路不通时它是唯一的排查手段。
 	mux.HandleFunc("/api/diag", s.requireSameHost(s.handleDiag))
 
-	// 用网关身份换会话 Cookie —— 让浏览器自己发起的请求也能过闸。
-	// 这个接口【只认网关身份】，拿已有 Cookie 换不出新 Cookie。
-	mux.HandleFunc("/api/session", s.requireGatewayOnly(s.handleSession))
+	// 换会话 Cookie：桌面走网关身份（桥取 Ttk）；无桥环境（手机浏览器）
+	// 走账号密码（管理壳到 UGOS 验密）。策略都在 handler 内部，见 login.go。
+	mux.HandleFunc("/api/session", s.handleSession)
 
 	// 其余 /api/* 全部转给上游 100zip 服务。
 	mux.HandleFunc("/api/", s.requireAuth(s.handleProxy))

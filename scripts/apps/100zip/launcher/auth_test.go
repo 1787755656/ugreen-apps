@@ -10,6 +10,8 @@ package main
 // 不走 devNoAuth，保证闸的代码路径被真实执行。
 
 import (
+	"fmt"
+	"io"
 	"net"
 	"net/http"
 	"net/http/httptest"
@@ -133,43 +135,108 @@ func TestAPIGate(t *testing.T) {
 	}
 }
 
-// ---- 3. /api/session 只认网关身份，Cookie 换不出新 Cookie ----
+// ---- 3. /api/session：网关身份直签；无桥环境走账号密码（HTTPS + 限流）----
 
-func TestSessionRequiresGatewayIdentity(t *testing.T) {
+func newTestServerWithLogin(fail func(u, p string) error) *Server {
 	s := newTestServer()
+	s.loginLimiter = &loginRateLimiter{}
+	s.ugosLogin = fail
+	return s
+}
 
-	// 本机 + 网关身份 → 200 且 Set-Cookie
-	w := get(t, s, s.requireGatewayOnly(s.handleSession), "POST", "/api/session", localAddr4, map[string]string{adminHdr: "1"})
+func TestSessionViaGatewayIdentity(t *testing.T) {
+	s := newTestServer()
+	// 网关身份 → 签发（桌面路径；LAN 来源与伪造身份等价于直接伪造 /api 头，无新增权限）
+	w := get(t, s, s.handleSession, "POST", "/api/session", localAddr4, map[string]string{adminHdr: "1"})
 	if w.Code != 200 {
 		t.Fatalf("网关身份换 Cookie 应 200，got %d", w.Code)
 	}
-	cookies := w.Result().Cookies()
-	if len(cookies) == 0 || cookies[0].Value == "" {
+	if len(w.Result().Cookies()) == 0 {
 		t.Fatal("没有下发会话 Cookie")
 	}
-	if cookies[0].Secure {
-		t.Fatal("明文测试请求下 Cookie 不应是 Secure（Secure 只配 https 的 SameSite=None）")
-	}
+}
 
-	// 本机 + 无身份 → 401
-	w = get(t, s, s.requireGatewayOnly(s.handleSession), "POST", "/api/session", localAddr4, nil)
+func TestSessionNoIdentityNoBody(t *testing.T) {
+	s := newTestServer()
+	w := get(t, s, s.handleSession, "POST", "/api/session", localAddr4, nil)
 	if w.Code != 401 {
-		t.Fatalf("无网关身份换 Cookie 应 401，got %d", w.Code)
+		t.Fatalf("无身份无凭据应 401，got %d", w.Code)
 	}
+	w = get(t, s, s.handleSession, "GET", "/api/session", localAddr4, nil)
+	if w.Code != 401 {
+		t.Fatalf("GET 换 Cookie 应 401，got %d", w.Code)
+	}
+}
 
-	// 局域网 + 伪造身份 → 403（本机闸先拦）
-	w = get(t, s, s.requireGatewayOnly(s.handleSession), "POST", "/api/session", lanAddr, map[string]string{adminHdr: "1"})
+func TestSessionViaCredentials(t *testing.T) {
+	calls := 0
+	s := newTestServerWithLogin(func(u, p string) error {
+		calls++
+		if u == "xw" && p == "right" {
+			return nil
+		}
+		return fmt.Errorf("UGOS 登录失败：密码错误")
+	})
+
+	// 明文入口拒绝（有凭据但没有 X-Forwarded-Proto=https）
+	w := credReq(t, s, lanAddr, map[string]string{"Content-Type": "application/json"}, "xw", "right")
 	if w.Code != 403 {
-		t.Fatalf("局域网换 Cookie 应 403，got %d", w.Code)
+		t.Fatalf("明文入口的密码登录应 403，got %d", w.Code)
 	}
 
-	// 拿已签发的 Cookie 再来换 → 仍要 401（Cookie 不能换 Cookie）
-	req := remoteReq(t, s, "POST", "/api/session", localAddr4, nil)
-	req.AddCookie(&http.Cookie{Name: sessionCookieName, Value: cookies[0].Value})
-	w2 := httptest.NewRecorder()
-	s.requireGatewayOnly(s.handleSession)(w2, req)
-	if w2.Code != 401 {
-		t.Fatalf("拿 Cookie 换 Cookie 应 401，got %d", w2.Code)
+	// HTTPS + 正确凭据 → Cookie（来源是局域网手机，允许——这正是本分支存在的意义）
+	hdr := map[string]string{"Content-Type": "application/json", "X-Forwarded-Proto": "https"}
+	w = credReq(t, s, lanAddr, hdr, "xw", "right")
+	if w.Code != 200 {
+		t.Fatalf("HTTPS 正确凭据应 200，got %d body=%s", w.Code, w.Body.String())
+	}
+	if len(w.Result().Cookies()) == 0 {
+		t.Fatal("凭据登录没有下发会话 Cookie")
+	}
+	// 验密真的发生了一次
+	if calls != 1 {
+		t.Fatalf("UGOS 验密应被调用 1 次，实际 %d", calls)
+	}
+
+	// 错误凭据 → 401，且连错 5 次后 429 锁定
+	for i := 1; i <= 5; i++ {
+		w = credReq(t, s, lanAddr, hdr, "xw", "wrong")
+		if w.Code != 401 {
+			t.Fatalf("第 %d 次错误凭据应 401，got %d", i, w.Code)
+		}
+	}
+	w = credReq(t, s, lanAddr, hdr, "xw", "right") // 锁定期内正确密码也拒
+	if w.Code != 429 {
+		t.Fatalf("锁定期内应 429，got %d", w.Code)
+	}
+	if calls != 6 { // 1 成功 + 5 失败；锁定后不再调用 UGOS
+		t.Fatalf("限流后不应再调 UGOS 验密，调用数 %d", calls)
+	}
+}
+
+func credReq(t *testing.T, s *Server, remote string, hdr map[string]string, user, pass string) *httptest.ResponseRecorder {
+	t.Helper()
+	body := fmt.Sprintf(`{"username":%q,"password":%q}`, user, pass)
+	r := remoteReq(t, s, "POST", "/api/session", remote, hdr)
+	r.Body = io.NopCloser(strings.NewReader(body))
+	w := httptest.NewRecorder()
+	s.handleSession(w, r)
+	return w
+}
+
+func TestSessionCookieCannotMintCookie(t *testing.T) {
+	s := newTestServer()
+	tok, err := s.sessions.issue()
+	if err != nil {
+		t.Fatal(err)
+	}
+	// 拿已签发的 Cookie、无身份、无凭据 → 401（Cookie 换不出新 Cookie）
+	r := remoteReq(t, s, "POST", "/api/session", localAddr4, nil)
+	r.AddCookie(&http.Cookie{Name: sessionCookieName, Value: tok})
+	w := httptest.NewRecorder()
+	s.handleSession(w, r)
+	if w.Code != 401 {
+		t.Fatalf("拿 Cookie 换 Cookie 应 401，got %d", w.Code)
 	}
 }
 

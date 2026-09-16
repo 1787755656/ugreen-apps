@@ -29,9 +29,11 @@ support_arch:
   - amd64
   - arm64
 
-# 只声明 pc。inner 应用在手机上是跳转手机浏览器打开的，页面能用（上游有移动端
-# 适配），但授权引导和文件选择的体验按桌面设计。
+# app + pc：上游 v0.5.20 专门做了移动端适配，inner 应用在手机上跳转浏览器
+# 打开即可用。无桥环境的认证走 /api/session 的账号密码分支（管理壳到 UGOS
+# 验密后签会话 Cookie，仅 HTTPS 入口 + 限流），见 launcher/login.go。
 supports:
+  - app
   - pc
 
 # --port 必须和下面的 port 一致。

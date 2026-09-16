@@ -125,17 +125,3 @@ func setSessionCookie(w http.ResponseWriter, r *http.Request, token string) {
 	http.SetCookie(w, cookie)
 }
 
-// handleSession 用网关身份换会话 Cookie。
-//
-// 前端（overlay/ugos-auth.js）带着 Ugreen-Ttk 发过来，网关校验通过后注入
-// Ugreen-User-*，到这里说明"这个用户确实通过了 UGOS 登录"，发 Cookie。
-// 上游 100zip 没有 /api/session 这个路由，所以这个路径在管理壳这里是安全的。
-func (s *Server) handleSession(w http.ResponseWriter, r *http.Request) {
-	token, err := s.sessions.issue()
-	if err != nil {
-		writeErr(w, http.StatusInternalServerError, "会话签发失败："+err.Error())
-		return
-	}
-	setSessionCookie(w, r, token)
-	writeJSON(w, http.StatusOK, map[string]any{"ok": true})
-}

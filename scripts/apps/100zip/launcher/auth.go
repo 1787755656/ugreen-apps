@@ -128,22 +128,6 @@ func (s *Server) requireSameHost(next http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
-// requireGatewayOnly 严格要求网关注入的身份，【不接受】会话 Cookie。
-// 只给 /api/session 用：拿一个已有的 Cookie 换不出新 Cookie。
-func (s *Server) requireGatewayOnly(next http.HandlerFunc) http.HandlerFunc {
-	return s.requireSameHost(func(w http.ResponseWriter, r *http.Request) {
-		if s.devNoAuth {
-			next(w, r)
-			return
-		}
-		if _, ok := identityFrom(r); !ok {
-			writeErr(w, http.StatusUnauthorized, authFailureHint)
-			return
-		}
-		next(w, r)
-	})
-}
-
 // requireAuth 包住所有转发给上游的接口：网关身份【或】会话 Cookie，二选一。
 //
 // 为什么要接受 Cookie：上游界面的诊断包导出是浏览器 <a> 直接触发的下载
