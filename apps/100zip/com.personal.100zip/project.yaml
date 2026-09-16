@@ -1,0 +1,182 @@
+# ============================================================
+# 100解压（100zip）— UGOS Pro 原生应用
+#
+# 上游：https://github.com/Alicace/100zip（作者 Alicace，MIT License）
+# 上游是飞牛 fnOS 的 .fpk 原生应用（Go + 7-Zip 静态引擎 + 原生 HTML 前端），
+# 本工程把它搬到绿联，未改上游业务代码：
+#   - 上游 Go 源码直接交叉编译（纯 Go，CGO_ENABLED=0）
+#   - 7-Zip 引擎按架构各取官方静态版（linux-x64 / linux-arm64）
+#   - 鉴权/授权目录/临时目录适配全在 launcher/（Go 管理壳）
+#   - 前端认证适配在 overlay/ugos-auth.js + scripts/patch-ui.py
+#
+# 改动前务必先读的源码注释：
+#   launcher/auth.go      —— 为什么光有网关认证不够，两道闸分别挡什么
+#   launcher/supervise.go —— 为什么要用管理壳 fork 上游，TMPDIR 给谁
+#   launcher/paths.go     —— 授权目录从哪来（参数 + shared 挂载发现）
+#   launcher/discover.go  —— 怎么从 mountinfo 分辨真实授权挂载
+# ============================================================
+
+spec_version: "2.1"
+
+app_id: com.personal.100zip
+
+# 跟随上游版本号（上游 manifest 的 version = 0.5.20，tag v0.5.20）。
+version: 0.5.20
+
+# 两个架构各出一个包。上游是纯 Go（brotli/klauspost-compress/lz4 全部纯 Go 实现），
+# CGO_ENABLED=0 交叉编译零配置；7-Zip 引擎官方就有 linux-arm64 静态版。
+support_arch:
+  - amd64
+  - arm64
+
+# 只声明 pc。inner 应用在手机上是跳转手机浏览器打开的，页面能用（上游有移动端
+# 适配），但授权引导和文件选择的体验按桌面设计。
+supports:
+  - pc
+
+# --port 必须和下面的 port 一致。
+# 这里起的是 Go 管理壳，不是上游本体：上游只监听 127.0.0.1 上的内部端口，
+# 由管理壳鉴权后反代过去。理由见 launcher/auth.go。
+start_cmd: bin/zip100-launcher --port=28737
+
+# 管理壳的 HTTP 端口，平台靠它探活。
+#
+# ⚠ 上游在 fnOS 上走 unix socket 没有端口概念（开发模式默认 8737），【故意
+#   没有照抄 8737】：高位端口撞车概率不低。28737 在真机上 ss 查过（空闲），
+#   也 grep 过本机其它应用的 project.yaml（无占用）。
+port: 28737
+
+# inner：根路径由网关从 www/ 直接 serve 静态页面，只有 /api/ 反代到本应用端口。
+# 上游的路由恰好是"除了 /healthz 之外全在 /api/ 下面"，天然对得上这个模型；
+# 上游前端对静态资源的引用全是相对路径（css/... js/...），www 目录层级原样搬即可。
+open_type: inner
+
+# 网关转发时不会剥掉这个前缀，上游注册的就是 /api/xxx，正好。
+proxy_path: api
+
+# 密码库能取出压缩包的明文密码、能读写授权目录里的全部文件 ——
+# 只有管理员该看到。注意 only_admin 挡的是桌面图标，【挡不住端口】——
+# 端口那一侧靠 launcher/auth.go 的两道闸。
+only_admin: true
+
+tag_types:
+  - utility
+
+depend_fw_version: 1.13.0.0000
+
+# 安装参数之外，用户也可以在应用中心的「访问路径」里手动加目录
+# （launcher 会从 shared 挂载里发现它们，见 launcher/discover.go）。
+allow_add_access_path: true
+
+support_migration: true
+
+# 【权限画像】零权限。
+#
+# 压缩/解压全在 NAS 本机文件上完成；上传/下载不存在；GitHub 版本检查是
+# 前端浏览器直接 fetch api.github.com 的（不经过应用后端），不消耗应用权限。
+# 沙箱对公网出站是 DROP 的，但本应用的后端不访问公网 —— 一个权限都不用声明，
+# unit 里还白得一层"只放行私网"的 IP 过滤。
+# exec 的是包内自带的二进制（管理壳 fork 上游 + 上游 fork 7zzs，绝对路径、
+# 不经过 shell），不需要 SYSTEM.EXEC_SYSTEM_COMMAND。
+permissions: []
+
+parameters:
+  # 在安装对话框里选一次，既拿到路径、又顺带把这个目录授权进沙箱
+  # （平台把 path 型参数写进 path_permissions 表 → unit 的 BindPaths=）。
+  #
+  # ⚠ 不设 required：全新安装/升级后【第一次启动读到的参数是空的】，
+  #   平台先起服务、2~3 秒后才写 <appid>.env 和 unit。所以留空能装、
+  #   读到空值不报错，界面上显示"先授权一个目录"引导，用户重启一次就好。
+  #
+  # ⚠ 压缩/解压的来源和目标都是这个列表里的目录（或其子目录）。
+  #   解压目标想选"压缩包所在目录"的话，把压缩包所在的目录选进来即可。
+  - key: ZIP_ROOTS
+    type: path
+    multi: true
+    max_values_count: 8
+    changeable: true
+    required: false
+    i18n:
+      zh-CN:
+        name: 工作目录
+        description: >-
+          100解压 在哪些文件夹里工作。这里选中的文件夹（及其子目录）里的压缩包
+          可以解压，也可以作为压缩的来源和输出位置，可添加多个。
+          选中的同时这个目录就被授权给本应用读写了。留空也能装，
+          装好后再在这里补选。装好或改完之后请在应用中心「停止 → 启动」一次，
+          新目录才会生效。
+      en-US:
+        name: Working folders
+        description: >-
+          Where 100zip reads and writes. Archives inside the folders picked
+          here (and their subfolders) can be extracted; the same folders are
+          used as compression sources and outputs. Several folders are
+          allowed. Picking a folder also grants this app read/write access
+          to it. May be left empty and filled in later. After installing or
+          changing this, stop and start the app once.
+
+# 所有对外链接一律指向上游原项目 —— 应用本身是 Alicace 的作品，
+# 署名和求助入口都应该落到他那里（MIT 许可证也要求保留版权声明）。
+license_agreement_link:
+  - https://github.com/Alicace/100zip/blob/main/LICENSE
+
+source_code_link:
+  - https://github.com/Alicace/100zip
+
+technical_support_link:
+  - https://github.com/Alicace/100zip/issues
+
+i18n:
+  zh-CN:
+    name: 100解压
+    description: >-
+      在 NAS 本机完成压缩、解压和包内预览的工具，文件不需要经过电脑中转。
+
+      解压支持 40 多种格式：7z、ZIP、RAR、TAR 全家（gz/bz2/xz/zst）、ISO、
+      CAB、WIM、VHD，以及 .7z.001、.zip.001、.z01、.part1.rar 这类分卷包，
+      缺卷会明确提示缺哪一卷。创建压缩包支持 7z（AES-256、文件名加密、
+      分卷）、ZIP、TAR、tar.gz/bz2/xz/zst，还能直接产出 zst/lz4/brotli。
+
+      压缩包里的内容可以直接预览：图片、视频、音频、文本、PDF 和 Office
+      文档都能打开，不用先解压。中文文件名乱码自动修复（GBK、Big5、日文
+      等常见代码页）。常用密码可以存进密码库，解压时一键选用 —— 密码
+      加密保存在这台 NAS 上，不会出现在日志里。
+
+      支持批量解压（每个压缩包自动隔离到独立目录）和批量压缩，任务中心
+      显示进度、速度、剩余时间，可以暂停、取消和重试。几十 GB 的大文件
+      任务也能处理，耗时取决于 CPU 和磁盘速度。
+
+      使用前需要在应用设置里选择工作目录（安装时就可以选），
+      应用只能访问选中的文件夹。
+    author: Alicace
+    publisher: 穿斯帕沃特
+    # ⚠ official / help / publisher_link 属于【i18n 语言块】，不是顶层字段，
+    #   而且是单个 URL 不是列表。写到顶层的话 `ugcli check` 照样过、
+    #   `ugcli pack` 直接拒（field official not found in type project.PrjConfig）。
+    official: https://github.com/Alicace/100zip
+    help: https://github.com/Alicace/100zip#readme
+    publisher_link: https://club.ugnas.com/home.php?mod=space&uid=10131
+  en-US:
+    name: 100zip
+    # ⚠ 这段有 1000【字符】的上限，超了 `ugcli check` 照样过、`pack` 直接拒。
+    description: >-
+      Compress, extract and preview archives right on the NAS. Extracts 40+
+      formats: 7z, ZIP, RAR, TAR family (gz/bz2/xz/zst), ISO, CAB, WIM, VHD,
+      plus multi-volume sets (.7z.001, .z01, .part1.rar) with clear
+      missing-volume hints. Creates 7z (AES-256, encrypted names, volumes),
+      ZIP, TAR and tar.gz/bz2/xz/zst.
+
+      Preview inside archives without extracting: images, video, audio, text,
+      PDF and Office documents. Garbled non-UTF8 filenames are fixed
+      automatically. Passwords can be stored in an encrypted local vault.
+      Batch extraction isolates each archive into its own folder; the task
+      center shows progress and speed with pause, cancel and retry.
+
+      Pick working folders in the app settings (or during install); the app
+      only touches those folders. Ported with modifications from 100zip by
+      Alicace.
+    author: Alicace
+    publisher: 穿斯帕沃特
+    official: https://github.com/Alicace/100zip
+    help: https://github.com/Alicace/100zip#readme
+    publisher_link: https://club.ugnas.com/home.php?mod=space&uid=10131

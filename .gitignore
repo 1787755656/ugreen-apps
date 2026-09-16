@@ -36,3 +36,10 @@ scripts/apps/lunatv/.build-cache/
 
 # piggybank 本地调试缓存（CI 用 RUNNER_TEMP）
 scripts/apps/piggybank/.build-cache/
+
+# 100zip 的前端 (rootfs_common/www) 由 build.sh 现场从上游生成（上游 www 拷贝
+# + UGOS 认证适配层 + 文案 patch），跟着上游 tag 走，不进 git。
+apps/100zip/com.personal.100zip/rootfs_common/www/
+
+# 本地调试 100zip build.sh 时落在脚本旁的下载缓存（CI 上用 RUNNER_TEMP）。
+scripts/apps/100zip/.build-cache/
