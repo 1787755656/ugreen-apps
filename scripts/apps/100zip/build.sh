@@ -173,7 +173,7 @@ echo "==> 组装前端 www"
 WWW="$APPDIR/rootfs_common/www"
 rm -rf "$WWW"
 mkdir -p "$WWW"
-cp -R "$UP/app/www/" "$WWW/"
+cp -R "$UP/app/www/." "$WWW/"   # /. 结尾：BSD/GNU cp 语义统一为"拷内容"
 # 桥接层整体替换：飞牛 SDK 桥在绿联上没有宿主，pickUserFile 会永远挂起。
 cp "$SLASH_DIR/overlay/fnos-bridge.js" "$WWW/js/fnos-bridge.js"
 cp "$SLASH_DIR/overlay/ugos-auth.js" "$WWW/js/ugos-auth.js"
