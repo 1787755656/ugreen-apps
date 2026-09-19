@@ -362,7 +362,7 @@
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/picoclaw/com.sipeed.picoclaw/rootfs_common/icon.png",
       "download_count": 0,
       "app_type": "native",
-      "category": "system",
+      "category": "ai",
       "platforms": [
         "amd64",
         "arm64"
@@ -406,7 +406,7 @@
       },
       "service_port": 28080,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/qbittorrent/com.qbee.qbittorrent/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 3,
       "app_type": "native",
       "category": "download",
       "platforms": [
