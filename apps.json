@@ -350,13 +350,13 @@
       "display_name": "PicoClaw",
       "description": "PicoClaw —— Sipeed 出品的超轻量个人 AI 助理/Agent（内存占用 <10MB， 单一静态二进制）。接入你自己的 LLM API Key（Claude、GPT、DeepSeek、 通义千问、Kimi、豆包、Ollama 及任意 OpenAI 兼容接口），即可通过 Telegram、Discord 等渠道对话，支持 MCP 工具、技能、定时任务和持久记忆。 首次使用：打开应用进入 WebUI 管理台，1) 配置 Provider（填 LLM API Key） → 2) 配置 Channel（聊天渠道）→ 3) 启动 Gateway 即可开聊。全部数据 保存在应用数据目录，卸载保留数据/迁移安装目录均可跟随。注意：Agent 可在应用沙箱内执行 NAS 上的 shell 命令，请只接入你本人使用的聊天渠道。 软件免费，仅需自付 LLM API 费用；PicoClaw 未发行任何加密货币， 声称关联的代币均为诈骗。",
       "homepage_url": "https://github.com/sipeed/picoclaw",
-      "updated_at": "2026-08-05",
+      "updated_at": "2026-09-19",
       "version": "0.3.1",
       "upk_version": "0.3.1.0002",
-      "release_tag": "picoclaw/v0.3.1-r4",
+      "release_tag": "picoclaw/v0.3.1-r5",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/picoclaw/v0.3.1-r4/amd64_com.sipeed.picoclaw_0.3.1.0002.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/picoclaw/v0.3.1-r4/arm64_com.sipeed.picoclaw_0.3.1.0002.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/picoclaw/v0.3.1-r5/amd64_nasync_com.sipeed.picoclaw_0.3.1.0002.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/picoclaw/v0.3.1-r5/arm64_nasync_com.sipeed.picoclaw_0.3.1.0002.upk"
       },
       "service_port": 18800,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/picoclaw/com.sipeed.picoclaw/rootfs_common/icon.png",
