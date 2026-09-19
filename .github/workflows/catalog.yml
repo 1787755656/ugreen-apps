@@ -1,0 +1,45 @@
+name: Refresh App Catalog
+
+# 生成仓库根的 apps.json（ugos-store 三方商店的目录源）。
+# 触发后只改 apps.json —— 不命中 build-apps.yml 的 paths，不会引发构建循环。
+
+on:
+  workflow_run:
+    workflows: ["Build UGOS Pro App Packages"]
+    types: [completed]
+  schedule:
+    - cron: "10 8 * * *"   # 每日构建（08:00 UTC）之后跑一次
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: catalog
+  cancel-in-progress: true
+
+jobs:
+  refresh:
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate apps.json
+        env:
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python3 scripts/catalog/generate-catalog.py
+
+      - name: Commit (if changed)
+        run: |
+          if git diff --quiet apps.json; then
+            echo "apps.json unchanged"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add apps.json
+          git commit -m "chore: refresh apps.json catalog [skip ci]"
+          git push

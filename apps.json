@@ -1,0 +1,510 @@
+{
+  "apps": [
+    {
+      "appname": "com.personal.100zip",
+      "display_name": "100解压 (100zip)",
+      "description": "在 NAS 本机完成压缩、解压和包内预览的工具，文件不需要经过电脑中转。\n解压支持 40 多种格式：7z、ZIP、RAR、TAR 全家（gz/bz2/xz/zst）、ISO、 CAB、WIM、VHD，以及 .7z.001、.zip.001、.z01、.part1.rar 这类分卷包， 缺卷会明确提示缺哪一卷。创建压缩包支持 7z（AES-256、文件名加密、 分卷）、ZIP、TAR、tar.gz/bz2/xz/zst，还能直接产出 zst/lz4/brotli。\n压缩包里的内容可以直接预览：图片、视频、音频、文本、PDF 和 Office 文档都能打开，不用先解压。中文文件名乱码自动修复（GBK、Big5、日文 等常见代码页）。常用密码可以存进密码库，解压时一键选用 —— 密码 加密保存在这台 NAS 上，不会出现在日志里。\n支持批量解压（每个压缩包自动隔离到独立目录）和批量压缩，任务中心 显示进度、速度、剩余时间，可以暂停、取消和重试。几十 GB 的大文件 任务也能处理，耗时取决于 CPU 和磁盘速度。\n使用前需要在应用设置里选择工作目录（安装时就可以选）， 应用只能访问选中的文件夹。",
+      "homepage_url": "https://github.com/Alicace/100zip",
+      "updated_at": "2026-09-16",
+      "version": "0.5.20",
+      "upk_version": "0.5.20.0002",
+      "release_tag": "100zip/v0.5.20-r2",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/100zip/v0.5.20-r2/amd64_nasync_com.personal.100zip_0.5.20.0002.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/100zip/v0.5.20-r2/arm64_nasync_com.personal.100zip_0.5.20.0002.upk"
+      },
+      "service_port": 28737,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/100zip/com.personal.100zip/rootfs_common/icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "system",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ]
+    },
+    {
+      "appname": "com.wushuo.anirss",
+      "display_name": "ass (ANI-RSS)",
+      "description": "基于 RSS 自动追番、订阅、下载、刮削与洗版（上游 ANI-RSS）。应用内置 Eclipse Temurin JRE，无需 NAS 安装系统 Java。默认账号 admin / admin， 登录后请及时修改密码。请在应用设置中授权媒体/下载共享目录，并在 WebUI 中配置下载路径与下载器。",
+      "homepage_url": "https://github.com/wushuo894/ani-rss",
+      "updated_at": "2026-09-19",
+      "version": "3.2.34",
+      "upk_version": "3.2.34.0003",
+      "release_tag": "ani-rss/v3.2.34",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/ani-rss/v3.2.34/amd64_nasync_com.wushuo.anirss_3.2.34.0003.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/ani-rss/v3.2.34/arm64_nasync_com.wushuo.anirss_3.2.34.0003.upk"
+      },
+      "service_port": 7789,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/ani-rss/com.wushuo.anirss/rootfs_common/icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "download",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ]
+    },
+    {
+      "appname": "com.personal.clouddl",
+      "display_name": "多网盘下载器 (Cloud Drive Downloader)",
+      "description": "把百度网盘、夸克网盘和阿里云盘里的文件直接下载到 NAS 上，不经过电脑中转。\n在应用里浏览网盘目录、搜索文件，单个文件或整个文件夹都能下载， 文件夹会保持原有的多级目录结构。下载走标准 HTTP 分片， 分片大小、每个文件的连接数、同时下载的任务数、总限速都可以自己调， 任务列表实时显示速度和预计剩余时间。\n还有一些省心的小设计：可以只在指定时段下载；磁盘可用空间低于设定值时 任务自动暂停、空间恢复后继续；重名文件可以选择报错、重命名、覆盖或跳过； 日志能在界面上直接看，导出诊断包时会自动抹掉凭据和下载链接。\n使用前需要在「设置 - 账号与凭据」里填入对应网盘的登录凭据 （百度是 BDUSS + STOKEN，夸克是 Cookie，阿里云盘可以直接 App 扫码）。 凭据只保存在这台 NAS 上。\n注意：本应用不是百度网盘、夸克网盘或阿里云盘的官方产品，用的是第三方接口， 对方随时可能调整限速或风控策略，请自行承担账号风险， 并确保下载的内容你有合法的使用权。\n本应用由 xiaocheng154 的开源项目 nas-cloud-downloader 移植而来（已修改： 适配绿联的应用沙箱与登录认证），原项目地址见\"源代码\"链接。",
+      "homepage_url": "https://github.com/xiaocheng154/nas-cloud-downloader",
+      "updated_at": "2026-09-14",
+      "version": "1.5.9",
+      "upk_version": "1.5.9.0001",
+      "release_tag": "clouddl/v1.5.9",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/clouddl/v1.5.9/amd64_nasync_com.personal.clouddl_1.5.9.0001.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/clouddl/v1.5.9/arm64_nasync_com.personal.clouddl_1.5.9.0001.upk"
+      },
+      "service_port": 28686,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/clouddl/com.personal.clouddl/rootfs_common/icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "download",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ]
+    },
+    {
+      "appname": "com.personal.dnet",
+      "display_name": "D-NET 动态网络管理",
+      "description": "轻量级动态网络管理工具：CDN 源站自动跟随 IP 变化更新（DCDN）、 动态域名解析（DDNS）、TCP/UDP 端口转发（DPF），一个应用管完。\n动态 CDN：支持阿里云 CDN/DCDN/ESA、腾讯云 CDN/EdgeOne、百度云 CDN/DRCDN、Cloudflare、又拍云以及自定义回调，IP 变了源站自动跟上。 动态 DNS：支持 A/AAAA/CNAME/TXT 记录，覆盖阿里云、腾讯云、百度云、 Cloudflare、华为云、DNSPod、NameSilo、GoDaddy 与自定义回调。 端口转发：IPv4/IPv6 入口转发到指定 IP 或域名，支持来源白名单、 连接数限制、超时设置与运行日志。\n变更可实时通过 Webhook 推送通知。首次打开会进入初始设置页： 请在安装后 30 分钟内从内网完成账号密码设置（超时后在应用中心 停止再启动一次即可重新进入），配置保存在 NAS 本机。",
+      "homepage_url": "https://github.com/cxbdasheng/dnet",
+      "updated_at": "2026-09-16",
+      "version": "3.1.0",
+      "upk_version": "3.1.0.0002",
+      "release_tag": "dnet/v3.1.0",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/dnet/v3.1.0/amd64_nasync_com.personal.dnet_3.1.0.0002.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/dnet/v3.1.0/arm64_nasync_com.personal.dnet_3.1.0.0002.upk"
+      },
+      "service_port": 19877,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/dnet/com.personal.dnet/rootfs_common/icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "system",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ]
+    },
+    {
+      "appname": "com.personal.easytier",
+      "display_name": "EasyTier 异地组网",
+      "description": "EasyTier 是一个去中心化的异地组网（mesh VPN）工具：各节点平等互联、无需中心服务器， 支持 UDP/TCP/WSS/WG 多协议、NAT 穿透、子网代理（把 NAS 所在局域网共享给整个虚拟网络） 与智能路由，流量可用 WireGuard 或 AES-GCM 加密。\n本应用为「核心 + Web 管理台」一体部署：安装后从桌面打开即进入 Web 管理台 （端口 11211，内置账号 admin / admin，注册已关闭，请登录后立即修改密码）。 在管理台里创建或加入虚拟网络，即可让 NAS 与你的其他设备组成跨地域的虚拟局域网。\n注意： · 组网需要宿主网络与 TUN 网卡：容器使用 host 网络模式、挂载 /dev/net/tun，\n  并需要 NET_ADMIN / NET_RAW 权限，安装时的告警属正常现象。\n· 如果你之前已用 Docker 手动部署过 EasyTier：容器同名（easytier）、端口相同\n  （11211/22020），请先停止并【删除】旧容器再启动本应用，否则会因端口与名字冲突起不来。\n· 数据目录可在安装时指定，旧部署的 /app/data 数据可通过指定目录直接沿用。",
+      "homepage_url": "https://easytier.cn/",
+      "updated_at": "2026-09-16",
+      "version": "2.6.4",
+      "upk_version": "2.6.4.0001",
+      "release_tag": "easytier/v2.6.4",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/easytier/v2.6.4/amd64_nasync_com.personal.easytier_2.6.4.0001.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/easytier/v2.6.4/arm64_nasync_com.personal.easytier_2.6.4.0001.upk"
+      },
+      "service_port": 11211,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/easytier/com.personal.easytier/rootfs_common/icon.png",
+      "download_count": 2,
+      "app_type": "native",
+      "category": "system",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ]
+    },
+    {
+      "appname": "com.koolcenter.fastnet",
+      "display_name": "FastNet",
+      "description": "FastNet 是 KoolCenter（原 KoolShare）出品的全平台网络测速与诊断工具。 打开应用即可在浏览器里对 NAS 本机做一次完整体检：延迟、多源 CDN 下载/上传速度、NAT 类型检测（RFC 5780 STUN）以及 IPv6 可用性评分。 适合用来分辨\"是 NAS 的宽带慢\"还是\"只有这一个下载慢\"，也可以核对 运营商给的带宽有没有跑满。无需注册、无需配置，不向存储空间写入任何 文件，测试结果只显示在浏览器里。 注意：控制台监听 28190 端口，同局域网内的任何设备都能打开（页面本身 不含任何凭据或个人数据，但每跑一次测速都会真实消耗上下行带宽）。 本应用需要访问互联网才能工作。",
+      "homepage_url": "https://www.koolcenter.com/t/topic/9148",
+      "updated_at": "2026-08-13",
+      "version": "0.7.6",
+      "upk_version": "0.7.6.0002",
+      "release_tag": "fastnet/v0.7.6-r1",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/fastnet/v0.7.6-r1/amd64_com.koolcenter.fastnet_0.7.6.0002.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/fastnet/v0.7.6-r1/arm64_com.koolcenter.fastnet_0.7.6.0002.upk"
+      },
+      "service_port": 28190,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/fastnet/com.koolcenter.fastnet/rootfs_common/icon.png",
+      "download_count": 2,
+      "app_type": "native",
+      "category": "system",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ]
+    },
+    {
+      "appname": "com.personal.liteclass",
+      "display_name": "轻课堂 LiteClass",
+      "description": "专为 NAS 用户打造的轻量级、多用户私有云学习管理系统。管理课程库、在线播放、 章节识别与自动封面、断点续播、倍速与字幕、带时间戳的课程笔记、学习时长统计、 考试与答题、AI 问答，支持多人一起看。数据只保存在自己的 NAS 上。 初始管理员为 admin / admin123，装好后请立刻在应用内改密码。",
+      "homepage_url": "https://hub.docker.com/r/luodichanagn/liteclass",
+      "updated_at": "2026-09-10",
+      "version": "1.1.6",
+      "upk_version": "1.1.6.0002",
+      "release_tag": "liteclass/v1.1.6",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/liteclass/v1.1.6/amd64_com.personal.liteclass_1.1.6.0002.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/liteclass/v1.1.6/arm64_com.personal.liteclass_1.1.6.0002.upk"
+      },
+      "service_port": 18083,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/liteclass/com.personal.liteclass/rootfs_common/icon.png",
+      "download_count": 1,
+      "app_type": "native",
+      "category": "media",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ]
+    },
+    {
+      "appname": "com.ponphil.litepan",
+      "display_name": "LitePan",
+      "description": "网盘聚合挂载工具，把多个网盘账号统一到一个界面管理。支持跨盘秒传、 302 直链播放、WebDAV 共享，可生成 .strm 文件并自动刮削 nfo 与海报， 对接 Emby / Jellyfin 直连播放；另有 TMDB 目录整理、命名对齐、 缓存保持、离线下载与自动联动。默认管理员密码 admin，登录后请立即修改。 原生版不含 FUSE 本地挂载（沙箱无法访问 /dev/fuse），需要该功能请用 官方 Docker 部署。",
+      "homepage_url": "https://www.litepan.top",
+      "updated_at": "2026-09-12",
+      "version": "0.5.5",
+      "upk_version": "0.5.5.0003",
+      "release_tag": "litepan/v0.5.5-Beta",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/litepan/v0.5.5-Beta/amd64_com.ponphil.litepan_0.5.5.0003.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/litepan/v0.5.5-Beta/arm64_com.ponphil.litepan_0.5.5.0003.upk"
+      },
+      "service_port": 25211,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/litepan/com.ponphil.litepan/rootfs_common/icon.png",
+      "download_count": 1,
+      "app_type": "native",
+      "category": "system",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ]
+    },
+    {
+      "appname": "com.gdy666.lucky",
+      "display_name": "Lucky",
+      "description": "Lucky —— 软硬路由公网神器/网络工具箱：IPv6/IPv4 端口转发、反向代理、 DDNS 动态域名、网页唤醒(WOL)、STUN 内网穿透、计划任务、ACME 证书自动申请、 FTP/WebDAV/文件浏览等，自带 Web 管理界面。默认登录账号 666，密码 666， 首次登录后请及时修改。注意：应用以普通用户运行，无法监听 1024 以下端口； 请勿在 Lucky 后台修改管理端口(16601)，否则应用图标将无法打开管理页。",
+      "homepage_url": "https://github.com/gdy666/lucky",
+      "updated_at": "2026-08-05",
+      "version": "2.27.2",
+      "upk_version": "2.27.2.0002",
+      "release_tag": "lucky/v2.27.2-r2",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/lucky/v2.27.2-r2/amd64_com.gdy666.lucky_2.27.2.0002.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/lucky/v2.27.2-r2/arm64_com.gdy666.lucky_2.27.2.0002.upk"
+      },
+      "service_port": 16601,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/lucky/com.gdy666.lucky/rootfs_common/icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "system",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ]
+    },
+    {
+      "appname": "com.personal.lunatv",
+      "display_name": "LunaTV 影视聚合",
+      "description": "在 NAS 上部署自己的影视聚合站：多个采集源聚合搜索、豆瓣/TMDB 条目详情、 播放记录与收藏同步、弹幕播放器、直播源、短剧和预告片日历。\n内置 SQLite 存储（免配置外部数据库），支持多用户注册与站点管理。\n首次使用：浏览器打开应用，用站长账号登录（admin / 安装时设置的密码）， 其他用户可在登录页自行注册。\n注意：应用本身不提供任何影视资源，播放内容来自你配置的采集源， 请遵守所在地区法律法规，仅用于个人学习目的（上游采用 CC BY-NC-SA 禁止商用）。",
+      "homepage_url": "https://github.com/MoonTechLab/LunaTV",
+      "updated_at": "2026-09-15",
+      "version": "6.6.4",
+      "upk_version": "6.6.4.0001",
+      "release_tag": "lunatv/v6.6.4",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/lunatv/v6.6.4/amd64_nasync_com.personal.lunatv_6.6.4.0001.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/lunatv/v6.6.4/arm64_nasync_com.personal.lunatv_6.6.4.0001.upk"
+      },
+      "service_port": 28300,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/lunatv/com.personal.lunatv/rootfs_common/icon.png",
+      "download_count": 2,
+      "app_type": "native",
+      "category": "media",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ]
+    },
+    {
+      "appname": "com.magiccode.magicmail",
+      "display_name": "Magicmail 魔法邮箱",
+      "description": "跑在自己 NAS 上的邮件代收客户端。通过 IMAP 协议把多个邮箱账号的邮件统一收取到本地数据库，用一个现代化的 PWA 界面集中阅读、搜索与管理，收件箱再多也只用打开一个页面。支持 IMAP IDLE 实时推送新邮件、SSE 页面即时刷新、Web Push 浏览器通知与 Webhook 回调；可发信、存草稿、管理附件（支持自动缓存与磁盘空间保护）、批量已读与删除、邮件自动去重；Outlook 等邮箱可用 OAuth2 授权登录，无需填写密码。邮箱密码以 AES-256-GCM 加密存储，邮件与附件全部留在自己的 NAS 上，不经任何第三方服务器中转。首次打开需要在页面里注册管理员账号，建议装好后立即完成注册。",
+      "homepage_url": "https://160621.xyz/magicmail",
+      "updated_at": "2026-09-03",
+      "version": "1.3.0",
+      "upk_version": "1.3.0.0003",
+      "release_tag": "magicmail/v1.3.0",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/magicmail/v1.3.0/amd64_com.magiccode.magicmail_1.3.0.0003.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/magicmail/v1.3.0/arm64_com.magiccode.magicmail_1.3.0.0003.upk"
+      },
+      "service_port": 23232,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/magicmail/com.magiccode.magicmail/rootfs_common/icon.png",
+      "download_count": 1,
+      "app_type": "native",
+      "category": "system",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ]
+    },
+    {
+      "appname": "com.magiccode.magicpush",
+      "display_name": "MagicPush",
+      "description": "支持多渠道消息推送的统一管理平台，通过标准 REST API 将消息推送到企业微信、钉钉、飞书、Telegram、Bark 等渠道。",
+      "homepage_url": "https://github.com/magiccode1412/magicpush",
+      "updated_at": "2026-08-05",
+      "version": "1.14.0",
+      "upk_version": "1.14.0.0003",
+      "release_tag": "magicpush/v1.14.0-r2",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/magicpush/v1.14.0-r2/amd64_com.magiccode.magicpush_1.14.0.0003.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/magicpush/v1.14.0-r2/arm64_com.magiccode.magicpush_1.14.0.0003.upk"
+      },
+      "service_port": 23000,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/magicpush/com.magiccode.magicpush/rootfs_common/icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "system",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ]
+    },
+    {
+      "appname": "com.metatube.server",
+      "display_name": "MetaTube",
+      "description": "影视媒体库的元数据刮削 API 服务，作为 Emby / Jellyfin 的元数据后端使用 （需在 Emby/Jellyfin 中安装 MetaTube 插件对接）。提供 RESTful API， 内置 20+ 数据源；本服务为后台 API，无独立操作界面。",
+      "homepage_url": "https://github.com/metatube-community/metatube-sdk-go",
+      "updated_at": "2026-08-05",
+      "version": "1.4.0",
+      "upk_version": "1.4.0.0002",
+      "release_tag": "metatube/v1.4.0-r2",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/metatube/v1.4.0-r2/amd64_com.metatube.server_1.4.0.0002.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/metatube/v1.4.0-r2/arm64_com.metatube.server_1.4.0.0002.upk"
+      },
+      "service_port": 28173,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/metatube/com.metatube.server/rootfs_common/icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "media",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ]
+    },
+    {
+      "appname": "com.natfrp.launcher",
+      "display_name": "SakuraFrp (natfrp-service)",
+      "description": "樱花 FRP（SakuraFrp）内网穿透客户端，自带本地 Web UI 管理界面。 通过樱花 FRP 隧道将 NAS 服务映射到公网访问。 Web UI 默认密码为 admin，请在首次登录后及时修改。",
+      "homepage_url": "https://www.natfrp.com",
+      "updated_at": "2026-08-05",
+      "version": "2026.7.18",
+      "upk_version": "2026.7.18.0002",
+      "release_tag": "natfrp/v2026.7.18-r2",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/natfrp/v2026.7.18-r2/amd64_com.natfrp.launcher_2026.7.18.0002.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/natfrp/v2026.7.18-r2/arm64_com.natfrp.launcher_2026.7.18.0002.upk"
+      },
+      "service_port": 7102,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/natfrp/com.natfrp.launcher/rootfs_common/icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "system",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ]
+    },
+    {
+      "appname": "com.oplist.openlist",
+      "display_name": "OpenList",
+      "description": "OpenList 是一款开源的文件列表程序，把 NAS 本机目录、WebDAV、S3、 FTP/SFTP 以及几十家网盘统一挂进同一个网页界面，支持文档/图片/音视频在线 预览、生成分享链接，并可再通过 WebDAV 对外提供。AList 的社区接续分支。 安装时选好数据目录与要挂载的本机目录即可使用。",
+      "homepage_url": "https://doc.oplist.org/",
+      "updated_at": "2026-09-14",
+      "version": "4.2.6",
+      "upk_version": "4.2.6.0003",
+      "release_tag": "openlist/v4.2.6-r1",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/openlist/v4.2.6-r1/amd64_nasync_com.oplist.openlist_4.2.6.0003.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/openlist/v4.2.6-r1/arm64_nasync_com.oplist.openlist_4.2.6.0003.upk"
+      },
+      "service_port": 28244,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/openlist/com.oplist.openlist/rootfs_common/icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "system",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ]
+    },
+    {
+      "appname": "com.sipeed.picoclaw",
+      "display_name": "PicoClaw",
+      "description": "PicoClaw —— Sipeed 出品的超轻量个人 AI 助理/Agent（内存占用 <10MB， 单一静态二进制）。接入你自己的 LLM API Key（Claude、GPT、DeepSeek、 通义千问、Kimi、豆包、Ollama 及任意 OpenAI 兼容接口），即可通过 Telegram、Discord 等渠道对话，支持 MCP 工具、技能、定时任务和持久记忆。 首次使用：打开应用进入 WebUI 管理台，1) 配置 Provider（填 LLM API Key） → 2) 配置 Channel（聊天渠道）→ 3) 启动 Gateway 即可开聊。全部数据 保存在应用数据目录，卸载保留数据/迁移安装目录均可跟随。注意：Agent 可在应用沙箱内执行 NAS 上的 shell 命令，请只接入你本人使用的聊天渠道。 软件免费，仅需自付 LLM API 费用；PicoClaw 未发行任何加密货币， 声称关联的代币均为诈骗。",
+      "homepage_url": "https://github.com/sipeed/picoclaw",
+      "updated_at": "2026-08-05",
+      "version": "0.3.1",
+      "upk_version": "0.3.1.0002",
+      "release_tag": "picoclaw/v0.3.1-r4",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/picoclaw/v0.3.1-r4/amd64_com.sipeed.picoclaw_0.3.1.0002.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/picoclaw/v0.3.1-r4/arm64_com.sipeed.picoclaw_0.3.1.0002.upk"
+      },
+      "service_port": 18800,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/picoclaw/com.sipeed.picoclaw/rootfs_common/icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "system",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ]
+    },
+    {
+      "appname": "com.ashc776.piggybank",
+      "display_name": "存钱罐 Piggy Bank",
+      "description": "面向家庭的自托管积分管理系统。孩子完成任务、领取家长发布的临时任务获得积分，用积分在商店兑换商品或现金，所有申请由家长审核。内置积分项管理、任务发布、商店商品、积分流水与兑换审核，支持孩子 PIN 码登录、12 生肖头像和实时刷新。数据保存在 NAS 本机 SQLite 单文件，不上传任何云端。默认管理员账号 admin，初始密码 admin123，登录后可在应用内修改。",
+      "homepage_url": "https://github.com/ASH-C776/piggy-bank",
+      "updated_at": "2026-09-15",
+      "version": "1.2.0",
+      "upk_version": "1.2.0.0006",
+      "release_tag": "piggybank/v1.2.0",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/piggybank/v1.2.0/amd64_nasync_com.ashc776.piggybank_1.2.0.0006.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/piggybank/v1.2.0/arm64_nasync_com.ashc776.piggybank_1.2.0.0006.upk"
+      },
+      "service_port": 23010,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/piggybank/com.ashc776.piggybank/rootfs_common/icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "system",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ]
+    },
+    {
+      "appname": "com.qbee.qbittorrent",
+      "display_name": "qBittorrent Enhanced Edition",
+      "description": "qBittorrent 增强版 —— 免费开源的 BitTorrent 下载客户端，内置 Web UI， 基于 qbittorrent-nox 无头版。在官方版基础上增加了自动屏蔽迅雷等吸血客户端、 自动 Ban 违规 Peer 等增强功能。首次登录账号 admin，密码 adminadmin， 登录后请及时修改密码。",
+      "homepage_url": "https://github.com/c0re100/qBittorrent-Enhanced-Edition",
+      "updated_at": "2026-08-05",
+      "version": "5.2.3",
+      "upk_version": "5.2.3.0003",
+      "release_tag": "qbittorrent/v5.2.3.10-r5",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/qbittorrent/v5.2.3.10-r5/amd64_com.qbee.qbittorrent_5.2.3.0003.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/qbittorrent/v5.2.3.10-r5/arm64_com.qbee.qbittorrent_5.2.3.0003.upk"
+      },
+      "service_port": 28080,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/qbittorrent/com.qbee.qbittorrent/rootfs_common/icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "download",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ]
+    },
+    {
+      "appname": "com.superng6.qbittorrent",
+      "display_name": "qBittorrent (superng6)",
+      "description": "免费开源的 BitTorrent 下载客户端，内置网页控制界面，支持磁力链接、种子文件、 RSS 订阅自动下载、下载队列与限速、做种比例控制。默认配置针对国内网络做过调整： 中文界面、内置一大批公共 tracker 并可在每次启动时自动更新、放开队列上限， 并自带 IP 地理数据库（无需联网即可显示 Peer 归属地）。 首次登录用户名 admin、密码 adminadmin，登录后请立即在「工具 → 选项 → Web UI」里修改。 需要在设置里选一个下载保存目录；想要更好的速度，请在路由器上把 BT 监听端口 转发到 NAS。注意：网页界面的端口对局域网开放，请务必设置一个强密码。 搜索插件需要 Python，本应用的运行环境里没有 Python，因此搜索功能不可用。",
+      "homepage_url": "https://hub.docker.com/r/superng6/qbittorrent",
+      "updated_at": "2026-08-15",
+      "version": "5.2.3",
+      "upk_version": "5.2.3.0001",
+      "release_tag": "qbittorrent-ng6/v5.2.3_v2.0.14",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/qbittorrent-ng6/v5.2.3_v2.0.14/amd64_com.superng6.qbittorrent_5.2.3.0001.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/qbittorrent-ng6/v5.2.3_v2.0.14/arm64_com.superng6.qbittorrent_5.2.3.0001.upk"
+      },
+      "service_port": 18081,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/qbittorrent-ng6/com.superng6.qbittorrent/rootfs_common/icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "download",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ]
+    },
+    {
+      "appname": "com.personal.readeck",
+      "display_name": "Readeck",
+      "description": "Readeck 是一款开源自托管的书签与「稍后读」服务。保存文章、高亮、 打标签、归档并整理你的阅读列表，Web 界面清爽。数据保存在 安装时选择的目录中。",
+      "homepage_url": "https://readeck.org/",
+      "updated_at": "2026-09-18",
+      "version": "0.23.4",
+      "upk_version": "0.23.4.0003",
+      "release_tag": "readeck/v0.23.4",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/readeck/v0.23.4/amd64_nasync_com.personal.readeck_0.23.4.0003.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/readeck/v0.23.4/arm64_nasync_com.personal.readeck_0.23.4.0003.upk"
+      },
+      "service_port": 28180,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/readeck/com.personal.readeck/rootfs_common/icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "system",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ]
+    },
+    {
+      "appname": "com.personal.sub2api",
+      "display_name": "Sub2API",
+      "description": "AI 接口中转站（API Gateway）。把你的各大 LLM 服务商 key 统一管起来， 通过一个 OpenAI 兼容的地址对外提供接入，内置用量统计、配额限制、 多用户管理、WebAuthn 登录等。自带管理界面与账号体系。 需要本机已安装 PostgreSQL 15+ 与 Redis 7+。首次启动请在浏览器中完成初始化向导。",
+      "homepage_url": "https://github.com/Wei-Shaw/sub2api",
+      "updated_at": "2026-09-19",
+      "version": "0.2.7",
+      "upk_version": "0.2.7.0003",
+      "release_tag": "sub2api/v0.2.7",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/sub2api/v0.2.7/amd64_nasync_com.personal.sub2api_0.2.7.0003.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/sub2api/v0.2.7/arm64_nasync_com.personal.sub2api_0.2.7.0003.upk"
+      },
+      "service_port": 25435,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/sub2api/com.personal.sub2api/rootfs_common/icon.png",
+      "download_count": 2,
+      "app_type": "native",
+      "category": "system",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ]
+    },
+    {
+      "appname": "com.personal.zhiyinmusic",
+      "display_name": "知音音乐 Zhiyin Music",
+      "description": "把 NAS 上的音乐做成一个自己的流媒体服务。\n选好音乐文件夹后自动扫描，读取内嵌标签、封面和歌词，按艺术家、专辑归档， 支持 MP3 / FLAC / WAV / M4A / OGG / OPUS / APE。可以从网易云、QQ 音乐、 酷狗、酷我、咪咕刮削元数据和封面，也能按播放历史给出推荐。\n除了网页版，它还提供一层 Subsonic API：手机上用音流、Symfonium、DSub 这类客户端填上 NAS 地址和账号就能直接听，不必开着浏览器。\n播放支持无缝拖动和多档音质（128k / 192k / 320k / 无损），转码由应用自带的 ffmpeg 完成。另外支持 .strm 网盘直链文件，把阿里云盘等网盘里的音乐 一并纳入音乐库。\n⚠ 本应用的端口在局域网上直接可达（Subsonic 客户端正是靠这个直连）， 装好后请立刻打开应用，在首次进入的引导页里把管理员账号创建掉。",
+      "homepage_url": "https://github.com/qwex888/zhiyin-music",
+      "updated_at": "2026-08-15",
+      "version": "0.8.1",
+      "upk_version": "0.8.1.0001",
+      "release_tag": "zhiyinmusic/v0.8.1",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/zhiyinmusic/v0.8.1/amd64_com.personal.zhiyinmusic_0.8.1.0001.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/zhiyinmusic/v0.8.1/arm64_com.personal.zhiyinmusic_0.8.1.0001.upk"
+      },
+      "service_port": 28085,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/zhiyinmusic/com.personal.zhiyinmusic/rootfs_common/icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "media",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ]
+    }
+  ]
+}
