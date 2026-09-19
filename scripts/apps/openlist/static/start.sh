@@ -42,7 +42,7 @@ mkdir -p "${TMPDIR}" 2>/dev/null
 # ---------------------------------------------------------------
 # UGOS 的 systemd 全局配置(/etc/systemd/system.conf)给【所有】服务注入了
 # DefaultEnvironment="GODEBUG=tlskyber=0"。Go 1.24 起陆续移除旧 GODEBUG 项，
-# 到 Go 1.27 已移除 8 项(x509sha1/tlskyber/gotypesalias/tlsunsafeekm/tlsrsakex/
+# 到 Go 1.27 已移除 9 项(x509sha1/tlskyber/gotypesalias/tlsunsafeekm/tlsrsakex/
 # tls3des/tls10server/x509keypairleaf/asynctimerchan)，规则是:环境里出现已移除
 # 项【且值等于旧默认值】时进程直接 fatal(https://go.dev/doc/godebug#go-124)。
 # tlskyber=0 正中枪口 —— OpenList 4.2.6(go1.27 编译)在 UGOS 上必崩就是这个。
