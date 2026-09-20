@@ -1,0 +1,22 @@
+{
+  "apps": [
+    {
+      "name": "com.wushuo.anirss",
+      "display_name": "ass (ANI-RSS)",
+      "description": "基于 RSS 自动追番、订阅、下载、刮削与洗版（上游 ANI-RSS）。应用内置 Eclipse Temurin JRE，无需 NAS 安装系统 Java。默认账号 admin / admin， 登录后请及时修改密码。请在应用设置中授权媒体/下载共享目录，并在 WebUI 中配置下载路径与下载器。",
+      "source_url": "https://github.com/wushuo894/ani-rss",
+      "github_repo": "wushuo894/ani-rss",
+      "latest_version": "3.2.36",
+      "updated_at": "2026-09-20"
+    },
+    {
+      "name": "com.ponphil.litepan",
+      "display_name": "LitePan",
+      "description": "网盘聚合挂载工具，把多个网盘账号统一到一个界面管理。支持跨盘秒传、 302 直链播放、WebDAV 共享，可生成 .strm 文件并自动刮削 nfo 与海报， 对接 Emby / Jellyfin 直连播放；另有 TMDB 目录整理、命名对齐、 缓存保持、离线下载与自动联动。默认管理员密码 admin，登录后请立即修改。 原生版不含 FUSE 本地挂载（沙箱无法访问 /dev/fuse），需要该功能请用 官方 Docker 部署。",
+      "source_url": "https://www.litepan.top",
+      "github_repo": "",
+      "latest_version": "0.5.6",
+      "updated_at": "2026-09-20"
+    }
+  ]
+}
