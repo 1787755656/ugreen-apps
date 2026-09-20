@@ -28,13 +28,13 @@
       "display_name": "ass (ANI-RSS)",
       "description": "基于 RSS 自动追番、订阅、下载、刮削与洗版（上游 ANI-RSS）。应用内置 Eclipse Temurin JRE，无需 NAS 安装系统 Java。默认账号 admin / admin， 登录后请及时修改密码。请在应用设置中授权媒体/下载共享目录，并在 WebUI 中配置下载路径与下载器。",
       "homepage_url": "https://github.com/wushuo894/ani-rss",
-      "updated_at": "2026-09-19",
-      "version": "3.2.34",
-      "upk_version": "3.2.34.0003",
-      "release_tag": "ani-rss/v3.2.34",
+      "updated_at": "2026-09-20",
+      "version": "3.2.36",
+      "upk_version": "3.2.36.0003",
+      "release_tag": "ani-rss/v3.2.36",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/ani-rss/v3.2.34/amd64_nasync_com.wushuo.anirss_3.2.34.0003.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/ani-rss/v3.2.34/arm64_nasync_com.wushuo.anirss_3.2.34.0003.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/ani-rss/v3.2.36/amd64_nasync_com.wushuo.anirss_3.2.36.0003.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/ani-rss/v3.2.36/arm64_nasync_com.wushuo.anirss_3.2.36.0003.upk"
       },
       "service_port": 7789,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/ani-rss/com.wushuo.anirss/rootfs_common/icon.png",
@@ -84,7 +84,7 @@
       },
       "service_port": 19877,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/dnet/com.personal.dnet/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 1,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -166,17 +166,17 @@
       "display_name": "LitePan",
       "description": "网盘聚合挂载工具，把多个网盘账号统一到一个界面管理。支持跨盘秒传、 302 直链播放、WebDAV 共享，可生成 .strm 文件并自动刮削 nfo 与海报， 对接 Emby / Jellyfin 直连播放；另有 TMDB 目录整理、命名对齐、 缓存保持、离线下载与自动联动。默认管理员密码 admin，登录后请立即修改。 原生版不含 FUSE 本地挂载（沙箱无法访问 /dev/fuse），需要该功能请用 官方 Docker 部署。",
       "homepage_url": "https://www.litepan.top",
-      "updated_at": "2026-09-12",
-      "version": "0.5.5",
-      "upk_version": "0.5.5.0003",
-      "release_tag": "litepan/v0.5.5-Beta",
+      "updated_at": "2026-09-20",
+      "version": "0.5.6",
+      "upk_version": "0.5.6.0003",
+      "release_tag": "litepan/v0.5.6-Beta",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/litepan/v0.5.5-Beta/amd64_com.ponphil.litepan_0.5.5.0003.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/litepan/v0.5.5-Beta/arm64_com.ponphil.litepan_0.5.5.0003.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/litepan/v0.5.6-Beta/amd64_nasync_com.ponphil.litepan_0.5.6.0003.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/litepan/v0.5.6-Beta/arm64_nasync_com.ponphil.litepan_0.5.6.0003.upk"
       },
       "service_port": 25211,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/litepan/com.ponphil.litepan/rootfs_common/icon.png",
-      "download_count": 1,
+      "download_count": 0,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -406,7 +406,7 @@
       },
       "service_port": 28080,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/qbittorrent/com.qbee.qbittorrent/rootfs_common/icon.png",
-      "download_count": 3,
+      "download_count": 4,
       "app_type": "native",
       "category": "download",
       "platforms": [
