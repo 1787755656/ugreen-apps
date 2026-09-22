@@ -551,6 +551,30 @@
         "amd64",
         "arm64"
       ]
+    },
+    {
+      "appname": "com.personal.liteparser",
+      "display_name": "联子百解",
+      "description": "粘贴抖音/快手/B站/微博/小红书等平台的分享链接，解析出无水印视频并直接下载保存到 NAS 存储。支持 26 个平台，下载任务管理（并发/断电恢复/历史记录），也可经服务器中转直接下载到浏览器设备。",
+      "homepage_url": "https://github.com/1787755656/liteparser-ugreen-app-releases",
+      "updated_at": "2026-09-22",
+      "version": "0.3.0",
+      "upk_version": "0.3.0.0010",
+      "release_tag": "v0.3.0.0010",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/liteparser-ugreen-app-releases/releases/download/v0.3.0.0010/amd64_nasync_com.personal.liteparser_0.3.0.0010.upk",
+        "arm64": "https://github.com/1787755656/liteparser-ugreen-app-releases/releases/download/v0.3.0.0010/arm64_nasync_com.personal.liteparser_0.3.0.0010.upk"
+      },
+      "service_port": 21120,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/liteparser-icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "download",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ],
+      "post_install_note": "装好后请在「设置」页填写 NAS 保存目录；解析抖音需在「设置」粘贴抖音网页版 Cookie。"
     }
   ]
 }
