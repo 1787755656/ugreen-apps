@@ -42,13 +42,18 @@ def read_meta(path: Path) -> dict:
 
 
 def read_project(py: Path) -> dict:
-    """从 project.yaml 取 tag_types / port；PyYAML 缺席时优雅降级。"""
-    out = {"tag_types": [], "port": None}
+    """从 project.yaml 取 tag_types / port / app_type；PyYAML 缺席时优雅降级。"""
+    out = {"tag_types": [], "port": None, "app_type": "native"}
     try:
         import yaml  # GitHub Actions 的 ubuntu runner 自带
         doc = yaml.safe_load(py.read_text(encoding="utf-8"))
         out["tag_types"] = doc.get("tag_types") or []
         out["port"] = doc.get("port")
+        # app_type 优先级：project.yaml 显式 app_type > is_docker_app 推导 > native
+        if doc.get("app_type"):
+            out["app_type"] = doc["app_type"]
+        elif doc.get("is_docker_app"):
+            out["app_type"] = "docker"
         i18n = (doc.get("i18n") or {}).get("zh-CN") or {}
         out["name"] = i18n.get("name")
         out["description"] = (i18n.get("description") or "").strip()
