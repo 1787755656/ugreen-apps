@@ -14,7 +14,7 @@
         "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/ugstore/v0.1.0.0016/arm64_nasync_com.personal.ugstore_0.1.0.0016.upk"
       },
       "service_port": 21310,
-      "icon_url": "",
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/ugstore-icon.png",
       "download_count": 0,
       "app_type": "native",
       "category": "utility",

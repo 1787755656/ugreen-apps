@@ -127,7 +127,7 @@ def main() -> None:
             "service_port": proj.get("port") or 0,
             "icon_url": f"{RAW_BASE}/apps/{slug}/{app_id}/rootfs_common/icon.png" if icon.exists() else "",
             "download_count": downloads,
-            "app_type": "native",
+            "app_type": proj.get("app_type") or "native",
             "category": category,
             "platforms": sorted(set(platforms)),
         })
