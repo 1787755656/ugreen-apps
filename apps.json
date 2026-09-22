@@ -441,7 +441,7 @@
       "appname": "com.personal.randomvideo",
       "display_name": "随机视频 Random Video",
       "description": "一个接一个随机刷短视频，支持进度拖动、静音切换与全屏。手机竖屏上滑换下一个，PC 以内嵌窗口打开。",
-      "homepage_url": "https://github.com/1787755656/ugreen-apps/tree/main/apps/randomvideo",
+      "homepage_url": "",
       "updated_at": "2026-09-22",
       "version": "0.1.0",
       "upk_version": "0.1.0.0006",
