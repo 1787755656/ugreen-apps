@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0d1117">
+<title>随机视频</title>
+<style>
+  :root{
+    --bg:#0b0d12;
+    --bg-soft:#141821;
+    --card:#1c212c;
+    --line:rgba(255,255,255,.10);
+    --text:#e8ecf3;
+    --text-dim:#9aa4b2;
+    --accent:#3b82f6;
+    --accent-soft:rgba(59,130,246,.16);
+    --danger:#f87171;
+    --radius:14px;
+    --bar-h:52px;
+  }
+  @media (prefers-color-scheme: light){
+    :root{
+      --bg:#f2f4f8;
+      --bg-soft:#ffffff;
+      --card:#ffffff;
+      --line:rgba(16,24,40,.10);
+      --text:#1b2230;
+      --text-dim:#6b7383;
+      --accent-soft:rgba(59,130,246,.10);
+    }
+  }
+
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0;height:100%;overflow:hidden}
+  body{
+    background:var(--bg);color:var(--text);
+    font:15px/1.5 -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;
+    user-select:none;
+  }
+
+  /* 整个 app 是唯一的布局容器：100vh 锁死，不允许被视频顶出视口 */
+  #app{
+    position:relative;height:100vh;height:100dvh;
+    display:flex;flex-direction:column;overflow:hidden;
+    padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  }
+
+  /* 视频框内的角落浮标：计数（左下）+ 设置（右上）。
+     错开到对角线两端，矮而窄的 inner 窗口里也不会交叠。 */
+  #counter{
+    position:absolute;bottom:10px;left:10px;z-index:12;pointer-events:none;
+    font-size:12px;color:rgba(255,255,255,.88);font-variant-numeric:tabular-nums;
+    background:rgba(0,0,0,.42);padding:4px 10px;border-radius:99px;backdrop-filter:blur(4px);
+  }
+  #gear{
+    position:absolute;top:10px;right:10px;z-index:12;
+    width:42px;height:42px;font-size:19px;
+  }
+  .ghost-btn{
+    border:1px solid var(--line);background:var(--bg-soft);color:var(--text);
+    border-radius:10px;padding:6px 11px;font-size:13px;cursor:pointer;
+    display:inline-flex;align-items:center;gap:6px;min-height:32px;
+  }
+  .ghost-btn:hover{border-color:var(--accent);color:var(--accent)}
+  .ghost-btn:active{transform:scale(.96)}
+
+  /* ---------------- 舞台 ---------------- */
+  #stage{
+    flex:1 1 auto;position:relative;min-height:0;
+    display:flex;align-items:center;justify-content:center;overflow:hidden;
+  }
+  #frame{position:relative;width:100%;height:100%;background:#000;overflow:hidden}
+  #v{
+    position:absolute;inset:0;width:100%;height:100%;
+    object-fit:contain;background:#000;display:block;
+  }
+  @media (min-width:900px){
+    /* PC inner 窗口：竖屏视频收成一张居中卡片，两侧留给桌面背景 */
+    #stage{padding:0 24px}
+    #frame{width:auto;aspect-ratio:9/16;max-width:100%;border-radius:var(--radius)}
+  }
+
+  /* 遮罩层：转圈 / 错误 / 需要手势 */
+  .overlay{
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    pointer-events:none;z-index:5;
+  }
+  #busy{display:none}
+  #busy.on{display:flex}
+  .spin{
+    width:34px;height:34px;border-radius:50%;
+    border:3px solid rgba(255,255,255,.22);border-top-color:#fff;
+    animation:rv-spin .8s linear infinite;
+  }
+  @keyframes rv-spin{to{transform:rotate(360deg)}}
+
+  #toast{
+    position:absolute;left:50%;top:14px;transform:translateX(-50%);
+    max-width:min(88%,520px);padding:9px 14px;border-radius:10px;
+    background:rgba(220,38,38,.92);color:#fff;font-size:13px;line-height:1.45;
+    z-index:20;display:none;pointer-events:none;
+  }
+  #toast.on{display:block}
+
+  #tap{
+    position:absolute;inset:0;z-index:8;display:none;
+    align-items:center;justify-content:center;flex-direction:column;gap:10px;
+    background:rgba(0,0,0,.45);cursor:pointer;
+  }
+  #tap.on{display:flex}
+  #tap .ring{
+    width:64px;height:64px;border-radius:50%;border:2px solid rgba(255,255,255,.85);
+    display:flex;align-items:center;justify-content:center;font-size:26px;
+  }
+  #tap .tip{font-size:13px;color:rgba(255,255,255,.9)}
+
+  /* 视频框右上角的设置齿轮（.round 提供圆形底色，#gear 负责定位） */
+  .round{
+    width:46px;height:46px;border-radius:50%;border:none;cursor:pointer;
+    background:rgba(20,24,33,.55);backdrop-filter:blur(6px);
+    color:#fff;font-size:19px;line-height:1;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .round:active{transform:scale(.92)}
+  .round.primary{background:var(--accent);width:54px;height:54px;font-size:22px;box-shadow:0 6px 18px rgba(59,130,246,.35)}
+  .round.off{opacity:.62}
+
+  /* ---------------- 控制条 ---------------- */
+  #ctrlbar{
+    flex:0 0 auto;display:flex;align-items:center;gap:10px;
+    padding:8px 14px 12px;min-height:var(--bar-h);
+  }
+  .iconbtn{
+    border:none;background:transparent;color:var(--text);cursor:pointer;
+    width:36px;height:36px;border-radius:10px;font-size:17px;
+    display:flex;align-items:center;justify-content:center;flex:0 0 auto;
+  }
+  .iconbtn:hover{background:var(--accent-soft)}
+  #progress{
+    flex:1 1 auto;min-width:0;appearance:none;-webkit-appearance:none;
+    height:4px;border-radius:99px;background:var(--line);cursor:pointer;
+  }
+  #progress::-webkit-slider-thumb{
+    -webkit-appearance:none;width:13px;height:13px;border-radius:50%;
+    background:var(--accent);border:2px solid var(--bg);cursor:pointer;
+  }
+  #progress::-moz-range-thumb{
+    width:13px;height:13px;border:2px solid var(--bg);border-radius:50%;
+    background:var(--accent);cursor:pointer;
+  }
+  #time{font-size:12px;color:var(--text-dim);font-variant-numeric:tabular-nums;flex:0 0 auto}
+
+  /* ---------------- 设置抽屉 ---------------- */
+  #mask{
+    position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:40;display:none;
+  }
+  #mask.on{display:block}
+  #sheet{
+    position:fixed;z-index:41;left:0;right:0;bottom:0;
+    background:var(--bg-soft);border-top:1px solid var(--line);
+    border-radius:16px 16px 0 0;padding:16px 18px calc(18px + env(safe-area-inset-bottom));
+    transform:translateY(102%);transition:transform .22s ease;
+    max-height:80vh;overflow:auto;
+  }
+  @media (min-width:900px){
+    #sheet{left:auto;right:18px;bottom:18px;width:340px;border-radius:16px;border:1px solid var(--line)}
+  }
+  #sheet.on{transform:translateY(0)}
+  #sheet h3{margin:0 0 14px;font-size:15px}
+  .row{
+    display:flex;align-items:center;gap:12px;padding:11px 0;border-top:1px solid var(--line);
+  }
+  .row:first-of-type{border-top:none}
+  .row .label{flex:1 1 auto;min-width:0}
+  .row .label b{display:block;font-weight:600;font-size:14px}
+  .row .label span{display:block;font-size:12px;color:var(--text-dim);margin-top:2px}
+  .seg{display:flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;flex:0 0 auto}
+  .seg button{
+    border:none;background:transparent;color:var(--text-dim);padding:6px 12px;
+    font-size:13px;cursor:pointer;min-height:32px;
+  }
+  .seg button.on{background:var(--accent);color:#fff}
+  .switch{
+    position:relative;width:44px;height:26px;border-radius:99px;border:none;cursor:pointer;
+    background:var(--line);flex:0 0 auto;transition:background .18s;
+  }
+  .switch::after{
+    content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;
+    background:#fff;transition:transform .18s;
+  }
+  .switch.on{background:var(--accent)}
+  .switch.on::after{transform:translateX(18px)}
+  #sheet .foot{margin-top:14px;font-size:12px;color:var(--text-dim);line-height:1.6}
+  #sheet .close{
+    width:100%;margin-top:14px;padding:10px;border-radius:10px;border:1px solid var(--line);
+    background:transparent;color:var(--text);font-size:14px;cursor:pointer;min-height:40px;
+  }
+
+  /* 窄屏时隐藏 PC 才需要的说明 */
+  @media (max-width:520px){
+    #brand span.name{display:none}
+    #time{display:none}
+  }
+</style>
+</head>
+<body>
+
+<div id="app">
+  <main id="stage">
+    <div id="frame">
+      <video id="v" playsinline webkit-playsinline autoplay muted preload="auto"></video>
+
+      <div id="counter">第 0 个</div>
+      <button class="round" id="btn-settings" title="设置">⚙</button>
+
+      <div class="overlay" id="busy"><div class="spin"></div></div>
+
+      <div id="tap">
+        <div class="ring">▶</div>
+        <div class="tip">轻点画面开始播放</div>
+      </div>
+    </div>
+
+    <div id="toast"></div>
+  </main>
+
+  <footer id="ctrlbar">
+    <button class="iconbtn" id="btn-play" title="播放/暂停">⏸</button>
+    <button class="iconbtn" id="btn-mute" title="声音">🔇</button>
+    <input type="range" id="progress" min="0" max="1000" value="0" step="1" aria-label="进度">
+    <span id="time">00:00 / 00:00</span>
+    <button class="iconbtn" id="btn-fs" title="全屏">⛶</button>
+  </footer>
+</div>
+
+<div id="mask"></div>
+<div id="sheet">
+  <h3>设置</h3>
+
+  <div class="row">
+    <div class="label">
+      <b>自动连播</b>
+      <span>播完自动换下一个</span>
+    </div>
+    <button class="switch" id="sw-auto" aria-label="自动连播"></button>
+  </div>
+
+  <div class="row">
+    <div class="label">
+      <b>默认静音</b>
+      <span>浏览器要求先静音才能自动播放</span>
+    </div>
+    <button class="switch" id="sw-muted" aria-label="默认静音"></button>
+  </div>
+
+  <div class="foot" id="ver"></div>
+  <button class="close" id="btn-close">关闭</button>
+</div>
+
+<script>
+/* eslint-disable */
+(function () {
+  "use strict";
+
+  var video = document.getElementById("v");
+  var busy = document.getElementById("busy");
+  var toastEl = document.getElementById("toast");
+  var tapEl = document.getElementById("tap");
+  var counterEl = document.getElementById("counter");
+  var timeEl = document.getElementById("time");
+  var progress = document.getElementById("progress");
+  var btnPlay = document.getElementById("btn-play");
+  var btnMute = document.getElementById("btn-mute");
+  var btnFs = document.getElementById("btn-fs");
+  var mask = document.getElementById("mask");
+  var sheet = document.getElementById("sheet");
+  var stage = document.getElementById("stage");
+
+  var LS = { mode: "rv.mode", auto: "rv.autoplay", muted: "rv.muted" };
+
+  var cfg = {
+    mode: "proxy", // 固定走代理，设置里不再提供直连/代理切换
+    autoplay: readLS(LS.auto, "1") !== "0",
+    muted: readLS(LS.muted, "1") !== "0"
+  };
+
+  var count = 0;
+  var loading = false;
+  var seeking = false;
+  var retry = 0;
+  var toastTimer = null;
+  var touchY = null;
+
+  function readLS(key, dflt) {
+    try { var v = localStorage.getItem(key); return v === null ? dflt : v; }
+    catch (e) { return dflt; }
+  }
+  function writeLS(key, val) {
+    try { localStorage.setItem(key, val); } catch (e) { /* 隐私模式下写不了，忽略 */ }
+  }
+
+  /* ------------------------------------------------ 提示 */
+
+  function toast(msg, ms) {
+    toastEl.textContent = msg;
+    toastEl.classList.add("on");
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toastEl.classList.remove("on"); }, ms || 3200);
+  }
+  function setBusy(on) {
+    loading = !!on;
+    busy.classList.toggle("on", loading);
+  }
+  function showTap(on) { tapEl.classList.toggle("on", !!on); }
+
+  function fmt(sec) {
+    if (!isFinite(sec) || sec < 0) sec = 0;
+    var m = Math.floor(sec / 60), s = Math.floor(sec % 60);
+    return (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s;
+  }
+
+  /* ------------------------------------------------ 加载下一个 */
+
+  function loadNext() {
+    if (loading) return;
+    setBusy(true);
+    showTap(false);
+
+    fetch("/api/next?t=" + Date.now(), { cache: "no-store" })
+      .then(function (r) {
+        return r.json().catch(function () { return { error: "接口返回了看不懂的内容（HTTP " + r.status + "）" }; })
+          .then(function (j) {
+            if (!r.ok || j.error) throw new Error(j.error || ("HTTP " + r.status));
+            return j;
+          });
+      })
+      .then(function (j) {
+        if (!j.id) throw new Error("接口没有返回视频 id");
+        var url = "/api/stream?id=" + encodeURIComponent(j.id);
+        video.src = url;
+        video.muted = cfg.muted;
+        video.loop = !cfg.autoplay;
+        retry = 0;
+        count += 1;
+        counterEl.textContent = "第 " + count + " 个";
+        progress.value = 0;
+        var p = video.play();
+        if (p && p.catch) {
+          p.catch(function () {
+            // 自动播放被拦：留一个大按钮等用户手势
+            setBusy(false);
+            showTap(true);
+          });
+        }
+      })
+      .catch(function (e) {
+        setBusy(false);
+        toast((e && e.message) ? e.message : String(e), 4500);
+      });
+  }
+
+  function safeNext() {
+    if (loading) { toast("正在加载，稍等一下"); return; }
+    loadNext();
+  }
+
+  /* ------------------------------------------------ 播放器事件 */
+
+  video.addEventListener("playing", function () {
+    setBusy(false);
+    showTap(false);
+    syncPlayIcon();
+  });
+  video.addEventListener("pause", function () { syncPlayIcon(); });
+  video.addEventListener("waiting", function () { setBusy(true); });
+  video.addEventListener("canplay", function () { setBusy(false); });
+  video.addEventListener("ended", function () {
+    if (cfg.autoplay) loadNext();
+    else if (video.play) { video.currentTime = 0; video.play().catch(function () {}); }
+  });
+  video.addEventListener("error", function () {
+    setBusy(false);
+    if (retry < 2) { retry += 1; setTimeout(loadNext, 400); toast("这个视频加载失败，换一个"); }
+    else toast("连续几个视频都加载失败，检查下 NAS 能否访问外网", 5000);
+  });
+
+  video.addEventListener("timeupdate", function () {
+    if (seeking) return;
+    var d = video.duration;
+    if (!isFinite(d) || d <= 0) { timeEl.textContent = "直播"; return; }
+    progress.value = Math.round((video.currentTime / d) * 1000);
+    timeEl.textContent = fmt(video.currentTime) + " / " + fmt(d);
+  });
+  video.addEventListener("loadedmetadata", function () {
+    var d = video.duration;
+    timeEl.textContent = fmt(0) + " / " + (isFinite(d) ? fmt(d) : "—");
+  });
+
+  function syncPlayIcon() { btnPlay.textContent = video.paused ? "▶" : "❚❚"; }
+  function syncMuteIcon() { btnMute.textContent = video.muted ? "🔇" : "🔊"; }
+
+  progress.addEventListener("input", function () { seeking = true; });
+  progress.addEventListener("change", function () {
+    seeking = false;
+    var d = video.duration;
+    if (isFinite(d) && d > 0) video.currentTime = (Number(progress.value) / 1000) * d;
+  });
+
+  /* ------------------------------------------------ 按钮 */
+
+  function togglePlay() {
+    if (video.paused) { video.play().catch(function () { showTap(true); }); }
+    else { video.pause(); }
+  }
+  function toggleMute() {
+    video.muted = !video.muted;
+    cfg.muted = video.muted;
+    writeLS(LS.muted, video.muted ? "1" : "0");
+    syncMuteIcon();
+    if (!video.paused && video.muted === false && video.volume === 0) video.volume = 1;
+  }
+  function toggleFullscreen() {
+    var el = document.getElementById("app");
+    try {
+      if (document.fullscreenElement) { document.exitFullscreen(); return; }
+      if (el.requestFullscreen) { el.requestFullscreen().catch(fallback); return; }
+      fallback();
+    } catch (e) { fallback(); }
+    function fallback() {
+      // iOS Safari 不支持任意元素全屏
+      if (video.webkitEnterFullscreen) video.webkitEnterFullscreen();
+      else toast("当前浏览器不支持全屏");
+    }
+  }
+
+  btnPlay.addEventListener("click", togglePlay);
+  btnMute.addEventListener("click", toggleMute);
+  btnFs.addEventListener("click", toggleFullscreen);
+  tapEl.addEventListener("click", function () {
+    showTap(false);
+    video.play().catch(function () { toast("还是播不了，试试点右上角的设置"); });
+  });
+  video.addEventListener("click", function () {
+    if (suppressClick) { suppressClick = false; return; }  // 刚拖拽换片，别误触播放
+    if (video.paused) togglePlay();
+  });
+
+  /* ---------------- 手势：手机上滑换一个 ---------------- */
+
+  stage.addEventListener("touchstart", function (e) {
+    touchY = e.touches.length ? e.touches[0].clientY : null;
+  }, { passive: true });
+  stage.addEventListener("touchend", function (e) {
+    if (touchY === null || !e.changedTouches.length) return;
+    var dy = touchY - e.changedTouches[0].clientY;
+    touchY = null;
+    if (dy > 60) safeNext();          // 上滑
+    else if (dy < -60) { /* 下滑留给以后做上一个，先不动 */ }
+  }, { passive: true });
+
+  /* ---------------- PC：鼠标拖拽 / 滚轮换一个（触屏没有这些事件） ---------------- */
+
+  var suppressClick = false;   // 鼠标拖拽触发换片后，抑制随之而来的 click
+  var dragY = null, dragMax = 0, dragging = false;
+  function isControl(t) {
+    return !!(t && t.closest && t.closest("button, input, .round, .iconbtn, #ctrlbar, #sheet, #mask"));
+  }
+  stage.addEventListener("mousedown", function (e) {
+    if (isControl(e.target)) return;
+    dragging = true; dragY = e.clientY; dragMax = 0;
+  }, { passive: true });
+  stage.addEventListener("mousemove", function (e) {
+    if (!dragging || dragY === null) return;
+    dragMax = Math.max(dragMax, Math.abs(e.clientY - dragY));
+  }, { passive: true });
+  stage.addEventListener("mouseup", function (e) {
+    if (!dragging) return;
+    dragging = false;
+    if (dragY === null) return;
+    var dy = dragY - e.clientY;
+    dragY = null;
+    if (dy > 60) { suppressClick = true; safeNext(); }   // 向上拖 = 下一个
+  }, { passive: true });
+  stage.addEventListener("mouseleave", function () { dragging = false; dragY = null; }, { passive: true });
+
+  var wheelLock = false;
+  stage.addEventListener("wheel", function (e) {
+    if (isControl(e.target) || wheelLock) return;
+    if (e.deltaY > 0) {        // 滚轮向下 = 下一个（与手机上滑同方向感）
+      wheelLock = true;
+      safeNext();
+      setTimeout(function () { wheelLock = false; }, 700);
+    }
+  }, { passive: true });
+
+  /* ---------------- 键盘（inner 桌面窗口） ---------------- */
+
+  document.addEventListener("keydown", function (e) {
+    if (e.target && /INPUT|TEXTAREA/.test(e.target.tagName)) return;
+    var k = e.key;
+    if (k === " " || k === "Spacebar") { e.preventDefault(); togglePlay(); }
+    else if (k === "ArrowDown" || k === "n" || k === "N" || k === "Enter") { e.preventDefault(); safeNext(); }
+    else if (k === "m" || k === "M") { toggleMute(); }
+    else if (k === "f" || k === "F") { toggleFullscreen(); }
+  });
+
+  /* ---------------- 设置面板 ---------------- */
+
+  function openSheet() { mask.classList.add("on"); sheet.classList.add("on"); }
+  function closeSheet() { mask.classList.remove("on"); sheet.classList.remove("on"); }
+
+  document.getElementById("btn-settings").addEventListener("click", openSheet);
+  document.getElementById("btn-close").addEventListener("click", closeSheet);
+  mask.addEventListener("click", closeSheet);
+
+  var swAuto = document.getElementById("sw-auto");
+  var swMuted = document.getElementById("sw-muted");
+  function paintSwitches() {
+    swAuto.classList.toggle("on", cfg.autoplay);
+    swMuted.classList.toggle("on", cfg.muted);
+  }
+  swAuto.addEventListener("click", function () {
+    cfg.autoplay = !cfg.autoplay;
+    writeLS(LS.auto, cfg.autoplay ? "1" : "0");
+    video.loop = !cfg.autoplay;
+    paintSwitches();
+  });
+  swMuted.addEventListener("click", function () {
+    cfg.muted = !cfg.muted;
+    writeLS(LS.muted, cfg.muted ? "1" : "0");
+    video.muted = cfg.muted;
+    syncMuteIcon();
+    paintSwitches();
+  });
+  paintSwitches();
+
+  /* ---------------- 启动 ---------------- */
+
+  syncMuteIcon();
+  syncPlayIcon();
+  loadNext();
+
+  // 页面从后台切回来时，若停了就自动续上
+  document.addEventListener("visibilitychange", function () {
+    if (!document.hidden && video.paused && !loading && video.src) {
+      video.play().catch(function () {});
+    }
+  });
+
+  // 版本/状态：拿不到也不影响用
+  fetch("/api/heartbeat", { cache: "no-store" })
+    .then(function (r) { return r.json(); })
+    .then(function (j) {
+      document.getElementById("ver").textContent = "后端 v" + (j.version || "?") + " · 已发放 " + (j.served || 0) + " 个视频";
+    })
+    .catch(function () {
+      document.getElementById("ver").textContent = "后端状态未知，视频可能取不到";
+    });
+})();
+</script>
+</body>
+</html>

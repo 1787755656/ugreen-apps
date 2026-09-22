@@ -8,14 +8,14 @@
       "updated_at": "2026-09-22",
       "version": "0.5.20",
       "upk_version": "0.5.20.0002",
-      "release_tag": "100zip/v0.5.20-r4",
+      "release_tag": "100zip/v0.5.20-r5",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/100zip/v0.5.20-r4/amd64_nasync_com.personal.100zip_0.5.20.0002.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/100zip/v0.5.20-r4/arm64_nasync_com.personal.100zip_0.5.20.0002.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/100zip/v0.5.20-r5/amd64_nasync_com.personal.100zip_0.5.20.0002.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/100zip/v0.5.20-r5/arm64_nasync_com.personal.100zip_0.5.20.0002.upk"
       },
       "service_port": 28737,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/100zip/com.personal.100zip/rootfs_common/icon.png",
-      "download_count": 2,
+      "download_count": 0,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -31,10 +31,10 @@
       "updated_at": "2026-09-22",
       "version": "3.2.37",
       "upk_version": "3.2.37.0003",
-      "release_tag": "ani-rss/v3.2.37-r1",
+      "release_tag": "ani-rss/v3.2.37-r2",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/ani-rss/v3.2.37-r1/amd64_nasync_com.wushuo.anirss_3.2.37.0003.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/ani-rss/v3.2.37-r1/arm64_nasync_com.wushuo.anirss_3.2.37.0003.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/ani-rss/v3.2.37-r2/amd64_nasync_com.wushuo.anirss_3.2.37.0003.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/ani-rss/v3.2.37-r2/arm64_nasync_com.wushuo.anirss_3.2.37.0003.upk"
       },
       "service_port": 7789,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/ani-rss/com.wushuo.anirss/rootfs_common/icon.png",
@@ -54,10 +54,10 @@
       "updated_at": "2026-09-22",
       "version": "1.5.9",
       "upk_version": "1.5.9.0002",
-      "release_tag": "clouddl/v1.5.9-r2",
+      "release_tag": "clouddl/v1.5.9-r3",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/clouddl/v1.5.9-r2/amd64_nasync_com.personal.clouddl_1.5.9.0002.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/clouddl/v1.5.9-r2/arm64_nasync_com.personal.clouddl_1.5.9.0002.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/clouddl/v1.5.9-r3/amd64_nasync_com.personal.clouddl_1.5.9.0002.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/clouddl/v1.5.9-r3/arm64_nasync_com.personal.clouddl_1.5.9.0002.upk"
       },
       "service_port": 28686,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/clouddl/com.personal.clouddl/rootfs_common/icon.png",
@@ -77,10 +77,10 @@
       "updated_at": "2026-09-22",
       "version": "3.1.0",
       "upk_version": "3.1.0.0003",
-      "release_tag": "dnet/v3.1.0-r2",
+      "release_tag": "dnet/v3.1.0-r3",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/dnet/v3.1.0-r2/amd64_nasync_com.personal.dnet_3.1.0.0003.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/dnet/v3.1.0-r2/arm64_nasync_com.personal.dnet_3.1.0.0003.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/dnet/v3.1.0-r3/amd64_nasync_com.personal.dnet_3.1.0.0003.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/dnet/v3.1.0-r3/arm64_nasync_com.personal.dnet_3.1.0.0003.upk"
       },
       "service_port": 19877,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/dnet/com.personal.dnet/rootfs_common/icon.png",
@@ -100,10 +100,10 @@
       "updated_at": "2026-09-22",
       "version": "2.6.4",
       "upk_version": "2.6.4.0002",
-      "release_tag": "easytier/v2.6.4-r2",
+      "release_tag": "easytier/v2.6.4-r3",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/easytier/v2.6.4-r2/amd64_nasync_com.personal.easytier_2.6.4.0002.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/easytier/v2.6.4-r2/arm64_nasync_com.personal.easytier_2.6.4.0002.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/easytier/v2.6.4-r3/amd64_nasync_com.personal.easytier_2.6.4.0002.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/easytier/v2.6.4-r3/arm64_nasync_com.personal.easytier_2.6.4.0002.upk"
       },
       "service_port": 11211,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/easytier/com.personal.easytier/rootfs_common/icon.png",
@@ -123,10 +123,10 @@
       "updated_at": "2026-09-22",
       "version": "0.7.6",
       "upk_version": "0.7.6.0002",
-      "release_tag": "fastnet/v0.7.6-r3",
+      "release_tag": "fastnet/v0.7.6-r4",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/fastnet/v0.7.6-r3/amd64_nasync_com.koolcenter.fastnet_0.7.6.0002.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/fastnet/v0.7.6-r3/arm64_nasync_com.koolcenter.fastnet_0.7.6.0002.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/fastnet/v0.7.6-r4/amd64_nasync_com.koolcenter.fastnet_0.7.6.0002.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/fastnet/v0.7.6-r4/arm64_nasync_com.koolcenter.fastnet_0.7.6.0002.upk"
       },
       "service_port": 28190,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/fastnet/com.koolcenter.fastnet/rootfs_common/icon.png",
@@ -146,10 +146,10 @@
       "updated_at": "2026-09-22",
       "version": "1.1.6",
       "upk_version": "1.1.6.0003",
-      "release_tag": "liteclass/v1.1.6-r2",
+      "release_tag": "liteclass/v1.1.6-r3",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/liteclass/v1.1.6-r2/amd64_nasync_com.personal.liteclass_1.1.6.0003.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/liteclass/v1.1.6-r2/arm64_nasync_com.personal.liteclass_1.1.6.0003.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/liteclass/v1.1.6-r3/amd64_nasync_com.personal.liteclass_1.1.6.0003.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/liteclass/v1.1.6-r3/arm64_nasync_com.personal.liteclass_1.1.6.0003.upk"
       },
       "service_port": 18083,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/liteclass/com.personal.liteclass/rootfs_common/icon.png",
@@ -169,10 +169,10 @@
       "updated_at": "2026-09-22",
       "version": "0.5.6",
       "upk_version": "0.5.6.0003",
-      "release_tag": "litepan/v0.5.6-Beta-r2",
+      "release_tag": "litepan/v0.5.6-Beta-r3",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/litepan/v0.5.6-Beta-r2/amd64_nasync_com.ponphil.litepan_0.5.6.0003.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/litepan/v0.5.6-Beta-r2/arm64_nasync_com.ponphil.litepan_0.5.6.0003.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/litepan/v0.5.6-Beta-r3/amd64_nasync_com.ponphil.litepan_0.5.6.0003.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/litepan/v0.5.6-Beta-r3/arm64_nasync_com.ponphil.litepan_0.5.6.0003.upk"
       },
       "service_port": 25211,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/litepan/com.ponphil.litepan/rootfs_common/icon.png",
@@ -192,10 +192,10 @@
       "updated_at": "2026-09-22",
       "version": "2.27.2",
       "upk_version": "2.27.2.0002",
-      "release_tag": "lucky/v2.27.2-r4",
+      "release_tag": "lucky/v2.27.2-r5",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/lucky/v2.27.2-r4/amd64_nasync_com.gdy666.lucky_2.27.2.0002.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/lucky/v2.27.2-r4/arm64_nasync_com.gdy666.lucky_2.27.2.0002.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/lucky/v2.27.2-r5/amd64_nasync_com.gdy666.lucky_2.27.2.0002.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/lucky/v2.27.2-r5/arm64_nasync_com.gdy666.lucky_2.27.2.0002.upk"
       },
       "service_port": 16601,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/lucky/com.gdy666.lucky/rootfs_common/icon.png",
@@ -215,10 +215,10 @@
       "updated_at": "2026-09-22",
       "version": "6.6.4",
       "upk_version": "6.6.4.0002",
-      "release_tag": "lunatv/v6.6.4-r2",
+      "release_tag": "lunatv/v6.6.4-r3",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/lunatv/v6.6.4-r2/amd64_nasync_com.personal.lunatv_6.6.4.0002.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/lunatv/v6.6.4-r2/arm64_nasync_com.personal.lunatv_6.6.4.0002.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/lunatv/v6.6.4-r3/amd64_nasync_com.personal.lunatv_6.6.4.0002.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/lunatv/v6.6.4-r3/arm64_nasync_com.personal.lunatv_6.6.4.0002.upk"
       },
       "service_port": 28300,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/lunatv/com.personal.lunatv/rootfs_common/icon.png",
@@ -261,10 +261,10 @@
       "updated_at": "2026-09-22",
       "version": "1.14.0",
       "upk_version": "1.14.0.0003",
-      "release_tag": "magicpush/v1.14.0-r4",
+      "release_tag": "magicpush/v1.14.0-r5",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/magicpush/v1.14.0-r4/amd64_nasync_com.magiccode.magicpush_1.14.0.0003.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/magicpush/v1.14.0-r4/arm64_nasync_com.magiccode.magicpush_1.14.0.0003.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/magicpush/v1.14.0-r5/amd64_nasync_com.magiccode.magicpush_1.14.0.0003.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/magicpush/v1.14.0-r5/arm64_nasync_com.magiccode.magicpush_1.14.0.0003.upk"
       },
       "service_port": 23000,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/magicpush/com.magiccode.magicpush/rootfs_common/icon.png",
@@ -284,10 +284,10 @@
       "updated_at": "2026-09-22",
       "version": "1.4.0",
       "upk_version": "1.4.0.0002",
-      "release_tag": "metatube/v1.4.0-r4",
+      "release_tag": "metatube/v1.4.0-r5",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/metatube/v1.4.0-r4/amd64_nasync_com.metatube.server_1.4.0.0002.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/metatube/v1.4.0-r4/arm64_nasync_com.metatube.server_1.4.0.0002.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/metatube/v1.4.0-r5/amd64_nasync_com.metatube.server_1.4.0.0002.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/metatube/v1.4.0-r5/arm64_nasync_com.metatube.server_1.4.0.0002.upk"
       },
       "service_port": 28173,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/metatube/com.metatube.server/rootfs_common/icon.png",
@@ -307,10 +307,10 @@
       "updated_at": "2026-09-22",
       "version": "2026.7.18",
       "upk_version": "2026.7.18.0002",
-      "release_tag": "natfrp/v2026.7.18-r4",
+      "release_tag": "natfrp/v2026.7.18-r5",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/natfrp/v2026.7.18-r4/amd64_nasync_com.natfrp.launcher_2026.7.18.0002.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/natfrp/v2026.7.18-r4/arm64_nasync_com.natfrp.launcher_2026.7.18.0002.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/natfrp/v2026.7.18-r5/amd64_nasync_com.natfrp.launcher_2026.7.18.0002.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/natfrp/v2026.7.18-r5/arm64_nasync_com.natfrp.launcher_2026.7.18.0002.upk"
       },
       "service_port": 7102,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/natfrp/com.natfrp.launcher/rootfs_common/icon.png",
@@ -330,10 +330,10 @@
       "updated_at": "2026-09-22",
       "version": "4.2.6",
       "upk_version": "4.2.6.0003",
-      "release_tag": "openlist/v4.2.6-r3",
+      "release_tag": "openlist/v4.2.6-r4",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/openlist/v4.2.6-r3/amd64_nasync_com.oplist.openlist_4.2.6.0003.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/openlist/v4.2.6-r3/arm64_nasync_com.oplist.openlist_4.2.6.0003.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/openlist/v4.2.6-r4/amd64_nasync_com.oplist.openlist_4.2.6.0003.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/openlist/v4.2.6-r4/arm64_nasync_com.oplist.openlist_4.2.6.0003.upk"
       },
       "service_port": 28244,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/openlist/com.oplist.openlist/rootfs_common/icon.png",
@@ -353,10 +353,10 @@
       "updated_at": "2026-09-22",
       "version": "0.3.1",
       "upk_version": "0.3.1.0002",
-      "release_tag": "picoclaw/v0.3.1-r7",
+      "release_tag": "picoclaw/v0.3.1-r8",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/picoclaw/v0.3.1-r7/amd64_nasync_com.sipeed.picoclaw_0.3.1.0002.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/picoclaw/v0.3.1-r7/arm64_nasync_com.sipeed.picoclaw_0.3.1.0002.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/picoclaw/v0.3.1-r8/amd64_nasync_com.sipeed.picoclaw_0.3.1.0002.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/picoclaw/v0.3.1-r8/arm64_nasync_com.sipeed.picoclaw_0.3.1.0002.upk"
       },
       "service_port": 18800,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/picoclaw/com.sipeed.picoclaw/rootfs_common/icon.png",
@@ -399,10 +399,10 @@
       "updated_at": "2026-09-22",
       "version": "5.2.3",
       "upk_version": "5.2.3.0003",
-      "release_tag": "qbittorrent/v5.2.3.10-r7",
+      "release_tag": "qbittorrent/v5.2.3.10-r8",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/qbittorrent/v5.2.3.10-r7/amd64_nasync_com.qbee.qbittorrent_5.2.3.0003.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/qbittorrent/v5.2.3.10-r7/arm64_nasync_com.qbee.qbittorrent_5.2.3.0003.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/qbittorrent/v5.2.3.10-r8/amd64_nasync_com.qbee.qbittorrent_5.2.3.0003.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/qbittorrent/v5.2.3.10-r8/arm64_nasync_com.qbee.qbittorrent_5.2.3.0003.upk"
       },
       "service_port": 28080,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/qbittorrent/com.qbee.qbittorrent/rootfs_common/icon.png",
@@ -422,16 +422,39 @@
       "updated_at": "2026-09-22",
       "version": "5.2.3",
       "upk_version": "5.2.3.0002",
-      "release_tag": "qbittorrent-ng6/v5.2.3_v2.0.14-r2",
+      "release_tag": "qbittorrent-ng6/v5.2.3_v2.0.14-r3",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/qbittorrent-ng6/v5.2.3_v2.0.14-r2/amd64_nasync_com.superng6.qbittorrent_5.2.3.0002.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/qbittorrent-ng6/v5.2.3_v2.0.14-r2/arm64_nasync_com.superng6.qbittorrent_5.2.3.0002.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/qbittorrent-ng6/v5.2.3_v2.0.14-r3/amd64_nasync_com.superng6.qbittorrent_5.2.3.0002.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/qbittorrent-ng6/v5.2.3_v2.0.14-r3/arm64_nasync_com.superng6.qbittorrent_5.2.3.0002.upk"
       },
       "service_port": 18081,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/qbittorrent-ng6/com.superng6.qbittorrent/rootfs_common/icon.png",
       "download_count": 0,
       "app_type": "native",
       "category": "download",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ]
+    },
+    {
+      "appname": "com.personal.randomvideo",
+      "display_name": "随机视频 Random Video",
+      "description": "一个接一个随机刷短视频，支持进度拖动、静音切换与全屏。手机竖屏上滑换下一个，PC 以内嵌窗口打开。",
+      "homepage_url": "https://github.com/1787755656/ugreen-apps/tree/main/apps/randomvideo",
+      "updated_at": "2026-09-22",
+      "version": "0.1.0",
+      "upk_version": "0.1.0.0006",
+      "release_tag": "randomvideo/v0.1.0",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/randomvideo/v0.1.0/amd64_nasync_com.personal.randomvideo_0.1.0.0006.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/randomvideo/v0.1.0/arm64_nasync_com.personal.randomvideo_0.1.0.0006.upk"
+      },
+      "service_port": 21166,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/randomvideo/com.personal.randomvideo/rootfs_common/icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "media",
       "platforms": [
         "amd64",
         "arm64"
@@ -445,10 +468,10 @@
       "updated_at": "2026-09-22",
       "version": "0.23.4",
       "upk_version": "0.23.4.0003",
-      "release_tag": "readeck/v0.23.4-r2",
+      "release_tag": "readeck/v0.23.4-r3",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/readeck/v0.23.4-r2/amd64_nasync_com.personal.readeck_0.23.4.0003.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/readeck/v0.23.4-r2/arm64_nasync_com.personal.readeck_0.23.4.0003.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/readeck/v0.23.4-r3/amd64_nasync_com.personal.readeck_0.23.4.0003.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/readeck/v0.23.4-r3/arm64_nasync_com.personal.readeck_0.23.4.0003.upk"
       },
       "service_port": 28180,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/readeck/com.personal.readeck/rootfs_common/icon.png",
@@ -468,10 +491,10 @@
       "updated_at": "2026-09-22",
       "version": "0.2.7",
       "upk_version": "0.2.7.0003",
-      "release_tag": "sub2api/v0.2.7-r2",
+      "release_tag": "sub2api/v0.2.7-r3",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/sub2api/v0.2.7-r2/amd64_nasync_com.personal.sub2api_0.2.7.0003.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/sub2api/v0.2.7-r2/arm64_nasync_com.personal.sub2api_0.2.7.0003.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/sub2api/v0.2.7-r3/amd64_nasync_com.personal.sub2api_0.2.7.0003.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/sub2api/v0.2.7-r3/arm64_nasync_com.personal.sub2api_0.2.7.0003.upk"
       },
       "service_port": 25435,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/sub2api/com.personal.sub2api/rootfs_common/icon.png",
@@ -491,10 +514,10 @@
       "updated_at": "2026-09-22",
       "version": "0.8.1",
       "upk_version": "0.8.1.0002",
-      "release_tag": "zhiyinmusic/v0.8.1-r2",
+      "release_tag": "zhiyinmusic/v0.8.1-r3",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/zhiyinmusic/v0.8.1-r2/amd64_nasync_com.personal.zhiyinmusic_0.8.1.0002.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/zhiyinmusic/v0.8.1-r2/arm64_nasync_com.personal.zhiyinmusic_0.8.1.0002.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/zhiyinmusic/v0.8.1-r3/amd64_nasync_com.personal.zhiyinmusic_0.8.1.0002.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/zhiyinmusic/v0.8.1-r3/arm64_nasync_com.personal.zhiyinmusic_0.8.1.0002.upk"
       },
       "service_port": 28085,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/zhiyinmusic/com.personal.zhiyinmusic/rootfs_common/icon.png",

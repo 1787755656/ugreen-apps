@@ -1,0 +1,52 @@
+# 配置规范版本
+spec_version: "2.1"
+# 应用ID
+app_id: com.personal.randomvideo
+# 应用版本号（x.y.z；构建号由 `ugcli pack --build N` 追加）
+version: 0.1.0
+# 支持的 CPU 架构
+support_arch:
+  - amd64
+  - arm64
+# 支持的客户端类型：桌面端 + 移动端（inner 应用在手机上会跳浏览器打开，实测可用）
+supports:
+  - pc
+  - app
+
+# 后端服务启动命令（相对于安装目录）
+start_cmd: bin/randomvideo_serv --port=21166
+# 后端服务监听端口
+port: 21166
+# 网关代理路径前缀 —— 对应后端注册的 /api/* 路由
+proxy_path: api
+# PC 桌面端以内嵌窗口打开
+open_type: inner
+# 应用分类
+tag_types:
+  - media
+  - utility
+
+# 依赖的最低固件版本
+depend_fw_version: 1.13.0.0000
+
+# 支持迁移安装目录
+support_migration: true
+
+# 权限声明：要连外网取视频，除此之外什么都不需要
+permissions:
+  - NETWORK.ACCESS_INTERNET
+
+# 应用展示信息（多语言）
+i18n:
+  zh-CN:
+    name: 随机视频
+    description: 一个接一个随机刷短视频，支持进度拖动、静音切换与全屏。手机竖屏上滑换下一个，PC 以内嵌窗口打开。
+    author: 穿斯帕沃特
+    publisher: 穿斯帕沃特
+    publisher_link: https://club.ugnas.com/home.php?mod=space&uid=10131
+  en-US:
+    name: Random Video
+    description: Watch random short videos one after another, with seek, mute and fullscreen. Swipe up for the next one on mobile; opens in an embedded window on PC.
+    author: 穿斯帕沃特
+    publisher: 穿斯帕沃特
+    publisher_link: https://club.ugnas.com/home.php?mod=space&uid=10131
