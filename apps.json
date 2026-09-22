@@ -445,10 +445,10 @@
       "updated_at": "2026-09-18",
       "version": "0.23.4",
       "upk_version": "0.23.4.0003",
-      "release_tag": "readeck/v0.23.4",
+      "release_tag": "readeck/v0.23.4-r1",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/readeck/v0.23.4/amd64_nasync_com.personal.readeck_0.23.4.0003.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/readeck/v0.23.4/arm64_nasync_com.personal.readeck_0.23.4.0003.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/readeck/v0.23.4-r1/amd64_nasync_com.personal.readeck_0.23.4.0003.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/readeck/v0.23.4-r1/arm64_nasync_com.personal.readeck_0.23.4.0003.upk"
       },
       "service_port": 28180,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/readeck/com.personal.readeck/rootfs_common/icon.png",
