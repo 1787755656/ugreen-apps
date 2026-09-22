@@ -132,6 +132,22 @@ def main() -> None:
             "platforms": sorted(set(platforms)),
         })
 
+    # 额外应用清单：不在 apps/ 下、由各应用自有仓库独立打包的应用（如商店本体
+    # com.personal.ugstore），以静态条目追加。不参与 build-apps 构建，也不被
+    # 目录刷新覆盖，从而实现商店自身的自更新。
+    extra_path = root / "scripts/catalog" / "extra-apps.json"
+    if extra_path.exists():
+        try:
+            extra_apps = json.loads(extra_path.read_text(encoding="utf-8")).get("apps", [])
+            seen = {e.get("appname") for e in entries}
+            for e in extra_apps:
+                name = e.get("appname")
+                if name and name not in seen:
+                    entries.append(e)
+                    seen.add(name)
+        except Exception as e:  # noqa: BLE001
+            print(f"warn: 读取 extra-apps.json 失败: {e}", file=sys.stderr)
+
     out = json.dumps({"apps": entries}, ensure_ascii=False, indent=2) + "\n"
     (root / "apps.json").write_text(out, encoding="utf-8")
     print(f"apps.json: {len(entries)} 个应用" + (f"；无 release: {missing}" if missing else ""))

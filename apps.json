@@ -505,6 +505,29 @@
         "amd64",
         "arm64"
       ]
+    },
+    {
+      "appname": "com.personal.ugstore",
+      "display_name": "三方应用商店",
+      "description": "面向 UGOS Pro 的第三方应用商店：浏览、安装、更新来自社区源的原生应用，全程走系统应用中心的正式安装通道，支持安装位置选择、更新检查与商店自更新。数据与账号只保存在自己的 NAS 上。",
+      "homepage_url": "https://github.com/conversun/fnos-store",
+      "updated_at": "2026-09-22",
+      "version": "0.1.0",
+      "upk_version": "0.1.0.0016",
+      "release_tag": "ugstore/v0.1.0.0016",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/ugstore/v0.1.0.0016/amd64_nasync_com.personal.ugstore_0.1.0.0016.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/ugstore/v0.1.0.0016/arm64_nasync_com.personal.ugstore_0.1.0.0016.upk"
+      },
+      "service_port": 21310,
+      "icon_url": "",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "utility",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ]
     }
   ]
 }
