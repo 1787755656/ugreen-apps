@@ -130,7 +130,7 @@
       },
       "service_port": 28190,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/fastnet/com.koolcenter.fastnet/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 1,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -360,7 +360,7 @@
       },
       "service_port": 18800,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/picoclaw/com.sipeed.picoclaw/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 2,
       "app_type": "native",
       "category": "ai",
       "platforms": [
@@ -452,7 +452,7 @@
       },
       "service_port": 21166,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/randomvideo/com.personal.randomvideo/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 1,
       "app_type": "native",
       "category": "media",
       "platforms": [
@@ -488,13 +488,13 @@
       "display_name": "Sub2API",
       "description": "AI 接口中转站（API Gateway）。把你的各大 LLM 服务商 key 统一管起来， 通过一个 OpenAI 兼容的地址对外提供接入，内置用量统计、配额限制、 多用户管理、WebAuthn 登录等。自带管理界面与账号体系。 需要本机已安装 PostgreSQL 15+ 与 Redis 7+。首次启动请在浏览器中完成初始化向导。",
       "homepage_url": "https://github.com/Wei-Shaw/sub2api",
-      "updated_at": "2026-09-22",
-      "version": "0.2.7",
-      "upk_version": "0.2.7.0003",
-      "release_tag": "sub2api/v0.2.7-r4",
+      "updated_at": "2026-09-23",
+      "version": "0.2.8",
+      "upk_version": "0.2.8.0003",
+      "release_tag": "sub2api/v0.2.8",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/sub2api/v0.2.7-r4/amd64_nasync_com.personal.sub2api_0.2.7.0003.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/sub2api/v0.2.7-r4/arm64_nasync_com.personal.sub2api_0.2.7.0003.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/sub2api/v0.2.8/amd64_nasync_com.personal.sub2api_0.2.8.0003.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/sub2api/v0.2.8/arm64_nasync_com.personal.sub2api_0.2.8.0003.upk"
       },
       "service_port": 25435,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/sub2api/com.personal.sub2api/rootfs_common/icon.png",
