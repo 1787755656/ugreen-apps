@@ -3,7 +3,8 @@
 #
 # 用法：build.sh <版本号 x.y.z> <架构 amd64|arm64>
 #
-# 这个应用的包 = 上游 monorepo 源码（server 端 tsc 编译 + 上游自带的预构建 web/dist）
+# 这个应用的包 = 上游 monorepo 源码（server 端 tsc 编译 + web 端 vite 构建，
+#              v1.3 起上游不再提交预构建 web/dist）
 #              + 官方 Node 20 运行时 + better-sqlite3 官方 v115 prebuild（按架构换装）。
 # 上游代码一行不改。本脚本只负责把 rootfs_<arch> 摆好；
 # ugcli check / pack / 发 Release 由可复用 workflow（reusable-build-app.yml）统一执行。
@@ -62,11 +63,15 @@ if [ "$SRC_VERSION" != "$VERSION" ]; then
   echo "⚠ 上游 package.json version（${SRC_VERSION}）与 tag（${REF:-main}）不一致，以 tag 版本 ${VERSION} 为准" >&2
 fi
 
-# ---- 2. 编译 server（tsc 需要 devDeps）----
+# ---- 2. 编译 server + web（devDeps 含 tsc/vue-tsc/vite）----
+# 上游 v1.3 起不再提交预构建 web/dist（web/ 改成了 Vue3+Vite 源码工程），
+# 前端必须从源码现编；产物路径 web/dist 与 server 端 fastify-static 的推导一致。
 cd "$UP"
 npm ci --ignore-scripts --no-audit --no-fund
 npm run build --workspace server
 [ -f server/dist/index.js ] || { echo "!! server/dist/index.js 缺失" >&2; exit 1; }
+npm run build --workspace web
+[ -f web/dist/index.html ] || { echo "!! web/dist/index.html 缺失" >&2; exit 1; }
 
 # ---- 3. 生产运行时树 ----
 BASE="$CACHE/runtime-base"
