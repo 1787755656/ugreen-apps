@@ -12,6 +12,14 @@
  * 自定义头，<a>/<img> 带不了；开场先用 token 换 Cookie，之后这些请求靠
  * Cookie 过闸。
  *
+ * 【手机端（无桥环境）怎么活】
+ * 手机上没有宿主桥，拿不到 Ttk，登录靠认证横幅里的表单：管理壳下发
+ * 一次性 RSA 公钥（/api/session/key），密码加密后提交（/api/session 的
+ * password_enc 通道）——手机端打开应用落在 HTTP 入口上，明文密码在那边
+ * 是被拒收的，加密通道是唯一合法形态（2026-09 修复）。开场探测先发一个
+ * 不带 Ttk 的空 POST /api/session：带有效会话 Cookie 时管理壳直接 200
+ * 确认，手机端 reload 后即刻进入应用，不用再等 5 秒的桥超时。
+ *
  * 【加载顺序是刻意的】
  * 本文件是普通脚本（会立即执行），上游的 app.js 是 module（会被推迟到最后）。
  * 但"推迟"仍然可能早于我们异步换完 Cookie，那样第一批 /api 请求会 401。
@@ -91,9 +99,16 @@
   var booting = null;
   function boot() {
     if (booting) return booting;
-    booting = getToken().then(function (token) {
-      state.token = token || null;
-      return exchangeSession(token);
+    // 探测先行：无 Ttk 的空 POST 在管理壳那边有一条"有效会话 Cookie → 200 确认"
+    // 的分支（2026-09 起）。手机端 reload 后这一发立刻 200，不用再等 5 秒桥超时，
+    // 认证横幅也不会再弹。探测 401 才去取桥上的 token 走网关身份换 Cookie。
+    booting = exchangeSession(null).then(function (ok) {
+      if (ok) return true;
+      return getToken().then(function (token) {
+        state.token = token || null;
+        if (!token) return false;
+        return exchangeSession(token);
+      });
     });
     return booting;
   }
@@ -157,7 +172,9 @@
         "未通过 UGOS 登录认证：" + state.diag + "。"));
       var tip = document.createElement("div");
       tip.style.cssText = "opacity:.9;margin-top:2px";
-      tip.textContent = "在 NAS 桌面里打开本应用可自动认证；手机等无桥环境可用 NAS 账号密码登录（仅经网关 HTTPS 提交）：";
+      tip.textContent =
+        "在 NAS 桌面里打开本应用可自动认证；手机等无桥环境可用 NAS 账号密码登录" +
+        "（密码用一次性公钥加密后提交，不走明文）：";
       bar.appendChild(tip);
 
       var form = document.createElement("div");
@@ -181,16 +198,94 @@
         "background:#fff;color:#c0392b;font-size:13px;font-weight:600;cursor:pointer";
       var msg = document.createElement("span");
       msg.style.cssText = "flex-basis:100%;font-size:12px;opacity:.95";
+
+      // ---- 一次性 RSA 公钥加密（登录表单专用） ----
+      // 手机端落在 HTTP 入口上，非安全上下文里 crypto.subtle 不存在，
+      // 所以用纯 JS 的 PKCS#1 v1.5 + e=65537（BigInt modpow）。
+      // 与管理壳的 rsa.DecryptPKCS1v15 对齐，也和绿联自家登录同一算法。
+      function b64ToBytes(b64) {
+        var bin = atob(b64), out = new Uint8Array(bin.length);
+        for (var i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+        return out;
+      }
+      function bytesToBig(bytes) {
+        var hex = "";
+        for (var i = 0; i < bytes.length; i++) {
+          hex += (bytes[i] < 16 ? "0" : "") + bytes[i].toString(16);
+        }
+        return hex ? BigInt("0x" + hex) : 0n;
+      }
+      function bigToBytes(x, len) {
+        var out = new Uint8Array(len);
+        for (var i = len - 1; i >= 0; i--) {
+          out[i] = Number(x & 0xffn);
+          x >>= 8n;
+        }
+        return out;
+      }
+      function modPow(base, exp, mod) {
+        var result = 1n;
+        base %= mod;
+        while (exp > 0n) {
+          if (exp & 1n) result = (result * base) % mod;
+          base = (base * base) % mod;
+          exp >>= 1n;
+        }
+        return result;
+      }
+      function rsaEncryptPassword(nB64, eB64, password) {
+        var nBytes = b64ToBytes(nB64);
+        var n = bytesToBig(nBytes);
+        var e = bytesToBig(b64ToBytes(eB64));
+        var k = nBytes.length; // 模长（字节）：2048 位 → 256
+        var msgBytes = new TextEncoder().encode(password);
+        if (msgBytes.length > k - 11) throw new Error("密码过长");
+        var padLen = k - 3 - msgBytes.length;
+        var pad = new Uint8Array(padLen);
+        crypto.getRandomValues(pad);
+        // PKCS#1 v1.5 的填充字节必须非零
+        for (var i = 0; i < padLen; i++) {
+          while (pad[i] === 0) crypto.getRandomValues(pad.subarray(i, i + 1));
+        }
+        var em = new Uint8Array(k);
+        em[0] = 0;
+        em[1] = 2;
+        em.set(pad, 2);
+        em[2 + padLen] = 0;
+        em.set(msgBytes, 3 + padLen);
+        var c = modPow(bytesToBig(em), e, n);
+        return btoa(String.fromCharCode.apply(null, bigToBytes(c, k)));
+      }
+
       btn.addEventListener("click", function () {
+        var u = user.value;
+        var p = pass.value;
+        if (!u || !p) {
+          msg.textContent = "请输入 NAS 用户名和密码。";
+          return;
+        }
         btn.disabled = true;
         btn.textContent = "验证中…";
         msg.textContent = "";
-        origFetch("/api/session", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({ username: user.value, password: pass.value }),
-        })
+        // 领一次性公钥 → 加密密码 → 提交。密钥用后即废：重试要重取，
+        // 抓包拿到的密文没有对应私钥、也没有重放窗口。
+        origFetch("/api/session/key", { credentials: "include" })
+          .then(function (res) {
+            if (!res.ok) throw new Error("取登录公钥失败（HTTP " + res.status + "）");
+            return res.json();
+          })
+          .then(function (key) {
+            return origFetch("/api/session", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              credentials: "include",
+              body: JSON.stringify({
+                username: u,
+                key_id: key.key_id,
+                password_enc: rsaEncryptPassword(key.n, key.e, p),
+              }),
+            });
+          })
           .then(function (res) {
             if (res.ok) {
               msg.textContent = "登录成功，正在刷新…";
