@@ -373,17 +373,17 @@
       "display_name": "存钱罐 Piggy Bank",
       "description": "面向家庭的自托管积分管理系统。孩子完成任务、领取家长发布的临时任务获得积分，用积分在商店兑换商品或现金，所有申请由家长审核。内置积分项管理、任务发布、商店商品、积分流水与兑换审核，支持孩子 PIN 码登录、12 生肖头像和实时刷新。数据保存在 NAS 本机 SQLite 单文件，不上传任何云端。默认管理员账号 admin，初始密码 admin123，登录后可在应用内修改。",
       "homepage_url": "https://github.com/ASH-C776/piggy-bank",
-      "updated_at": "2026-09-15",
-      "version": "1.2.0",
-      "upk_version": "1.2.0.0006",
-      "release_tag": "piggybank/v1.2.0",
+      "updated_at": "2026-09-24",
+      "version": "1.3.3",
+      "upk_version": "1.3.3.0007",
+      "release_tag": "piggybank/v1.3.3",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/piggybank/v1.2.0/amd64_nasync_com.ashc776.piggybank_1.2.0.0006.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/piggybank/v1.2.0/arm64_nasync_com.ashc776.piggybank_1.2.0.0006.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/piggybank/v1.3.3/amd64_nasync_com.ashc776.piggybank_1.3.3.0007.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/piggybank/v1.3.3/arm64_nasync_com.ashc776.piggybank_1.3.3.0007.upk"
       },
       "service_port": 23010,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/piggybank/com.ashc776.piggybank/rootfs_common/icon.png",
-      "download_count": 1,
+      "download_count": 0,
       "app_type": "native",
       "category": "system",
       "platforms": [
