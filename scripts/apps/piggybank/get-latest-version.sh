@@ -1,11 +1,11 @@
 #!/bin/bash
 set -euo pipefail
 
-# 上游 ASH-C776/piggy-bank：tag 是两段式的（当前 v1.2）。版本源 = 最高的 v* tag，
+# 上游 ASH-C776/piggy-bank：tag 两段三段混用（v1.2、v1.3.3）。版本源 = 最高的 v* tag，
 # 归一化成 x.y.z（两段补 .0，同 smartdns 先例）；上游没 tag 时兜底读 main 分支
 # package.json 的 .version。
-# ⚠ build.sh 会 checkout 选中的 tag 并硬断言 package.json 的 version 一致——
-#   上游打 tag 不 bump package.json 的话 CI 会红：宁可红也不打文不对题的包。
+# 注意：上游自 v1.3 起打 tag 不再 bump package.json（v1.3.3 的 package.json 仍是
+# 1.0.0），发布身份以上游 tag 为准；build.sh 对两者不一致只警告不拦截（2026-09-25）。
 
 INPUT_VERSION="${1:-}"
 UPSTREAM_REPO="https://github.com/ASH-C776/piggy-bank.git"

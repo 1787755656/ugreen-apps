@@ -55,10 +55,11 @@ else
   echo "==> 取上游源码 @ ${REF}"
   git clone --quiet --depth 1 --branch "$REF" "https://github.com/ASH-C776/piggy-bank.git" "$UP"
 fi
+# 上游自 v1.3 起打 tag 不再 bump package.json（v1.3.3 的 package.json 仍是 1.0.0），
+# 发布身份以上游 tag 为准，这里只警告不拦截——硬断言会把商店永远卡在 v1.2.0。
 SRC_VERSION="$(jq -r '.version' "$UP/package.json")"
 if [ "$SRC_VERSION" != "$VERSION" ]; then
-  echo "!! 上游 package.json version（${SRC_VERSION}）与传入版本（${VERSION}）不一致" >&2
-  exit 1
+  echo "⚠ 上游 package.json version（${SRC_VERSION}）与 tag（${REF:-main}）不一致，以 tag 版本 ${VERSION} 为准" >&2
 fi
 
 # ---- 2. 编译 server（tsc 需要 devDeps）----
