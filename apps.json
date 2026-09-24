@@ -5,17 +5,17 @@
       "display_name": "100解压 (100zip)",
       "description": "在 NAS 本机完成压缩、解压和包内预览的工具，文件不需要经过电脑中转。\n解压支持 40 多种格式：7z、ZIP、RAR、TAR 全家（gz/bz2/xz/zst）、ISO、 CAB、WIM、VHD，以及 .7z.001、.zip.001、.z01、.part1.rar 这类分卷包， 缺卷会明确提示缺哪一卷。创建压缩包支持 7z（AES-256、文件名加密、 分卷）、ZIP、TAR、tar.gz/bz2/xz/zst，还能直接产出 zst/lz4/brotli。\n压缩包里的内容可以直接预览：图片、视频、音频、文本、PDF 和 Office 文档都能打开，不用先解压。中文文件名乱码自动修复（GBK、Big5、日文 等常见代码页）。常用密码可以存进密码库，解压时一键选用 —— 密码 加密保存在这台 NAS 上，不会出现在日志里。\n支持批量解压（每个压缩包自动隔离到独立目录）和批量压缩，任务中心 显示进度、速度、剩余时间，可以暂停、取消和重试。几十 GB 的大文件 任务也能处理，耗时取决于 CPU 和磁盘速度。\n使用前需要在应用设置里选择工作目录（安装时就可以选）， 应用只能访问选中的文件夹。",
       "homepage_url": "https://github.com/Alicace/100zip",
-      "updated_at": "2026-09-22",
+      "updated_at": "2026-09-24",
       "version": "0.5.20",
       "upk_version": "0.5.20.0002",
-      "release_tag": "100zip/v0.5.20-r6",
+      "release_tag": "100zip/v0.5.20-r7",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/100zip/v0.5.20-r6/amd64_nasync_com.personal.100zip_0.5.20.0002.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/100zip/v0.5.20-r6/arm64_nasync_com.personal.100zip_0.5.20.0002.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/100zip/v0.5.20-r7/amd64_nasync_com.personal.100zip_0.5.20.0002.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/100zip/v0.5.20-r7/arm64_nasync_com.personal.100zip_0.5.20.0002.upk"
       },
       "service_port": 28737,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/100zip/com.personal.100zip/rootfs_common/icon.png",
-      "download_count": 2,
+      "download_count": 0,
       "app_type": "native",
       "category": "system",
       "platforms": [
