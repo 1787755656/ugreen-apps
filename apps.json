@@ -15,7 +15,7 @@
       },
       "service_port": 28737,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/100zip/com.personal.100zip/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 2,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -61,7 +61,7 @@
       },
       "service_port": 28686,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/clouddl/com.personal.clouddl/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 2,
       "app_type": "native",
       "category": "download",
       "platforms": [
@@ -153,7 +153,7 @@
       },
       "service_port": 18083,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/liteclass/com.personal.liteclass/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 2,
       "app_type": "native",
       "category": "media",
       "platforms": [
@@ -245,7 +245,7 @@
       },
       "service_port": 23232,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/magicmail/com.magiccode.magicmail/rootfs_common/icon.png",
-      "download_count": 6,
+      "download_count": 7,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -452,7 +452,7 @@
       },
       "service_port": 21166,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/randomvideo/com.personal.randomvideo/rootfs_common/icon.png",
-      "download_count": 1,
+      "download_count": 2,
       "app_type": "native",
       "category": "media",
       "platforms": [
@@ -498,7 +498,7 @@
       },
       "service_port": 25435,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/sub2api/com.personal.sub2api/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 1,
       "app_type": "native",
       "category": "system",
       "platforms": [
