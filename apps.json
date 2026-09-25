@@ -15,7 +15,7 @@
       },
       "service_port": 28737,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/100zip/com.personal.100zip/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 1,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -28,13 +28,13 @@
       "display_name": "ass (ANI-RSS)",
       "description": "基于 RSS 自动追番、订阅、下载、刮削与洗版（上游 ANI-RSS）。应用内置 Eclipse Temurin JRE，无需 NAS 安装系统 Java。默认账号 admin / admin， 登录后请及时修改密码。请在应用设置中授权媒体/下载共享目录，并在 WebUI 中配置下载路径与下载器。",
       "homepage_url": "https://github.com/wushuo894/ani-rss",
-      "updated_at": "2026-09-22",
-      "version": "3.2.37",
-      "upk_version": "3.2.37.0003",
-      "release_tag": "ani-rss/v3.2.37-r3",
+      "updated_at": "2026-09-25",
+      "version": "3.2.38",
+      "upk_version": "3.2.38.0003",
+      "release_tag": "ani-rss/v3.2.38",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/ani-rss/v3.2.37-r3/amd64_nasync_com.wushuo.anirss_3.2.37.0003.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/ani-rss/v3.2.37-r3/arm64_nasync_com.wushuo.anirss_3.2.37.0003.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/ani-rss/v3.2.38/amd64_nasync_com.wushuo.anirss_3.2.38.0003.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/ani-rss/v3.2.38/arm64_nasync_com.wushuo.anirss_3.2.38.0003.upk"
       },
       "service_port": 7789,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/ani-rss/com.wushuo.anirss/rootfs_common/icon.png",
@@ -346,6 +346,29 @@
       ]
     },
     {
+      "appname": "com.xnkyn.p2peeproxy",
+      "display_name": "P2Pee 内网穿透",
+      "description": "基于 P2Pee（p2pee.cn）的 P2P 内网穿透工具。无需公网 IP、无需端口映射， 通过浏览器即可访问 NAS 上的内网服务。本应用提供管理界面，可填写需要转发的本地地址， 并直接在页面上显示穿透后的公网访问地址，无需再到容器或系统日志中查找。",
+      "homepage_url": "https://p2pee.cn",
+      "updated_at": "2026-09-25",
+      "version": "1.0.0",
+      "upk_version": "1.0.0.0003",
+      "release_tag": "p2pee-proxy/v1.0.0",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/p2pee-proxy/v1.0.0/amd64_nasync_com.xnkyn.p2peeproxy_1.0.0.0003.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/p2pee-proxy/v1.0.0/arm64_nasync_com.xnkyn.p2peeproxy_1.0.0.0003.upk"
+      },
+      "service_port": 21710,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/p2pee-proxy/com.xnkyn.p2peeproxy/rootfs_common/icon.png",
+      "download_count": 2,
+      "app_type": "native",
+      "category": "system",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ]
+    },
+    {
       "appname": "com.sipeed.picoclaw",
       "display_name": "PicoClaw",
       "description": "PicoClaw —— Sipeed 出品的超轻量个人 AI 助理/Agent（内存占用 <10MB， 单一静态二进制）。接入你自己的 LLM API Key（Claude、GPT、DeepSeek、 通义千问、Kimi、豆包、Ollama 及任意 OpenAI 兼容接口），即可通过 Telegram、Discord 等渠道对话，支持 MCP 工具、技能、定时任务和持久记忆。 首次使用：打开应用进入 WebUI 管理台，1) 配置 Provider（填 LLM API Key） → 2) 配置 Channel（聊天渠道）→ 3) 启动 Gateway 即可开聊。全部数据 保存在应用数据目录，卸载保留数据/迁移安装目录均可跟随。注意：Agent 可在应用沙箱内执行 NAS 上的 shell 命令，请只接入你本人使用的聊天渠道。 软件免费，仅需自付 LLM API 费用；PicoClaw 未发行任何加密货币， 声称关联的代币均为诈骗。",
@@ -383,7 +406,7 @@
       },
       "service_port": 23010,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/piggybank/com.ashc776.piggybank/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 1,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -574,29 +597,6 @@
         "arm64"
       ],
       "post_install_note": "装好后请在「设置」页填写 NAS 保存目录；解析抖音需在「设置」粘贴抖音网页版 Cookie。"
-    },
-    {
-      "appname": "com.xnkyn.p2peeproxy",
-      "display_name": "P2Pee 内网穿透",
-      "description": "基于 P2Pee（p2pee.cn）的 P2P 内网穿透工具。无需公网 IP、无需端口映射，通过浏览器即可访问 NAS 上的内网服务。本应用提供管理界面，可填写需要转发的本地地址，并直接在页面上显示穿透后的公网访问地址，无需再到容器或系统日志中查找。管理界面带登录密码保护（首次打开设置），仅允许从 NAS 本机桌面访问。",
-      "homepage_url": "https://p2pee.cn",
-      "updated_at": "2026-09-25",
-      "version": "1.0.0",
-      "upk_version": "1.0.0.0003",
-      "release_tag": "p2pee-proxy/v1.0.0",
-      "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/p2pee-proxy/v1.0.0/amd64_nasync_com.xnkyn.p2peeproxy_1.0.0.0003.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/p2pee-proxy/v1.0.0/arm64_nasync_com.xnkyn.p2peeproxy_1.0.0.0003.upk"
-      },
-      "service_port": 21710,
-      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/p2pee-proxy/com.xnkyn.p2peeproxy/rootfs_common/icon.png",
-      "download_count": 0,
-      "app_type": "native",
-      "category": "utility",
-      "platforms": [
-        "amd64",
-        "arm64"
-      ]
     }
   ]
 }
