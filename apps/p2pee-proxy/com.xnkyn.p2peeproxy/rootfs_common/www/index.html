@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>P2Pee 内网穿透</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <span class="logo">P2P</span>
+        <div>
+          <h1>P2Pee 内网穿透</h1>
+          <p class="sub">基于 p2pee.cn · 无需公网 IP，浏览器直连内网服务</p>
+        </div>
+      </div>
+      <span id="statusBadge" class="badge off">未运行</span>
+      <button id="logout" class="btn ghost sm" type="button" style="display:none">退出登录</button>
+    </header>
+
+    <section class="card">
+      <h2>配置</h2>
+      <label class="field">
+        <span>客户端 Key</span>
+        <input id="key" type="password" placeholder="在 p2pee.cn 控制台获取的 Key" autocomplete="off" />
+      </label>
+
+      <div class="field">
+        <span>转发目标</span>
+        <div id="targets" class="targets"></div>
+        <button id="addTarget" class="btn ghost sm" type="button">+ 添加目标</button>
+        <p class="hint">填写要暴露到公网的内网地址，例如 <code>http://127.0.0.1:8080</code>。可选名称用于区分多个目标，如 <code>esxi=https://192.168.1.100</code>。</p>
+      </div>
+
+      <label class="field row">
+        <input id="tlsInsecure" type="checkbox" />
+        <span>跳过本地 HTTPS 自签证书校验（<code>-tls-insecure</code>）</span>
+      </label>
+
+      <div class="actions">
+        <button id="save" class="btn" type="button">保存配置</button>
+        <button id="start" class="btn primary" type="button">启动</button>
+        <button id="stop" class="btn danger" type="button" disabled>停止</button>
+      </div>
+      <p id="msg" class="msg"></p>
+    </section>
+
+    <section class="card">
+      <h2>公网访问地址</h2>
+      <p class="hint">穿透成功后的公网地址会显示在这里（来自代理日志），点击即可在浏览器打开：</p>
+      <div id="accessURLs" class="access-urls">
+        <p class="empty">尚未获取到访问地址。启动后请稍候，或到
+          <a href="https://p2pee.cn/dashboard/p2p" target="_blank" rel="noopener">P2Pee 控制台</a>
+          查看设备上线状态与访问地址。</p>
+      </div>
+      <a class="btn ghost sm" href="https://p2pee.cn/dashboard/p2p" target="_blank" rel="noopener">在 P2Pee 控制台查看 →</a>
+    </section>
+
+    <section class="card">
+      <h2>实时日志</h2>
+      <p class="hint">代理进程输出实时显示在此，无需再到容器/系统日志查看：</p>
+      <pre id="log" class="log"></pre>
+    </section>
+  </div>
+  <div id="authOverlay" class="overlay hidden">
+    <div class="auth-card">
+      <h2 id="authTitle">登录</h2>
+      <p id="authHint" class="hint"></p>
+      <input id="authPw" type="password" placeholder="管理密码" autocomplete="off" />
+      <button id="authSubmit" class="btn primary" type="button">进入</button>
+      <p id="authMsg" class="msg"></p>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

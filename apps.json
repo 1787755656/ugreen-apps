@@ -574,6 +574,29 @@
         "arm64"
       ],
       "post_install_note": "装好后请在「设置」页填写 NAS 保存目录；解析抖音需在「设置」粘贴抖音网页版 Cookie。"
+    },
+    {
+      "appname": "com.xnkyn.p2peeproxy",
+      "display_name": "P2Pee 内网穿透",
+      "description": "基于 P2Pee（p2pee.cn）的 P2P 内网穿透工具。无需公网 IP、无需端口映射，通过浏览器即可访问 NAS 上的内网服务。本应用提供管理界面，可填写需要转发的本地地址，并直接在页面上显示穿透后的公网访问地址，无需再到容器或系统日志中查找。管理界面带登录密码保护（首次打开设置），仅允许从 NAS 本机桌面访问。",
+      "homepage_url": "https://p2pee.cn",
+      "updated_at": "2026-09-25",
+      "version": "1.0.0",
+      "upk_version": "1.0.0.0003",
+      "release_tag": "p2pee-proxy/v1.0.0",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/p2pee-proxy/v1.0.0/amd64_nasync_com.xnkyn.p2peeproxy_1.0.0.0003.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/p2pee-proxy/v1.0.0/arm64_nasync_com.xnkyn.p2peeproxy_1.0.0.0003.upk"
+      },
+      "service_port": 21710,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/p2pee-proxy/com.xnkyn.p2peeproxy/rootfs_common/icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "utility",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ]
     }
   ]
 }

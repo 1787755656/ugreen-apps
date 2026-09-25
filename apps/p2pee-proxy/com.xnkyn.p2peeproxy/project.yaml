@@ -1,0 +1,71 @@
+# ============================================================
+# P2Pee 内网穿透 (p2pee.cn) — UGOS Pro 原生应用
+# 管理壳 launcher (Go) 包装 p2pee-proxy 二进制，提供管理界面与公网地址展示
+# ============================================================
+
+spec_version: "2.1"
+app_id: com.xnkyn.p2peeproxy
+version: 1.0.0
+
+support_arch:
+  - amd64
+  - arm64
+
+supports:
+  - pc
+  - app
+
+# 管理壳启动命令（首段须存在于 rootfs_<arch>/bin/ 下）；端口须与 port 一致
+start_cmd: bin/launcher --port=21710
+
+# 管理壳 HTTP 端口（供系统探活；inner 下由网关反代 /api/）
+port: 21710
+
+# 网关代理路径前缀 —— 对应后端注册的 /api/* 路由
+proxy_path: api
+
+# PC 桌面端以内嵌窗口打开（移动端会跳浏览器，实测可用）
+open_type: inner
+
+# 应用分类
+tag_types:
+  - utility
+
+# 最低固件版本（占位值，正式上架前请联系绿联开发确认真实版本号）
+depend_fw_version: 1.13.0.0000
+
+# 支持迁移安装目录
+support_migration: true
+
+# 权限：P2P 穿透必须联网（公网 UDP/TCP 出站）；启动器 exec 的是包内二进制，不需要 EXEC 权限
+permissions:
+  - NETWORK.ACCESS_INTERNET
+
+# 合规信息：p2pee 为闭源免费工具，提供官方链接即可（非开源，无需 source_code_link）
+technical_support_link:
+  - https://p2pee.cn
+
+i18n:
+  zh-CN:
+    name: P2Pee 内网穿透
+    description: >-
+      基于 P2Pee（p2pee.cn）的 P2P 内网穿透工具。无需公网 IP、无需端口映射，
+      通过浏览器即可访问 NAS 上的内网服务。本应用提供管理界面，可填写需要转发的本地地址，
+      并直接在页面上显示穿透后的公网访问地址，无需再到容器或系统日志中查找。
+    author: xnkyn
+    official: https://p2pee.cn
+    help: https://p2pee.cn/#download-proxy
+    publisher: 穿斯帕沃特
+    publisher_link: https://club.ugnas.com/home.php?mod=space&uid=10131
+  en-US:
+    name: P2Pee Tunnel
+    description: >-
+      P2P intranet penetration powered by P2Pee (p2pee.cn). Expose your local NAS
+      services to the internet through P2P tunnels, no public IP or port forwarding required.
+      This app provides a management UI to configure forwarding targets and shows the public
+      access URL directly in the page instead of digging through logs.
+    author: xnkyn
+    official: https://p2pee.cn
+    help: https://p2pee.cn/#download-proxy
+    publisher: 穿斯帕沃特
+    publisher_link: https://club.ugnas.com/home.php?mod=space&uid=10131
