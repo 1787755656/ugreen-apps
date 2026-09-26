@@ -61,7 +61,7 @@
       },
       "service_port": 28686,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/clouddl/com.personal.clouddl/rootfs_common/icon.png",
-      "download_count": 2,
+      "download_count": 8,
       "app_type": "native",
       "category": "download",
       "platforms": [
@@ -360,7 +360,7 @@
       },
       "service_port": 21710,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/p2pee-proxy/com.xnkyn.p2peeproxy/rootfs_common/icon.png",
-      "download_count": 2,
+      "download_count": 3,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -383,7 +383,7 @@
       },
       "service_port": 18800,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/picoclaw/com.sipeed.picoclaw/rootfs_common/icon.png",
-      "download_count": 2,
+      "download_count": 3,
       "app_type": "native",
       "category": "ai",
       "platforms": [
@@ -442,13 +442,13 @@
       "display_name": "qBittorrent (superng6)",
       "description": "免费开源的 BitTorrent 下载客户端，内置网页控制界面，支持磁力链接、种子文件、 RSS 订阅自动下载、下载队列与限速、做种比例控制。默认配置针对国内网络做过调整： 中文界面、内置一大批公共 tracker 并可在每次启动时自动更新、放开队列上限， 并自带 IP 地理数据库（无需联网即可显示 Peer 归属地）。 首次登录用户名 admin、密码 adminadmin，登录后请立即在「工具 → 选项 → Web UI」里修改。 需要在设置里选一个下载保存目录；想要更好的速度，请在路由器上把 BT 监听端口 转发到 NAS。注意：网页界面的端口对局域网开放，请务必设置一个强密码。 搜索插件需要 Python，本应用的运行环境里没有 Python，因此搜索功能不可用。",
       "homepage_url": "https://hub.docker.com/r/superng6/qbittorrent",
-      "updated_at": "2026-09-22",
+      "updated_at": "2026-09-26",
       "version": "5.2.3",
       "upk_version": "5.2.3.0002",
-      "release_tag": "qbittorrent-ng6/v5.2.3_v2.0.14-r4",
+      "release_tag": "qbittorrent-ng6/v5.2.3_v2.0.15",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/qbittorrent-ng6/v5.2.3_v2.0.14-r4/amd64_nasync_com.superng6.qbittorrent_5.2.3.0002.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/qbittorrent-ng6/v5.2.3_v2.0.14-r4/arm64_nasync_com.superng6.qbittorrent_5.2.3.0002.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/qbittorrent-ng6/v5.2.3_v2.0.15/amd64_nasync_com.superng6.qbittorrent_5.2.3.0002.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/qbittorrent-ng6/v5.2.3_v2.0.15/arm64_nasync_com.superng6.qbittorrent_5.2.3.0002.upk"
       },
       "service_port": 18081,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/qbittorrent-ng6/com.superng6.qbittorrent/rootfs_common/icon.png",
