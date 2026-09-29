@@ -25,7 +25,13 @@ ARCH="${2:?ARCH is required (amd64|arm64)}"
 # Pinned Node runtime (bump deliberately; must stay on an ABI that
 # better-sqlite3 ships prebuilds for). NODE_ABI must match NODE_VERSION's
 # major (node 20 = ABI 115) — it selects the better-sqlite3 prebuild.
-NODE_VERSION="20.18.1"
+# Stay on ≥20.19: upstream server deps include ESM-only packages
+# (uuid ^14), which only require() cleanly once Node enables require(esm)
+# by default (20.19+). Upstream's own Dockerfile runs node:20-alpine,
+# i.e. this same latest-v20 line. Going below 20.19 breaks the server at
+# startup with ERR_REQUIRE_ESM; bumping past the v20 major means
+# revisiting the better-sqlite3 prebuild ABI too.
+NODE_VERSION="20.20.2"
 NODE_ABI="115"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
