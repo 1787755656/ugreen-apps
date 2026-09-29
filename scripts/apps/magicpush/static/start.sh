@@ -48,9 +48,11 @@ fi
 # shellcheck disable=SC1090
 . "${ENV_FILE}"
 export JWT_SECRET
-export PORT
 export NODE_ENV
 export TZ
+# data/.env 里持久化的 PORT 是首启那版写下的旧值（老安装是 3000），source 会
+# 盖掉上面算好的端口；端口始终以 start.sh 本次计算的 WEBUI_PORT 为准
+export PORT="${WEBUI_PORT}"
 
 # 前端静态资源路径相对 server/src -> ../../web/dist，与 Docker 布局一致
 # 工作目录切到 server，匹配相对路径与 dotenv

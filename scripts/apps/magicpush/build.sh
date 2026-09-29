@@ -98,6 +98,17 @@ if ! file "$SQLITE_NODE" | grep -q "ELF.*${ELF_MACHINE}"; then
   exit 1
 fi
 
+# ---- 3.5 runtime log dirs: the UGOS native sandbox mounts app/ read-only
+#      (only data/log/cache are writable), and upstream hardcodes
+#      app/server/logs for winston — mkdirSync there ENOENTs and kills the
+#      process at module load. Point both spots at LOG_DIR (exported by
+#      static/start.sh to the package log/ dir), keeping the original
+#      relative path as fallback for dev/Docker. patch-log-dir.js exits 1
+#      if upstream ever refactors these lines, failing the build instead of
+#      shipping a package that cannot start.
+echo "==> Patching server log dirs to honor LOG_DIR"
+node "$SCRIPT_DIR/patch-log-dir.js" "$WORK_DIR/src/server"
+
 # ---- 4. Node runtime ----
 NODE_TARBALL="node-v${NODE_VERSION}-linux-${NODE_ARCH}.tar.xz"
 echo "==> Downloading Node runtime: ${NODE_TARBALL}"
