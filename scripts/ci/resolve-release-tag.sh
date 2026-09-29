@@ -38,15 +38,35 @@ emit_output() {
 
 BASE_TAG="${APP_SLUG}/v${VERSION}"
 
-# ---- build_num: count of every tag this app has ever had, plus one ----
-# Independent of which upstream version is being built right now — this
-# guarantees the ugcli build number keeps increasing even across different
-# upstream versions or manual re-releases, which a per-version counter
-# would not.
+# ---- build_num: must never repeat a number ugcli has already handed out ----
+# A pure "tag count + 1" used to guarantee that trivially, but the release
+# job's cleanup step deletes superseded -rN tags (--cleanup-tag), so the
+# count goes DOWN between releases and numbers get reused — magicpush
+# shipped 0003 twice (v1.14.0-r6 and -r7) exactly this way. Release asset
+# filenames survive for every kept revision and encode the build number
+# (<arch>[_<infix>]_<appid>_<x.y.z.N>.upk), so take the max of the tag
+# count and every build number still visible in assets, then add one.
 ALL_APP_TAGS=$(git ls-remote --tags origin "refs/tags/${APP_SLUG}/*" 2>/dev/null | \
   awk '{print $2}' | sed 's|^refs/tags/||' | sed 's|\^{}$||' | sort -u || true)
 EXISTING_TAG_COUNT=$(printf '%s\n' "${ALL_APP_TAGS}" | grep -c . || true)
-BUILD_NUM=$((EXISTING_TAG_COUNT + 1))
+
+APP_ID="${APP_ID:-}"
+META_FILE="scripts/apps/${APP_SLUG}/meta.env"
+if [ -f "${META_FILE}" ]; then
+  # shellcheck disable=SC1090
+  . "${META_FILE}"
+fi
+# Escape dots for grep -E; empty APP_ID (no meta.env) degrades to matching
+# every .upk in the repo — an over-count, which is the safe direction.
+APP_ID_RE=$(printf '%s' "${APP_ID}" | sed 's/\./\\./g')
+MAX_ASSET_BUILD=$(gh api --paginate 'repos/{owner}/{repo}/releases' --jq '.[].assets[].name' 2>/dev/null \
+  | grep -E "${APP_ID_RE}.*\.upk$" \
+  | sed -E 's/.*\.([0-9]+)\.upk$/\1/' \
+  | sort -n | tail -1 || true)
+# 10# forces base-10: asset names zero-pad ("0003"), and $(( )) would read
+# those as octal (0008 → error, 0010 → 8).
+MAX_ASSET_BUILD=$((10#${MAX_ASSET_BUILD:-0}))
+BUILD_NUM=$((EXISTING_TAG_COUNT > MAX_ASSET_BUILD ? EXISTING_TAG_COUNT : MAX_ASSET_BUILD + 1))
 
 # ---- Existing tags for THIS specific version (base tag + any -rN) ----
 # Tag names can contain regex-special characters, so exact string
