@@ -12,7 +12,7 @@ APP_DIR="${INSTALL_DIR}/app"
 SERVER_DIR="${APP_DIR}/server"
 NODE_BIN="${INSTALL_DIR}/bin/node"
 
-# 与 project.yaml 的 port 一致（monorepo 里 magicpush 占 23000，避开）
+# 与 project.yaml 的 port 一致（monorepo 里 magicpush 占 23020，避开）
 WEBUI_PORT="${PORT:-23010}"
 
 mkdir -p "${DATA_DIR}" "${LOG_DIR}" "${CACHE_DIR}" 2>/dev/null

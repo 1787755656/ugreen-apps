@@ -14,7 +14,9 @@ supports:
 
 # start_cmd 首段必须存在于 rootfs_<arch>/bin/
 start_cmd: bin/start.sh
-port: 23000
+# 23000 与 docknav（独立仓库 app，真机在装）撞端口，2026-09-29 改 23020；
+# 与 scripts/apps/magicpush/static/start.sh 的 WEBUI_PORT 兜底值必须同步
+port: 23020
 open_type: tab
 
 tag_types:
