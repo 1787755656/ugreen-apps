@@ -114,6 +114,15 @@ def main():
                     # 命名真实文件（见 build.sh），所以这里直接跳过链接项。
                     continue
                 tf.extract(member, out, set_attrs=False)
+                if member.isdir():
+                    # set_attrs=False 时 tarfile 建目录一律用 0700 的"安全模式"
+                    # （归档里的真正 mode 只在 set_attrs=True 时才补，而 True 会
+                    # 连 chown/mtime 一起套 —— CI 上既没 root 也不需要）。
+                    # 0700 一旦进包，装到真机后非 root 的应用进程进不去这些目录，
+                    # 表现成 MODULE_NOT_FOUND（liteclass v1.1.6-r4 的事故）。
+                    # 这里显式按归档 mode 补上；归档没给 mode 就按 0755。
+                    os.chmod(os.path.join(out, member.name),
+                             member.mode & 0o7777 or 0o755)
                 if member.isfile():
                     found += 1
     print("  解出 %d 个文件" % found, flush=True)

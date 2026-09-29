@@ -170,7 +170,7 @@ install -m 0755 "$WORK_DIR/node-v${NODE_VERSION}-linux-${NODE_ARCH}/bin/node" "$
 # =========================================================================
 echo "==> Verifying"
 python3 - "$ROOTFS" "$ARCH" <<'PY'
-import os, struct, sys
+import os, stat, struct, sys
 
 rootfs, arch = sys.argv[1], sys.argv[2]
 want_machine = {'amd64': 0x3e, 'arm64': 0xb7}[arch]
@@ -206,6 +206,7 @@ for rel, what in [('bin/node', 'Node 运行时'),
                   ('server/index.js', '上游主程序'),
                   ('server/config.js', '上游配置模块'),
                   ('server/ugos-launcher.js', 'UGOS 适配层'),
+                  ('server/helpers/media.js', '目录浏览器模块（launcher/routes 都 require 它）'),
                   ('server/public', '前端'),
                   ('server/node_modules/fastify', 'fastify'),
                   ('server/node_modules/sqlite3/build/Release/node_sqlite3.node', 'sqlite3 原生模块')]:
@@ -225,6 +226,19 @@ for rel in ['server/jwt.secret', 'server/liteclass.db', 'server/data', 'server/t
 for junk in ['javascript-obfuscator', 'eslint-scope', 'class-validator', 'libphonenumber-js']:
     if os.path.exists(os.path.join(rootfs, 'server', 'node_modules', junk)):
         fail.append('成品里混进了镜像夹带的构建期依赖：node_modules/%s' % junk)
+
+# 4.5 目录权限必须全是 0755。解镜像那步曾把 0700 目录带进包（tarfile
+#     set_attrs=False 的坑，见 extract-image.py），v1.1.6-r4 装到真机后
+#     非 root 的应用进程进不去 helpers/ 等目录，启动即 MODULE_NOT_FOUND。
+#     旧版 ugcli 打包时会顺手把目录归一成 0755，新打包工具是原样保留的，
+#     所以这层必须在这里自己守住。
+for dirpath, dirnames, _ in os.walk(rootfs):
+    for d in dirnames:
+        p = os.path.join(dirpath, d)
+        m = stat.S_IMODE(os.stat(p).st_mode)
+        if m != 0o755:
+            fail.append('目录权限不是 0755（非 root 进程进不去）：'
+                        '%s 是 %s' % (os.path.relpath(p, rootfs), oct(m)))
 
 if fail:
     for f in fail:
