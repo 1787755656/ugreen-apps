@@ -153,7 +153,7 @@
       },
       "service_port": 18083,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/liteclass/com.personal.liteclass/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 1,
       "app_type": "native",
       "category": "media",
       "platforms": [
@@ -260,11 +260,11 @@
       "homepage_url": "https://github.com/magiccode1412/magicpush",
       "updated_at": "2026-09-29",
       "version": "1.14.0",
-      "upk_version": "1.14.0.0005",
-      "release_tag": "magicpush/v1.14.0-r9",
+      "upk_version": "1.14.0.0006",
+      "release_tag": "magicpush/v1.14.0-r10",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/magicpush/v1.14.0-r9/amd64_nasync_com.magiccode.magicpush_1.14.0.0005.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/magicpush/v1.14.0-r9/arm64_nasync_com.magiccode.magicpush_1.14.0.0005.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/magicpush/v1.14.0-r10/amd64_nasync_com.magiccode.magicpush_1.14.0.0006.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/magicpush/v1.14.0-r10/arm64_nasync_com.magiccode.magicpush_1.14.0.0006.upk"
       },
       "service_port": 23000,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/magicpush/com.magiccode.magicpush/rootfs_common/icon.png",
