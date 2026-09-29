@@ -260,13 +260,13 @@
       "homepage_url": "https://github.com/magiccode1412/magicpush",
       "updated_at": "2026-09-29",
       "version": "1.14.0",
-      "upk_version": "1.14.0.0006",
-      "release_tag": "magicpush/v1.14.0-r10",
+      "upk_version": "1.14.0.0007",
+      "release_tag": "magicpush/v1.14.0-r11",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/magicpush/v1.14.0-r10/amd64_nasync_com.magiccode.magicpush_1.14.0.0006.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/magicpush/v1.14.0-r10/arm64_nasync_com.magiccode.magicpush_1.14.0.0006.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/magicpush/v1.14.0-r11/amd64_nasync_com.magiccode.magicpush_1.14.0.0007.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/magicpush/v1.14.0-r11/arm64_nasync_com.magiccode.magicpush_1.14.0.0007.upk"
       },
-      "service_port": 23000,
+      "service_port": 23020,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/magicpush/com.magiccode.magicpush/rootfs_common/icon.png",
       "download_count": 0,
       "app_type": "native",
@@ -398,11 +398,11 @@
       "homepage_url": "https://github.com/ASH-C776/piggy-bank",
       "updated_at": "2026-09-29",
       "version": "1.3.4",
-      "upk_version": "1.3.4.0009",
-      "release_tag": "piggybank/v1.3.4-r1",
+      "upk_version": "1.3.4.0010",
+      "release_tag": "piggybank/v1.3.4-r2",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/piggybank/v1.3.4-r1/amd64_nasync_com.ashc776.piggybank_1.3.4.0009.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/piggybank/v1.3.4-r1/arm64_nasync_com.ashc776.piggybank_1.3.4.0009.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/piggybank/v1.3.4-r2/amd64_nasync_com.ashc776.piggybank_1.3.4.0010.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/piggybank/v1.3.4-r2/arm64_nasync_com.ashc776.piggybank_1.3.4.0010.upk"
       },
       "service_port": 23010,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/piggybank/com.ashc776.piggybank/rootfs_common/icon.png",
