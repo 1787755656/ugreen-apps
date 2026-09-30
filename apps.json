@@ -139,6 +139,29 @@
       ]
     },
     {
+      "appname": "com.personal.ittools",
+      "display_name": "IT Tools",
+      "description": "面向开发者的在线工具箱（上游 IT-Tools），内置 100 多个小工具： 令牌与随机串生成、Base64 与 URL 编解码、JWT 解析、JSON/XML/SQL 格式化与对比、哈希与加解密、二维码、文本与日期转换、 Docker run 转 compose 等等。所有计算都在浏览器本地完成， 不上传任何数据、无需账号登录，也不访问互联网。 安装后从绿联桌面打开（新标签页），局域网内设备也可以直接 浏览器访问 NAS 的 25180 端口使用，手机上同样可用。 本应用为纯静态服务，安装即用、无需任何配置。",
+      "homepage_url": "https://it-tools.tech",
+      "updated_at": "2026-09-30",
+      "version": "2024.10.22",
+      "upk_version": "2024.10.22.0001",
+      "release_tag": "it-tools/v2024.10.22",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/it-tools/v2024.10.22/amd64_nasync_com.personal.ittools_2024.10.22.0001.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/it-tools/v2024.10.22/arm64_nasync_com.personal.ittools_2024.10.22.0001.upk"
+      },
+      "service_port": 25180,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/it-tools/com.personal.ittools/rootfs_common/icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "system",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ]
+    },
+    {
       "appname": "com.personal.liteclass",
       "display_name": "轻课堂 LiteClass",
       "description": "专为 NAS 用户打造的轻量级、多用户私有云学习管理系统。管理课程库、在线播放、 章节识别与自动封面、断点续播、倍速与字幕、带时间戳的课程笔记、学习时长统计、 考试与答题、AI 问答，支持多人一起看。数据只保存在自己的 NAS 上。 初始管理员为 admin / admin123，装好后请立刻在应用内改密码。",
@@ -475,7 +498,7 @@
       },
       "service_port": 21166,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/randomvideo/com.personal.randomvideo/rootfs_common/icon.png",
-      "download_count": 3,
+      "download_count": 4,
       "app_type": "native",
       "category": "media",
       "platforms": [
