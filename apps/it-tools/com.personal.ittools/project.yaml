@@ -1,0 +1,85 @@
+# ============================================================
+# IT-Tools —— UGOS Pro 原生应用配置（ugreen-apps monorepo 版）
+#
+# 上游（github.com/CorentinTh/it-tools）是纯前端 SPA，无后端。
+# 包 = 上游 release 的静态 dist（build.sh 现场下载解到 rootfs_common/www，
+#      不进 git）+ 极简 Go 静态文件服务器（scripts/apps/it-tools/server，
+#      build.sh 现场交叉编译到 rootfs_<arch>/bin）。
+# 服务器带 SPA fallback（上游是 vue-router history 模式），
+# 并给带 hash 的 /assets/ 加一年 immutable 缓存，升级立即生效。
+#
+# version 行由 CI（reusable-build-app.yml）按上游最新 release 自动 sed。
+# ============================================================
+
+spec_version: "2.1"
+
+app_id: com.personal.ittools
+
+# 跟随上游版本。注意 ugcli 对中段(minor)有"最多两位数"的隐藏限制，
+# 上游日期式版本 2024.10.22 恰好合法。
+version: 2024.10.22
+
+support_arch:
+  - amd64
+  - arm64
+
+# 纯静态工具箱不依赖 JSSDK，手机浏览器直接打开端口即可用，app/pc 都支持。
+# supports 留空默认 app+pc。
+
+# 启动命令：Go 静态文件服务器，--port 必须和下面的 port 一致。
+start_cmd: bin/ittools-server --port=25180
+
+port: 25180
+
+# 新标签页直连后端端口。纯前端无 /api，不需要 inner 与网关反代。
+open_type: tab
+
+tag_types:
+  - devtool
+
+depend_fw_version: 1.13.0.0000
+
+# 零出站、零系统命令：Go 服务器只读安装目录里的 www/ 并监听本机端口。
+# 不需要 EXEC（start_cmd 直接 exec ELF，无 shell 包装），也不需要 INTERNET。
+permissions: []
+
+# 用了开源组件（上游 MIT），合规字段指向真实许可证与源码。
+license_agreement_link:
+  - https://github.com/CorentinTh/it-tools/blob/main/LICENSE
+source_code_link:
+  - https://github.com/CorentinTh/it-tools
+technical_support_link:
+  - https://github.com/CorentinTh/it-tools/issues
+
+i18n:
+  zh-CN:
+    name: IT Tools
+    description: >-
+      面向开发者的在线工具箱（上游 IT-Tools），内置 100 多个小工具：
+      令牌与随机串生成、Base64 与 URL 编解码、JWT 解析、JSON/XML/SQL
+      格式化与对比、哈希与加解密、二维码、文本与日期转换、
+      Docker run 转 compose 等等。所有计算都在浏览器本地完成，
+      不上传任何数据、无需账号登录，也不访问互联网。
+      安装后从绿联桌面打开（新标签页），局域网内设备也可以直接
+      浏览器访问 NAS 的 25180 端口使用，手机上同样可用。
+      本应用为纯静态服务，安装即用、无需任何配置。
+    author: Corentin Thibaut
+    official: https://it-tools.tech
+    help: https://github.com/CorentinTh/it-tools
+    publisher: 穿斯帕沃特
+  en-US:
+    name: IT Tools
+    description: >-
+      A developer toolbox (upstream IT-Tools) with 100+ handy tools:
+      token and random string generators, Base64/URL encoders, JWT parser,
+      JSON/XML/SQL formatters and diff, hashes and ciphers, QR codes,
+      text and date converters, docker run to compose conversion, and more.
+      Everything runs locally in your browser — nothing is uploaded,
+      no account needed, no internet access.
+      Open it from the UGOS desktop (new tab); any device on the LAN can
+      also reach port 25180 of the NAS directly from a browser, mobile
+      included. Purely static service — install and use, zero configuration.
+    author: Corentin Thibaut
+    official: https://it-tools.tech
+    help: https://github.com/CorentinTh/it-tools
+    publisher: 穿斯帕沃特
