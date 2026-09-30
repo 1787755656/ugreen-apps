@@ -461,6 +461,29 @@
       ]
     },
     {
+      "appname": "com.personal.postgresql17",
+      "display_name": "PostgreSQL 17",
+      "description": "PostgreSQL 17 数据库服务器，开箱即用。自带 psql / pg_dump / pg_restore 等命令行工具和全套 contrib 扩展（pg_trgm、hstore、uuid-ossp、 pg_stat_statements、postgres_fdw 等 200 余个）。 提供网页管理界面：查看连接信息、新建/删除数据库、创建专用账号、 一键备份与还原、查看运行日志、修改端口与访问范围。 安装后打开应用即可看到连接信息，可直接填进 Immich、n8n、Home Assistant 这类需要 PostgreSQL 的应用。 管理界面直接使用绿联云的账号体系，无需另设密码，仅管理员可进入。 注意：同一台 NAS 上的其它应用连接数据库时请填 127.0.0.1 （沙箱内解析不了 localhost）。",
+      "homepage_url": "https://www.postgresql.org",
+      "updated_at": "2026-09-30",
+      "version": "1.0.0",
+      "upk_version": "1.0.0.0001",
+      "release_tag": "postgresql/v1.0.0",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/postgresql/v1.0.0/amd64_nasync_com.personal.postgresql17_1.0.0.0001.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/postgresql/v1.0.0/arm64_nasync_com.personal.postgresql17_1.0.0.0001.upk"
+      },
+      "service_port": 25432,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/postgresql/com.personal.postgresql17/rootfs_common/icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "system",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ]
+    },
+    {
       "appname": "com.qbee.qbittorrent",
       "display_name": "qBittorrent Enhanced Edition",
       "description": "qBittorrent 增强版 —— 免费开源的 BitTorrent 下载客户端，内置 Web UI， 基于 qbittorrent-nox 无头版。在官方版基础上增加了自动屏蔽迅雷等吸血客户端、 自动 Ban 违规 Peer 等增强功能。首次登录账号 admin，密码 adminadmin， 登录后请及时修改密码。",
@@ -544,6 +567,29 @@
       },
       "service_port": 28180,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/readeck/com.personal.readeck/rootfs_common/icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "system",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ]
+    },
+    {
+      "appname": "com.personal.redis",
+      "display_name": "Redis",
+      "description": "Redis 8 内存数据库，开箱即用。可以给 NAS 上的其它应用 （Nextcloud、n8n、Immich、各种自建服务）当缓存、会话存储或消息队列， 也能给局域网里的客户端用。自带 Redis 8 官方发行版的四个模块： JSON、搜索、时序、布隆过滤器（可在管理页里关掉以节省内存）。 提供网页管理界面：查看运行状态与内存占用、连接信息、命中率与各库键数、 直接执行 Redis 命令、一键备份与还原、查看运行日志、修改端口与访问范围。 默认【只监听本机】并强制设置随机密码 —— 要让局域网连接请在管理页里打开。 管理界面直接使用绿联云的账号体系，无需另设密码，仅管理员可进入。 注意：同一台 NAS 上的其它应用连接时请填 127.0.0.1 （沙箱内解析不了 localhost）。",
+      "homepage_url": "https://redis.io",
+      "updated_at": "2026-09-30",
+      "version": "8.10.0",
+      "upk_version": "8.10.0.0001",
+      "release_tag": "redis/v8.10.0",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/redis/v8.10.0/amd64_nasync_com.personal.redis_8.10.0.0001.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/redis/v8.10.0/arm64_nasync_com.personal.redis_8.10.0.0001.upk"
+      },
+      "service_port": 26379,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/redis/com.personal.redis/rootfs_common/icon.png",
       "download_count": 0,
       "app_type": "native",
       "category": "system",
