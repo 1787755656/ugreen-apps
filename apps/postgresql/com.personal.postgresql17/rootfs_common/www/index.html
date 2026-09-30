@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PostgreSQL</title>
+<style>
+  :root{
+    --bg:#f5f6f8; --card:#fff; --line:#e3e6ea; --text:#1f2328; --dim:#6b7280;
+    --accent:#336791; --ok:#1a7f4b; --warn:#b45309; --danger:#b42318;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --bg:#16181c; --card:#1e2126; --line:#2f343b; --text:#e6e8eb;
+           --dim:#9aa3ad; --accent:#6ba3d6; --ok:#4ac07d; --warn:#e0a33e; --danger:#e5736a; }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);
+       font:14px/1.6 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}
+  header{display:flex;align-items:center;gap:12px;padding:14px 20px;
+         background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+  header h1{font-size:17px;margin:0;font-weight:600}
+  header .ver{color:var(--dim);font-size:12px}
+  header .spacer{flex:1}
+  header .who{color:var(--dim);font-size:12.5px}
+  main{max-width:920px;margin:0 auto;padding:18px 16px 60px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;
+        padding:16px 18px;margin-bottom:14px}
+  .card h2{font-size:15px;margin:0 0 12px;font-weight:600}
+  .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+  .row+.row{margin-top:10px}
+  label{color:var(--dim);font-size:13px}
+  input[type=text],input[type=password],input[type=number],select,textarea{
+    background:var(--bg);color:var(--text);border:1px solid var(--line);
+    border-radius:6px;padding:7px 10px;font:inherit;min-width:0}
+  textarea{width:100%;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px}
+  input[type=number]{width:110px;-moz-appearance:textfield}
+  input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+  button{background:var(--accent);color:#fff;border:0;border-radius:6px;
+         padding:7px 14px;font:inherit;cursor:pointer}
+  button.ghost{background:transparent;color:var(--accent);border:1px solid var(--line)}
+  button.danger{background:var(--danger)}
+  button:disabled{opacity:.5;cursor:default}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line)}
+  th{color:var(--dim);font-weight:500}
+  pre{background:var(--bg);border:1px solid var(--line);border-radius:6px;
+      padding:10px;max-height:380px;overflow:auto;font-size:12px;margin:0;
+      white-space:pre-wrap;word-break:break-all}
+  .banner{border-radius:8px;padding:11px 14px;margin-bottom:14px;font-size:13px}
+  .banner.warn{background:rgba(180,83,9,.12);border:1px solid var(--warn);color:var(--warn)}
+  .banner.err{background:rgba(180,35,24,.12);border:1px solid var(--danger);color:var(--danger)}
+  .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px}
+  .dot.on{background:var(--ok)} .dot.off{background:var(--dim)} .dot.bad{background:var(--danger)}
+  .kv{display:grid;grid-template-columns:auto 1fr auto;gap:8px 12px;align-items:center;font-size:13px}
+  .kv .k{color:var(--dim)}
+  .kv .v{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;word-break:break-all}
+  .muted{color:var(--dim);font-size:12.5px}
+  .tabs{display:flex;gap:6px;margin-bottom:10px}
+  .tabs button{background:transparent;color:var(--dim);border:1px solid transparent;padding:5px 12px}
+  .tabs button.sel{color:var(--text);border-color:var(--line);background:var(--bg)}
+  .hide{display:none !important}
+  .gate{max-width:480px;margin:12vh auto;padding:0 16px}
+</style>
+</head>
+<body>
+
+<!-- 拿不到绿联登录态时显示这个（比如页面不是从桌面里打开的） -->
+<div id="gate-view" class="gate hide">
+  <div class="card">
+    <h2>无法验证登录身份</h2>
+    <p class="muted" id="gate-msg"></p>
+    <p class="muted">本应用使用绿联云的账号体系，请在 <b>绿联云桌面</b> 里点击应用图标打开，
+      不要直接访问端口。</p>
+    <pre id="gate-diag" class="hide" style="margin-bottom:12px"></pre>
+    <div class="row"><button id="gate-retry">重试</button></div>
+  </div>
+</div>
+
+<div id="app-view" class="hide">
+<header>
+  <h1>PostgreSQL</h1>
+  <span class="ver" id="hdr-ver"></span>
+  <span class="spacer"></span>
+  <span class="who" id="hdr-who"></span>
+</header>
+<main>
+  <div class="card">
+    <h2>服务状态</h2>
+    <div class="row">
+      <span><span id="st-dot" class="dot off"></span><b id="st-phase">读取中…</b></span>
+      <span class="spacer"></span>
+      <button class="ghost" id="btn-start">启动</button>
+      <button class="ghost" id="btn-restart">重启</button>
+      <button class="ghost danger" id="btn-stop">停止</button>
+    </div>
+    <div class="row"><span class="muted" id="st-detail"></span></div>
+    <div id="st-err" class="banner err hide"></div>
+  </div>
+
+  <!-- 数据目录状态异常时才显示：有东西但不是一个能用的数据库。 -->
+  <div class="card hide" id="card-broken">
+    <h2>数据目录状态异常</h2>
+    <div class="banner err" id="brk-why"></div>
+    <p class="muted">应用不会在这样的目录上启动，也<b>不会自动清理它</b>——
+      万一判断错了，那就是把你的数据库删掉。<br>
+      确认里面没有要保留的东西之后，可以重新初始化：<b>旧目录只会被改名保留，不会删除</b>。</p>
+    <div class="row"><button class="danger" id="btn-reinit">清空并重新初始化</button></div>
+    <div id="brk-msg" class="banner hide"></div>
+  </div>
+
+  <!-- 安装参数里的数据目录和实际位置不一致时才显示。
+       平时不摆出来：迁移会停服好几分钟，不该长期放在那里等人误点。 -->
+  <div class="card hide" id="card-migrate">
+    <h2>迁移数据目录</h2>
+    <p class="muted">安装参数里的「数据保存目录」改过了，但数据还在原来的位置。</p>
+    <div class="kv" id="mig-kv"></div>
+    <p class="muted" style="margin-top:10px">
+      迁移会：停止数据库 → 复制 → 逐个文件核对数量和字节数 → 核对通过才切换配置 →
+      把旧目录改名成 <code>.migrated-<i>时间</i></code> 保留 → 在新位置自动启动。<br>
+      <b>任何一步失败都会退回原位置，原数据全程不会被删除。</b>
+    </p>
+    <div class="row">
+      <label><input type="checkbox" id="mig-clear">
+        清理目标目录后重试（目标里原有的东西会改名保留，不会删除）</label>
+    </div>
+    <div class="row"><button class="danger" id="btn-migrate">开始迁移</button></div>
+    <div id="mig-msg" class="banner hide"></div>
+  </div>
+
+  <div class="card">
+    <h2>连接信息</h2>
+    <div class="kv" id="conn-kv"></div>
+    <div class="row" style="margin-top:12px">
+      <button class="ghost" id="btn-show-pw">显示密码</button>
+      <button class="ghost" id="btn-copy-uri">复制连接串</button>
+    </div>
+    <div class="row"><span class="muted">
+      同一台 NAS 上的其它应用请填 <code>127.0.0.1</code>；
+      沙箱里解析不了 <code>localhost</code> 这个名字。
+    </span></div>
+    <div id="conn-msg" class="banner hide"></div>
+  </div>
+
+  <div class="card">
+    <h2>数据库</h2>
+    <table><thead><tr><th>名称</th><th>属主</th><th>大小</th><th>编码</th><th></th></tr></thead>
+      <tbody id="db-rows"></tbody></table>
+    <div class="row" style="margin-top:12px">
+      <input type="text" id="db-name" placeholder="新建数据库名">
+      <label><input type="checkbox" id="db-role" checked> 同时建一个同名专用账号</label>
+      <button id="btn-db-create">新建</button>
+    </div>
+    <div class="row"><span class="muted">名字只能用字母、数字、下划线，且以字母或下划线开头。</span></div>
+    <div class="row">
+      <label><input type="checkbox" id="db-drop-role" checked>
+        删除数据库时一并删除同名账号</label>
+    </div>
+    <div id="db-msg" class="banner hide"></div>
+  </div>
+
+  <div class="card">
+    <h2>备份</h2>
+    <div class="row">
+      <button id="btn-backup">立即备份（pg_dumpall）</button>
+      <label class="ghost" style="border:1px solid var(--line);border-radius:6px;padding:7px 14px;cursor:pointer">
+        上传备份<input type="file" id="backup-file" accept=".gz" class="hide">
+      </label>
+    </div>
+    <table style="margin-top:10px"><thead><tr><th>文件</th><th>大小</th><th>时间</th><th></th></tr></thead>
+      <tbody id="bk-rows"></tbody></table>
+    <div id="bk-msg" class="banner hide"></div>
+    <pre id="bk-out" class="hide" style="margin-top:10px"></pre>
+  </div>
+
+  <div class="card">
+    <h2>设置</h2>
+    <div class="row">
+      <label style="width:130px">数据库端口</label>
+      <input type="number" id="set-port" min="1024" max="65535">
+      <span class="muted">要大于 1024（应用以普通用户运行）</span>
+    </div>
+    <div class="row">
+      <label style="width:130px">局域网访问</label>
+      <label><input type="checkbox" id="set-lan"> 允许局域网内的其它设备连接</label>
+    </div>
+    <div class="row">
+      <label style="width:130px">时区</label>
+      <input type="text" id="set-tz" placeholder="Asia/Shanghai">
+    </div>
+    <div class="row"><button id="btn-save-settings">保存并重启数据库</button></div>
+    <div id="set-msg" class="banner hide"></div>
+
+    <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+    <div class="row">
+      <label style="width:130px">数据库密码</label>
+      <input type="text" id="set-dbpw" placeholder="留空则随机生成">
+      <button class="ghost" id="btn-dbpw">修改</button>
+    </div>
+
+    <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+    <div class="row"><label>高级配置（postgresql.custom.conf，重启后生效）</label></div>
+    <div class="row"><textarea id="custom-conf" rows="6"></textarea></div>
+    <div class="row"><button class="ghost" id="btn-save-conf">保存配置</button>
+      <span class="muted">写错了数据库会起不来，但这个页面照常能用，回来改回去即可。</span></div>
+  </div>
+
+  <div class="card">
+    <h2>日志</h2>
+    <div class="tabs">
+      <button id="tab-pg" class="sel">PostgreSQL</button>
+      <button id="tab-app">应用</button>
+      <span class="spacer"></span>
+      <button class="ghost" id="btn-log-refresh">刷新</button>
+    </div>
+    <pre id="log-box">读取中…</pre>
+  </div>
+</main>
+</div>
+
+<!-- 绿联 JSSDK（cloudWindow）。单独一个 script 标签引入：即便它初始化失败，
+     也只影响"拿 token"这一件事，主脚本照跑、能给出明确提示。 -->
+<script src="cloudwindow.js"></script>
+<script>
+"use strict";
+
+// esc 用在所有插进 innerHTML 的地方。
+// 【它自己绝不能抛异常】——catch 分支里也会调它，一旦它抛，
+// 错误提示就会静默消失，表现成"点了没反应"。
+function esc(v){
+  if (v === null || v === undefined) return "";
+  return String(v).replace(/[&<>"']/g, function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+  });
+}
+
+function $(id){ return document.getElementById(id); }
+function show(el, on){ if (el) el.classList.toggle("hide", !on); }
+
+function banner(el, msg, kind){
+  if (!el) return;
+  el.className = "banner " + (kind || "warn");
+  el.textContent = msg;
+  show(el, !!msg);
+}
+
+// ---- 危险操作的二次确认 -------------------------------------------------
+//
+// 【绝对不能用 confirm() / alert() / prompt()】。本应用是 open_type: inner，
+// 页面跑在绿联桌面的内嵌窗口里，浏览器会把这些原生弹窗直接拦掉 ——
+// confirm() 不弹、返回 undefined，于是 `if (!confirm(...)) return;` 永远从这里
+// 返回，删库/删备份/还原三个按钮的表现就是"点了没反应"，而控制台里什么都没有。
+//
+// 换成页面内的两段式：第一次点把按钮变成「再点一次确认」并把后果写在旁边，
+// 8 秒内再点一次才真的执行，超时自动复原。好处是确认信息比 confirm 的小方框
+// 能写得清楚得多，也不依赖任何浏览器行为。
+const ARM_WINDOW_MS = 8000;
+
+function twoStep(btn, warning, msgEl, fn){
+  if (!btn) return;
+  const now = Date.now();
+  if (btn._armedAt && now - btn._armedAt < ARM_WINDOW_MS){
+    disarm(btn);
+    banner(msgEl, "", "warn");
+    return fn();
+  }
+  if (!btn._label) btn._label = btn.textContent;
+  btn._armedAt = now;
+  btn.textContent = "再点一次确认";
+  banner(msgEl, warning, "err");
+  setTimeout(function(){
+    if (btn._armedAt && Date.now() - btn._armedAt >= ARM_WINDOW_MS) disarm(btn);
+  }, ARM_WINDOW_MS + 100);
+}
+
+function disarm(btn){
+  if (!btn) return;
+  btn._armedAt = 0;
+  if (btn._label) btn.textContent = btn._label;
+}
+
+// ---- 绿联登录认证 ------------------------------------------------------
+//
+// 机制见官方文档 backend/system-capabilities/login-auth：
+//   JSSDK 的 getThirdToken 拿到 third_token
+//     → 以 Ugreen-Ttk 请求头带上，请求 /api/**（即 project.yaml 的 proxy_path）
+//     → 系统网关校验登录态，通过后把 Ugreen-User-ID / -Name / -Type 注入请求头
+//       再转发给后端。
+// 应用自己不再实现账号系统。
+
+let ugToken = null;
+
+async function fetchUgToken(){
+  if (!window.UGCloudWindow){
+    throw new Error("没有加载到绿联 JSSDK（cloudwindow.js）");
+  }
+  // 【第三个参数是超时，必须给】：不在绿联桌面窗口里跑时根本没有桥接对象，
+  // 不给超时这个 Promise 会永远挂着，表现成页面一直卡在"读取中"。
+  const info = await window.UGCloudWindow.useCapacity("getThirdToken", {}, 5000);
+  if (!info || !info.third_token){
+    throw new Error("getThirdToken 没有返回 third_token");
+  }
+  return info.third_token;
+}
+
+function authHeaders(extra){
+  const h = Object.assign({}, extra || {});
+  if (ugToken) h["Ugreen-Ttk"] = ugToken;
+  return h;
+}
+
+async function api(path, opts){
+  const o = Object.assign({credentials: "include"}, opts || {});
+  o.headers = authHeaders(Object.assign({"Content-Type":"application/json"}, o.headers));
+  const res = await fetch(path, o);
+  let data = null;
+  try { data = await res.json(); } catch(e) { data = null; }
+  if (res.status === 401 || res.status === 403){
+    showGate((data && data.error) || ("HTTP " + res.status));
+    throw new Error((data && data.error) || "未通过身份验证");
+  }
+  if (!res.ok) throw new Error((data && data.error) || ("HTTP " + res.status));
+  return data;
+}
+
+function post(path, body){
+  return api(path, {method:"POST", body: JSON.stringify(body || {})});
+}
+
+// 复制到剪贴板。navigator.clipboard 在非安全上下文下是 undefined，
+// 绿联桌面走 HTTPS 网关一般没问题，但留个兜底不亏。
+function copyText(text){
+  if (navigator.clipboard && window.isSecureContext){
+    return navigator.clipboard.writeText(text);
+  }
+  return new Promise(function(resolve, reject){
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    let ok = false;
+    try { ok = document.execCommand("copy"); } catch(e) { ok = false; }
+    document.body.removeChild(ta);
+    ok ? resolve() : reject(new Error("浏览器不允许复制，请手动选中"));
+  });
+}
+
+function fmtSize(n){
+  if (!n && n !== 0) return "";
+  const u = ["B","KB","MB","GB","TB"];
+  let i = 0;
+  while (n >= 1024 && i < u.length-1){ n /= 1024; i++; }
+  return (i === 0 ? n : n.toFixed(1)) + " " + u[i];
+}
+
+function fmtDuration(sec){
+  sec = Math.max(0, sec|0);
+  const d = Math.floor(sec/86400), h = Math.floor(sec%86400/3600),
+        m = Math.floor(sec%3600/60);
+  if (d) return d + " 天 " + h + " 小时";
+  if (h) return h + " 小时 " + m + " 分";
+  if (m) return m + " 分";
+  return sec + " 秒";
+}
+
+// ---- 视图切换 ----------------------------------------------------------
+
+function showGate(msg){
+  $("gate-msg").textContent = msg || "";
+  show($("gate-view"), true);
+  show($("app-view"), false);
+  stopPolling();
+
+  // 顺手把自查信息拉出来显示。用户手上没有 SSH，鉴权链路出问题时
+  // 界面上如果只有一句"无法验证身份"，就完全无从下手了。
+  const box = $("gate-diag");
+  fetch("/api/diag", {headers: authHeaders(), credentials:"include"})
+    .then(function(res){ return res.json(); })
+    .then(function(d){
+      const lines = [
+        "拿到 third_token：" + (ugToken ? "是" : "否"),
+        "网关注入的用户信息：" + (d.authenticated ? "有" : "【没有】")
+      ];
+      const h = d.gateway_headers || {};
+      Object.keys(h).sort().forEach(function(k){ lines.push("  " + k + ": " + h[k]); });
+      if (!d.authenticated) lines.push(d.hint || "");
+      box.textContent = lines.join("\n");
+      show(box, true);
+    })
+    .catch(function(e){
+      box.textContent = "连自查接口都请求不到：" + e.message +
+        "\n（说明 /api 根本没被转发到应用后端）";
+      show(box, true);
+    });
+}
+
+function showApp(){
+  show($("gate-view"), false);
+  show($("app-view"), true);
+  refreshAll();
+  startPolling();
+}
+
+// ---- 状态 --------------------------------------------------------------
+
+let conn = null;
+let pwVisible = false;
+
+async function loadMe(){
+  const me = await api("/api/me");
+  // 直接显示网关给的原始 type，不去翻译成"管理员/普通用户" ——
+  // 这个字段的取值和文档对不上（管理员用户组的成员拿到的并不是 admin），
+  // 自作主张翻译只会显示出一个和事实相反的身份。
+  $("hdr-who").textContent = me.name ? (me.name + (me.type ? "（" + me.type + "）" : "")) : "";
+}
+
+async function loadStatus(){
+  const s = await api("/api/status");
+  const srv = s.server || {};
+  const dot = $("st-dot");
+  dot.className = "dot " + (srv.running ? "on" : (srv.last_error ? "bad" : "off"));
+  $("st-phase").textContent = srv.phase || (srv.running ? "运行中" : "已停止");
+
+  const bits = [];
+  if (srv.running){
+    bits.push("PID " + srv.pid);
+    bits.push("已运行 " + fmtDuration(srv.uptime_sec));
+  }
+  if (s.version) bits.push("PostgreSQL " + s.version);
+  bits.push("数据目录 " + s.data_dir);
+  $("st-detail").textContent = bits.join("　·　");
+  $("hdr-ver").textContent = s.app_version ? ("pgdg " + s.app_version) : "";
+
+  banner($("st-err"),
+         srv.last_error && !srv.running ? ("最近一次错误：" + srv.last_error) : "", "err");
+
+  renderBroken(s);
+  renderMigrate(s);
+
+  // 设置项只在用户没有正在编辑时回填，免得把人家输了一半的值冲掉。
+  if (document.activeElement !== $("set-port")) $("set-port").value = s.pg_port;
+  if (document.activeElement !== $("set-tz")) $("set-tz").value = s.timezone || "";
+  if (document.activeElement !== $("set-lan")) $("set-lan").checked = !!s.allow_lan;
+  return s;
+}
+
+// ---- 数据目录状态异常 / 迁移 -------------------------------------------
+
+function renderBroken(s){
+  show($("card-broken"), !!s.data_broken);
+  if (s.data_broken){
+    $("brk-why").textContent = "数据目录 " + s.data_dir + "：" + (s.data_state || "");
+  }
+}
+
+function renderMigrate(s){
+  const mig = s.migration || {};
+  // 迁移正在跑或刚跑完的时候也要显示这张卡片 —— 否则一点「开始迁移」，
+  // 卡片就因为轮询到新状态而消失，用户连进度都看不到。
+  const need = !!s.migrate_to || mig.running || mig.finished;
+  show($("card-migrate"), need);
+  if (!need) return;
+
+  const rows = [
+    ["当前位置", s.data_dir || ""],
+    ["目标位置", (mig.to || (s.migrate_to ? s.migrate_to + "/pgdata" : ""))]
+  ];
+  let html = "";
+  for (const pair of rows){
+    html += '<span class="k">' + esc(pair[0]) + '</span><span class="v">' +
+            esc(pair[1]) + '</span><span></span>';
+  }
+  $("mig-kv").innerHTML = html;
+
+  const btn = $("btn-migrate");
+  btn.disabled = !!mig.running;
+  if (mig.running){
+    banner($("mig-msg"),
+           "（已进行 " + fmtDuration(mig.elapsed_sec) + "）" + (mig.phase || "正在迁移…"),
+           "warn");
+  } else if (mig.error){
+    banner($("mig-msg"), "迁移失败：" + mig.error, "err");
+  } else if (mig.finished){
+    banner($("mig-msg"), mig.result || "迁移完成", "warn");
+  }
+}
+
+function startMigrate(){
+  const btn = $("btn-migrate");
+  twoStep(btn,
+    "将停止数据库并把数据复制到新位置，大库可能要几分钟，期间所有连它的应用都会断开。" +
+    "核对通过之后才会切换，原数据只改名不删除。8 秒内再点一次那个按钮确认。",
+    $("mig-msg"),
+    async function(){
+      try {
+        await post("/api/migrate", {clear_target: $("mig-clear").checked});
+        banner($("mig-msg"), "已开始迁移，请不要关闭页面…", "warn");
+        loadStatus().catch(function(){});
+      } catch(e){
+        banner($("mig-msg"), e.message, "err");
+      }
+    });
+}
+
+function doReinit(){
+  const btn = $("btn-reinit");
+  twoStep(btn,
+    "将把当前数据目录改名让开（不删除），然后重新初始化一个空数据库。" +
+    "如果里面其实有你要的数据，现在就该停下。8 秒内再点一次那个按钮确认。",
+    $("brk-msg"),
+    async function(){
+      try {
+        const r = await post("/api/reinit", {confirm: "REINIT"});
+        banner($("brk-msg"),
+               "已重新初始化" + (r.retired ? ("，旧目录保留在 " + r.retired) : ""), "warn");
+        refreshAll();
+      } catch(e){
+        banner($("brk-msg"), e.message, "err");
+      }
+    });
+}
+
+async function loadConnection(){
+  conn = await api("/api/connection");
+  renderConnection();
+}
+
+function renderConnection(){
+  if (!conn) return;
+  const host = location.hostname || "NAS-IP";
+  const pw = pwVisible ? conn.password : "••••••••••••";
+  const uri = "postgresql://" + conn.user + ":" + conn.password + "@" +
+              host + ":" + conn.port + "/" + conn.database;
+  const rows = [
+    ["主机", host],
+    ["端口", conn.port],
+    ["用户", conn.user],
+    ["密码", pw],
+    ["默认库", conn.database]
+  ];
+  let html = "";
+  for (const pair of rows){
+    html += '<span class="k">' + esc(pair[0]) + '</span><span class="v">' +
+            esc(pair[1]) + '</span><span></span>';
+  }
+  html += '<span class="k">连接串</span><span class="v">' +
+          esc(pwVisible ? uri : uri.replace(conn.password, "••••••••")) + '</span><span></span>';
+
+  const roles = conn.roles || {};
+  const names = Object.keys(roles).sort();
+  if (names.length){
+    html += '<span class="k" style="grid-column:1/-1;margin-top:8px">应用建过的专用账号</span>';
+    for (const n of names){
+      html += '<span class="k">' + esc(n) + '</span><span class="v">' +
+              esc(pwVisible ? roles[n] : "••••••••") + '</span><span></span>';
+    }
+  }
+  $("conn-kv").innerHTML = html;
+  $("btn-show-pw").textContent = pwVisible ? "隐藏密码" : "显示密码";
+}
+
+// ---- 数据库 ------------------------------------------------------------
+
+async function loadDatabases(){
+  const tbody = $("db-rows");
+  try {
+    const d = await api("/api/databases");
+    const items = d.items || [];
+    if (!items.length){
+      tbody.innerHTML = '<tr><td colspan="5" class="muted">还没有数据库</td></tr>';
+      return;
+    }
+    tbody.innerHTML = items.map(function(it){
+      return "<tr><td>" + esc(it.name) + "</td><td>" + esc(it.owner) + "</td><td>" +
+        esc(it.size) + "</td><td>" + esc(it.encoding) + "</td><td>" +
+        (it.name === "postgres" ? '<span class="muted">系统库</span>'
+          : '<button class="ghost danger" data-drop="' + esc(it.name) + '">删除</button>') +
+        "</td></tr>";
+    }).join("");
+    tbody.querySelectorAll("[data-drop]").forEach(function(b){
+      b.onclick = function(){ dropDatabase(b, b.getAttribute("data-drop")); };
+    });
+  } catch(e){
+    tbody.innerHTML = '<tr><td colspan="5" class="muted">' + esc(e.message) + "</td></tr>";
+  }
+}
+
+async function createDatabase(){
+  const name = $("db-name").value.trim();
+  if (!name){ banner($("db-msg"), "请先填数据库名", "err"); return; }
+  try {
+    const r = await post("/api/databases", {name: name, create_role: $("db-role").checked});
+    $("db-name").value = "";
+    let msg = "已创建数据库 " + name;
+    if (r.password){
+      msg += "，专用账号 " + name + " 的密码是 " + r.password + "（也可在「连接信息」里查看）";
+    }
+    banner($("db-msg"), msg, "warn");
+    await loadDatabases();
+    await loadConnection();
+  } catch(e){
+    banner($("db-msg"), e.message, "err");
+  }
+}
+
+function dropDatabase(btn, name){
+  const alsoRole = $("db-drop-role").checked;
+  twoStep(btn,
+    "将删除数据库 " + name + "，里面的数据会全部丢失且无法撤销" +
+    (alsoRole ? "，同名账号也会一起删掉" : "（同名账号保留）") +
+    "。确定的话 8 秒内再点一次那个按钮。",
+    $("db-msg"),
+    async function(){
+      try {
+        const r = await post("/api/databases/drop", {name: name, drop_role: alsoRole});
+        banner($("db-msg"), r.warning || ("已删除 " + name), "warn");
+        await loadDatabases();
+        await loadConnection();
+      } catch(e){
+        banner($("db-msg"), e.message, "err");
+      }
+    });
+}
+
+// ---- 备份 --------------------------------------------------------------
+
+async function loadBackups(){
+  const tbody = $("bk-rows");
+  try {
+    const d = await api("/api/backups");
+    const items = d.items || [];
+    if (!items.length){
+      tbody.innerHTML = '<tr><td colspan="4" class="muted">还没有备份</td></tr>';
+      return;
+    }
+    tbody.innerHTML = items.map(function(it){
+      const n = esc(it.name);
+      return "<tr><td>" + n + "</td><td>" + esc(fmtSize(it.size)) + "</td><td>" +
+        esc(it.mtime) + '</td><td>' +
+        '<button class="ghost" data-dl="' + n + '">下载</button> ' +
+        '<button class="ghost" data-rs="' + n + '">还原</button> ' +
+        '<button class="ghost danger" data-del="' + n + '">删除</button></td></tr>';
+    }).join("");
+    tbody.querySelectorAll("[data-dl]").forEach(function(b){
+      b.onclick = function(){ downloadBackup(b.getAttribute("data-dl")); };
+    });
+    tbody.querySelectorAll("[data-rs]").forEach(function(b){
+      b.onclick = function(){ restoreBackup(b, b.getAttribute("data-rs")); };
+    });
+    tbody.querySelectorAll("[data-del]").forEach(function(b){
+      b.onclick = function(){ deleteBackup(b, b.getAttribute("data-del")); };
+    });
+  } catch(e){
+    tbody.innerHTML = '<tr><td colspan="4" class="muted">' + esc(e.message) + "</td></tr>";
+  }
+}
+
+// 下载要走 fetch 而不是直接跳转 location.href：
+// 鉴权 token 在【请求头】里，浏览器跳转带不上它，会被网关挡成 401。
+async function downloadBackup(name){
+  banner($("bk-msg"), "正在准备下载…", "warn");
+  try {
+    const res = await fetch("/api/backups/download?name=" + encodeURIComponent(name),
+                            {headers: authHeaders(), credentials:"include"});
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 60000);
+    banner($("bk-msg"), "", "warn");
+  } catch(e){
+    banner($("bk-msg"), "下载失败：" + e.message, "err");
+  }
+}
+
+async function createBackup(){
+  const btn = $("btn-backup");
+  btn.disabled = true;
+  banner($("bk-msg"), "正在备份，大库可能要几分钟…", "warn");
+  try {
+    const r = await post("/api/backups/create", {});
+    banner($("bk-msg"), "备份完成：" + r.name + "（" + fmtSize(r.size) + "）", "warn");
+    await loadBackups();
+  } catch(e){
+    banner($("bk-msg"), e.message, "err");
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+function deleteBackup(btn, name){
+  twoStep(btn, "将删除备份文件 " + name + "，无法撤销。8 秒内再点一次那个按钮确认。",
+    $("bk-msg"),
+    async function(){
+      try {
+        await post("/api/backups/delete", {name: name});
+        await loadBackups();
+      } catch(e){ banner($("bk-msg"), e.message, "err"); }
+    });
+}
+
+function restoreBackup(btn, name){
+  twoStep(btn,
+    "将从 " + name + " 还原：备份里的角色和数据库会被写回当前实例。" +
+    "同名对象已存在的那部分会报错并跳过，所以还原到空实例最稳妥；" +
+    "建议先对当前数据做一次备份。8 秒内再点一次那个按钮确认。",
+    $("bk-msg"),
+    async function(){
+      banner($("bk-msg"), "正在还原，请不要关闭页面…", "warn");
+      try {
+        const r = await post("/api/backups/restore", {name: name});
+        banner($("bk-msg"), r.ok ? "还原完成" : ("还原过程中有报错：" + (r.error || "")),
+               r.ok ? "warn" : "err");
+        const out = $("bk-out");
+        out.textContent = r.output || "（没有输出）";
+        show(out, true);
+        await loadDatabases();
+      } catch(e){
+        banner($("bk-msg"), e.message, "err");
+      }
+    });
+}
+
+// 上传【必须分片】：请求要过绿联网关，而网关全局 nginx.conf 里写死了
+// client_max_body_size 20m，应用改不了它。一次性 POST 一个上百 MB 的备份必然 413。
+async function uploadBackup(file){
+  if (!file) return;
+  if (!/\.sql\.gz$/.test(file.name)){
+    banner($("bk-msg"), "只接受本应用导出的 .sql.gz 备份文件", "err");
+    return;
+  }
+  try {
+    const init = await post("/api/backups/upload/init", {name: file.name, size: file.size});
+    const cs = init.chunk_size || (8 << 20);
+    const total = Math.max(1, Math.ceil(file.size / cs));
+    for (let i = 0; i < total; i++){
+      banner($("bk-msg"), "正在上传… " + (i + 1) + " / " + total, "warn");
+      const blob = file.slice(i * cs, Math.min((i + 1) * cs, file.size));
+      const res = await fetch("/api/backups/upload/chunk?session=" +
+                              encodeURIComponent(init.session) + "&index=" + i,
+                              {method:"POST", body: blob,
+                               headers: authHeaders(), credentials:"include"});
+      if (!res.ok){
+        const d = await res.json().catch(function(){ return null; });
+        throw new Error((d && d.error) || ("第 " + (i+1) + " 片失败：HTTP " + res.status));
+      }
+    }
+    const d = await post("/api/backups/upload/complete",
+                         {session: init.session, chunks: total});
+    banner($("bk-msg"), "上传完成：" + d.name + "（" + fmtSize(d.size) + "）", "warn");
+    await loadBackups();
+  } catch(e){
+    banner($("bk-msg"), "上传失败：" + e.message, "err");
+  }
+}
+
+// ---- 设置 --------------------------------------------------------------
+
+async function saveSettings(){
+  try {
+    await post("/api/settings", {
+      pg_port: parseInt($("set-port").value, 10) || 5432,
+      allow_lan: $("set-lan").checked,
+      timezone: $("set-tz").value.trim() || "Asia/Shanghai"
+    });
+    banner($("set-msg"), "已保存，数据库正在重启…", "warn");
+    setTimeout(refreshAll, 3000);
+  } catch(e){ banner($("set-msg"), e.message, "err"); }
+}
+
+async function changeDbPassword(){
+  try {
+    const r = await post("/api/superuser-password", {password: $("set-dbpw").value});
+    $("set-dbpw").value = "";
+    banner($("set-msg"), "数据库密码已改为：" + r.password +
+           "　别忘了同步修改用到它的应用", "warn");
+    await loadConnection();
+  } catch(e){ banner($("set-msg"), e.message, "err"); }
+}
+
+async function loadCustomConf(){
+  const d = await api("/api/custom-conf");
+  if (document.activeElement !== $("custom-conf")) $("custom-conf").value = d.content || "";
+}
+
+async function saveCustomConf(){
+  try {
+    await post("/api/custom-conf", {content: $("custom-conf").value});
+    banner($("set-msg"), "已保存，重启数据库后生效", "warn");
+  } catch(e){ banner($("set-msg"), e.message, "err"); }
+}
+
+// ---- 日志 --------------------------------------------------------------
+
+let logSrc = "pg";
+
+async function loadLogs(){
+  try {
+    const d = await api("/api/logs?lines=400&src=" + logSrc);
+    const box = $("log-box");
+    const atBottom = box.scrollTop + box.clientHeight >= box.scrollHeight - 30;
+    box.textContent = (d.lines || []).join("\n") || "（暂无日志）";
+    if (atBottom) box.scrollTop = box.scrollHeight;
+  } catch(e){
+    $("log-box").textContent = e.message;
+  }
+}
+
+// ---- 轮询与初始化 ------------------------------------------------------
+
+let timer = null;
+
+function startPolling(){
+  stopPolling();
+  timer = setInterval(function(){
+    loadStatus().catch(function(){});
+    loadLogs().catch(function(){});
+  }, 5000);
+}
+
+function stopPolling(){
+  if (timer){ clearInterval(timer); timer = null; }
+}
+
+function refreshAll(){
+  // 每一步单独 try/catch：一步挂掉不能拖垮后面的。
+  // 这个坑真踩过 —— init 里前面一个函数抛异常，后面的初始化全不执行，
+  // 表现成完全不相干的功能"点了没反应"。
+  const steps = [
+    ["me", loadMe], ["status", loadStatus], ["connection", loadConnection],
+    ["databases", loadDatabases], ["backups", loadBackups],
+    ["custom-conf", loadCustomConf], ["logs", loadLogs]
+  ];
+  steps.forEach(function(pair){
+    try {
+      const p = pair[1]();
+      if (p && p.catch) p.catch(function(e){ console.error(pair[0], e); });
+    } catch(e){ console.error(pair[0], e); }
+  });
+}
+
+function bind(id, ev, fn){
+  const el = $(id);
+  if (!el){ console.error("页面上没有 id=" + id + " 的元素"); return; }
+  el.addEventListener(ev, fn);
+}
+
+async function boot(){
+  try {
+    ugToken = await fetchUgToken();
+  } catch(e){
+    // 拿不到 token 也先试一把请求：万一这条路本来就能通（比如网关认了桌面会话），
+    // 就不该拿"没拿到 token"把用户挡在外面。真不通的话下面那个 /api/me 会告诉我们。
+    console.error("getThirdToken 失败", e);
+  }
+  try {
+    await api("/api/me");
+    showApp();
+  } catch(e){
+    // api() 在 401/403 时已经调过 showGate 了，这里兜住其它错误（比如网络不通）。
+    showGate(e.message);
+  }
+}
+
+function init(){
+  bind("gate-retry", "click", boot);
+
+  bind("btn-start", "click", function(){ post("/api/server",{action:"start"}).then(loadStatus); });
+  bind("btn-stop", "click", function(){ post("/api/server",{action:"stop"}).then(loadStatus); });
+  bind("btn-restart", "click", function(){ post("/api/server",{action:"restart"}).then(loadStatus); });
+
+  bind("btn-show-pw", "click", function(){ pwVisible = !pwVisible; renderConnection(); });
+  bind("btn-copy-uri", "click", function(){
+    if (!conn) return;
+    const uri = "postgresql://" + conn.user + ":" + conn.password + "@" +
+                (location.hostname || "NAS-IP") + ":" + conn.port + "/" + conn.database;
+    copyText(uri).then(function(){
+      $("btn-copy-uri").textContent = "已复制";
+      setTimeout(function(){ $("btn-copy-uri").textContent = "复制连接串"; }, 1500);
+    }).catch(function(e){
+      // 【不能用 alert 兜底】：内嵌窗口里它同样被拦掉，用户会以为"点了没反应"。
+      // 复制失败时把连接串写进页面，用户至少能自己选中。
+      banner($("conn-msg"), e.message + "：" + uri, "err");
+    });
+  });
+
+  bind("btn-db-create", "click", createDatabase);
+  bind("btn-migrate", "click", startMigrate);
+  bind("btn-reinit", "click", doReinit);
+  bind("btn-backup", "click", createBackup);
+  bind("backup-file", "change", function(e){
+    uploadBackup(e.target.files && e.target.files[0]);
+    e.target.value = "";
+  });
+
+  bind("btn-save-settings", "click", saveSettings);
+  bind("btn-dbpw", "click", changeDbPassword);
+  bind("btn-save-conf", "click", saveCustomConf);
+
+  bind("tab-pg", "click", function(){
+    logSrc = "pg"; $("tab-pg").classList.add("sel"); $("tab-app").classList.remove("sel"); loadLogs();
+  });
+  bind("tab-app", "click", function(){
+    logSrc = "app"; $("tab-app").classList.add("sel"); $("tab-pg").classList.remove("sel"); loadLogs();
+  });
+  bind("btn-log-refresh", "click", loadLogs);
+
+  boot();
+}
+
+document.addEventListener("DOMContentLoaded", init);
+</script>
+</body>
+</html>

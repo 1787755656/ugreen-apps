@@ -1,0 +1,146 @@
+# ============================================================
+# PostgreSQL 17 —— UGOS Pro 原生应用配置
+#
+# 二进制来自 PostgreSQL 官方 Debian 仓库（apt.postgresql.org，pgdg），
+# 由 scripts/fetch-runtime.py 连同整条依赖闭包（含 glibc 与 ld.so）一起打进包里。
+# start_cmd 指向自研的 Go 管理壳，由它负责 initdb、守护 postgres 进程，
+# 并在 port 上提供管理页（绿联要求这个端口必须提供 HTTP 服务）。
+# ============================================================
+
+spec_version: "2.1"
+
+app_id: com.personal.postgresql17
+
+# 版本号跟随 PostgreSQL 大版本 + 本应用自身的迭代次数。
+# 注意 ugcli 对中段(minor)有"最多两位数"的隐藏限制，所以不能直接写 17.10.x。
+version: 1.0.0
+
+support_arch:
+  - amd64
+  - arm64
+
+supports:
+  - pc
+
+# 启动命令：Go 管理壳。--port 必须和下面的 port 一致。
+start_cmd: bin/launcher --port=25432
+
+# 管理壳的 HTTP 端口。
+# 【这不是数据库端口】—— PostgreSQL 默认跑在 5432，可以在管理页里改。
+# 系统用这个端口探活，网关也把 /api 反代到这里。
+# 注意管理壳【只监听 127.0.0.1】：鉴权完全依赖网关注入的用户身份，
+# 必须让同机网关成为唯一入口，否则局域网上任何设备都能伪造那几个头。
+port: 25432
+
+# 在绿联云桌面内以独立窗口打开。
+# 【使用系统登录认证能力的前提就是 inner】：只有这种方式下前端才能通过 JSSDK
+# 拿到 third_token，网关也才会做鉴权并注入 Ugreen-User-* 请求头。
+open_type: inner
+
+# 需要网关代理（并鉴权）的请求路径前缀。
+# 前端所有 /api/** 的请求都会被网关校验登录态后转发到上面的 port。
+# 注意【网关转发时不剥离这个前缀】，所以后端路由就注册成 /api/xxx。
+proxy_path: api
+
+# 数据库管理属于系统级操作，只给管理员。
+# 【谁能进完全由平台这一项决定】——后端不再自己判断是不是管理员：
+# 真机上 Ugreen-User-Type 对"管理员用户组"的成员返回的并不是文档写的 admin，
+# 按那个字段硬拦会把合法用户挡在外面。后端只确认请求确实经过了网关鉴权。
+only_admin: true
+
+tag_types:
+  - utility
+
+depend_fw_version: 1.13.0.0000
+
+# 允许用户额外授权目录。数据库默认就落在应用数据目录里，不选也能装；
+# 但数据库是会长大的，NAS 的系统盘往往不大，所以要给用户一条搬到数据卷上的路。
+allow_add_access_path: true
+
+support_migration: true
+
+# 数据保存目录。
+#
+# type: path 参数一次办两件事：在安装/设置弹窗里渲染文件夹选择器，并把选中的
+# 目录记进 path_permissions（from_type=1）→ 生成 systemd unit 的 BindPaths=
+# → 沙箱里直接读写得到，不用再去「访问路径」里补一遍。
+#
+# ⚠ 全新安装的【首次启动】读到的值一定是空的：平台先起服务，2~3 秒后才把值
+#   写进 init.d/<appid>.env，而那个文件是 root:root 0640，应用自己读不到。
+#   所以管理壳的策略是：初始化那一刻定下落点并写进自己的 config.json，
+#   此后只认配置、绝不跟着环境变量漂移（漂移的后果是"数据库突然变空"）。
+#   参数后来改了，管理页上会出现一张「迁移数据目录」的卡片，由人点一次才搬。
+parameters:
+  - key: POSTGRES_DATA_DIR
+    type: path
+    multi: false
+    changeable: true
+    i18n:
+      zh-CN:
+        name: 数据保存目录
+        description: >-
+          选择存放数据库文件的共享文件夹，选好即完成授权。数据会存到该目录下的
+          postgresql17-data 子目录。留空也能安装，数据存到应用数据目录。
+          安装后再改这一项的话，打开应用会出现「迁移数据目录」的卡片，
+          点一次即可自动停库、复制、校验并在新位置启动。
+      en-US:
+        name: Data directory
+        description: >-
+          Pick the shared folder for the database files; choosing it also
+          grants access. Data goes into a postgresql17-data subfolder there.
+          May be left empty — data then lives in the app data directory.
+          Changing it after installation makes a "migrate data directory"
+          card appear in the app: one click stops the server, copies and
+          verifies the data, and brings it back up in the new location.
+
+# 只要这一个权限：
+#   SYSTEM.EXEC_SYSTEM_COMMAND —— 管理壳要 fork postgres 子进程；更关键的是
+#   initdb 内部会用 popen() 起 "postgres --single" 来做 bootstrap，
+#   而 popen 需要 /bin/sh，沙箱里只有声明了这个权限才会把 /bin 挂进来。
+#
+# 【不要】声明 NETWORK.ACCESS_INTERNET：那是给"主动访问互联网"用的，
+# 数据库只是被动监听端口，不需要它。权限画像越干净越好。
+permissions:
+  - SYSTEM.EXEC_SYSTEM_COMMAND
+
+license_agreement_link:
+  - https://www.postgresql.org/about/licence/
+source_code_link:
+  - https://git.postgresql.org/gitweb/?p=postgresql.git
+technical_support_link:
+  - https://www.postgresql.org/docs/17/index.html
+
+i18n:
+  zh-CN:
+    name: PostgreSQL 17
+    description: >-
+      PostgreSQL 17 数据库服务器，开箱即用。自带 psql / pg_dump / pg_restore
+      等命令行工具和全套 contrib 扩展（pg_trgm、hstore、uuid-ossp、
+      pg_stat_statements、postgres_fdw 等 200 余个）。
+      提供网页管理界面：查看连接信息、新建/删除数据库、创建专用账号、
+      一键备份与还原、查看运行日志、修改端口与访问范围。
+      安装后打开应用即可看到连接信息，可直接填进 Immich、n8n、Home Assistant
+      这类需要 PostgreSQL 的应用。
+      管理界面直接使用绿联云的账号体系，无需另设密码，仅管理员可进入。
+      注意：同一台 NAS 上的其它应用连接数据库时请填 127.0.0.1
+      （沙箱内解析不了 localhost）。
+    author: PostgreSQL Global Development Group
+    official: https://www.postgresql.org
+    help: https://www.postgresql.org/docs/17/index.html
+    publisher: 穿斯帕沃特
+  en-US:
+    name: PostgreSQL 17
+    description: >-
+      PostgreSQL 17 database server, ready to use. Ships with psql, pg_dump,
+      pg_restore and the full set of contrib extensions (pg_trgm, hstore,
+      uuid-ossp, pg_stat_statements, postgres_fdw and 200+ more).
+      A web console lets you view connection details, create and drop
+      databases, create dedicated roles, back up and restore, read the server
+      log, and change the port and access scope.
+      The console uses your UGOS account — no separate password, admins only.
+      Other apps on the same NAS should connect to 127.0.0.1;
+      the sandbox cannot resolve the name "localhost".
+    author: PostgreSQL Global Development Group
+    official: https://www.postgresql.org
+    help: https://www.postgresql.org/docs/17/index.html
+    publisher: 穿斯帕沃特

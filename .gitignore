@@ -58,3 +58,8 @@ apps/mariadb/com.personal.mariadb/rootfs_common/www/
 # MariaDB build.sh 的本地缓存（Go 工具链 + deb 下载缓存；CI 上同样落在脚本旁，
 # runner 一次性用完即弃）。
 scripts/apps/mariadb/.build-cache/
+
+# redis / postgresql 的 build.sh 本地缓存（同上：Go 工具链 + deb 下载缓存）。
+# 两应用的管理页前端是直接提交的静态文件，无需 ignore。
+scripts/apps/redis/.build-cache/
+scripts/apps/postgresql/.build-cache/

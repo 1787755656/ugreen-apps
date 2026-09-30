@@ -1,0 +1,162 @@
+# ============================================================
+# Redis 8 —— UGOS Pro 原生应用配置
+#
+# 二进制来自 Redis 官方 apt 仓库（packages.redis.io/deb，bookworm 分支），
+# 由 scripts/fetch-runtime.py 连同整条依赖闭包（含 glibc 与 ld.so）一起打进包里。
+# start_cmd 指向自研的 Go 管理壳，由它生成 redis.conf、守护 redis-server 进程，
+# 并在 port 上提供管理页（绿联要求这个端口必须提供 HTTP 服务）。
+# ============================================================
+
+spec_version: "2.1"
+
+app_id: com.personal.redis
+
+# 版本号跟随 Redis 大版本 + 本应用自身的迭代次数。
+# 注意 ugcli 对中段(minor)有"最多两位数"的隐藏限制，所以不能直接写 8.10.0。
+version: 8.10.0
+
+support_arch:
+  - amd64
+  - arm64
+
+# 只声明 pc。
+# 管理页依赖 JSSDK 的 getThirdToken 拿登录 token，而 inner 应用在手机上是
+# 跳转手机浏览器打开的，那里没有桥接对象 —— 声明支持 app 等于承诺一个
+# 实际上用不了的入口。
+supports:
+  - pc
+
+# 启动命令：Go 管理壳。--port 必须和下面的 port 一致。
+start_cmd: bin/launcher --port=26379
+
+# 管理页的 HTTP 端口。
+# 【这不是 Redis 端口】—— Redis 跑在 16379（不是上游的 6379，因为
+#   UGOS 系统自己就占着 6379），可以在管理页里改。
+# 系统用这个端口探活，网关也把 /api 反代到这里。
+# 注意管理壳【只监听 127.0.0.1】：鉴权完全依赖网关注入的用户身份，
+# 必须让同机网关成为唯一入口，否则局域网上任何设备都能伪造那几个头。
+port: 26379
+
+# 在绿联云桌面内以独立窗口打开。
+# 【使用系统登录认证能力的前提就是 inner】：只有这种方式下前端才能通过 JSSDK
+# 拿到 third_token，网关也才会做鉴权并注入 Ugreen-User-* 请求头。
+open_type: inner
+
+# 需要网关代理（并鉴权）的请求路径前缀。
+# 前端所有 /api/** 的请求都会被网关校验登录态后转发到上面的 port。
+# 注意【网关转发时不剥离这个前缀】，所以后端路由就注册成 /api/xxx。
+proxy_path: api
+
+# 管理页上会明文显示 Redis 密码，还能直接执行命令，只给管理员。
+# 【谁能进完全由平台这一项决定】——后端不再自己判断是不是管理员：
+# 真机上 Ugreen-User-Type 对"管理员用户组"的成员返回的并不是文档写的 admin，
+# 按那个字段硬拦会把合法用户挡在外面。后端只确认请求确实经过了网关鉴权。
+only_admin: true
+
+tag_types:
+  - utility
+
+depend_fw_version: 1.13.0.0000
+
+# 允许用户额外授权目录。数据默认就落在应用数据目录里，不选也能装；
+# 但 NAS 的系统盘往往不大，要给用户一条把数据搬到数据卷上的路。
+allow_add_access_path: true
+
+support_migration: true
+
+# 数据保存目录。
+#
+# type: path 参数一次办两件事：在安装/设置弹窗里渲染文件夹选择器，并把选中的
+# 目录记进 path_permissions（from_type=1）→ 生成 systemd unit 的 BindPaths=
+# → 沙箱里直接读写得到，不用再去「访问路径」里补一遍。
+#
+# ⚠ 全新安装的【首次启动】读到的值一定是空的：平台先起服务，2~3 秒后才把值
+#   写进 init.d/<appid>.env，而那个文件是 root:root 0640，应用自己读不到。
+#   所以管理壳的策略是：初始化那一刻定下落点并写进自己的 config.json，
+#   此后只认配置、绝不跟着环境变量漂移（漂移的后果是"数据突然没了"）。
+#   参数后来改了，管理页上会出现一张「迁移数据目录」的卡片，由人点一次才搬。
+parameters:
+  - key: REDIS_DATA_DIR
+    type: path
+    multi: false
+    changeable: true
+    i18n:
+      zh-CN:
+        name: 数据保存目录
+        description: >-
+          选择存放 Redis 数据文件（dump.rdb / AOF）的共享文件夹，选好即完成授权。
+          数据会存到该目录下的 redis-data 子目录。留空也能安装，数据存到应用数据目录。
+          安装后再改这一项的话，打开应用会出现「迁移数据目录」的卡片，
+          点一次即可自动停服、复制、校验并在新位置启动。
+      en-US:
+        name: Data directory
+        description: >-
+          Pick the shared folder for the Redis data files (dump.rdb / AOF);
+          choosing it also grants access. Data goes into a redis-data subfolder
+          there. May be left empty — data then lives in the app data directory.
+          Changing it after installation makes a "migrate data directory" card
+          appear in the app: one click stops the server, copies and verifies
+          the data, and brings it back up in the new location.
+
+# 【一个权限都不要】。2026-08-09 在真机上验过了。
+#
+# 直觉上"管理壳要 fork redis-server 子进程"就该声明 SYSTEM.EXEC_SYSTEM_COMMAND，
+# 但那条权限的实际作用只是往 unit 里加四行
+# BindReadOnlyPaths=/bin /sbin /usr/bin /usr/sbin —— 沙箱里【没有任何 seccomp】
+# （systemctl cat 出来的 unit 里没有 SystemCallFilter），execve 本身不受限制。
+# 而我们 exec 的是包内自带的 loader（绝对路径，在 BindReadOnlyPaths 的安装目录里），
+# 一步都不碰 /bin。
+#
+# 验法：用 systemd-run 复刻真实 unit 的全部沙箱属性、【只去掉那四行】，
+# 跑同一个 launcher —— redis-server 照常起来、照常监听、照常应答。
+# （PostgreSQL 那个应用不一样，它的 initdb 会 popen 一条 sh 命令，是真的要 /bin。）
+#
+# 也【不要】声明 NETWORK.ACCESS_INTERNET：那是给"主动访问互联网"用的，
+# Redis 只是被动监听端口，不需要它。
+permissions: []
+
+license_agreement_link:
+  - https://github.com/redis/redis/blob/unstable/LICENSE.txt
+source_code_link:
+  - https://github.com/redis/redis
+technical_support_link:
+  - https://redis.io/docs/latest/
+
+i18n:
+  zh-CN:
+    name: Redis
+    description: >-
+      Redis 8 内存数据库，开箱即用。可以给 NAS 上的其它应用
+      （Nextcloud、n8n、Immich、各种自建服务）当缓存、会话存储或消息队列，
+      也能给局域网里的客户端用。自带 Redis 8 官方发行版的四个模块：
+      JSON、搜索、时序、布隆过滤器（可在管理页里关掉以节省内存）。
+      提供网页管理界面：查看运行状态与内存占用、连接信息、命中率与各库键数、
+      直接执行 Redis 命令、一键备份与还原、查看运行日志、修改端口与访问范围。
+      默认【只监听本机】并强制设置随机密码 —— 要让局域网连接请在管理页里打开。
+      管理界面直接使用绿联云的账号体系，无需另设密码，仅管理员可进入。
+      注意：同一台 NAS 上的其它应用连接时请填 127.0.0.1
+      （沙箱内解析不了 localhost）。
+    author: Redis Ltd.
+    official: https://redis.io
+    help: https://redis.io/docs/latest/
+    publisher: 穿斯帕沃特
+  en-US:
+    name: Redis
+    description: >-
+      Redis 8 in-memory database, ready to use. Serves as a cache, session
+      store or message queue for the other apps on your NAS (Nextcloud, n8n,
+      Immich and friends) or for clients on your LAN. Ships with the four
+      modules from the official Redis 8 distribution — JSON, Search,
+      Time Series and Bloom — which can be switched off to save memory.
+      A web console shows status, memory use, connection details, hit rate and
+      per-database key counts, runs Redis commands, backs up and restores,
+      reads the log, and changes the port and access scope.
+      Listens on loopback only by default and always sets a random password;
+      LAN access is one click away in the console.
+      The console uses your UGOS account — no separate password, admins only.
+      Other apps on the same NAS should connect to 127.0.0.1;
+      the sandbox cannot resolve the name "localhost".
+    author: Redis Ltd.
+    official: https://redis.io
+    help: https://redis.io/docs/latest/
+    publisher: 穿斯帕沃特
