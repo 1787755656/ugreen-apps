@@ -130,7 +130,7 @@
       },
       "service_port": 28190,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/fastnet/com.koolcenter.fastnet/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 1,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -268,7 +268,7 @@
       },
       "service_port": 23020,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/magicpush/com.magiccode.magicpush/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 1,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -302,17 +302,17 @@
     {
       "appname": "com.natfrp.launcher",
       "display_name": "SakuraFrp (natfrp-service)",
-      "description": "樱花 FRP（SakuraFrp）内网穿透客户端，自带本地 Web UI 管理界面。 通过樱花 FRP 隧道将 NAS 服务映射到公网访问。 Web UI 默认密码为 admin，请在首次登录后及时修改。",
+      "description": "樱花 FRP（SakuraFrp）内网穿透客户端，带应用内管理窗口：在应用里就能设置访问密钥、 Web UI 密码，查看隧道列表并控制哪些隧道在本机开机自启，以及开关远程管理， 无需手动记 IP 或改 https。通过樱花 FRP 隧道将 NAS 服务映射到公网访问。",
       "homepage_url": "https://www.natfrp.com",
-      "updated_at": "2026-09-29",
+      "updated_at": "2026-09-30",
       "version": "2026.7.18",
-      "upk_version": "2026.7.18.0003",
-      "release_tag": "natfrp/v2026.7.18-r7",
+      "upk_version": "2026.7.18.0004",
+      "release_tag": "natfrp/v2026.7.18-r8",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/natfrp/v2026.7.18-r7/amd64_nasync_com.natfrp.launcher_2026.7.18.0003.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/natfrp/v2026.7.18-r7/arm64_nasync_com.natfrp.launcher_2026.7.18.0003.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/natfrp/v2026.7.18-r8/amd64_nasync_com.natfrp.launcher_2026.7.18.0004.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/natfrp/v2026.7.18-r8/arm64_nasync_com.natfrp.launcher_2026.7.18.0004.upk"
       },
-      "service_port": 7102,
+      "service_port": 7101,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/natfrp/com.natfrp.launcher/rootfs_common/icon.png",
       "download_count": 0,
       "app_type": "native",
@@ -511,13 +511,13 @@
       "display_name": "Sub2API",
       "description": "AI 接口中转站（API Gateway）。把你的各大 LLM 服务商 key 统一管起来， 通过一个 OpenAI 兼容的地址对外提供接入，内置用量统计、配额限制、 多用户管理、WebAuthn 登录等。自带管理界面与账号体系。 需要本机已安装 PostgreSQL 15+ 与 Redis 7+。首次启动请在浏览器中完成初始化向导。",
       "homepage_url": "https://github.com/Wei-Shaw/sub2api",
-      "updated_at": "2026-09-29",
-      "version": "0.2.10",
-      "upk_version": "0.2.10.0004",
-      "release_tag": "sub2api/v0.2.10-r1",
+      "updated_at": "2026-09-30",
+      "version": "0.2.11",
+      "upk_version": "0.2.11.0005",
+      "release_tag": "sub2api/v0.2.11",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/sub2api/v0.2.10-r1/amd64_nasync_com.personal.sub2api_0.2.10.0004.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/sub2api/v0.2.10-r1/arm64_nasync_com.personal.sub2api_0.2.10.0004.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/sub2api/v0.2.11/amd64_nasync_com.personal.sub2api_0.2.11.0005.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/sub2api/v0.2.11/arm64_nasync_com.personal.sub2api_0.2.11.0005.upk"
       },
       "service_port": 25435,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/sub2api/com.personal.sub2api/rootfs_common/icon.png",
