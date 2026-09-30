@@ -300,6 +300,29 @@
       ]
     },
     {
+      "appname": "com.personal.mariadb",
+      "display_name": "MariaDB",
+      "description": "MariaDB 11.4 LTS —— 开源关系型数据库的绿联原生应用版本， 为 NAS 上的其它应用（Halo、WordPress、Nextcloud 等）或局域网里的客户端 提供兼容 MySQL 的数据库服务。自带的管理页面用来查看运行状态与连接信息、 修改 root 密码；日常的建库建表请用你惯用的客户端 （Navicat、DBeaver、phpMyAdmin 等）。 运行库全部随包携带，不会往系统里装任何东西。",
+      "homepage_url": "https://mariadb.org",
+      "updated_at": "2026-09-30",
+      "version": "11.4.12",
+      "upk_version": "11.4.12.0001",
+      "release_tag": "mariadb/v11.4.12",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/mariadb/v11.4.12/amd64_nasync_com.personal.mariadb_11.4.12.0001.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/mariadb/v11.4.12/arm64_nasync_com.personal.mariadb_11.4.12.0001.upk"
+      },
+      "service_port": 23306,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/mariadb/com.personal.mariadb/rootfs_common/icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "system",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ]
+    },
+    {
       "appname": "com.metatube.server",
       "display_name": "MetaTube",
       "description": "影视媒体库的元数据刮削 API 服务，作为 Emby / Jellyfin 的元数据后端使用 （需在 Emby/Jellyfin 中安装 MetaTube 插件对接）。提供 RESTful API， 内置 20+ 数据源；本服务为后台 API，无独立操作界面。",
@@ -337,7 +360,7 @@
       },
       "service_port": 7101,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/natfrp/com.natfrp.launcher/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 1,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -498,7 +521,7 @@
       },
       "service_port": 21166,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/randomvideo/com.personal.randomvideo/rootfs_common/icon.png",
-      "download_count": 4,
+      "download_count": 5,
       "app_type": "native",
       "category": "media",
       "platforms": [
