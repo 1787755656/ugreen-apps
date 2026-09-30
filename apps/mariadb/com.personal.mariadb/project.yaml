@@ -1,0 +1,147 @@
+# ============================================================
+# MariaDB — UGOS Pro 原生应用配置
+#
+# 基于 MariaDB 11.4 LTS（官方 Debian 12 的 deb 包解出来重新组装）。
+# 包内自带【含 glibc 和 ld.so 在内】的完整运行库闭包 ——
+# 原生沙箱的根目录只有 8 项、/usr 根本不存在，不能指望沙箱里的系统库。
+#
+# 启动的不是 mariadbd 本身而是一个 Go 管理壳，原因见 launcher/main.go 顶部注释：
+# 平台要一个 HTTP 端口来探活，而 MariaDB 说的是 MySQL 协议。
+# ============================================================
+
+spec_version: "2.1"
+
+app_id: com.personal.mariadb
+
+# 版本号跟随上游 MariaDB（打包时 --build 追加构建号）。
+# 注意 ugcli 对 version 有个隐藏校验：中段最多两位数 —— 11.4.x 满足。
+version: 11.4.12
+
+support_arch:
+  - amd64
+  - arm64
+
+# 只声明 pc。
+# 管理页面依赖 JSSDK 的 getThirdToken 拿登录 token，而 inner 应用在手机上是
+# 跳转手机浏览器打开的，那里没有桥接对象 —— 声明支持 app 等于承诺一个
+# 实际上用不了的入口。
+supports:
+  - pc
+
+# 启动的是管理壳，不是 mariadbd。--port 必须与下面的 port 一致。
+start_cmd: bin/mariadb-launcher --port=23306
+
+# 管理页面的 HTTP 端口，平台靠它探测应用是否起来了。
+# 【这不是数据库端口】—— MySQL 协议端口默认 3306，在管理页里改。
+port: 23306
+
+# inner + proxy_path 是接入 UGOS「登录认证」能力的前提条件（官方文档
+# backend/system-capabilities/login-auth）：网关校验完登录态后，会把
+# Ugreen-User-ID / Ugreen-User-Name / Ugreen-User-Type 注入请求头再转发给后端。
+# 管理页面上会明文显示数据库 root 密码，所以后端要求两道闸都过：
+# 请求必须来自 NAS 本机、且带着网关注入的用户身份（Ugreen-User-ID）。
+# ⚠【不要】拿 Ugreen-User-Type == admin 做硬拦 —— 这个字段的取值和文档
+#   对不上（真机上「管理员用户组」的账号拿到的不是 admin），详见 launcher/auth.go。
+#
+# ⚠ 光有这两行【不够】。真机实测 inner 应用的声明端口在局域网上直接可达，
+#   谁都能绕开网关直连并伪造那几个头。所以后端还有一道闸：请求源地址必须是
+#   NAS 本机（网关同机，源 IP 必然是本机的；局域网上的机器必然不是）。
+#   改 open_type 之前，务必先读 launcher/auth.go 顶部那段。
+open_type: inner
+
+# 网关转发时不会剥掉这个前缀，所以后端路由注册的就是 /api/xxx。
+proxy_path: api
+
+# 只有管理员能看到/打开这个应用。
+#
+# 「限制成管理员」这件事【由平台管，不由后端判断】：网关注入的
+# Ugreen-User-Type 的取值和文档对不上（真机上属于「管理员用户组」的账号
+# 拿到的并不是 admin），后端拿它硬拦会把合法管理员挡在门外。详见 launcher/auth.go。
+#
+# 注意 only_admin 管的是桌面图标对谁显示、谁能打开，它【挡不住端口】——
+# 端口那一侧靠 auth.go 里"请求必须来自 NAS 本机"那道闸。
+only_admin: true
+
+tag_types:
+  - utility
+
+depend_fw_version: 1.13.0.0000
+
+allow_add_access_path: true
+
+support_migration: true
+
+# 数据库的数据目录。
+#
+# type: path 参数一次办两件事：在安装/设置弹窗里渲染文件夹选择器，
+# 并把选中的目录记进 path_permissions（from_type=1）→ 生成 systemd unit 的
+# BindPaths= → 沙箱里直接读写得到，不用再去「访问路径」补一遍。
+#
+# 留空也能装：数据落在应用数据目录。数据库体积会长，建议还是指定一个数据卷。
+#
+# ⚠ 全新安装的【首次启动】读到的参数是空的 —— 平台先起服务、2~3 秒后才写
+#   .env 和授权目录。所以管理壳的策略是：初始化那一刻定下数据目录并写进自己的
+#   配置文件，此后只认配置、不再跟着环境变量漂移；参数后来改了只在管理页提示，
+#   绝不自动搬数据。（数据库目录漂移的后果是"数据库突然变空"，必须杜绝。）
+parameters:
+  - key: MARIADB_DATA_DIR
+    type: path
+    multi: false
+    changeable: true
+    i18n:
+      zh-CN:
+        name: 数据保存目录
+        description: >-
+          选择存放数据库文件的共享文件夹，选好即完成授权。数据会存到该目录下的
+          mariadb-data 子目录。留空也能安装，数据存到应用数据目录。
+          注意：这个目录只在【首次初始化】时生效，之后更换需要手动迁移数据。
+      en-US:
+        name: Data directory
+        description: >-
+          Pick the shared folder for the database files; choosing it also
+          grants access. Data goes into a mariadb-data subfolder there.
+          May be left empty — data then lives in the app data directory.
+          Note: this only takes effect on first initialisation; changing it
+          later requires migrating the data by hand.
+
+# 只需要执行子进程的权限：管理壳要 fork mariadbd。
+# 【不声明 NETWORK.ACCESS_INTERNET】—— 数据库只对内提供服务，不访问外网。
+# 沙箱对局域网/loopback 的收发本来就放行，那个权限管的是"互联网"。
+permissions:
+  - SYSTEM.EXEC_SYSTEM_COMMAND
+
+license_agreement_link:
+  - https://github.com/MariaDB/server/blob/11.4/COPYING
+source_code_link:
+  - https://github.com/MariaDB/server/tree/11.4
+technical_support_link:
+  - https://mariadb.com/kb/en/
+
+i18n:
+  en-US:
+    name: MariaDB
+    description: >-
+      MariaDB 11.4 LTS — the open-source relational database, packaged as a
+      native UGOS app. Provides a MySQL-compatible server for the other apps
+      on your NAS (Halo, WordPress, Nextcloud …) or for clients on your LAN.
+      The bundled admin page shows the service status and connection details
+      and lets you change the root password; day-to-day database work is done
+      with your usual client (Navicat, DBeaver, phpMyAdmin …).
+      All runtime libraries are bundled, so nothing is installed system-wide.
+    author: MariaDB Foundation
+    official: https://mariadb.org/
+    help: https://mariadb.com/kb/en/
+    publisher: 穿斯帕沃特
+  zh-CN:
+    name: MariaDB
+    description: >-
+      MariaDB 11.4 LTS —— 开源关系型数据库的绿联原生应用版本，
+      为 NAS 上的其它应用（Halo、WordPress、Nextcloud 等）或局域网里的客户端
+      提供兼容 MySQL 的数据库服务。自带的管理页面用来查看运行状态与连接信息、
+      修改 root 密码；日常的建库建表请用你惯用的客户端
+      （Navicat、DBeaver、phpMyAdmin 等）。
+      运行库全部随包携带，不会往系统里装任何东西。
+    author: MariaDB Foundation
+    official: https://mariadb.org/
+    help: https://mariadb.com/kb/en/
+    publisher: 穿斯帕沃特

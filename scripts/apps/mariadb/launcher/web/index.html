@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MariaDB</title>
+<style>
+  :root {
+    --bg: #f5f6f8; --card: #fff; --line: #e3e6ea; --text: #1f2329;
+    --muted: #6b7280; --accent: #1a73e8; --ok: #16a34a; --warn: #b45309;
+    --warn-bg: #fef6e7; --err: #dc2626;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 14px/1.6 -apple-system, BlinkMacSystemFont, "PingFang SC",
+          "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+  }
+  .wrap { max-width: 780px; margin: 0 auto; padding: 20px 16px 64px; }
+  h1 { font-size: 20px; margin: 4px 0 18px; display: flex; align-items: center; gap: 10px; }
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+    padding: 16px 18px; margin-bottom: 14px;
+  }
+  .card h2 { font-size: 15px; margin: 0 0 12px; font-weight: 600; }
+  .row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .row + .row { margin-top: 10px; }
+  label.f { min-width: 86px; color: var(--muted); }
+  input[type=text], input[type=number], input[type=password] {
+    flex: 1; min-width: 0; padding: 7px 10px; border: 1px solid var(--line);
+    border-radius: 6px; font: inherit; background: #fff; color: var(--text);
+  }
+  input:disabled { background: #f2f3f5; color: var(--muted); }
+  button {
+    padding: 7px 14px; border: 1px solid var(--line); border-radius: 6px;
+    background: #fff; color: var(--text); font: inherit; cursor: pointer;
+  }
+  button:hover:not(:disabled) { border-color: #c3c8d0; }
+  button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  button.primary:hover:not(:disabled) { background: #1666d0; }
+  button:disabled { opacity: .5; cursor: not-allowed; }
+  .pill {
+    display: inline-flex; align-items: center; gap: 6px; padding: 2px 10px;
+    border-radius: 999px; font-size: 13px; background: #eef0f3; color: var(--muted);
+  }
+  .pill .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+  .pill.running { background: #e7f6ec; color: var(--ok); }
+  .pill.failed  { background: #fdeaea; color: var(--err); }
+  .pill.busy, .pill.starting { background: var(--warn-bg); color: var(--warn); }
+  .mono {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 13px; word-break: break-all;
+  }
+  .kv { display: grid; grid-template-columns: 86px 1fr auto; gap: 8px 10px; align-items: center; }
+  .kv .k { color: var(--muted); }
+  .warn {
+    background: var(--warn-bg); border: 1px solid #f3d9a4; color: #7c4a03;
+    border-radius: 8px; padding: 10px 12px; margin-bottom: 10px;
+  }
+  .msg { margin-top: 10px; padding: 9px 12px; border-radius: 6px; display: none; }
+  .msg.show { display: block; }
+  .msg.ok { background: #e7f6ec; color: #14532d; }
+  .msg.err { background: #fdeaea; color: #7f1d1d; }
+  .hint { color: var(--muted); font-size: 13px; margin-top: 8px; }
+  pre.log {
+    background: #1f2329; color: #d7dae0; border-radius: 8px; padding: 12px;
+    max-height: 340px; overflow: auto; font-size: 12px; line-height: 1.5;
+    white-space: pre-wrap; word-break: break-all; margin: 0;
+  }
+  .switch { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>MariaDB <span id="state-pill" class="pill"><span class="dot"></span><span id="state-text">加载中</span></span></h1>
+
+  <div id="warnings"></div>
+
+  <div class="card">
+    <h2>服务</h2>
+    <div class="kv">
+      <span class="k">版本</span><span class="mono" id="version">—</span><span></span>
+      <span class="k">数据目录</span><span class="mono" id="datadir">—</span><span></span>
+      <span class="k">Socket</span><span class="mono" id="socket">—</span><span></span>
+    </div>
+    <div class="row" style="margin-top:14px">
+      <button id="btn-start">启动</button>
+      <button id="btn-stop">停止</button>
+      <button id="btn-restart">重启</button>
+      <button id="btn-refresh">刷新</button>
+    </div>
+    <div id="msg-service" class="msg"></div>
+  </div>
+
+  <!-- 迁移数据目录。整张卡片默认隐藏，只有安装参数指向的位置和当前数据目录
+       不一致时才出现（后端的 status.migrate_to 非空即表示这种情况）。 -->
+  <div class="card" id="card-migrate" style="display:none">
+    <h2>数据目录</h2>
+    <div class="kv">
+      <span class="k">当前位置</span><span class="mono" id="mig-from">—</span><span></span>
+      <span class="k">将迁移到</span><span class="mono" id="mig-to">—</span><span></span>
+    </div>
+    <div class="row" style="margin-top:14px">
+      <button id="btn-migrate" class="primary">迁移数据目录</button>
+    </div>
+    <div class="hint">
+      安装参数里的数据目录和数据库实际所在位置不一致。点上面的按钮把数据搬过去：
+      会短暂停止数据库 → 复制 → 逐项核对文件数和字节数 → 校验通过后才切换 →
+      在新位置启动。数据量大时可能要几分钟，期间别关页面。
+      <br>
+      中途任何一步失败都不会动到原数据，数据库仍会在原位置启动。
+      迁移成功后旧数据也会保留（目录名加 <code>.migrated-</code> 时间戳后缀），
+      确认新位置一切正常后可以手动删除。
+    </div>
+    <div id="msg-migrate" class="msg"></div>
+  </div>
+
+  <div class="card">
+    <h2>连接信息</h2>
+    <div class="kv">
+      <span class="k">主机</span><span class="mono" id="conn-host">—</span>
+      <button data-copy="conn-host">复制</button>
+      <span class="k">端口</span><span class="mono" id="conn-port">—</span>
+      <button data-copy="conn-port">复制</button>
+      <span class="k">用户名</span><span class="mono">root</span>
+      <span></span>
+      <span class="k">密码</span>
+      <span class="mono" id="conn-pass">••••••••</span>
+      <button id="btn-reveal">显示</button>
+      <span class="k">连接串</span><span class="mono" id="conn-uri">—</span>
+      <button data-copy="conn-uri">复制</button>
+    </div>
+    <div class="hint" id="conn-hint"></div>
+  </div>
+
+  <div class="card">
+    <h2>网络</h2>
+    <div class="row">
+      <label class="f" for="in-port">端口</label>
+      <input type="number" id="in-port" min="1024" max="65535" step="1">
+      <button id="btn-port" class="primary">保存并重启</button>
+    </div>
+    <div class="row">
+      <label class="switch">
+        <input type="checkbox" id="in-lan">
+        <span>允许局域网访问（关闭时只有 NAS 本机的其它应用能连）</span>
+      </label>
+    </div>
+    <div class="hint">
+      关闭时监听 127.0.0.1，NAS 上的其它应用（Halo、WordPress 等）照常可以连，
+      但你从电脑上用 Navicat 连不上。开启前需要先把 root 密码改成你自己设定的。
+    </div>
+    <div id="msg-network" class="msg"></div>
+  </div>
+
+  <div class="card">
+    <h2>root 密码</h2>
+    <div class="row">
+      <label class="f" for="in-pass">新密码</label>
+      <input type="password" id="in-pass" placeholder="至少 8 个字符" autocomplete="new-password">
+      <button id="btn-pass" class="primary">修改</button>
+      <button id="btn-gen">随机生成</button>
+    </div>
+    <div class="hint">
+      修改密码需要短暂停止数据库（通常几秒到十几秒），期间连接会中断。
+      即使忘记了当前密码也能改 —— 这里走的是不校验权限的维护通道。
+    </div>
+    <div id="msg-pass" class="msg"></div>
+  </div>
+
+  <div class="card">
+    <h2>错误日志</h2>
+    <div class="row" style="margin-bottom:10px">
+      <button id="btn-log">刷新日志</button>
+      <span class="hint" id="log-path" style="margin:0"></span>
+    </div>
+    <pre class="log" id="log">（点上面的按钮读取）</pre>
+  </div>
+
+</div>
+
+<!--
+  UGOS 的 JSSDK（@ugreen-nas/core 的 cloudWindow），打成 IIFE 单独引入。
+  单独一个 script 标签是有意的：它初始化失败也只影响自己，主脚本照跑。
+  重新生成用 scripts/build-sdk.sh。
+-->
+<script src="cloudwindow.js"></script>
+<script>
+"use strict";
+
+// 页面上所有插入文本都走它。注意：catch 分支里也会用到，
+// 所以它自己【绝不能抛异常】—— 否则错误提示会静默消失，表现成"点了没反应"。
+function esc(v) {
+  if (v === null || v === undefined) return "";
+  return String(v)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
+
+function $(id) { return document.getElementById(id); }
+
+function showMsg(id, text, ok) {
+  var el = $(id);
+  if (!el) return;
+  el.textContent = String(text === null || text === undefined ? "" : text);
+  el.className = "msg show " + (ok ? "ok" : "err");
+}
+
+function clearMsg(id) {
+  var el = $(id);
+  if (el) el.className = "msg";
+}
+
+// ---- UGOS 登录认证 ----
+// 网关会校验登录态并把 Ugreen-User-* 头注入给后端。前端这侧要做的是用 JSSDK
+// 取 third_token，以 Ugreen-Ttk 头带上（官方文档 backend/system-capabilities/login-auth）。
+var ugToken = null;
+// 认证过程的诊断信息。后端只会说"未通过 UGOS 登录认证"，那是个死胡同 ——
+// 到底是 SDK 没加载、token 没取到、还是取到了但网关没认，只有前端知道。
+// 把它显示出来，下次出问题就不用靠猜了。
+var authDiag = "尚未开始";
+
+// 取 token 的这几行【对齐同一台 NAS 上已经跑通的 PostgreSQL 应用】，
+// 不要自己发挥。两个已经踩过的坑：
+//
+//   ① 不要先调 UGOSCore.init()。我照官方示例加过，结果 init 迟迟不返回、
+//      超时后直接 return，取 token 这一步【一次都没被调到】——
+//      等于自己制造了一个新故障。那个能跑通的应用根本没调 init。
+//   ② 第三个参数（超时）必须给：不在绿联桌面窗口里跑时没有桥接对象，
+//      不给超时这个 Promise 会永远挂着，表现成页面一直卡在"读取中"。
+async function initAuth() {
+  var cw = window.UGCloudWindow;
+  if (!cw || typeof cw.useCapacity !== "function") {
+    authDiag = "没有加载到绿联 JSSDK（cloudwindow.js）";
+    return;
+  }
+  try {
+    var info = await cw.useCapacity("getThirdToken", {}, 5000);
+    if (info && info.third_token) {
+      ugToken = info.third_token;
+      authDiag = "已取得认证 token";
+    } else {
+      authDiag = "getThirdToken 没有返回 third_token（响应：" + JSON.stringify(info) + "）";
+    }
+  } catch (e) {
+    authDiag = "getThirdToken 失败：" + ((e && e.message) ? e.message : e);
+    console.error(authDiag, e);
+  }
+  // 注意：拿不到 token 也【不要】在这里中断。万一网关认的是桌面会话本身，
+  // 这条路可能本来就是通的 —— 不该拿"没拿到 token"把用户挡在外面。
+  // 真不通的话，后面第一个 /api 请求会给出准确的错误。
+}
+
+async function api(path, body) {
+  var opt = {
+    headers: { "Accept": "application/json" },
+    // 网关把 /api 当跨源代理时，不加这个带不上会话
+    credentials: "include",
+  };
+  if (ugToken) {
+    opt.headers["Ugreen-Ttk"] = ugToken;   // 字段名由平台固定
+  }
+  if (body !== undefined) {
+    opt.method = "POST";
+    opt.headers["Content-Type"] = "application/json";
+    opt.body = JSON.stringify(body);
+  }
+  var res = await fetch("/api/" + path, opt);
+  var data = null;
+  try { data = await res.json(); } catch (e) { data = null; }
+  if (!res.ok) {
+    if (res.status === 401 || res.status === 403) {
+      // 这两个状态码的原因很具体，直接把后端的话术透出来最有用；
+      // 后端拿不到时给一个指向正确做法的兜底。
+      throw new Error((data && data.error) ||
+        "未通过 UGOS 登录认证，请从 NAS 桌面的应用图标打开本应用。");
+    }
+    throw new Error((data && data.error) || ("请求失败：HTTP " + res.status));
+  }
+  return data;
+}
+
+// 耗时操作（启停、改密码）返回 202 就走了，真正的结果在
+// /api/status 的 operation 字段里。这里盯着它直到跑完。
+// 为什么后端不同步做完再返回：停一个数据库最长要等 90 秒，
+// 而网关的反代读超时是 60 秒，同步做会先被网关掐断。
+function watchOperation(msgId) {
+  var timer = setInterval(async function () {
+    try {
+      var s = await api("status");
+      render(s);
+      var op = s.operation || {};
+      if (op.running) {
+        // 有阶段说明就显示阶段（迁移几个 G 要好几分钟，只说"正在执行"
+        // 用户没法判断是卡住了还是在正常干活）。
+        showMsg(msgId, op.phase
+          ? ((op.kind || "操作") + "：" + op.phase)
+          : ("正在执行：" + (op.kind || "操作") + "…"), true);
+        return;
+      }
+      clearInterval(timer);
+      if (op.error) {
+        showMsg(msgId, op.error, false);
+      } else if (op.message) {
+        showMsg(msgId, op.message, true);
+      } else {
+        clearMsg(msgId);
+      }
+    } catch (e) {
+      clearInterval(timer);
+      showMsg(msgId, (e && e.message) ? e.message : String(e), false);
+    }
+  }, 1000);
+}
+
+var STATE_TEXT = {
+  running: "运行中", stopped: "已停止", starting: "启动中",
+  failed: "启动失败", busy: "维护中"
+};
+
+var current = null;
+var revealed = false;
+
+function render(s) {
+  current = s;
+
+  var pill = $("state-pill");
+  pill.className = "pill " + esc(s.server.state);
+  $("state-text").textContent = STATE_TEXT[s.server.state] || s.server.state;
+
+  $("version").textContent = s.server.version || "—";
+  $("datadir").textContent = s.data_dir || "—";
+  // migrate_to 非空 = 安装参数改过但数据还在老地方
+  var migTo = s.migrate_to || "";
+  $("card-migrate").style.display = migTo ? "" : "none";
+  if (migTo) {
+    $("mig-from").textContent = s.data_dir || "—";
+    $("mig-to").textContent = migTo;
+  }
+  $("socket").textContent = s.socket_path || "—";
+  $("log-path").textContent = s.error_log || "";
+
+  // 警告条
+  var warnHtml = "";
+  if (s.server.last_error && s.server.state === "failed") {
+    warnHtml += '<div class="warn">' + esc(s.server.last_error) + "</div>";
+  }
+  for (var i = 0; i < (s.warnings || []).length; i++) {
+    warnHtml += '<div class="warn">' + esc(s.warnings[i]) + "</div>";
+  }
+  $("warnings").innerHTML = warnHtml;
+
+  // 连接信息
+  var host = s.allow_lan && s.lan_addresses && s.lan_addresses.length
+    ? s.lan_addresses[0] : "127.0.0.1";
+  $("conn-host").textContent = host;
+  $("conn-port").textContent = String(s.port);
+  $("conn-pass").textContent = revealed ? s.root_password : "••••••••";
+  $("btn-reveal").textContent = revealed ? "隐藏" : "显示";
+  $("conn-uri").textContent =
+    "mysql://root:" + (revealed ? s.root_password : "<密码>") + "@" + host + ":" + s.port + "/";
+
+  $("conn-hint").textContent = s.allow_lan
+    ? "局域网已开放。NAS 上的其它应用建议仍填 127.0.0.1。"
+    : "当前只监听 127.0.0.1：NAS 上的其它应用填 127.0.0.1 即可（不要填 localhost，"
+      + "沙箱里没有 /etc/hosts，解析不了）；从电脑上连需要先开启局域网访问。";
+
+  // 表单（用户正在输入时不要覆盖）
+  var portInput = $("in-port");
+  if (document.activeElement !== portInput) portInput.value = s.port;
+  $("in-lan").checked = !!s.allow_lan;
+
+  // 有异步操作在跑时，所有会改变状态的按钮都锁住 ——
+  // 后端也会用 409 挡住并发操作，但界面上先禁掉更不容易让人困惑。
+  var opRunning = !!(s.operation && s.operation.running);
+  var busy = opRunning || s.server.state === "busy" || s.server.state === "starting";
+  $("btn-start").disabled = busy || s.server.state === "running";
+  $("btn-stop").disabled = busy || s.server.state === "stopped";
+  $("btn-restart").disabled = busy;
+  $("btn-port").disabled = busy;
+  $("btn-pass").disabled = busy;
+  $("btn-migrate").disabled = busy;
+  $("btn-gen").disabled = busy;
+  $("in-lan").disabled = busy;
+}
+
+async function refresh() {
+  try {
+    render(await api("status"));
+  } catch (e) {
+    var msg = (e && e.message) ? e.message : String(e);
+    // 鉴权失败要放在页面最顶上、而不是塞进某张卡片底部的小提示条里 ——
+    // 这时候整页都是空的，用户需要的是"我该怎么正确打开它"。
+    //
+    // 并且【一定要把认证过程的诊断一起显示出来】：后端只会说"未通过 UGOS
+    // 登录认证"，那是个死胡同 —— 到底是 SDK 没加载、init 失败、还是 token
+    // 取到了但网关没认，只有前端知道。第一版没显示，结果只能靠猜。
+    var html = '<div class="warn">' + esc(msg) + "</div>";
+    html += '<div class="warn">认证诊断：' + esc(authDiag) +
+      '　·　<a href="/api/diag" target="_blank">查看网关传过来的内容</a></div>';
+    $("warnings").innerHTML = html;
+    showMsg("msg-service", "读取状态失败：" + msg, false);
+  }
+}
+
+async function copyText(text) {
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+  } catch (e) { /* 落到下面的兜底 */ }
+  // 非 HTTPS 或没有剪贴板权限时的兜底
+  try {
+    var ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    var ok = document.execCommand("copy");
+    document.body.removeChild(ta);
+    return ok;
+  } catch (e) { return false; }
+}
+
+function setupCopy() {
+  var btns = document.querySelectorAll("button[data-copy]");
+  for (var i = 0; i < btns.length; i++) {
+    (function (btn) {
+      btn.onclick = async function () {
+        var src = $(btn.getAttribute("data-copy"));
+        if (!src) return;
+        var text = src.textContent;
+        // 连接串里如果还是占位的 <密码>，复制真实密码更有用
+        if (current && text.indexOf("<密码>") >= 0) {
+          text = text.replace("<密码>", current.root_password);
+        }
+        var ok = await copyText(text);
+        var old = btn.textContent;
+        btn.textContent = ok ? "已复制" : "复制失败";
+        setTimeout(function () { btn.textContent = old; }, 1500);
+      };
+    })(btns[i]);
+  }
+}
+
+function setupService() {
+  var acts = [["btn-start", "start"], ["btn-stop", "stop"], ["btn-restart", "restart"]];
+  for (var i = 0; i < acts.length; i++) {
+    (function (id, action) {
+      $(id).onclick = async function () {
+        clearMsg("msg-service");
+        try {
+          await api("service", { action: action });
+          watchOperation("msg-service");
+        } catch (e) {
+          showMsg("msg-service", (e && e.message) ? e.message : String(e), false);
+        }
+      };
+    })(acts[i][0], acts[i][1]);
+  }
+  $("btn-refresh").onclick = refresh;
+}
+
+function setupReveal() {
+  $("btn-reveal").onclick = function () {
+    revealed = !revealed;
+    if (current) render(current);
+  };
+}
+
+function setupNetwork() {
+  $("btn-port").onclick = async function () {
+    clearMsg("msg-network");
+    var v = parseInt($("in-port").value, 10);
+    if (!v || v < 1024 || v > 65535) {
+      showMsg("msg-network", "端口必须是 1024–65535 之间的整数。", false);
+      return;
+    }
+    try {
+      var r = await api("network", { port: v });
+      if (r && r.note) { showMsg("msg-network", r.note, true); return; }
+      watchOperation("msg-network");
+    } catch (e) {
+      showMsg("msg-network", (e && e.message) ? e.message : String(e), false);
+    }
+  };
+
+  $("in-lan").onchange = async function () {
+    clearMsg("msg-network");
+    var want = $("in-lan").checked;
+    try {
+      var r = await api("network", { allow_lan: want });
+      if (r && r.note) { showMsg("msg-network", r.note, true); return; }
+      watchOperation("msg-network");
+    } catch (e) {
+      // 被拒绝时要把开关拨回去，否则界面显示的和实际状态对不上
+      $("in-lan").checked = !want;
+      showMsg("msg-network", (e && e.message) ? e.message : String(e), false);
+    }
+  };
+}
+
+function setupPassword() {
+  $("btn-pass").onclick = async function () {
+    clearMsg("msg-pass");
+    var pw = $("in-pass").value;
+    if (!pw || pw.length < 8) {
+      showMsg("msg-pass", "密码至少 8 个字符。", false);
+      return;
+    }
+    try {
+      await api("password", { password: pw });
+      $("in-pass").value = "";
+      watchOperation("msg-pass");
+    } catch (e) {
+      showMsg("msg-pass", (e && e.message) ? e.message : String(e), false);
+    }
+  };
+
+  // 二次确认做成【页面内的两段式按钮】，不能用原生 confirm()：
+  // inner 应用的页面跑在 UGOS 桌面的内嵌窗口里，浏览器会拦掉
+  // confirm/prompt 这类原生弹窗，表现就是"点了没反应"。
+  var migrateArmed = 0;
+  $("btn-migrate").onclick = async function () {
+    var btn = $("btn-migrate");
+    var now = Date.now();
+    if (now - migrateArmed > 8000) {
+      migrateArmed = now;
+      btn.textContent = "再点一次确认迁移";
+      showMsg("msg-migrate",
+        "将把数据迁移到 " + $("mig-to").textContent +
+        "。数据库会短暂停止；复制校验通过后才切换，失败不影响原数据。" +
+        "确认无误请再点一次按钮（8 秒内有效）。", true);
+      setTimeout(function () {
+        if (Date.now() - migrateArmed >= 8000) {
+          migrateArmed = 0;
+          btn.textContent = "迁移数据目录";
+          clearMsg("msg-migrate");
+        }
+      }, 8200);
+      return;
+    }
+    migrateArmed = 0;
+    btn.textContent = "迁移数据目录";
+    clearMsg("msg-migrate");
+    try {
+      await api("migrate", {});
+      watchOperation("msg-migrate");
+    } catch (e) {
+      showMsg("msg-migrate", (e && e.message) ? e.message : String(e), false);
+    }
+  };
+
+  $("btn-gen").onclick = async function () {
+    clearMsg("msg-pass");
+    try {
+      var r = await api("password", { generate: true });
+      // 新密码在 202 的响应体里就给了，先让它显示出来 ——
+      // 万一后续保存配置失败，用户至少已经看到过这个密码。
+      revealed = true;
+      if (r && r.root_password) {
+        showMsg("msg-pass", "新密码：" + r.root_password + "（请立刻记下来），正在应用…", true);
+      }
+      watchOperation("msg-pass");
+    } catch (e) {
+      showMsg("msg-pass", (e && e.message) ? e.message : String(e), false);
+    }
+  };
+}
+
+function setupLog() {
+  $("btn-log").onclick = async function () {
+    $("log").textContent = "读取中…";
+    try {
+      var r = await api("logs");
+      $("log").textContent = r.content || "（空）";
+      $("log").scrollTop = $("log").scrollHeight;
+    } catch (e) {
+      $("log").textContent = "读取失败：" + ((e && e.message) ? e.message : String(e));
+    }
+  };
+}
+
+// init 里每一步单独 try/catch：一个步骤挂掉不能拖垮后面的。
+// 踩过的坑是「某个 setup 抛异常 → 它后面的 setup 全都没执行」，
+// 表现是完全不相干的功能失灵，排查方向会被彻底带偏。
+async function init() {
+  var steps = [
+    ["copy", setupCopy], ["service", setupService], ["reveal", setupReveal],
+    ["network", setupNetwork], ["password", setupPassword], ["log", setupLog]
+  ];
+  for (var i = 0; i < steps.length; i++) {
+    try {
+      steps[i][1]();
+    } catch (e) {
+      console.error("初始化步骤 " + steps[i][0] + " 失败", e);
+    }
+  }
+  // 先拿到认证 token 再发第一个请求，否则首屏必然 401 闪一下。
+  try {
+    await initAuth();
+  } catch (e) {
+    console.error("初始化步骤 auth 失败", e);
+  }
+  await refresh();
+  setInterval(refresh, 5000);
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", init);
+} else {
+  init();
+}
+</script>
+</body>
+</html>
