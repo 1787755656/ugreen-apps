@@ -689,6 +689,29 @@
         "arm64"
       ],
       "post_install_note": "装好后请在「设置」页填写 NAS 保存目录；解析抖音需在「设置」粘贴抖音网页版 Cookie。"
+    },
+    {
+      "appname": "com.personal.mook",
+      "display_name": "Mook SSH 运维工作台",
+      "description": "自托管服务器运维工作台：浏览器里的 Web SSH 终端（xterm.js，多标签并行会话、断线自动重连）、服务器实时监控（延迟/CPU/内存/硬盘）、SFTP 文件管理（浏览/上传/下载/重命名），以及对接 OpenAI 兼容接口的 AI 辅助。\n数据（服务器凭据、AI 设置、常用命令）以 SQLite 存在 NAS 本地，支持一键备份还原。首次使用：打开应用按引导设置管理员密码即可。",
+      "homepage_url": "https://github.com/NikoYomi/mook",
+      "updated_at": "2026-10-01",
+      "version": "0.2.8",
+      "upk_version": "0.2.8.0004",
+      "release_tag": "mook/v0.2.8.0004",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/mook/v0.2.8.0004/amd64_nasync_com.personal.mook_0.2.8.0004.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/mook/v0.2.8.0004/arm64_nasync_com.personal.mook_0.2.8.0004.upk"
+      },
+      "service_port": 5866,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/mook-icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "system",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ]
     }
   ]
 }
