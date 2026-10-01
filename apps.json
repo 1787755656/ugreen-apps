@@ -235,13 +235,13 @@
       "display_name": "LunaTV 影视聚合",
       "description": "在 NAS 上部署自己的影视聚合站：多个采集源聚合搜索、豆瓣/TMDB 条目详情、 播放记录与收藏同步、弹幕播放器、直播源、短剧和预告片日历。\n内置 SQLite 存储（免配置外部数据库），支持多用户注册与站点管理。\n首次使用：浏览器打开应用，用站长账号登录（admin / 安装时设置的密码）， 其他用户可在登录页自行注册。\n注意：应用本身不提供任何影视资源，播放内容来自你配置的采集源， 请遵守所在地区法律法规，仅用于个人学习目的（上游采用 CC BY-NC-SA 禁止商用）。",
       "homepage_url": "https://github.com/MoonTechLab/LunaTV",
-      "updated_at": "2026-09-22",
-      "version": "6.6.4",
-      "upk_version": "6.6.4.0002",
-      "release_tag": "lunatv/v6.6.4-r4",
+      "updated_at": "2026-10-01",
+      "version": "6.6.5",
+      "upk_version": "6.6.5.0003",
+      "release_tag": "lunatv/v6.6.5",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/lunatv/v6.6.4-r4/amd64_nasync_com.personal.lunatv_6.6.4.0002.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/lunatv/v6.6.4-r4/arm64_nasync_com.personal.lunatv_6.6.4.0002.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/lunatv/v6.6.5/amd64_nasync_com.personal.lunatv_6.6.5.0003.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/lunatv/v6.6.5/arm64_nasync_com.personal.lunatv_6.6.5.0003.upk"
       },
       "service_port": 28300,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/lunatv/com.personal.lunatv/rootfs_common/icon.png",
