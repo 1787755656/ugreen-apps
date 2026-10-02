@@ -49,20 +49,27 @@ start_cmd: bin/zhiyin-launcher --port=28085
 #   占了。管理壳在 exec 之前会自己探一次端口，撞上了会在日志里点名说明。
 port: 28085
 
-# tab：浏览器直接打开这个端口，应用自己 serve 前端和 API。
+# inner：走 UGOS 网关打开，网关终结 HTTPS、把 HTTP 转发给应用端口。
 #
-# ⚠ 这里【不能用 inner】，三个独立的硬理由：
-#   ① 上游的路由散在 /api、/rest（Subsonic）、/swagger-ui、以及前端的静态资源
-#      好几个前缀下，而 inner 的网关只把 proxy_path 那一个前缀反代到应用端口，
-#      其余的会去找 www/ 下的静态文件然后 404。
-#   ② Subsonic 客户端（音流、Symfonium、DSub）要用【自己的账号密码】直连
-#      服务器地址，它们不可能穿过 UGOS 的网关登录态 —— 走 inner 就等于
-#      把这个应用最大的卖点关掉了。
-#   ③ inner 的请求要过网关，而网关全局写死 client_max_body_size 20m。
+# ⚠ 为什么从 tab 改成 inner（2026-10）：应用本身只 serve HTTP，不提供 HTTPS。
+#   用 HTTPS 访问 UGOS 的用户，应用中心会把 tab 类应用也拼成
+#   https://<IP>:28085 去打开 → 应用不响应 HTTPS，直接打不开。inner 让浏览器
+#   只跟网关打交道（https://<NAS>/pkg/com.personal.zhiyinmusic/...），由网关把
+#   请求转发给应用，应用侧全程 HTTP，问题消失。
 #
-#   代价是端口在局域网上直接可达 —— 所以装好之后要【立刻】打开应用，
-#   在上游自己的引导页里把管理员账号创建掉（在那之前谁都能抢先创建）。
-open_type: tab
+# ⚠ inner 的代价（网关只反代 proxy_path 那一个前缀，其余走 www/ 静态）：
+#   ① 前端必须铺进 www/ —— build.sh 已把上游 app/web 拷进 rootfs_common/www，
+#      否则根路径只会 serve 占位页。
+#   ② Subsonic 客户端的 /rest 前缀不在 proxy_path 内 → 走 inner 后 Subsonic
+#      直连（音流 / Symfonium / DSub）失效；Web 播放器走 /api 不受影响。
+#   ③ 网关全局 client_max_body_size 20m，大文件上传会 413。
+#   ④ 网关静态 serve 无 SPA fallback，BrowserRouter 子路径刷新会 404
+#      （首次进入 / 正常，应用内跳转正常）。
+#   这些代价可接受时再用 inner；若 Subsonic 直连是刚需，改回 tab 并改用
+#   http 访问 UGOS（或关掉 NAS 的强制 HTTPS）。
+proxy_path: api
+
+open_type: inner
 
 # 这是给全家人用的音乐播放器，不是管理工具，普通用户也该看到图标。
 # （注意 only_admin 管的只是桌面图标对谁显示，本来也挡不住端口。）

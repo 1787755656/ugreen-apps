@@ -112,6 +112,11 @@ python3 "$SCRIPT_DIR/extract-image.py" "$IMAGE_REPO" "$MANIFEST_DIGEST" "$WORK_D
 # ---- 上游主程序 + 前端 + 配置模板 + 更新日志 ----
 install -m 0755 "$UP/usr/local/bin/zhiyin-music" "$ROOTFS/bin/zhiyin-music"
 cp -R "$UP/app/web" "$ROOTFS/app/web"
+# inner 形态：网关从 www/ serve 静态，所以把上游前端铺进 rootfs_common/www，
+# 覆盖原本的占位 index.html。app/web 是架构无关的前端，两个架构共用同一份。
+# （rootfs_${ARCH}/app/web 仍保留，tab 形态时应用自己 serve 前端用。）
+mkdir -p "$REPO_ROOT/$PROJECT_DIR/rootfs_common/www"
+cp -R "$UP/app/web/." "$REPO_ROOT/$PROJECT_DIR/rootfs_common/www/"
 # 镜像里的 /app/config.toml 就是上游的 config.toml.example（带完整中文注释）。
 # 管理壳首次启动按它生成用户的配置，之后只改受管的那几个键（见 launcher/config.go）。
 install -m 0644 "$UP/app/config.toml" "$ROOTFS/app/config.toml.default"
