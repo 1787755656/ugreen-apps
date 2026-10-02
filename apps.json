@@ -61,7 +61,7 @@
       },
       "service_port": 28686,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/clouddl/com.personal.clouddl/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 1,
       "app_type": "native",
       "category": "download",
       "platforms": [
@@ -130,7 +130,7 @@
       },
       "service_port": 28190,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/fastnet/com.koolcenter.fastnet/rootfs_common/icon.png",
-      "download_count": 1,
+      "download_count": 2,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -153,7 +153,7 @@
       },
       "service_port": 25180,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/it-tools/com.personal.ittools/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 2,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -176,7 +176,7 @@
       },
       "service_port": 18083,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/liteclass/com.personal.liteclass/rootfs_common/icon.png",
-      "download_count": 1,
+      "download_count": 2,
       "app_type": "native",
       "category": "media",
       "platforms": [
@@ -189,13 +189,13 @@
       "display_name": "LitePan",
       "description": "网盘聚合挂载工具，把多个网盘账号统一到一个界面管理。支持跨盘秒传、 302 直链播放、WebDAV 共享，可生成 .strm 文件并自动刮削 nfo 与海报， 对接 Emby / Jellyfin 直连播放；另有 TMDB 目录整理、命名对齐、 缓存保持、离线下载与自动联动。默认管理员密码 admin，登录后请立即修改。 原生版不含 FUSE 本地挂载（沙箱无法访问 /dev/fuse），需要该功能请用 官方 Docker 部署。",
       "homepage_url": "https://www.litepan.top",
-      "updated_at": "2026-09-22",
-      "version": "0.5.6",
-      "upk_version": "0.5.6.0003",
-      "release_tag": "litepan/v0.5.6-Beta-r4",
+      "updated_at": "2026-10-02",
+      "version": "0.5.7",
+      "upk_version": "0.5.7.0004",
+      "release_tag": "litepan/v0.5.7-Beta",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/litepan/v0.5.6-Beta-r4/amd64_nasync_com.ponphil.litepan_0.5.6.0003.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/litepan/v0.5.6-Beta-r4/arm64_nasync_com.ponphil.litepan_0.5.6.0003.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/litepan/v0.5.7-Beta/amd64_nasync_com.ponphil.litepan_0.5.7.0004.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/litepan/v0.5.7-Beta/arm64_nasync_com.ponphil.litepan_0.5.7.0004.upk"
       },
       "service_port": 25211,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/litepan/com.ponphil.litepan/rootfs_common/icon.png",
@@ -360,7 +360,7 @@
       },
       "service_port": 7101,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/natfrp/com.natfrp.launcher/rootfs_common/icon.png",
-      "download_count": 1,
+      "download_count": 2,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -452,7 +452,7 @@
       },
       "service_port": 23010,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/piggybank/com.ashc776.piggybank/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 1,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -603,13 +603,13 @@
       "display_name": "Sub2API",
       "description": "AI 接口中转站（API Gateway）。把你的各大 LLM 服务商 key 统一管起来， 通过一个 OpenAI 兼容的地址对外提供接入，内置用量统计、配额限制、 多用户管理、WebAuthn 登录等。自带管理界面与账号体系。 需要本机已安装 PostgreSQL 15+ 与 Redis 7+。首次启动请在浏览器中完成初始化向导。",
       "homepage_url": "https://github.com/Wei-Shaw/sub2api",
-      "updated_at": "2026-09-30",
-      "version": "0.2.11",
-      "upk_version": "0.2.11.0005",
-      "release_tag": "sub2api/v0.2.11",
+      "updated_at": "2026-10-02",
+      "version": "0.2.13",
+      "upk_version": "0.2.13.0006",
+      "release_tag": "sub2api/v0.2.13",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/sub2api/v0.2.11/amd64_nasync_com.personal.sub2api_0.2.11.0005.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/sub2api/v0.2.11/arm64_nasync_com.personal.sub2api_0.2.11.0005.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/sub2api/v0.2.13/amd64_nasync_com.personal.sub2api_0.2.13.0006.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/sub2api/v0.2.13/arm64_nasync_com.personal.sub2api_0.2.13.0006.upk"
       },
       "service_port": 25435,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/sub2api/com.personal.sub2api/rootfs_common/icon.png",
@@ -636,7 +636,7 @@
       },
       "service_port": 28085,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/zhiyinmusic/com.personal.zhiyinmusic/rootfs_common/icon.png",
-      "download_count": 1,
+      "download_count": 3,
       "app_type": "native",
       "category": "media",
       "platforms": [
