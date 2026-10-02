@@ -626,17 +626,17 @@
       "display_name": "知音音乐 Zhiyin Music",
       "description": "把 NAS 上的音乐做成一个自己的流媒体服务。\n选好音乐文件夹后自动扫描，读取内嵌标签、封面和歌词，按艺术家、专辑归档， 支持 MP3 / FLAC / WAV / M4A / OGG / OPUS / APE。可以从网易云、QQ 音乐、 酷狗、酷我、咪咕刮削元数据和封面，也能按播放历史给出推荐。\n除了网页版，它还提供一层 Subsonic API：手机上用音流、Symfonium、DSub 这类客户端填上 NAS 地址和账号就能直接听，不必开着浏览器。\n播放支持无缝拖动和多档音质（128k / 192k / 320k / 无损），转码由应用自带的 ffmpeg 完成。另外支持 .strm 网盘直链文件，把阿里云盘等网盘里的音乐 一并纳入音乐库。\n⚠ 本应用的端口在局域网上直接可达（Subsonic 客户端正是靠这个直连）， 装好后请立刻打开应用，在首次进入的引导页里把管理员账号创建掉。",
       "homepage_url": "https://github.com/qwex888/zhiyin-music",
-      "updated_at": "2026-09-29",
+      "updated_at": "2026-10-02",
       "version": "0.8.1",
-      "upk_version": "0.8.1.0003",
-      "release_tag": "zhiyinmusic/v0.8.1-r5",
+      "upk_version": "0.8.1.0004",
+      "release_tag": "zhiyinmusic/v0.8.1-r6",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/zhiyinmusic/v0.8.1-r5/amd64_nasync_com.personal.zhiyinmusic_0.8.1.0003.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/zhiyinmusic/v0.8.1-r5/arm64_nasync_com.personal.zhiyinmusic_0.8.1.0003.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/zhiyinmusic/v0.8.1-r6/amd64_nasync_com.personal.zhiyinmusic_0.8.1.0004.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/zhiyinmusic/v0.8.1-r6/arm64_nasync_com.personal.zhiyinmusic_0.8.1.0004.upk"
       },
       "service_port": 28085,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/zhiyinmusic/com.personal.zhiyinmusic/rootfs_common/icon.png",
-      "download_count": 3,
+      "download_count": 0,
       "app_type": "native",
       "category": "media",
       "platforms": [
