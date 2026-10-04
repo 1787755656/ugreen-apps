@@ -488,13 +488,13 @@
       "display_name": "qBittorrent Enhanced Edition",
       "description": "qBittorrent 增强版 —— 免费开源的 BitTorrent 下载客户端，内置 Web UI， 基于 qbittorrent-nox 无头版。在官方版基础上增加了自动屏蔽迅雷等吸血客户端、 自动 Ban 违规 Peer 等增强功能。首次登录账号 admin，密码 adminadmin， 登录后请及时修改密码。",
       "homepage_url": "https://github.com/c0re100/qBittorrent-Enhanced-Edition",
-      "updated_at": "2026-09-29",
-      "version": "5.2.3",
-      "upk_version": "5.2.3.0004",
-      "release_tag": "qbittorrent/v5.2.3.10-r10",
+      "updated_at": "2026-10-04",
+      "version": "5.2.4",
+      "upk_version": "5.2.4.0005",
+      "release_tag": "qbittorrent/v5.2.4.10",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/qbittorrent/v5.2.3.10-r10/amd64_nasync_com.qbee.qbittorrent_5.2.3.0004.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/qbittorrent/v5.2.3.10-r10/arm64_nasync_com.qbee.qbittorrent_5.2.3.0004.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/qbittorrent/v5.2.4.10/amd64_nasync_com.qbee.qbittorrent_5.2.4.0005.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/qbittorrent/v5.2.4.10/arm64_nasync_com.qbee.qbittorrent_5.2.4.0005.upk"
       },
       "service_port": 28080,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/qbittorrent/com.qbee.qbittorrent/rootfs_common/icon.png",
