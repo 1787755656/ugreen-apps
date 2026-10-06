@@ -28,17 +28,17 @@
       "display_name": "ass (ANI-RSS)",
       "description": "基于 RSS 自动追番、订阅、下载、刮削与洗版（上游 ANI-RSS）。应用内置 Eclipse Temurin JRE，无需 NAS 安装系统 Java。默认账号 admin / admin， 登录后请及时修改密码。请在应用设置中授权媒体/下载共享目录，并在 WebUI 中配置下载路径与下载器。",
       "homepage_url": "https://github.com/wushuo894/ani-rss",
-      "updated_at": "2026-09-28",
-      "version": "3.2.39",
-      "upk_version": "3.2.39.0003",
-      "release_tag": "ani-rss/v3.2.39",
+      "updated_at": "2026-10-06",
+      "version": "3.2.40",
+      "upk_version": "3.2.40.0004",
+      "release_tag": "ani-rss/v3.2.40",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/ani-rss/v3.2.39/amd64_nasync_com.wushuo.anirss_3.2.39.0003.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/ani-rss/v3.2.39/arm64_nasync_com.wushuo.anirss_3.2.39.0003.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/ani-rss/v3.2.40/amd64_nasync_com.wushuo.anirss_3.2.40.0004.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/ani-rss/v3.2.40/arm64_nasync_com.wushuo.anirss_3.2.40.0004.upk"
       },
       "service_port": 7789,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/ani-rss/com.wushuo.anirss/rootfs_common/icon.png",
-      "download_count": 1,
+      "download_count": 0,
       "app_type": "native",
       "category": "download",
       "platforms": [
