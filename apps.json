@@ -28,13 +28,13 @@
       "display_name": "ass (ANI-RSS)",
       "description": "基于 RSS 自动追番、订阅、下载、刮削与洗版（上游 ANI-RSS）。应用内置 Eclipse Temurin JRE，无需 NAS 安装系统 Java。默认账号 admin / admin， 登录后请及时修改密码。请在应用设置中授权媒体/下载共享目录，并在 WebUI 中配置下载路径与下载器。",
       "homepage_url": "https://github.com/wushuo894/ani-rss",
-      "updated_at": "2026-10-06",
-      "version": "3.2.40",
-      "upk_version": "3.2.40.0004",
-      "release_tag": "ani-rss/v3.2.40",
+      "updated_at": "2026-10-07",
+      "version": "3.2.43",
+      "upk_version": "3.2.43.0005",
+      "release_tag": "ani-rss/v3.2.43",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/ani-rss/v3.2.40/amd64_nasync_com.wushuo.anirss_3.2.40.0004.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/ani-rss/v3.2.40/arm64_nasync_com.wushuo.anirss_3.2.40.0004.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/ani-rss/v3.2.43/amd64_nasync_com.wushuo.anirss_3.2.43.0005.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/ani-rss/v3.2.43/arm64_nasync_com.wushuo.anirss_3.2.43.0005.upk"
       },
       "service_port": 7789,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/ani-rss/com.wushuo.anirss/rootfs_common/icon.png",
@@ -314,7 +314,7 @@
       },
       "service_port": 23306,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/mariadb/com.personal.mariadb/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 1,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -350,17 +350,17 @@
       "display_name": "SakuraFrp (natfrp-service)",
       "description": "樱花 FRP（SakuraFrp）内网穿透客户端，带应用内管理窗口：在应用里就能设置访问密钥、 Web UI 密码，查看隧道列表并控制哪些隧道在本机开机自启，以及开关远程管理， 无需手动记 IP 或改 https。通过樱花 FRP 隧道将 NAS 服务映射到公网访问。",
       "homepage_url": "https://www.natfrp.com",
-      "updated_at": "2026-09-30",
-      "version": "2026.7.18",
-      "upk_version": "2026.7.18.0004",
-      "release_tag": "natfrp/v2026.7.18-r8",
+      "updated_at": "2026-10-07",
+      "version": "2026.10.7",
+      "upk_version": "2026.10.7.0005",
+      "release_tag": "natfrp/v2026.10.7",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/natfrp/v2026.7.18-r8/amd64_nasync_com.natfrp.launcher_2026.7.18.0004.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/natfrp/v2026.7.18-r8/arm64_nasync_com.natfrp.launcher_2026.7.18.0004.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/natfrp/v2026.10.7/amd64_nasync_com.natfrp.launcher_2026.10.7.0005.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/natfrp/v2026.10.7/arm64_nasync_com.natfrp.launcher_2026.10.7.0005.upk"
       },
       "service_port": 7101,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/natfrp/com.natfrp.launcher/rootfs_common/icon.png",
-      "download_count": 3,
+      "download_count": 0,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -603,13 +603,13 @@
       "display_name": "Sub2API",
       "description": "AI 接口中转站（API Gateway）。把你的各大 LLM 服务商 key 统一管起来， 通过一个 OpenAI 兼容的地址对外提供接入，内置用量统计、配额限制、 多用户管理、WebAuthn 登录等。自带管理界面与账号体系。 需要本机已安装 PostgreSQL 15+ 与 Redis 7+。首次启动请在浏览器中完成初始化向导。",
       "homepage_url": "https://github.com/Wei-Shaw/sub2api",
-      "updated_at": "2026-10-02",
-      "version": "0.2.13",
-      "upk_version": "0.2.13.0006",
-      "release_tag": "sub2api/v0.2.13",
+      "updated_at": "2026-10-07",
+      "version": "0.2.14",
+      "upk_version": "0.2.14.0007",
+      "release_tag": "sub2api/v0.2.14",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/sub2api/v0.2.13/amd64_nasync_com.personal.sub2api_0.2.13.0006.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/sub2api/v0.2.13/arm64_nasync_com.personal.sub2api_0.2.13.0006.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/sub2api/v0.2.14/amd64_nasync_com.personal.sub2api_0.2.14.0007.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/sub2api/v0.2.14/arm64_nasync_com.personal.sub2api_0.2.14.0007.upk"
       },
       "service_port": 25435,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/sub2api/com.personal.sub2api/rootfs_common/icon.png",
