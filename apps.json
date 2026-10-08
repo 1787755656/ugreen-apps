@@ -15,7 +15,7 @@
       },
       "service_port": 28737,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/100zip/com.personal.100zip/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 1,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -28,13 +28,13 @@
       "display_name": "ass (ANI-RSS)",
       "description": "基于 RSS 自动追番、订阅、下载、刮削与洗版（上游 ANI-RSS）。应用内置 Eclipse Temurin JRE，无需 NAS 安装系统 Java。默认账号 admin / admin， 登录后请及时修改密码。请在应用设置中授权媒体/下载共享目录，并在 WebUI 中配置下载路径与下载器。",
       "homepage_url": "https://github.com/wushuo894/ani-rss",
-      "updated_at": "2026-10-07",
-      "version": "3.2.43",
-      "upk_version": "3.2.43.0005",
-      "release_tag": "ani-rss/v3.2.43",
+      "updated_at": "2026-10-08",
+      "version": "3.2.44",
+      "upk_version": "3.2.44.0006",
+      "release_tag": "ani-rss/v3.2.44",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/ani-rss/v3.2.43/amd64_nasync_com.wushuo.anirss_3.2.43.0005.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/ani-rss/v3.2.43/arm64_nasync_com.wushuo.anirss_3.2.43.0005.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/ani-rss/v3.2.44/amd64_nasync_com.wushuo.anirss_3.2.44.0006.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/ani-rss/v3.2.44/arm64_nasync_com.wushuo.anirss_3.2.44.0006.upk"
       },
       "service_port": 7789,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/ani-rss/com.wushuo.anirss/rootfs_common/icon.png",
@@ -153,7 +153,7 @@
       },
       "service_port": 25180,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/it-tools/com.personal.ittools/rootfs_common/icon.png",
-      "download_count": 2,
+      "download_count": 3,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -245,7 +245,7 @@
       },
       "service_port": 28300,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/lunatv/com.personal.lunatv/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 1,
       "app_type": "native",
       "category": "media",
       "platforms": [
@@ -291,7 +291,7 @@
       },
       "service_port": 23020,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/magicpush/com.magiccode.magicpush/rootfs_common/icon.png",
-      "download_count": 1,
+      "download_count": 2,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -314,7 +314,7 @@
       },
       "service_port": 23306,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/mariadb/com.personal.mariadb/rootfs_common/icon.png",
-      "download_count": 1,
+      "download_count": 2,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -360,7 +360,7 @@
       },
       "service_port": 7101,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/natfrp/com.natfrp.launcher/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 1,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -406,7 +406,7 @@
       },
       "service_port": 21710,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/p2pee-proxy/com.xnkyn.p2peeproxy/rootfs_common/icon.png",
-      "download_count": 6,
+      "download_count": 7,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -498,7 +498,7 @@
       },
       "service_port": 28080,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/qbittorrent/com.qbee.qbittorrent/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 1,
       "app_type": "native",
       "category": "download",
       "platforms": [
@@ -647,15 +647,15 @@
     {
       "appname": "com.personal.ugstore",
       "display_name": "三方应用商店",
-      "description": "面向 UGOS Pro 的第三方应用商店：浏览、安装、更新来自社区源的原生应用，全程走系统应用中心的正式安装通道，支持安装位置选择、更新检查与商店自更新。数据与账号只保存在自己的 NAS 上。\n桌面端经网关身份自动鉴权；手机端经网关访问、无宿主桥，使用「访问密码」闸，首帧即弹出密码验证（联子压缩 / 联子看图同款方案），通过后渲染应用界面。支持 amd64 / arm64 双架构。",
-      "homepage_url": "https://github.com/1787755656/ugreen-apps",
-      "updated_at": "2026-10-08",
+      "description": "面向 UGOS Pro 的第三方应用商店：浏览、安装、更新来自社区源的原生应用，全程走系统应用中心的正式安装通道，支持安装位置选择、更新检查与商店自更新。数据与账号只保存在自己的 NAS 上。",
+      "homepage_url": "https://github.com/conversun/fnos-store",
+      "updated_at": "2026-09-22",
       "version": "0.1.0",
-      "upk_version": "0.1.0.0020",
-      "release_tag": "ugstore/0.1.0.0020",
+      "upk_version": "0.1.0.0017",
+      "release_tag": "ugstore/v0.1.0.0017",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/ugstore/0.1.0.0020/amd64_nasync_com.personal.ugstore_0.1.0.0020.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/ugstore/0.1.0.0020/arm64_nasync_com.personal.ugstore_0.1.0.0020.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/ugstore/v0.1.0.0017/amd64_nasync_com.personal.ugstore_0.1.0.0017.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/ugstore/v0.1.0.0017/arm64_nasync_com.personal.ugstore_0.1.0.0017.upk"
       },
       "service_port": 21310,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/ugstore-icon.png",
