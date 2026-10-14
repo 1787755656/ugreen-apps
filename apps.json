@@ -199,7 +199,7 @@
       },
       "service_port": 25211,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/litepan/com.ponphil.litepan/rootfs_common/icon.png",
-      "download_count": 1,
+      "download_count": 2,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -360,7 +360,7 @@
       },
       "service_port": 7101,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/natfrp/com.natfrp.launcher/rootfs_common/icon.png",
-      "download_count": 3,
+      "download_count": 4,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -406,7 +406,7 @@
       },
       "service_port": 21710,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/p2pee-proxy/com.xnkyn.p2peeproxy/rootfs_common/icon.png",
-      "download_count": 13,
+      "download_count": 15,
       "app_type": "native",
       "category": "system",
       "platforms": [
