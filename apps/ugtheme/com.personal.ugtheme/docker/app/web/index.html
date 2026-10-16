@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>主题美化中心</title>
+<style>
+:root{--g:#0f7a55;--g2:#0a5c40;--bg:#f3f6f4;--card:#fff;--line:#e3e8e5;--tx:#1d2b25;--sub:#68796f;--warn:#b45309;--danger:#b91c1c}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font:14px/1.6 -apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--tx)}
+.wrap{max-width:1060px;margin:0 auto;padding:20px 16px 60px}
+header{display:flex;align-items:center;gap:10px;padding:6px 2px 18px}
+header h1{font-size:20px;font-weight:700;color:var(--g2)}
+header .v{color:var(--sub);font-size:12px}
+header .sp{flex:1}
+button{font:inherit;border:1px solid var(--line);background:#fff;color:var(--tx);border-radius:8px;padding:7px 14px;cursor:pointer}
+button:hover{border-color:var(--g);color:var(--g)}
+button.primary{background:var(--g);border-color:var(--g);color:#fff}
+button.primary:hover{background:var(--g2)}
+button.danger{color:var(--danger)}
+button:disabled{opacity:.5;cursor:default}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:16px}
+.card h2{font-size:15px;margin-bottom:4px}
+.card .hint{color:var(--sub);font-size:12px;margin-bottom:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.theme{border:1px solid var(--line);border-radius:10px;padding:12px;text-align:center}
+.theme.current{border-color:var(--g);box-shadow:0 0 0 2px rgba(15,122,85,.15)}
+.theme img{width:44px;height:44px;margin:4px;border-radius:10px;background:#f6f8f7}
+.theme .nm{font-weight:600;font-size:13px}
+.theme .au{color:var(--sub);font-size:11px;margin:2px 0 10px}
+.theme button{width:100%;padding:6px;font-size:13px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-start}
+.row .grow{flex:1;min-width:260px}
+label.f{display:block;font-size:12px;color:var(--sub);margin:10px 0 4px}
+input[type=text],input[type=password],input[type=url]{width:100%;font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:8px}
+input:focus{outline:none;border-color:var(--g)}
+.wpbox{display:flex;gap:16px;flex-wrap:wrap}
+.wpbox img{width:280px;max-width:100%;border-radius:10px;border:1px solid var(--line)}
+pre{background:#101613;color:#c7d4cd;border-radius:8px;padding:12px;font-size:11px;line-height:1.5;max-height:260px;overflow:auto;white-space:pre-wrap}
+.msg{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:#1d2b25;color:#fff;padding:9px 18px;border-radius:20px;font-size:13px;opacity:0;transition:.25s;pointer-events:none;max-width:80%}
+.msg.show{opacity:1}
+.msg.err{background:var(--danger)}
+.tag{display:inline-block;background:rgba(15,122,85,.1);color:var(--g2);font-size:11px;border-radius:6px;padding:1px 8px;margin-left:6px}
+ul.tips{color:var(--sub);font-size:12px;padding-left:18px}
+.auth{max-width:380px;margin:12vh auto 0;text-align:center}
+.auth h1{font-size:22px;color:var(--g2);margin-bottom:6px}
+.auth .sub{color:var(--sub);font-size:13px;margin-bottom:22px}
+.auth input{margin-bottom:12px;text-align:center}
+.auth button{width:100%}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+<div id="auth" class="wrap auth hidden">
+  <h1>主题美化中心</h1>
+  <div class="sub" id="authSub">请输入应用密码</div>
+  <input type="password" id="pw" placeholder="应用密码" autocomplete="current-password">
+  <button class="primary" id="authBtn">进入</button>
+</div>
+
+<div id="main" class="wrap hidden">
+  <header>
+    <h1>主题美化中心</h1><span class="v" id="ver"></span>
+    <span class="sp"></span>
+    <button id="outBtn">退出登录</button>
+  </header>
+
+  <div class="card">
+    <h2>图标主题</h2>
+    <div class="hint">仅同名覆盖系统图标文件，替换前自动备份原版；应用图标不会新增或丢失。改完若未生效，桌面 Ctrl+F5 强刷或重启浏览器。系统更新可能还原图标，回这里点一下即可。</div>
+    <div class="grid" id="themes"></div>
+    <div style="margin-top:12px">
+      <button class="danger" id="restoreIcons">从备份还原官方图标</button>
+      <span class="hint" id="bakInfo" style="margin:0 0 0 10px;display:inline-block"></span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>壁纸<span class="tag">登录背景</span><span class="tag">桌面壁纸库</span></h2>
+    <div class="hint">「刷新 Bing 壁纸」同时更新两处：登录页背景立即生效；桌面壁纸写入壁纸库（bing_日期.jpg）。点击下方缩略图可直接设为桌面壁纸——修改的是每个用户的壁纸指针（原指针自动备份，可一键还原），桌面刷新或重新登录后生效。首次修改前自动备份原版登录背景。</div>
+    <div class="wpbox">
+      <div>
+        <label class="f">当前登录背景（登录页实时读取此文件）</label>
+        <img id="loginPreview" alt="登录背景">
+      </div>
+      <div class="grow">
+        <div class="row">
+          <button class="primary" id="refreshWp">刷新 Bing 每日壁纸</button>
+          <label class="f" style="margin:0">或上传图片作为登录背景</label>
+          <input type="file" id="wpFile" accept="image/jpeg,image/png">
+        </div>
+        <div class="row" style="margin-top:10px">
+          <button class="danger" id="restoreWp">恢复原始登录背景</button>
+          <span class="hint" id="wpState" style="margin:0;align-self:center"></span>
+        </div>
+        <label class="f">壁纸源 URL（默认必应每日图，可换任意图片直链或 JSON 源）</label>
+        <div class="row" id="presets" style="gap:6px;margin-bottom:8px"></div>
+        <div class="row">
+          <input type="url" id="srcInput" class="grow" placeholder="https://…">
+          <button id="saveSrc">保存</button>
+        </div>
+        <label class="f">定时刷新（cron 表达式，默认每天 08:00）</label>
+        <div class="row">
+          <input type="text" id="cronInput" class="grow" placeholder="0 8 * * *">
+          <button id="saveCron">保存</button>
+        </div>
+        <label class="f">桌面壁纸库（保留最近 <span id="poolKeep">14</span> 张；点击缩略图设为桌面壁纸，再点一次确认）</label>
+        <div class="row" id="pool" style="gap:6px"></div>
+        <div class="row" style="margin-top:10px">
+          <button class="danger" id="restoreDesktop">恢复原桌面壁纸</button>
+          <span class="hint" id="desktopState" style="margin:0;align-self:center"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>使用须知</h2>
+    <ul class="tips">
+      <li>图标与登录背景修改前自动备份到应用数据目录；卸载应用前请先「还原」，否则备份随之删除。</li>
+      <li>更换壁纸后若登录页没变，是浏览器缓存，强刷（Ctrl+Shift+R）即可。</li>
+      <li>数据目录建议在安装时选到共享文件夹（如 Docker 目录下新建文件夹），重装不丢备份。</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>操作日志</h2>
+    <pre id="logs">（空）</pre>
+    <div style="margin-top:10px"><button id="logBtn">刷新日志</button></div>
+  </div>
+</div>
+
+<div class="msg" id="msg"></div>
+
+<script>
+"use strict";
+var $ = function(id){return document.getElementById(id)};
+var state = null;
+var authMode = "login";
+
+function toast(text, err){
+  var m = $("msg");
+  m.textContent = text;
+  m.className = "msg show" + (err ? " err" : "");
+  setTimeout(function(){ m.className = "msg" + (err ? " err" : ""); }, 2600);
+}
+
+function api(path, opt, cb, fail){
+  opt = opt || {};
+  opt.headers = Object.assign({"X-Requested-With":"fetch"}, opt.headers || {});
+  opt.credentials = "same-origin";
+  /* 登录/设置密码这两个接口的失败是它自己的业务错误（密码错、已初始化……），
+     不能当成"会话失效"弹登录页——那样无论什么原因提示都变成"请先登录"。
+     服务端用 code=unauthorized 明确标记"会话没了"，前端只认它。 */
+  var isAuthCall = (path === "/api/login" || path === "/api/setup");
+  fetch(path, opt).then(function(r){
+    return r.json().catch(function(){
+      return {error: "服务响应异常（HTTP " + r.status + "）",
+              code: r.status === 403 ? "unauthorized" : ""};
+    }).then(function(j){
+      j = j || {};
+      if (j.code === "unauthorized" || (r.status === 403 && !j.error)){
+        if (isAuthCall) throw new Error(j.error || "密码错误，请重新输入");
+        showAuth();
+        throw new Error(j.error || "请先登录");
+      }
+      if (j.error) throw new Error(j.error);
+      if (r.status >= 400) throw new Error("请求失败（HTTP " + r.status + "）");
+      cb(j);
+    });
+  }).catch(function(e){
+    toast(e.message || "请求失败", true);
+    if (fail) fail(e);
+  });
+}
+
+function showAuth(){
+  $("auth").classList.remove("hidden");
+  $("main").classList.add("hidden");
+  $("pw").focus();
+}
+
+function showMain(){
+  $("auth").classList.add("hidden");
+  $("main").classList.remove("hidden");
+  load();
+}
+
+function esc(s){ return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){
+  return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]; }); }
+
+/* 需要二次确认的按钮：第一次点变成"确认执行？"，3 秒内再点才真正执行 */
+function armConfirm(btn, text, fn){
+  var armed = false, timer = null;
+  btn.onclick = function(){
+    if (!armed){
+      armed = true;
+      btn.dataset.old = btn.textContent;
+      btn.textContent = text;
+      timer = setTimeout(function(){ armed = false; btn.textContent = btn.dataset.old; }, 3000);
+      return;
+    }
+    clearTimeout(timer); armed = false; btn.textContent = btn.dataset.old;
+    fn();
+  };
+}
+
+function load(){
+  api("/api/state", {}, function(st){
+    state = st;
+    $("ver").textContent = "v" + st.version;
+    $("poolKeep").textContent = st.pool_keep;
+    renderThemes();
+    $("bakInfo").textContent = st.icons_backup_count ? ("已有 " + st.icons_backup_count + " 个原图标备份") : "尚未替换过图标";
+    $("loginPreview").src = "/api/preview/login?t=" + Date.now();
+    $("wpState").textContent = st.last_bing ? ("上次 Bing 应用：" + st.last_bing) : "";
+    $("srcInput").value = st.source;
+    $("cronInput").value = st.schedule || "";
+    var poolHtml = "";
+    st.pool.slice(0, 8).forEach(function(f){
+      poolHtml += '<img src="/api/preview/pool/' + esc(f) + '" data-file="' + esc(f) + '" title="点击设为桌面壁纸（' + esc(f) + '）" style="width:64px;height:40px;object-fit:cover;border-radius:6px;border:1px solid var(--line);cursor:pointer' + (st.last_desktop === f ? ';outline:2px solid var(--g)' : '') + '">';
+    });
+    $("pool").innerHTML = poolHtml || '<span class="hint">暂无（刷新后写入）</span>';
+    bindPool();
+    var pr = "";
+    (st.presets || []).forEach(function(p){
+      var cur = st.source === p.url;
+      pr += '<button data-url="' + esc(p.url) + '" style="font-size:12px;padding:4px 10px;' +
+            (cur ? 'border-color:var(--g);color:var(--g)' : '') + '">' + esc(p.name) + '</button>';
+    });
+    $("presets").innerHTML = pr;
+    document.querySelectorAll("#presets button").forEach(function(b){
+      b.onclick = function(){ $("srcInput").value = b.dataset.url; $("saveSrc").click(); };
+    });
+    var du = (st.desktop_users || []).map(function(u){ return u.user; });
+    var ds = [];
+    if (st.last_desktop_at && st.last_desktop) ds.push("当前桌面：" + st.last_desktop + "（" + st.last_desktop_at + "）");
+    ds.push("将影响 " + du.length + " 个用户" + (du.length ? "：" + du.join("、") : ""));
+    if (st.desktop_restored_at) ds.push("已还原（" + st.desktop_restored_at + "）");
+    $("desktopState").textContent = ds.join("；");
+    loadLogs();
+  });
+}
+
+function bindPool(){
+  document.querySelectorAll("#pool img").forEach(function(img){
+    img.onclick = function(){
+      if (img.dataset.armed === "1"){
+        var f = img.dataset.file;
+        api("/api/wallpaper/desktop", {method:"POST", body:JSON.stringify({file:f})}, function(r){
+          toast("已设为 " + r.users.length + " 个用户的桌面壁纸，桌面刷新后生效");
+          load();
+        });
+      } else {
+        document.querySelectorAll("#pool img").forEach(function(o){
+          delete o.dataset.armed;
+          o.style.outline = (o.dataset.file === state.last_desktop) ? "2px solid var(--g)" : "";
+        });
+        img.dataset.armed = "1";
+        img.style.outline = "2px solid var(--warn)";
+        toast("再点一次确认：" + img.dataset.file);
+      }
+    };
+  });
+}
+
+function renderThemes(){
+  var cur = state.last_theme;
+  var html = "";
+  state.themes.forEach(function(t){
+    var samples = (state.theme_samples && state.theme_samples[t.id]) || [];
+    var imgs = "";
+    for (var i = 0; i < Math.min(4, samples.length); i++){
+      imgs += '<img src="/api/preview/theme/' + t.id + "/" + esc(samples[i]) + '">';
+    }
+    html += '<div class="theme' + (cur === t.id ? " current" : "") + '" id="th-' + t.id + '">' +
+      "<div>" + imgs + "</div>" +
+      '<div class="nm">' + esc(t.name) + (cur === t.id ? ' <span class="tag">当前</span>' : "") + "</div>" +
+      '<div class="au">' + esc(t.author) + "</div>" +
+      '<button data-theme="' + t.id + '">' + (t.id === "default" ? "应用（还原官方）" : "应用此主题") + "</button>" +
+      "</div>";
+  });
+  $("themes").innerHTML = html;
+  document.querySelectorAll("#themes button").forEach(function(b){
+    var id = b.dataset.theme;
+    armConfirm(b, "确认应用？", function(){
+      api("/api/apply_icons", {method:"POST", body:JSON.stringify({theme:id})}, function(r){
+        toast("已替换 " + r.replaced + " 个图标" + (r.skipped ? ("，池外跳过 " + r.skipped + " 个") : ""));
+        load();
+      });
+    });
+  });
+}
+
+function loadLogs(){
+  api("/api/logs", {}, function(r){ $("logs").textContent = r.logs || "（空）"; });
+}
+
+function authLabel(){
+  return authMode === "setup" ? "设置并进入" : "进入";
+}
+
+function setAuthMode(setup){
+  authMode = setup ? "setup" : "login";
+  $("authSub").textContent = setup
+    ? "首次使用，请设置应用密码（4 位以上）"
+    : "请输入应用密码";
+  var b = $("authBtn");
+  b.disabled = false;
+  b.textContent = authLabel();
+}
+
+$("authBtn").onclick = function(){
+  var pw = $("pw").value;
+  if (!pw) { toast("请输入密码", true); $("pw").focus(); return; }
+  var b = $("authBtn");
+  b.disabled = true;
+  b.textContent = "验证中…";
+  var restore = function(){ b.disabled = false; b.textContent = authLabel(); };
+  api(authMode === "setup" ? "/api/setup" : "/api/login",
+      {method:"POST", body:JSON.stringify({password:pw})},
+      function(){ $("pw").value = ""; restore(); showMain(); },
+      function(){ restore(); $("pw").select(); });
+};
+$("pw").addEventListener("keydown", function(e){ if (e.key === "Enter") $("authBtn").click(); });
+
+$("outBtn").onclick = function(){ api("/api/logout", {method:"POST"}, function(){ showAuth(); }); };
+
+armConfirm($("restoreIcons"), "确认还原？", function(){
+  api("/api/restore_icons", {method:"POST"}, function(r){
+    toast("已还原 " + r.restored + " 个图标"); load();
+  });
+});
+
+$("refreshWp").onclick = function(){
+  var b = $("refreshWp"); b.disabled = true; b.textContent = "下载中…";
+  api("/api/wallpaper/refresh", {method:"POST"}, function(){
+    b.disabled = false; b.textContent = "刷新 Bing 每日壁纸";
+    toast("壁纸已更新（登录背景 + 壁纸库）"); load();
+  }, function(){
+    b.disabled = false; b.textContent = "刷新 Bing 每日壁纸";
+  });
+};
+
+$("saveSrc").onclick = function(){
+  api("/api/source", {method:"POST", body:JSON.stringify({url:$("srcInput").value})},
+      function(){ toast("壁纸源已保存"); load(); });
+};
+$("saveCron").onclick = function(){
+  api("/api/schedule", {method:"POST", body:JSON.stringify({cron:$("cronInput").value})},
+      function(){ toast("定时已保存"); load(); });
+};
+armConfirm($("restoreWp"), "确认恢复？", function(){
+  api("/api/wallpaper/restore_login", {method:"POST"}, function(){
+    toast("登录背景已恢复原版"); load();
+  });
+});
+armConfirm($("restoreDesktop"), "确认恢复？", function(){
+  api("/api/wallpaper/desktop_restore", {method:"POST"}, function(r){
+    toast("桌面壁纸已还原（" + r.restored.length + " 个用户）"); load();
+  });
+});
+$("wpFile").addEventListener("change", function(){
+  var f = this.files[0]; if (!f) return;
+  if (f.size > 40 * 1024 * 1024) { toast("图片不能超过 40MB", true); return; }
+  var fr = new FileReader();
+  fr.onload = function(){
+    api("/api/wallpaper/upload", {method:"POST", body:fr.result,
+        headers:{"Content-Type":"application/octet-stream"}},
+        function(){ toast("登录背景已更新"); load(); });
+  };
+  fr.readAsArrayBuffer(f);
+});
+$("logBtn").onclick = loadLogs;
+
+/* 首次探测：welcome 看是否初始化；state 403 → 登录页，200 → 直接进主界面 */
+fetch("/api/welcome").then(function(r){ return r.json(); }).then(function(w){
+  setAuthMode(!!w.setup);
+  return fetch("/api/state", {credentials:"same-origin", headers:{"X-Requested-With":"fetch"}});
+}).then(function(r){
+  if (r && r.status === 403){ showAuth(); return; }
+  return r.json();
+}).then(function(st){
+  if (!st) return;
+  state = st;
+  showMain();
+}).catch(function(){ showAuth(); });
+</script>
+</body>
+</html>

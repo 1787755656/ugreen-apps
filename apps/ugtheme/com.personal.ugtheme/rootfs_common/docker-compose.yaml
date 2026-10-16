@@ -1,0 +1,26 @@
+# UGTheme 主题美化 — 安装时按 Go text/template 渲染（不是 ${VAR}）。
+# 图标目录与壁纸目录 bind 进容器读写；数据目录（备份/配置/日志）用安装时选择的路径。
+name: ugtheme-ugreen
+
+services:
+  ugtheme:
+    image: "ugtheme/ugtheme:1.1.1"
+    ports:
+      - "28750:28750"
+    environment:
+      TZ: "{{.TZ}}"
+      UGTHEME_PORT: "28750"
+    volumes:
+      - type: bind
+        source: "{{ if .DATA_PATH }}{{ index .DATA_PATH 0 }}{{ else }}./data{{ end }}"
+        target: /data
+      - type: bind
+        source: /ugreen/static/icons
+        target: /ugreen/static/icons
+      - type: bind
+        source: /ugreen/wallpaper
+        target: /ugreen/wallpaper
+      - type: bind
+        source: /ugreen/.config/.nas
+        target: /ugreen/.config/.nas
+    restart: unless-stopped

@@ -1,0 +1,71 @@
+spec_version: "2.1"
+app_id: com.personal.ugtheme
+version: 1.1.1
+
+support_arch:
+  - amd64
+  - arm64
+
+product_series:
+  - nasync
+
+supports:
+  - pc
+  - app
+
+is_docker_app: true
+
+# Docker 应用依赖 Docker 套件
+depend_docker_version: 1.7.0.0000
+
+depend_fw_version: 1.13.0.0000
+
+port: 28750
+
+# Docker 应用只能 tab：浏览器新标签页直连容器端口，应用自带密码登录
+open_type: tab
+
+only_admin: true
+
+support_migration: true
+
+tag_types:
+  - utility
+
+license_agreement_link:
+  - "https://github.com/zifeng-chen/ugreen-icon-replacer/blob/main/LICENSE"
+
+source_code_link:
+  - "https://github.com/zifeng-chen/ugreen-icon-replacer"
+  - "https://github.com/leaosunday/naswallpaper"
+
+parameters:
+  - key: DATA_PATH
+    type: path
+    required: false
+    changeable: true
+    multi: false
+    i18n:
+      en-US:
+        name: "Data directory"
+        description: "Optional: choose a folder for app data (backups, config, logs). Recommended, for example a new folder under your Docker share — backups survive reinstall there. Leave empty to use the app package directory (deleted on uninstall; restore originals before uninstalling)."
+      zh-CN:
+        name: "数据目录"
+        description: "可选：选择存放应用数据（备份、配置、日志）的文件夹。建议选一个，例如在 Docker 共享目录下新建的文件夹，重装不丢备份。留空则使用应用包内目录（卸载即删，卸载前请先在应用内还原）。"
+
+i18n:
+  zh-CN:
+    name: "主题美化中心"
+    description: "一键更换 UGOS 桌面应用图标主题，内置 iOS26 液态玻璃、锤子OS、拟物毛玻璃、绿联毛玻璃、官方默认五套主题（同名覆盖、可一键还原原版）。自动下载必应每日壁纸，同步更新登录页背景与桌面壁纸库（在 UGOS 壁纸设置中选择），支持自定义壁纸源、上传图片与 cron 定时刷新。所有修改前自动备份原版文件。首次打开需设置应用密码，管理员专用，请勿将端口暴露到公网。图标主题来自 ugreen-icon-replacer（MIT）。"
+    author: 穿斯帕沃特
+    official: "https://club.ugnas.com/home.php?mod=space&uid=10131"
+    publisher: 穿斯帕沃特
+    publisher_link: "https://club.ugnas.com/home.php?mod=space&uid=10131"
+
+  en-US:
+    name: "Theme Studio"
+    description: "One-click UGOS desktop icon themes with five bundled styles (iOS 26 liquid glass, SmartisanOS, glass, UGREEN glass, official default). Same-name overwrite with automatic backup and one-click restore. Downloads the Bing daily wallpaper to the login background and the desktop wallpaper library (select it in UGOS wallpaper settings), with custom source URL, image upload and cron scheduling. First launch asks you to set an app password. Admin only — do not expose the port to the internet. Icon themes from ugreen-icon-replacer (MIT)."
+    author: 穿斯帕沃特
+    official: "https://club.ugnas.com/home.php?mod=space&uid=10131"
+    publisher: 穿斯帕沃特
+    publisher_link: "https://club.ugnas.com/home.php?mod=space&uid=10131"
