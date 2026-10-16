@@ -1,0 +1,17 @@
+# 证件照服务（纯 CPU 版）— 两架构通用
+# 镜像由 rootfs_<arch>/images/ 离线加载
+# 模型目录为安装时选择的共享文件夹（内置模型启动时自动播种）
+# 注意：bind 长语法、无 $VAR、参数全列表（UGOS 实测约束）
+services:
+  hivision-idphotos:
+    image: hivision-idphotos-pro:1.0.0
+    container_name: hivision-idphotos-app
+    restart: unless-stopped
+    ports:
+      - "20858:8081"
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - type: bind
+        source: "{{ index .MODELS_DIR 0 }}"
+        target: /app/creator/models

@@ -1,30 +1,37 @@
 #!/usr/bin/env bash
-# 证件照服务（Docker 型）build.sh——CI 占位实现。
+# 证件照服务（Docker 型，纯 CPU）build.sh。
 #
-# 该应用的镜像由本地构建并发布（python:3.10-slim 基础 + HivisionIDPhotosPro
-# 源码，双架构 docker build 后 docker save），upk 经本仓库 Release 发布。
-# 因此 CI 不做镜像构建：should_build=true 到达这里时，断言对应 Release
-# 的 upk 资产已存在（即本地已完成发布），否则给出明确指引并失败——
-# 避免发布空包或静默过期。
+# 镜像由本地构建并发布在独立仓库
+#   1787755656/idphotos-ugreen-app（tag idphotos/v1.0.0-r1）：
+#     img-arm64.tar / img-amd64.tar = python:3.10-slim 基础上含项目源码的
+#     HivisionIDPhotos Pro CPU 镜像（模型不内置，安装时挂载模型文件夹）。
+# 这里只做：下载对应架构镜像 tar，铺 rootfs_<arch>/images/，随后由可复用
+# workflow 统一执行 ugcli check / pack / 发布。
 set -euo pipefail
 
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
 VERSION="${1:?usage: build.sh <version> <arch>}"
 ARCH="${2:?usage: build.sh <version> <arch>}"
 # shellcheck disable=SC1091
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/meta.env"
-TAG="${FILE_PREFIX}/v${VERSION}"
+APP_DIR="$REPO_ROOT/$PROJECT_DIR"
+IMG_DIR="$APP_DIR/rootfs_${ARCH}/images"
+mkdir -p "$IMG_DIR"
 
-REPO="${GITHUB_REPOSITORY:-1787755656/ugreen-apps}"
-ASSET="${ARCH}_nasync_${APP_ID}_${VERSION}.0001.upk"
-URL="https://github.com/${REPO}/releases/download/${TAG}/${ASSET}"
+BASE_REPO="1787755656/idphotos-ugreen-app"
+BASE_TAG="idphotos/v1.0.0-r1"
+ASSET="img-${ARCH}.tar"
+URL="https://github.com/${BASE_REPO}/releases/download/${BASE_TAG}/${ASSET}"
 
-CODE=$(curl -s -o /dev/null -w '%{http_code}' -IL "$URL")
-if [ "$CODE" = "200" ] || [ "$CODE" = "302" ]; then
-  echo "Release asset already published: $URL (CI 无需构建)"
-  exit 0
+echo "downloading ${URL}"
+if [ -n "${GH_TOKEN:-}" ]; then
+  curl -sL -H "Authorization: Bearer ${GH_TOKEN}" -o "$IMG_DIR/hivision-idphotos-pro-1.0.0.tar" "$URL"
+else
+  curl -sL -o "$IMG_DIR/hivision-idphotos-pro-1.0.0.tar" "$URL"
 fi
-
-echo "ERROR: ${TAG} 的 upk 资产不存在（${URL}）。" >&2
-echo "该应用由本地构建发布：先在本地执行 docker build/save 与 ugcli pack，" >&2
-echo "再以 tag ${TAG} 上传 upk 资产到本仓库 Release，然后重跑。" >&2
-exit 1
+SIZE=$(stat -c%s "$IMG_DIR/hivision-idphotos-pro-1.0.0.tar" 2>/dev/null || stat -f%z "$IMG_DIR/hivision-idphotos-pro-1.0.0.tar")
+if [ "$SIZE" -lt 200000000 ]; then
+  echo "ERROR: downloaded image tar too small (${SIZE} bytes)" >&2
+  exit 1
+fi
+echo "image tar ready: ${SIZE} bytes -> $IMG_DIR/hivision-idphotos-pro-1.0.0.tar"
