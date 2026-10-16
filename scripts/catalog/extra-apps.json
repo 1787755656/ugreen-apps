@@ -68,6 +68,30 @@
         "amd64",
         "arm64"
       ]
+    },
+    {
+      "appname": "com.personal.junyaoktv",
+      "display_name": "骏耀K歌",
+      "description": "骏耀K歌 —— 局域网家庭 KTV 点歌系统的绿联原生应用版本。\n电视大屏沉浸播放、手机扫码点歌、网页端曲库管理三端一体，同一个端口（28083）；非 H.264 片源自动调用本机硬件转码服务（hwtranscode）硬解硬转，不可用时回退包内 ffmpeg 软件编码；曲库兼容 mp4/mkv/avi/flv/mov/webm/mpg，多音轨文件自动启用原唱/伴唱切换。",
+      "homepage_url": "https://github.com/ma303973022/junyao-ktv",
+      "updated_at": "2026-10-16",
+      "version": "1.0.0",
+      "upk_version": "1.0.0.0004",
+      "release_tag": "junyaoktv/1.0.0.0004",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/junyaoktv/1.0.0.0004/amd64_nasync_com.personal.junyaoktv_1.0.0.0004.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/junyaoktv/1.0.0.0004/arm64_nasync_com.personal.junyaoktv_1.0.0.0004.upk"
+      },
+      "service_port": 28083,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/junyaoktv-icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "media",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ],
+      "post_install_note": "首次启动读到的安装参数一定是空的（平台先起服务、2~3 秒后才写参数）：装好后到应用中心「停止 → 启动」一次，歌曲目录才会生效。硬件转码令牌 / 地址在应用中心「设置」里填。"
     }
   ]
 }
