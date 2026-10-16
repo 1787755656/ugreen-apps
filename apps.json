@@ -174,16 +174,16 @@
       "description": "AI 证件照生成服务（纯 CPU 推理，无需显卡/NPU）：上传照片自动抠图， 支持标准一寸/二寸、各国签证规格与自定义尺寸，背景色自由替换， 一键生成六寸排版照；另提供透明底抠图、加水印、改 KB、格式转换、 黑白照上色、图片转动漫、清晰度增强等图片工具。 安装时选择模型文件夹；全部模型可在开发者仓库 （https://github.com/no1yu/HivisionIDPhotosPro）README 的「模型说明」 章节获取下载链接，下载后放入模型文件夹对应子目录即可使用 （推荐先放 PP-MattingV2 与 YuNet 两个）； 也提供 HTTP API 供其它应用调用（见 API.md）。",
       "homepage_url": "https://github.com/no1yu/HivisionIDPhotosPro",
       "updated_at": "2026-10-16",
-      "version": "1.0.0",
-      "upk_version": "1.0.0.0002",
-      "release_tag": "idphotos/v1.0.0-r1",
+      "version": "1.0.1",
+      "upk_version": "1.0.1.0003",
+      "release_tag": "idphotos/v1.0.1",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/idphotos/v1.0.0-r1/amd64_nasync_com.chuan.idphotos_1.0.0.0002.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/idphotos/v1.0.0-r1/arm64_nasync_com.chuan.idphotos_1.0.0.0002.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/idphotos/v1.0.1/amd64_nasync_com.chuan.idphotos_1.0.1.0003.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/idphotos/v1.0.1/arm64_nasync_com.chuan.idphotos_1.0.1.0003.upk"
       },
       "service_port": 20858,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/idphotos/com.chuan.idphotos/rootfs_common/icon.png",
-      "download_count": 2,
+      "download_count": 0,
       "app_type": "docker",
       "category": "system",
       "platforms": [
@@ -782,7 +782,7 @@
       },
       "service_port": 28750,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/ugtheme/com.personal.ugtheme/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 2,
       "app_type": "docker",
       "category": "utility",
       "platforms": [
