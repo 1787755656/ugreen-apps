@@ -3,15 +3,15 @@
     {
       "appname": "com.personal.ugstore",
       "display_name": "三方应用商店",
-      "description": "面向 UGOS Pro 的第三方应用商店：浏览、安装、更新来自社区源的原生应用，全程走系统应用中心的正式安装通道，支持安装位置选择、更新检查与商店自更新。数据与账号只保存在自己的 NAS 上。\n桌面端经网关身份自动鉴权；手机端经网关访问、无宿主桥，使用「访问密码」闸，首帧即弹出密码验证（联子压缩 / 联子看图同款方案），通过后渲染应用界面。支持 amd64 / arm64 双架构。",
+      "description": "面向 UGOS Pro 的第三方应用商店：浏览、安装、更新来自社区源的原生应用，全程走系统应用中心的正式安装通道，支持安装位置选择、更新检查与商店自更新。数据与账号只保存在自己的 NAS 上。\n桌面端经网关身份自动鉴权；手机端经网关访问、无宿主桥，使用「访问密码」闸，首帧即弹出密码验证（联子压缩 / 联子看图同款方案），通过后渲染应用界面。支持 amd64 / arm64 双架构。安装时可为声明了路径参数的应用（如证件照服务的模型目录）填写文件夹路径。",
       "homepage_url": "https://github.com/1787755656/ugreen-apps",
-      "updated_at": "2026-10-15",
+      "updated_at": "2026-10-16",
       "version": "0.1.0",
-      "upk_version": "0.1.0.0021",
-      "release_tag": "ugstore/0.1.0.0021",
+      "upk_version": "0.1.0.0022",
+      "release_tag": "ugstore/0.1.0.0022",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/ugstore/0.1.0.0021/amd64_nasync_com.personal.ugstore_0.1.0.0021.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/ugstore/0.1.0.0021/arm64_nasync_com.personal.ugstore_0.1.0.0021.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/ugstore/0.1.0.0022/amd64_nasync_com.personal.ugstore_0.1.0.0022.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/ugstore/0.1.0.0022/arm64_nasync_com.personal.ugstore_0.1.0.0022.upk"
       },
       "service_port": 21310,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/ugstore-icon.png",
@@ -99,30 +99,6 @@
           "description": "存放 MV 歌曲文件（.mp4/.mkv/.avi/.flv/.mov/.webm/.mpg）的共享文件夹，选好即完成授权，曲库扫描就是扫它。文件名格式：\"歌手 - 歌名.mp4\" 或 \"歌名.mp4\"；多音轨文件自动启用原唱/伴唱切换。留空则用应用数据目录下的 mv 子目录。装好或改完请在应用中心「停止 → 启动」一次才生效。"
         }
       ]
-    },
-    {
-      "appname": "com.personal.litereader",
-      "display_name": "轻阅读",
-      "description": "把 NAS 变成自己的电子书库。选好书库文件夹后自动扫描并读出书名、作者和封面，支持 EPUB、MOBI、AZW3、PDF、TXT、FB2 和 CBZ/CBR 漫画。\n在浏览器里直接翻页阅读，进度、书签、笔记和高亮都存在 NAS 上，换一台设备接着看；TXT 会自动转成 EPUB 排版。还有阅读时长统计和成就系统。\n朗读支持本机离线合成（sherpa-onnx）或微软 Edge 在线语音；可选 AI 助手做摘要和问答（自带 OpenAI/Claude 兼容接口地址和密钥，不填不联网）。\n支持多用户，可按人分配可见书库。",
-      "homepage_url": "https://club.ugnas.com/home.php?mod=space&uid=10131",
-      "updated_at": "2026-10-16",
-      "version": "1.2.3",
-      "upk_version": "1.2.3.0006",
-      "release_tag": "litereader/1.2.3.0006",
-      "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/litereader/1.2.3.0006/amd64_nasync_com.personal.litereader_1.2.3.0006.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/litereader/1.2.3.0006/arm64_nasync_com.personal.litereader_1.2.3.0006.upk"
-      },
-      "service_port": 28082,
-      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/litereader-icon.png",
-      "download_count": 0,
-      "app_type": "native",
-      "category": "media",
-      "platforms": [
-        "amd64",
-        "arm64"
-      ],
-      "post_install_note": "装好后请选好书库文件夹，并在应用中心「停止 → 启动」一次使其生效；初始账号 admin / admin123，登录后请修改密码。"
     }
   ]
 }
