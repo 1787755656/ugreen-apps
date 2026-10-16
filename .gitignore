@@ -63,3 +63,5 @@ scripts/apps/mariadb/.build-cache/
 # 两应用的管理页前端是直接提交的静态文件，无需 ignore。
 scripts/apps/redis/.build-cache/
 scripts/apps/postgresql/.build-cache/
+apps/*/com.*/rootfs_arm64/images/
+apps/*/com.*/rootfs_amd64/images/
