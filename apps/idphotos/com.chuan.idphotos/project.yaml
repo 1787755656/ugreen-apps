@@ -1,0 +1,114 @@
+# ============================================================
+# 证件照服务 (HivisionIDPhotos Pro · CPU 版) — UGOS Pro Docker 应用
+#
+# AI 证件照生成服务：抠图 + 背景色/证件尺寸排版 + 六寸照，纯 CPU 推理。
+# 核心链路模型（PP-MattingV2 抠图 + YuNet 人脸检测）已内置镜像，
+# 装完即用；demo 页面（/demo/index.html）可直接作为操作界面。
+#
+# 双架构（arm64 / amd64）镜像分别放 rootfs_arm64/images 与 rootfs_amd64/images，
+# compose 两架构通用（纯 CPU 无设备差异，单份即可）。
+#
+# 作者（上游）：https://github.com/no1yu/HivisionIDPhotosPro
+# 发布者：穿斯帕沃热特
+# ============================================================
+
+spec_version: "2.1"
+app_id: com.chuan.idphotos
+version: 1.0.0
+
+support_arch:
+  - arm64
+  - amd64
+
+supports:
+  - pc
+  - app
+
+is_docker_app: true
+
+# 依赖 Docker 套件（Docker 应用必填）
+depend_docker_version: 1.7.0.0000
+
+# 最低固件版本（无条件必填）
+depend_fw_version: 1.13.0.0000
+
+# 服务端口，与 docker-compose.yaml 的宿主侧端口一致（供系统探活）
+port: 20858
+
+# 浏览器新标签页直连容器端口（项目自带 demo 操作页）
+open_type: tab
+
+# 家庭工具类应用，全家可用，不限管理员
+only_admin: false
+
+tag_types:
+  - utility
+
+support_migration: true
+
+# 安装时选择一个共享文件夹作为模型目录（必填）：
+#   模型按项目 README 的下载链接获取后放入对应子目录；
+#   推荐先放 PP-MattingV2（默认抠图）与 YuNet（默认人脸检测）两个。
+parameters:
+  - key: MODELS_DIR
+    type: path
+    multi: false
+    required: true
+    i18n:
+      zh-CN:
+        name: 模型目录
+        description: >-
+          存放 AI 模型的共享文件夹。安装后内置模型会自动复制进去；
+          如需扩展（更多抠图模型、上色、动漫化等），按项目 README 的
+          模型下载链接下载后放入本文件夹对应子目录。
+      en-US:
+        name: Models Folder
+        description: >-
+          A shared folder for AI models. Built-in models are copied here
+          automatically on first start; to add more models (extra matting,
+          colorization, cartoonize, etc.), download them from the links in
+          the project README and place them into the matching subfolders.
+
+i18n:
+  zh-CN:
+    name: 证件照服务
+    description: >-
+      AI 证件照生成服务（纯 CPU 推理，无需显卡/NPU）：上传照片自动抠图，
+      支持标准一寸/二寸、各国签证规格与自定义尺寸，背景色自由替换，
+      一键生成六寸排版照；另提供透明底抠图、加水印、改 KB、格式转换、
+      黑白照上色、图片转动漫、清晰度增强等图片工具。
+      安装时选择模型文件夹；全部模型可在开发者仓库
+      （https://github.com/no1yu/HivisionIDPhotosPro）README 的「模型说明」
+      章节获取下载链接，下载后放入模型文件夹对应子目录即可使用
+      （推荐先放 PP-MattingV2 与 YuNet 两个）；
+      也提供 HTTP API 供其它应用调用（见 API.md）。
+    author: no1yu
+    official: "https://github.com/no1yu/HivisionIDPhotosPro"
+    publisher: 穿斯帕沃热特
+    publisher_link: "https://club.ugnas.com/home.php?mod=space&uid=10131"
+  en-US:
+    name: ID Photo Service
+    description: >-
+      AI ID photo service (pure CPU inference, no GPU/NPU required):
+      automatic background removal, standard 1/2-inch and international visa
+      sizes, custom dimensions, free background color replacement, and
+      one-click 6-inch layout sheets. Also ships image tools: transparent
+      matting, watermark, KB resize, format conversion, colorization,
+      cartoonize and enhancement. Choose a models folder on install; all
+      models can be fetched from the developer repository
+      (https://github.com/no1yu/HivisionIDPhotosPro, see the "Model
+      Description" section of its README) and placed into matching
+      subfolders (PP-MattingV2 + YuNet recommended first);
+      HTTP API available for other apps (see API.md).
+    author: no1yu
+    official: "https://github.com/no1yu/HivisionIDPhotosPro"
+    publisher: ChuanSiPaWoReTe
+    publisher_link: "https://club.ugnas.com/home.php?mod=space&uid=10131"
+
+# 项目本体 Apache-2.0
+license_agreement_link:
+  - https://github.com/no1yu/HivisionIDPhotosPro/blob/main/LICENSE
+source_code_link:
+  - https://github.com/no1yu/HivisionIDPhotosPro
+technical_support_link:
+  - https://github.com/no1yu/HivisionIDPhotosPro/issues
