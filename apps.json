@@ -153,7 +153,7 @@
       },
       "service_port": 20858,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/idphotos/com.chuan.idphotos/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 2,
       "app_type": "docker",
       "category": "system",
       "platforms": [
@@ -396,13 +396,13 @@
       "display_name": "OpenList",
       "description": "OpenList 是一款开源的文件列表程序，把 NAS 本机目录、WebDAV、S3、 FTP/SFTP 以及几十家网盘统一挂进同一个网页界面，支持文档/图片/音视频在线 预览、生成分享链接，并可再通过 WebDAV 对外提供。AList 的社区接续分支。 安装时选好数据目录与要挂载的本机目录即可使用。",
       "homepage_url": "https://doc.oplist.org/",
-      "updated_at": "2026-10-15",
-      "version": "4.2.6",
-      "upk_version": "4.2.6.0005",
-      "release_tag": "openlist/v4.2.6-r7",
+      "updated_at": "2026-10-16",
+      "version": "4.2.7",
+      "upk_version": "4.2.7.0006",
+      "release_tag": "openlist/v4.2.7",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/openlist/v4.2.6-r7/amd64_nasync_com.oplist.openlist_4.2.6.0005.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/openlist/v4.2.6-r7/arm64_nasync_com.oplist.openlist_4.2.6.0005.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/openlist/v4.2.7/amd64_nasync_com.oplist.openlist_4.2.7.0006.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/openlist/v4.2.7/arm64_nasync_com.oplist.openlist_4.2.7.0006.upk"
       },
       "service_port": 28244,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/openlist/com.oplist.openlist/rootfs_common/icon.png",
@@ -626,13 +626,13 @@
       "display_name": "Sub2API",
       "description": "AI 接口中转站（API Gateway）。把你的各大 LLM 服务商 key 统一管起来， 通过一个 OpenAI 兼容的地址对外提供接入，内置用量统计、配额限制、 多用户管理、WebAuthn 登录等。自带管理界面与账号体系。 需要本机已安装 PostgreSQL 15+ 与 Redis 7+。首次启动请在浏览器中完成初始化向导。",
       "homepage_url": "https://github.com/Wei-Shaw/sub2api",
-      "updated_at": "2026-10-13",
-      "version": "0.2.16",
-      "upk_version": "0.2.16.0009",
-      "release_tag": "sub2api/v0.2.16",
+      "updated_at": "2026-10-16",
+      "version": "0.2.17",
+      "upk_version": "0.2.17.0010",
+      "release_tag": "sub2api/v0.2.17",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/sub2api/v0.2.16/amd64_nasync_com.personal.sub2api_0.2.16.0009.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/sub2api/v0.2.16/arm64_nasync_com.personal.sub2api_0.2.16.0009.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/sub2api/v0.2.17/amd64_nasync_com.personal.sub2api_0.2.17.0010.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/sub2api/v0.2.17/arm64_nasync_com.personal.sub2api_0.2.17.0010.upk"
       },
       "service_port": 25435,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/sub2api/com.personal.sub2api/rootfs_common/icon.png",
