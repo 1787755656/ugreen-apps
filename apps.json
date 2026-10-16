@@ -21,6 +21,13 @@
       "platforms": [
         "amd64",
         "arm64"
+      ],
+      "install_params": [
+        {
+          "key": "ZIP_ROOTS",
+          "name": "工作目录",
+          "description": "100解压 在哪些文件夹里工作。这里选中的文件夹（及其子目录）里的压缩包 可以解压，也可以作为压缩的来源和输出位置，可添加多个。 选中的同时这个目录就被授权给本应用读写了。留空也能装， 装好后再在这里补选。装好或改完之后请在应用中心「停止 → 启动」一次， 新目录才会生效。"
+        }
       ]
     },
     {
@@ -44,6 +51,13 @@
       "platforms": [
         "amd64",
         "arm64"
+      ],
+      "install_params": [
+        {
+          "key": "MEDIA_PATH",
+          "name": "媒体与下载目录",
+          "description": "选择存放番剧的共享文件夹，可添加多个。选好即完成授权，之后在 WebUI 的 下载路径里填这些目录即可。留空也能安装，装好后在应用「访问路径」里授权同样可以。"
+        }
       ]
     },
     {
@@ -67,6 +81,13 @@
       "platforms": [
         "amd64",
         "arm64"
+      ],
+      "install_params": [
+        {
+          "key": "CLOUDDL_DOWNLOAD_DIR",
+          "name": "下载保存目录",
+          "description": "从网盘下载下来的文件放在哪。选一个你在文件管理器里看得到的目录即可， 选中的同时这个目录就被授权给本应用读写了。留空也能装， 文件会先落在应用私有数据目录里，之后可以在这里补选。 装好或改完之后请在应用中心「停止 → 启动」一次，新目录才会生效。"
+        }
       ]
     },
     {
@@ -90,7 +111,8 @@
       "platforms": [
         "amd64",
         "arm64"
-      ]
+      ],
+      "install_params": null
     },
     {
       "appname": "com.personal.easytier",
@@ -113,6 +135,13 @@
       "platforms": [
         "amd64",
         "arm64"
+      ],
+      "install_params": [
+        {
+          "key": "EASYTIER_DATA",
+          "name": "数据目录",
+          "description": "存放 Web 管理台账号、虚拟网络配置与日志（对应容器内 /app/data）。 留空则使用应用安装目录内的 data 文件夹。若你之前用 Docker 手动部署过 EasyTier 并想沿用旧数据（网页账号、已配置的虚拟网络），请选择旧部署 挂载的数据目录（其内应有 web、config、logs-core 等子目录）。 安装或修改后请在应用中心「停止 → 启动」一次使其生效。"
+        }
       ]
     },
     {
@@ -136,7 +165,8 @@
       "platforms": [
         "amd64",
         "arm64"
-      ]
+      ],
+      "install_params": null
     },
     {
       "appname": "com.chuan.idphotos",
@@ -159,6 +189,13 @@
       "platforms": [
         "amd64",
         "arm64"
+      ],
+      "install_params": [
+        {
+          "key": "MODELS_DIR",
+          "name": "模型目录",
+          "description": "存放 AI 模型的共享文件夹。安装后内置模型会自动复制进去； 如需扩展（更多抠图模型、上色、动漫化等），按项目 README 的 模型下载链接下载后放入本文件夹对应子目录。"
+        }
       ]
     },
     {
@@ -182,7 +219,8 @@
       "platforms": [
         "amd64",
         "arm64"
-      ]
+      ],
+      "install_params": null
     },
     {
       "appname": "com.personal.liteclass",
@@ -205,6 +243,13 @@
       "platforms": [
         "amd64",
         "arm64"
+      ],
+      "install_params": [
+        {
+          "key": "DEFAULT_SHARE_PATH",
+          "name": "课程媒体库目录",
+          "description": "存放课程视频/资料的文件夹（选好即完成授权）。留空则使用应用数据目录下的 media。⚠ 刚安装或升级后请在应用中心「停止」再「启动」一次，参数和目录 授权才会生效。"
+        }
       ]
     },
     {
@@ -228,6 +273,13 @@
       "platforms": [
         "amd64",
         "arm64"
+      ],
+      "install_params": [
+        {
+          "key": "LITEPAN_STRM_DIR",
+          "name": "STRM 输出目录",
+          "description": "选择 LitePan 生成 .strm 文件、nfo 与海报的共享文件夹， 再把它加进 Emby / Jellyfin 的媒体库即可直连播放。 选好即完成授权。留空也能安装，文件会写到应用数据目录， 但 Emby / Jellyfin 读不到；装好后可在应用「设置」里改。"
+        }
       ]
     },
     {
@@ -251,7 +303,8 @@
       "platforms": [
         "amd64",
         "arm64"
-      ]
+      ],
+      "install_params": null
     },
     {
       "appname": "com.personal.lunatv",
@@ -274,7 +327,8 @@
       "platforms": [
         "amd64",
         "arm64"
-      ]
+      ],
+      "install_params": null
     },
     {
       "appname": "com.magiccode.magicmail",
@@ -297,7 +351,8 @@
       "platforms": [
         "amd64",
         "arm64"
-      ]
+      ],
+      "install_params": null
     },
     {
       "appname": "com.magiccode.magicpush",
@@ -320,7 +375,8 @@
       "platforms": [
         "amd64",
         "arm64"
-      ]
+      ],
+      "install_params": null
     },
     {
       "appname": "com.personal.mariadb",
@@ -343,6 +399,13 @@
       "platforms": [
         "amd64",
         "arm64"
+      ],
+      "install_params": [
+        {
+          "key": "MARIADB_DATA_DIR",
+          "name": "数据保存目录",
+          "description": "选择存放数据库文件的共享文件夹，选好即完成授权。数据会存到该目录下的 mariadb-data 子目录。留空也能安装，数据存到应用数据目录。 注意：这个目录只在【首次初始化】时生效，之后更换需要手动迁移数据。"
+        }
       ]
     },
     {
@@ -366,7 +429,8 @@
       "platforms": [
         "amd64",
         "arm64"
-      ]
+      ],
+      "install_params": null
     },
     {
       "appname": "com.natfrp.launcher",
@@ -389,7 +453,8 @@
       "platforms": [
         "amd64",
         "arm64"
-      ]
+      ],
+      "install_params": null
     },
     {
       "appname": "com.oplist.openlist",
@@ -412,6 +477,18 @@
       "platforms": [
         "amd64",
         "arm64"
+      ],
+      "install_params": [
+        {
+          "key": "OL_DATA_DIR",
+          "name": "数据目录",
+          "description": "OpenList 存放配置、数据库、搜索索引的目录。选好即完成授权。 留空也能安装，数据会放在应用自己的数据目录里（跟随应用卸载一起删除）。 注意别选在下面「本机存储目录」的里面。"
+        },
+        {
+          "key": "OL_STORAGE_PATHS",
+          "name": "本机存储目录",
+          "description": "想通过 OpenList 访问的 NAS 本机目录，可以选多个。选好即完成授权， 之后在 OpenList 后台「存储 → 添加 → 本机存储」里填同样的路径即可。 只挂网盘等远程存储的话，这里可以不选。"
+        }
       ]
     },
     {
@@ -435,7 +512,8 @@
       "platforms": [
         "amd64",
         "arm64"
-      ]
+      ],
+      "install_params": null
     },
     {
       "appname": "com.sipeed.picoclaw",
@@ -458,7 +536,8 @@
       "platforms": [
         "amd64",
         "arm64"
-      ]
+      ],
+      "install_params": null
     },
     {
       "appname": "com.ashc776.piggybank",
@@ -481,7 +560,8 @@
       "platforms": [
         "amd64",
         "arm64"
-      ]
+      ],
+      "install_params": null
     },
     {
       "appname": "com.personal.postgresql17",
@@ -504,6 +584,13 @@
       "platforms": [
         "amd64",
         "arm64"
+      ],
+      "install_params": [
+        {
+          "key": "POSTGRES_DATA_DIR",
+          "name": "数据保存目录",
+          "description": "选择存放数据库文件的共享文件夹，选好即完成授权。数据会存到该目录下的 postgresql17-data 子目录。留空也能安装，数据存到应用数据目录。 安装后再改这一项的话，打开应用会出现「迁移数据目录」的卡片， 点一次即可自动停库、复制、校验并在新位置启动。"
+        }
       ]
     },
     {
@@ -527,6 +614,13 @@
       "platforms": [
         "amd64",
         "arm64"
+      ],
+      "install_params": [
+        {
+          "key": "DOWNLOAD_PATH",
+          "name": "下载保存目录",
+          "description": "选择下载文件要保存到的共享文件夹，可添加多个。选好即完成授权， 第一个会被设为 qBittorrent 的默认保存路径。留空也能安装， 装好后在应用「访问路径」里授权、再到 WebUI 里改保存路径同样可以。"
+        }
       ]
     },
     {
@@ -550,6 +644,13 @@
       "platforms": [
         "amd64",
         "arm64"
+      ],
+      "install_params": [
+        {
+          "key": "QB_DOWNLOAD_PATH",
+          "name": "下载保存目录",
+          "description": "下载的文件放在哪。选一个你在文件管理器里看得到的目录即可，选中的同时 这个目录就被授权给本应用读写了。留空也能装，文件会先落在应用私有数据 目录里。装好或改完之后请在应用中心「停止 → 启动」一次，新目录才生效。"
+        }
       ]
     },
     {
@@ -573,7 +674,8 @@
       "platforms": [
         "amd64",
         "arm64"
-      ]
+      ],
+      "install_params": null
     },
     {
       "appname": "com.personal.readeck",
@@ -596,6 +698,13 @@
       "platforms": [
         "amd64",
         "arm64"
+      ],
+      "install_params": [
+        {
+          "key": "READEK_DATA_DIR",
+          "name": "数据保存目录",
+          "description": "选择 Readeck 保存书签、阅读内容与数据库的共享文件夹。 选好即完成授权，数据会存到该目录。          留空也能安装， 数据存到应用数据目录；装好后可在应用「设置」里改。"
+        }
       ]
     },
     {
@@ -619,6 +728,13 @@
       "platforms": [
         "amd64",
         "arm64"
+      ],
+      "install_params": [
+        {
+          "key": "REDIS_DATA_DIR",
+          "name": "数据保存目录",
+          "description": "选择存放 Redis 数据文件（dump.rdb / AOF）的共享文件夹，选好即完成授权。 数据会存到该目录下的 redis-data 子目录。留空也能安装，数据存到应用数据目录。 安装后再改这一项的话，打开应用会出现「迁移数据目录」的卡片， 点一次即可自动停服、复制、校验并在新位置启动。"
+        }
       ]
     },
     {
@@ -642,6 +758,13 @@
       "platforms": [
         "amd64",
         "arm64"
+      ],
+      "install_params": [
+        {
+          "key": "SUB2API_DATA_DIR",
+          "name": "数据保存目录",
+          "description": "选择存放 Sub2API 配置与数据的共享文件夹，选好即完成授权。 数据会存到该目录下的 sub2api-data 子目录。留空也能安装，数据存到应用数据目录。"
+        }
       ]
     },
     {
@@ -688,6 +811,13 @@
       "platforms": [
         "amd64",
         "arm64"
+      ],
+      "install_params": [
+        {
+          "key": "ZHIYIN_MUSIC_PATHS",
+          "name": "音乐文件夹",
+          "description": "存放音乐的文件夹，可以选多个。选中的同时这些目录就被授权给本应用读写了， 应用会自动把它们加进扫描目录。留空也能装，装好后在应用中心 「停止 → 启动」一次再来补选。之后在这里去掉某个目录，它也会被移出扫描范围； 你在应用内自己添加的目录不受影响。"
+        }
       ]
     },
     {

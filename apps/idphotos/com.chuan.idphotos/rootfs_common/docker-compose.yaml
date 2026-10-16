@@ -4,7 +4,7 @@
 # 注意：bind 长语法、无 $VAR、参数全列表（UGOS 实测约束）
 services:
   hivision-idphotos:
-    image: hivision-idphotos-pro:1.0.0
+    image: hivision-idphotos-pro:1.0.1
     container_name: hivision-idphotos-app
     restart: unless-stopped
     ports:

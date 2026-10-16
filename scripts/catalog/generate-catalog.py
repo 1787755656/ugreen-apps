@@ -57,6 +57,8 @@ def read_project(py: Path) -> dict:
         i18n = (doc.get("i18n") or {}).get("zh-CN") or {}
         out["name"] = i18n.get("name")
         out["description"] = (i18n.get("description") or "").strip()
+        # path 型参数原样保留（生成 install_params 用）
+        out["parameters"] = doc.get("parameters") or []
     except Exception as e:  # noqa: BLE001 —— 描述缺失不阻塞目录生成
         print(f"warn: parse {py}: {e}", file=sys.stderr)
     return out
@@ -135,6 +137,17 @@ def main() -> None:
             "app_type": proj.get("app_type") or "native",
             "category": category,
             "platforms": sorted(set(platforms)),
+            # path 型参数提取：需要用户安装时填写的参数（如模型目录），
+            # 商店前端据此在安装对话框收集路径后带参提交安装。
+            "install_params": [
+                {
+                    "key": pp.get("key", ""),
+                    "name": (pp.get("i18n") or {}).get("zh-CN", {}).get("name", pp.get("key", "")),
+                    "description": (pp.get("i18n") or {}).get("zh-CN", {}).get("description", ""),
+                }
+                for pp in (proj.get("parameters") or [])
+                if pp.get("type") == "path"
+            ] or None,
         })
 
     # 额外应用清单：不在 apps/ 下、由各应用自有仓库独立打包的应用（如商店本体
