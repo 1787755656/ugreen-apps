@@ -145,15 +145,15 @@
       "homepage_url": "https://github.com/no1yu/HivisionIDPhotosPro",
       "updated_at": "2026-10-16",
       "version": "1.0.0",
-      "upk_version": "1.0.0.0001",
-      "release_tag": "idphotos/v1.0.0",
+      "upk_version": "1.0.0.0002",
+      "release_tag": "idphotos/v1.0.0-r1",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/idphotos/v1.0.0/amd64_nasync_com.chuan.idphotos_1.0.0.0001.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/idphotos/v1.0.0/arm64_nasync_com.chuan.idphotos_1.0.0.0001.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/idphotos/v1.0.0-r1/amd64_nasync_com.chuan.idphotos_1.0.0.0002.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/idphotos/v1.0.0-r1/arm64_nasync_com.chuan.idphotos_1.0.0.0002.upk"
       },
       "service_port": 20858,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/idphotos/com.chuan.idphotos/rootfs_common/icon.png",
-      "download_count": 2,
+      "download_count": 0,
       "app_type": "docker",
       "category": "system",
       "platforms": [
