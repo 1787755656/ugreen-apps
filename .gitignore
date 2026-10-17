@@ -59,6 +59,10 @@ apps/mariadb/com.personal.mariadb/rootfs_common/www/
 # runner 一次性用完即弃）。
 scripts/apps/mariadb/.build-cache/
 
+# Octop 的前端 (rootfs_common/www) 由 build.sh 现场从上游 fpk 里的
+# site-packages/octop/dashboard 铺出来（前后端同版本、单一来源），不进 git。
+apps/octop/com.tencent.octop/rootfs_common/www/
+
 # redis / postgresql 的 build.sh 本地缓存（同上：Go 工具链 + deb 下载缓存）。
 # 两应用的管理页前端是直接提交的静态文件，无需 ignore。
 scripts/apps/redis/.build-cache/
