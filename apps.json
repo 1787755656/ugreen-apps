@@ -67,11 +67,11 @@
       "homepage_url": "https://github.com/xiaocheng154/nas-cloud-downloader",
       "updated_at": "2026-10-17",
       "version": "1.5.9",
-      "upk_version": "1.5.9.0004",
-      "release_tag": "clouddl/v1.5.9-r7",
+      "upk_version": "1.5.9.0010",
+      "release_tag": "clouddl/v1.5.9-r8",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/clouddl/v1.5.9-r7/amd64_nasync_com.personal.clouddl_1.5.9.0004.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/clouddl/v1.5.9-r7/arm64_nasync_com.personal.clouddl_1.5.9.0004.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/clouddl/v1.5.9-r8/amd64_nasync_com.personal.clouddl_1.5.9.0010.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/clouddl/v1.5.9-r8/arm64_nasync_com.personal.clouddl_1.5.9.0010.upk"
       },
       "service_port": 28686,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/clouddl/com.personal.clouddl/rootfs_common/icon.png",
