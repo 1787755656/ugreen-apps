@@ -463,11 +463,11 @@
       "homepage_url": "https://github.com/Youngxj/N_m3u8DL-RE-FN",
       "updated_at": "2026-10-17",
       "version": "0.6.0",
-      "upk_version": "0.6.0.0001",
-      "release_tag": "nm3u8dlre/v0.6.0-beta",
+      "upk_version": "0.6.0.0002",
+      "release_tag": "nm3u8dlre/v0.6.0-beta-r1",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/nm3u8dlre/v0.6.0-beta/amd64_nasync_com.personal.nm3u8dlre_0.6.0.0001.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/nm3u8dlre/v0.6.0-beta/arm64_nasync_com.personal.nm3u8dlre_0.6.0.0001.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/nm3u8dlre/v0.6.0-beta-r1/amd64_nasync_com.personal.nm3u8dlre_0.6.0.0002.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/nm3u8dlre/v0.6.0-beta-r1/arm64_nasync_com.personal.nm3u8dlre_0.6.0.0002.upk"
       },
       "service_port": 28940,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/nm3u8dlre/com.personal.nm3u8dlre/rootfs_common/icon.png",
@@ -482,7 +482,7 @@
         {
           "key": "DOWNLOAD_DIR",
           "name": "下载目录",
-          "description": "下载完成的视频保存到哪个文件夹。选中即完成授权，应用只能读写这里。 不选也能装，文件会落在应用自己的共享目录里。 装完或改动后请在应用中心把应用「停止 → 启动」一次。"
+          "description": "下载完成的视频保存到哪个文件夹。选中即完成授权，应用只能读写这里。 不选也能装，但文件会落在应用数据目录（绿联文件管理器里看不到）， 页面顶部会给出提示。 选完保存后如果目录还没生效，应用会自己重启一次（约 10 秒），不用手动停止再启动。"
         }
       ]
     },
@@ -840,7 +840,7 @@
       },
       "service_port": 28750,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/ugtheme/com.personal.ugtheme/rootfs_common/icon.png",
-      "download_count": 10,
+      "download_count": 11,
       "app_type": "docker",
       "category": "utility",
       "platforms": [
