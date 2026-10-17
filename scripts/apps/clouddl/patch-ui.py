@@ -45,10 +45,16 @@ HTML_PATCHES: list[tuple[str, str, bool]] = [
     #   顺序必须是这个 —— 详见 overlay/ugos-auth.js 开头的说明。
     #   上游没有任何认证，缺了这一步 UGOS 网关不会注入用户身份，
     #   后端每个请求都 401，界面表现是右下角不停弹"未通过登录认证"。
+    #
+    # task-locate.js 是"任务卡片 → 在文件管理器中定位"那一层，普通脚本、
+    # 立即执行（它在 app.js 之前把 MutationObserver 挂好，之后由它自己
+    # 跟着上游的重画给卡片补按钮）。放在 ugos-auth.js 之后是因为它要靠
+    # __clouddlAuth.token 判断"到底在不在绿联桌面窗口里"。
     (
         '<script type="module" src="/static/app.js"></script>',
         '<script src="/static/cloudwindow.js"></script>\n'
-        '  <script src="/static/ugos-auth.js"></script>',
+        '  <script src="/static/ugos-auth.js"></script>\n'
+        '  <script src="/static/task-locate.js"></script>',
         True,
     ),
 ]

@@ -163,9 +163,10 @@ echo "==> [$ARCH] 编译管理壳 linux/$ARCH"
   CGO_ENABLED=0 GOOS=linux GOARCH="$ARCH" \
   go build -trimpath -ldflags="-s -w -X main.version=$VERSION" -o "$dir/bin/clouddl" . )
 
-# f. 认证适配层 + JSSDK 也要放一份到上游自己 serve 的 static 里
+# f. 认证适配层 + JSSDK + 任务卡片定位层也要放一份到上游自己 serve 的 static 里
 #    （生产环境走不到，因为管理壳只反代 /api/；放齐是免得留下坏引用）。
-cp "$SLASH_DIR/overlay/ugos-auth.js" "$SLASH_DIR/overlay/cloudwindow.js" "$dir/service/src/static/"
+cp "$SLASH_DIR/overlay/ugos-auth.js" "$SLASH_DIR/overlay/cloudwindow.js" \
+   "$SLASH_DIR/overlay/task-locate.js" "$dir/service/src/static/"
 
 # g. 文案本地化（上游是给飞牛写的）+ 把 app.js 的加载改由认证适配层接管。
 python3 "$SLASH_DIR/patch-ui.py" \
@@ -197,9 +198,11 @@ mkdir -p "$APPDIR/rootfs_common/www"
 cp -R "$UP/app/service/src/static" "$APPDIR/rootfs_common/www/static"
 cp "$UP/app/service/src/static/index.html" "$APPDIR/rootfs_common/www/index.html"
 
-# UGOS 登录认证适配层 + 绿联 JSSDK（都是本移植版新增的，上游没有）。
-# 没有这两个文件，网关不会给后端注入用户身份 —— 界面会一直弹“未通过登录认证”。
+# UGOS 登录认证适配层 + 绿联 JSSDK + 任务卡片定位层（都是本移植版新增的，上游没有）。
+# 没有前两个文件，网关不会给后端注入用户身份 —— 界面会一直弹“未通过登录认证”。
+# task-locate.js 给下载任务加“在文件管理器中打开”，靠 JSSDK 的 openApp 实现。
 cp "$SLASH_DIR/overlay/ugos-auth.js" "$SLASH_DIR/overlay/cloudwindow.js" \
+   "$SLASH_DIR/overlay/task-locate.js" \
    "$APPDIR/rootfs_common/www/static/"
 
 # ---- 3b. 界面文案本地化 ----
