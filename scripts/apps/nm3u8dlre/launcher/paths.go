@@ -23,7 +23,15 @@ type Paths struct {
 	EngineBundled string // 包内自带引擎
 	EngineData    string // 应用内更新后的引擎（优先使用）
 	FFmpeg        string // 可选的 ffmpeg（混流用）
-	Download      string // 默认下载目录
+
+	// 下载目录的现场，给界面/诊断用。
+	Download       string // 实际生效的下载目录
+	DownloadSource string // env | unit | shared | data
+	DownloadActive bool   // Download 是否真的可写
+	DeclaredPath   string // 平台声明授权、但沙箱里还用不了的目录（pending）
+	DeclaredErr    string
+
+	Fallback string // 声明目录不可用时的兜底目录（data/downloads）
 }
 
 // envDir 读取环境变量形式的目录；平台在未选择 path 参数时会写字面量 "null"。
@@ -35,24 +43,114 @@ func envDir(key, def string) string {
 	return filepath.Clean(v)
 }
 
-func firstWritable(cands ...string) string {
-	for _, d := range cands {
-		if d == "" || d == "null" {
-			continue
-		}
-		if err := os.MkdirAll(d, 0o755); err == nil {
-			if w, err := os.CreateTemp(d, ".wtest"); err == nil {
-				name := w.Name()
-				w.Close()
-				os.Remove(name)
-				return d
-			}
+// writableDir 判断目录存在且当前进程能真写（不只看权限位，直接落一个临时文件）。
+func writableDir(d string) bool {
+	if d == "" {
+		return false
+	}
+	st, err := os.Stat(d)
+	if err != nil || !st.IsDir() {
+		return false
+	}
+	f, err := os.CreateTemp(d, ".wtest")
+	if err != nil {
+		return false
+	}
+	name := f.Name()
+	f.Close()
+	os.Remove(name)
+	return true
+}
+
+// ensureDir 只对「自己该创建的目录」动手（data/cache/log 这类），
+// 用户授权目录绝不去 mkdir —— 那目录归平台和用户管。
+func ensureDir(d string) string {
+	if d == "" {
+		return ""
+	}
+	if err := os.MkdirAll(d, 0o755); err != nil {
+		return ""
+	}
+	if !writableDir(d) {
+		return ""
+	}
+	return d
+}
+
+// quickDataDir 在 resolvePaths 之前先算出 data 目录（自愈状态文件要放这儿）。
+func quickDataDir() string {
+	exe, _ := os.Executable()
+	if r, err := filepath.EvalSymlinks(exe); err == nil {
+		exe = r
+	}
+	install := envDir("UGAPP_INSTALL_DIR", filepath.Dir(filepath.Dir(exe)))
+	return envDir("UGAPP_DATA_DIR", filepath.Join(install, "data"))
+}
+
+// unitFilePath 返回本应用的 systemd unit 路径（沙箱里 /lib 只读挂载，0644 可读）。
+func unitFilePath(install string) string {
+	appID := filepath.Base(strings.TrimRight(install, "/"))
+	for _, dir := range []string{"/lib/systemd/system", "/usr/lib/systemd/system", "/etc/systemd/system"} {
+		p := filepath.Join(dir, appID+".service")
+		if _, err := os.Stat(p); err == nil {
+			return p
 		}
 	}
 	return ""
 }
 
-func resolvePaths() (*Paths, error) {
+// DeclaredDownloadDirs 从 unit 的 BindPaths= 里取「平台已经授权给用户的目录」。
+//
+// 为什么读 unit 而不是 init.d/*.env：
+//   - init.d/ 是 0700 root，沙箱里的应用进程读不到（实测 from_file 永远为空）；
+//   - unit 是 0644，**在挂载生效之前**就能读到平台"打算授权什么"。
+//
+// BindPaths 有 `BindPaths=-"/volume1/x"` 这种写法（`-` 表示挂载失败可忽略），
+// 需要去掉前缀与引号；只保留 /volumeN 下、且不属于本应用自己的
+// data/cache/log/shared（那些是 UGAPP_* 目录，不是用户授权目录）。
+func DeclaredDownloadDirs(install string) []string {
+	unit := unitFilePath(install)
+	if unit == "" {
+		return nil
+	}
+	raw, err := os.ReadFile(unit)
+	if err != nil {
+		return nil
+	}
+	var out []string
+	for _, line := range strings.Split(string(raw), "\n") {
+		line = strings.TrimSpace(line)
+		if !strings.HasPrefix(line, "BindPaths=") {
+			continue
+		}
+		v := strings.TrimSpace(strings.TrimPrefix(line, "BindPaths="))
+		v = strings.TrimPrefix(v, "-")
+		v = strings.Trim(v, `"`)
+		v = strings.Trim(v, "'")
+		if !strings.HasPrefix(v, "/volume") || strings.Contains(v, "/@") {
+			continue
+		}
+		if strings.HasPrefix(v, install+string(os.PathSeparator)) {
+			continue
+		}
+		out = append(out, filepath.Clean(v))
+	}
+	return out
+}
+
+// resolvePaths 解析全部工作目录。
+//
+// 下载目录的优先级：
+//  1. 环境变量 DOWNLOAD_DIR（path 参数，平台在服务启动后约 1.6 秒才写）
+//  2. unit 里的 BindPaths=（平台的权威授权声明，启动后约 4 秒出现）
+//  3. shared/downloads
+//  4. data/downloads
+//
+// ⚠ 关键：1/2 存在但沙箱里用不了时（全新安装的第一次启动就是这个状态 ——
+// 参数还没写、挂载还没建），绝不静默回退到 data 目录（用户根本看不到那里），
+// 而是记成 pending，由 main 的自愈逻辑主动退出一次让 systemd 重启（那时参数与
+// 挂载都已就位）。只有在自愈配额用尽后，才退到兜底目录并在界面挂横幅。
+func resolvePaths(healExhausted bool) (*Paths, error) {
 	exe, _ := os.Executable()
 	if r, err := filepath.EvalSymlinks(exe); err == nil {
 		exe = r
@@ -67,7 +165,7 @@ func resolvePaths() (*Paths, error) {
 		Shared:  envDir("UGAPP_SHARED_DIR", filepath.Join(install, "shared")),
 		WWW:     filepath.Join(install, "www"),
 	}
-	for _, d := range []string{p.Data, p.Log, p.Cache, p.Shared} {
+	for _, d := range []string{p.Data, p.Log, p.Cache} {
 		_ = os.MkdirAll(d, 0o755)
 	}
 	p.Tasks = filepath.Join(p.Data, "tasks")
@@ -98,16 +196,47 @@ func resolvePaths() (*Paths, error) {
 	}
 	p.FFmpeg = ff
 
-	// 下载目录优先级：应用设置里选的 path 参数 → 应用共享目录 → 数据目录。
-	// 参数未选时可能是 "null"，也可能是空串；两种情况都回退。
-	p.Download = firstWritable(
-		strings.TrimSpace(os.Getenv("DOWNLOAD_DIR")),
-		filepath.Join(p.Shared, "downloads"),
-		filepath.Join(p.Data, "downloads"),
-	)
-	if p.Download == "" {
-		return nil, fmt.Errorf("没有可写的下载目录（已尝试 DOWNLOAD_DIR / shared/downloads / data/downloads）")
+	p.Fallback = ensureDir(filepath.Join(p.Data, "downloads"))
+	if p.Fallback == "" {
+		p.Fallback = p.Data // data 一定可写，纯保险
 	}
+
+	// 1) 参数（环境变量）  2) unit 里的授权声明
+	var declared, declaredSrc string
+	if v := envDir("DOWNLOAD_DIR", ""); v != "" {
+		declared, declaredSrc = v, "env"
+	} else if dirs := DeclaredDownloadDirs(install); len(dirs) > 0 {
+		declared, declaredSrc = dirs[0], "unit"
+	}
+
+	if declared != "" {
+		if writableDir(declared) {
+			p.Download = declared
+			p.DownloadSource = declaredSrc
+			p.DownloadActive = true
+			return p, nil
+		}
+		p.DeclaredPath = declared
+		p.DeclaredErr = "平台已声明该目录，但沙箱里不可写"
+		if _, err := os.Stat(declared); err != nil {
+			p.DeclaredErr = "平台已授权该目录，但沙箱里还不存在（挂载尚未生效）"
+		}
+		if healExhausted {
+			// 自愈配额用尽：先保证能干活，界面挂横幅说清楚
+			p.Download, p.DownloadSource, p.DownloadActive = p.Fallback, "data", true
+		} else {
+			p.Download, p.DownloadSource, p.DownloadActive = declared, declaredSrc, false
+		}
+		return p, nil
+	}
+
+	// 3) shared/downloads（没给授权目录时的兜底）
+	if d := ensureDir(filepath.Join(p.Shared, "downloads")); d != "" {
+		p.Download, p.DownloadSource, p.DownloadActive = d, "shared", true
+		return p, nil
+	}
+	// 4) 最后的兜底：应用数据目录（绿联文件管理器看不到，界面要提示）
+	p.Download, p.DownloadSource, p.DownloadActive = p.Fallback, "data", true
 	return p, nil
 }
 
@@ -122,9 +251,12 @@ func (p *Paths) Engine() string {
 }
 
 // allowedRoots 是文件下载/删除/目录浏览允许触及的根集合。
-// 只包含沙箱里真正授权的目录，避免越权访问其它卷。
+// 只包含沙箱里真正授权（或声明过）的目录，避免越权访问其它卷。
 func (p *Paths) allowedRoots(extra ...string) []string {
-	roots := []string{p.Download, p.Shared}
+	roots := []string{p.Download, p.Fallback, p.Shared}
+	if p.DeclaredPath != "" {
+		roots = append(roots, p.DeclaredPath)
+	}
 	roots = append(roots, extra...)
 	out := roots[:0]
 	seen := map[string]bool{}
@@ -156,4 +288,25 @@ func realPath(p string) string {
 		return r
 	}
 	return p
+}
+
+// downloadStatus 给界面用的下载目录现场（前端据此挂横幅）。
+func (p *Paths) downloadStatus() map[string]any {
+	m := map[string]any{
+		"path":    p.Download,
+		"source":  p.DownloadSource,
+		"active":  p.DownloadActive,
+		"warning": "",
+	}
+	switch {
+	case !p.DownloadActive && p.DeclaredPath != "":
+		m["warning"] = fmt.Sprintf("已授权目录 %s 还没生效，应用正在自动重启，请稍候几秒", p.DeclaredPath)
+		m["declared"] = p.DeclaredPath
+		m["declaredError"] = p.DeclaredErr
+	case p.DownloadSource == "data":
+		m["warning"] = "没有可用的授权目录，文件会存到应用数据目录（绿联文件管理器里看不到）。请到「应用中心 → m3u8下载器 → 设置」选择下载目录。"
+	case p.DownloadSource == "shared":
+		m["warning"] = "还没选择下载目录，文件存在应用共享目录；建议在应用设置里明确选一个文件夹。"
+	}
+	return m
 }

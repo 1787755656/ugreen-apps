@@ -180,3 +180,53 @@ export class TrimApp {
 }
 
 export default TrimApp;
+
+/* ---------------- 下载目录现场横幅 ----------------
+ * 后端 /api/?action=status 会带 download{warning}：授权目录还没生效（应用正在
+ * 自动重启）、或者当前没有可用目录只能落到应用数据目录（文件管理器看不到）。
+ * 这两种状态必须让用户看见 —— 上一版就是静默回退，用户以为下到了配置的目录。
+ */
+const BANNER_CSS = `
+.ugb-warn{display:flex;gap:10px;align-items:flex-start;margin:0 0 14px;padding:11px 14px;border-radius:10px;
+  background:rgba(255,193,7,.12);border:1px solid rgba(255,193,7,.45);color:var(--bs-body-color,#dee2e6);
+  font-size:13.5px;line-height:1.5}
+.ugb-warn .ugb-ico{flex:0 0 auto;width:20px;height:20px;border-radius:50%;background:#ffc107;color:#212529;
+  font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;margin-top:1px}
+`;
+
+function ensureBannerCSS() {
+  if (document.getElementById('ugb-warn-css')) return;
+  const st = document.createElement('style');
+  st.id = 'ugb-warn-css';
+  st.textContent = BANNER_CSS;
+  document.head.appendChild(st);
+}
+
+async function showDownloadWarning() {
+  try {
+    const res = await fetch('/api/?' + new URLSearchParams({ action: 'status' }));
+    const d = await res.json();
+    const msg = d && d.download && d.download.warning;
+    if (!msg) return;
+    ensureBannerCSS();
+    const box = document.createElement('div');
+    box.className = 'ugb-warn';
+    const ico = document.createElement('span');
+    ico.className = 'ugb-ico';
+    ico.textContent = '!';
+    const txt = document.createElement('div');
+    txt.className = 'ugb-txt';
+    txt.textContent = msg;
+    box.append(ico, txt);
+    const host = document.querySelector('main') || document.body;
+    host.insertBefore(box, host.firstChild);
+  } catch (_) { /* 页面还没起好就算了，不影响主流程 */ }
+}
+
+if (typeof document !== 'undefined') {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', showDownloadWarning, { once: true });
+  } else {
+    showDownloadWarning();
+  }
+}

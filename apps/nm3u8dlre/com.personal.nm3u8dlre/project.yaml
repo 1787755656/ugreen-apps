@@ -56,15 +56,17 @@ parameters:
         name: 下载目录
         description: >-
           下载完成的视频保存到哪个文件夹。选中即完成授权，应用只能读写这里。
-          不选也能装，文件会落在应用自己的共享目录里。
-          装完或改动后请在应用中心把应用「停止 → 启动」一次。
+          不选也能装，但文件会落在应用数据目录（绿联文件管理器里看不到），
+          页面顶部会给出提示。
+          选完保存后如果目录还没生效，应用会自己重启一次（约 10 秒），不用手动停止再启动。
       en-US:
         name: Download folder
         description: >-
           Where finished files are saved. Selecting a folder also grants access,
           and the app can only touch that folder. Leaving it empty stores files in
-          the app's own shared folder. Stop and start the app once after install
-          or after changing this value.
+          the app data directory, which the file manager does not show (the page
+          will warn you). If the folder is not effective yet, the app restarts
+          itself once (about 10 seconds) - no manual stop/start needed.
 
 license_agreement_link:
   - https://github.com/nilaoda/N_m3u8DL-RE/blob/main/LICENSE

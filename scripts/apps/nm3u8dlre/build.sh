@@ -81,8 +81,8 @@ done
 grep -q "const API = (params) => '/api/?" "$WWW/app.js" || {
   echo "::error::www/app.js 未被 patch-ui.py 改造（API 前缀不是 /api/?）" >&2; exit 1; }
 # 前端资源指纹：网关对静态资源带长缓存，改了 www 里的 js/css 一定要同步改
-# index.html 的 ?v=（当前 0.6.0.1）。改 UI 时三处一起改，否则用户会"看不到更新"。
-grep -q 'app.js?v=0.6.0.1' "$WWW/index.html" || echo "::warning::index.html 的 app.js?v= 不是 0.6.0.1，确认是否忘了改指纹"
+# index.html 的 ?v=（当前 0.6.0.2）。改 UI 时三处一起改，否则用户会"看不到更新"。
+grep -q 'app.js?v=0.6.0.2' "$WWW/index.html" || echo "::warning::index.html 的 app.js?v= 不是 0.6.0.2，确认是否忘了改指纹"
 # 网关的 gzip_static 会把陈旧 .gz 钉死，www 里绝不能留
 if ls "$WWW"/*.gz >/dev/null 2>&1; then
   echo "::error::www/ 里存在 .gz 文件（会盖住新前端，见踩坑记录）" >&2; exit 1

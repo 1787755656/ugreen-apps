@@ -1,11 +1,11 @@
-/* N_m3u8DL-RE Web UI（fnOS index.cgi 轮询版，零依赖原生 JS） */
+/* N_m3u8DL-RE Web UI（绿联 index.cgi 轮询版，零依赖原生 JS） */
 'use strict';
 
-// 所有 API 走 /api（UGOS 网关反代到后端端口；静态页由网关从 www/ 直接提供）
+// 所有 API 走 /api/（UGOS 网关反代到后端端口；静态页由网关从 www/ 直接提供）
 const API = (params) => '/api/?' + new URLSearchParams(params).toString();
 const $ = (id) => document.getElementById(id);
 
-// ---------- 轻提示 / 确认（Bootstrap 组件；fnOS iframe 中 alert/confirm 可能被屏蔽） ----------
+// ---------- 轻提示 / 确认（Bootstrap 组件；绿联 iframe 中 alert/confirm 可能被屏蔽） ----------
 function uiToast(msg, type = 'danger') {
   const box = $('toast-box');
   if (!box) { console.error(msg); return; }
@@ -190,7 +190,7 @@ function taskCard(t) {
   </div>`;
 }
 
-// 调用 fnOS 打开任务文件/目录（优先使用真实路径 /vol1/...，fnOS 才能识别）
+// 调用 绿联 打开任务文件/目录（优先使用真实路径 /vol1/...，绿联 才能识别）
 function wireOpenButtons(card, t) {
   const realDir = t.realOutDir || t.outDir;
   card.querySelector('.btn-open-file')?.addEventListener('click', () => {
@@ -394,7 +394,7 @@ function collectCfgParams(params) {
   return params;
 }
 
-// ---------- fnOS SDK 单例（关键：整个页面只与宿主握手一次，重复 new TrimApp() 会导致
+// ---------- 绿联 SDK 单例（关键：整个页面只与宿主握手一次，重复 new TrimApp() 会导致
 //   宿主只响应首次握手，后续点击打开/浏览静默无响应；重开应用=新页面所以又能用） ----------
 let trimSdkPromise = null;
 function getTrimSdk(force) {
@@ -419,27 +419,27 @@ async function sdkReady(force) {
   return null;
 }
 
-// 调用 fnOS 打开文件/目录（开放平台 SDK 页面路由能力，无 Scope 要求）
+// 调用 绿联 打开文件/目录（开放平台 SDK 页面路由能力，无 Scope 要求）
 // 失败时错误可见，并提供"复制路径"兜底
 async function openViaFn(method, path, displayName) {
   try {
     let sdk = await sdkReady(false);
     if (!sdk) sdk = await sdkReady(true); // 宿主桥接可能晚建立，重建一次
-    if (!sdk) throw new Error('当前为独立浏览器环境或 fnOS 宿主桥接不可用，无法直接打开');
+    if (!sdk) throw new Error('当前不在绿联桌面窗口中（或宿主桥未就绪），无法直接调起文件管理器');
     await sdk[method](path);
-    uiToast('已通过 fnOS 打开' + (displayName ? '：' + displayName : ''), 'success');
+    uiToast('已在文件管理器中打开' + (displayName ? '：' + displayName : ''), 'success');
   } catch (e) {
-    console.error('[fnOS open]', method, path, e);
+    console.error('[绿联 open]', method, path, e);
     try {
       await navigator.clipboard.writeText(path || '');
-      uiToast('fnOS 打开失败：' + (e && e.message ? e.message : e) + '，路径已复制到剪贴板', 'warn');
+      uiToast('打开失败：' + (e && e.message ? e.message : e) + '，路径已复制到剪贴板', 'warn');
     } catch (_) {
-      uiToast('fnOS 打开失败：' + (e && e.message ? e.message : e) + '（路径：' + path + '）', 'danger');
+      uiToast('打开失败：' + (e && e.message ? e.message : e) + '（路径：' + path + '）', 'danger');
     }
   }
 }
 
-// 从 fnOS 选择结果中提取路径（兼容多种返回形态）
+// 从 绿联 选择结果中提取路径（兼容多种返回形态）
 function extractPickedPath(res) {
   if (!res) return null;
   if (typeof res === 'string') return res || null;
@@ -460,7 +460,7 @@ function extractPickedPath(res) {
   return null;
 }
 
-// 调用 fnOS 文件管理器选择目录（复用 SDK 单例；不支持时回退手动输入）
+// 调用 绿联 文件管理器选择目录（复用 SDK 单例；不支持时回退手动输入）
 $('btn-browse').addEventListener('click', async () => {
   $('form-msg').textContent = '';
   try {
@@ -498,7 +498,7 @@ $('btn-browse').addEventListener('click', async () => {
       $('f-custom-dir').focus();
     }
   } catch (e) {
-    $('form-msg').textContent = '无法打开文件管理器（需 fnOS 1.2.0401+ 并从桌面/应用中心打开本应用），请手动输入路径';
+    $('form-msg').textContent = '无法打开文件管理器（请从绿联桌面或应用中心打开本应用），请手动输入路径';
     $('f-custom-dir').focus();
   }
 });
@@ -634,7 +634,7 @@ async function initTheme() {
   let saved = null;
   try { saved = localStorage.getItem('m3u8_theme'); } catch (_) {}
   if (saved === 'light' || saved === 'dark') { applyTheme(saved); return; }
-  // 未手动选择过 → 跟随 fnOS 主题（复用 SDK 单例），默认暗黑
+  // 未手动选择过 → 跟随宿主主题（复用 SDK 单例），默认暗黑
   try {
     const sdk = await getTrimSdk();
     if (sdk.isWeb) {

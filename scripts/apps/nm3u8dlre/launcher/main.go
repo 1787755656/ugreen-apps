@@ -28,7 +28,11 @@ func main() {
 	flag.Parse()
 
 	log.SetFlags(log.LstdFlags)
-	p, err := resolvePaths()
+
+	// 自愈状态要在解析路径之前读（解析结果依赖"配额是否用尽"）。
+	heal := loadHealState(filepath.Join(quickDataDir(), "selfheal.json"))
+
+	p, err := resolvePaths(heal.exhausted())
 	if err != nil {
 		log.Fatalf("初始化失败: %v", err)
 	}
@@ -38,8 +42,31 @@ func main() {
 		upd:   newUpdater(p.Data),
 	}
 
-	log.Printf("nm3u8dlre 启动: 安装=%s 数据=%s 下载=%s 引擎=%s ffmpeg=%s",
-		p.Install, p.Data, p.Download, p.Engine(), orNone(p.FFmpeg))
+	// 授权目录这次真的可用了 → 清掉自愈记录，下回从零开始
+	if p.DownloadActive && (p.DownloadSource == "env" || p.DownloadSource == "unit") {
+		heal.reset()
+	}
+
+	appendStartupRecord(p.Data, startupRecord{
+		At:          nowISO(),
+		EnvDir:      envDir("DOWNLOAD_DIR", ""),
+		UnitPaths:   DeclaredDownloadDirs(p.Install),
+		Download:    p.Download,
+		Source:      p.DownloadSource,
+		Active:      p.DownloadActive,
+		Declared:    p.DeclaredPath,
+		DeclaredErr: p.DeclaredErr,
+		HealRecent:  heal.recent(),
+		HealGaveUp:  heal.GaveUp,
+		Uid:         os.Getuid(),
+	}, 10)
+
+	log.Printf("nm3u8dlre 启动: 安装=%s 数据=%s 下载=%s(%s,active=%v) 引擎=%s ffmpeg=%s",
+		p.Install, p.Data, p.Download, p.DownloadSource, p.DownloadActive,
+		p.Engine(), orNone(p.FFmpeg))
+	if p.DeclaredPath != "" && !p.DownloadActive {
+		log.Printf("[自愈] 平台已声明授权目录 %s，但沙箱里还用不了（%s）", p.DeclaredPath, p.DeclaredErr)
+	}
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {
@@ -65,6 +92,19 @@ func main() {
 		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 		defer cancel()
 		_ = srv.Shutdown(ctx)
+	}()
+
+	// 首启自愈：等 8 秒（平台写 unit 要 ~4 秒），授权目录仍不可用就主动退出一次，
+	// 借 unit 的 Restart=on-failure + RestartSec=5s 重启，那时参数与挂载都已就位。
+	go func() {
+		time.Sleep(8 * time.Second)
+		exit, reason := healDecision(p, heal)
+		if !exit {
+			return
+		}
+		log.Printf("[自愈] %s → 主动退出（%d 秒后由 systemd 拉起）", reason, 5)
+		s.store.stopAll()
+		os.Exit(healExitCode)
 	}()
 
 	if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
@@ -195,7 +235,7 @@ func (s *server) handleAPI(w http.ResponseWriter, r *http.Request) {
 		for _, t := range tasks {
 			views = append(views, s.view(t))
 		}
-		writeJSON(w, 200, map[string]any{"ok": true, "dir": s.paths.Download, "tasks": views})
+		writeJSON(w, 200, map[string]any{"ok": true, "dir": s.paths.Download, "download": s.paths.downloadStatus(), "tasks": views})
 
 	case "stop":
 		if err := s.store.Stop(strings.TrimSpace(vals["id"])); err != nil {
@@ -246,6 +286,7 @@ func (s *server) handleAPI(w http.ResponseWriter, r *http.Request) {
 			"engine":     s.paths.Engine(),
 			"engineOk":   fileExists(s.paths.Engine()),
 			"ffmpeg":     s.paths.FFmpeg,
+			"downloadInfo": s.paths.downloadStatus(),
 			"wwwOk":      fileExists(filepath.Join(s.paths.WWW, "index.html")),
 			"goArch":     runtime.GOARCH,
 			"pid":        os.Getpid(),

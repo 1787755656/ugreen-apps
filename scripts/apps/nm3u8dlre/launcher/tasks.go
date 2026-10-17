@@ -321,13 +321,23 @@ func (s *taskStore) Create(vals map[string]string, rawQuery string) (*Task, erro
 
 	outDir := strings.TrimSpace(vals["dir"])
 	if outDir == "" || outDir == "null" {
+		if !s.paths.DownloadActive {
+			// 平台已授权但挂载还没生效（首启窗口）：明确报错，别把文件偷偷写到
+			// 用户看不见的应用数据目录里 —— 之前就是这么坑到用户的。
+			return nil, fmt.Errorf("下载目录 %s 还没生效（应用正在自动重启），请等几秒再试", s.paths.DeclaredPath)
+		}
 		outDir = s.paths.Download
+	}
+	outDir = filepath.Clean(outDir)
+	// 先校验授权范围，再动手建目录：用户授权目录不由我们创建/猜测
+	if !underAny(outDir, s.paths.allowedRoots()) {
+		return nil, fmt.Errorf("输出目录不在已授权范围内（%s），请在应用设置里重新选择下载目录", outDir)
 	}
 	if err := os.MkdirAll(outDir, 0o755); err != nil {
 		return nil, fmt.Errorf("无法创建输出目录 %s: %v", outDir, err)
 	}
-	if !underAny(outDir, s.paths.allowedRoots()) {
-		return nil, fmt.Errorf("输出目录不在已授权范围内（%s），请在应用设置里重新选择下载目录", outDir)
+	if !writableDir(outDir) {
+		return nil, fmt.Errorf("输出目录不可写：%s（检查应用设置里选的目录是否已被删除或权限被改）", outDir)
 	}
 
 	engine := s.paths.Engine()
