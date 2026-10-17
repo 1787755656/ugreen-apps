@@ -457,6 +457,29 @@
       "install_params": null
     },
     {
+      "appname": "com.personal.nm3u8dlre",
+      "display_name": "m3u8下载器",
+      "description": "把开源工具 N_m3u8DL-RE 做成绿联 NAS 上的可视化流媒体下载器，粘贴 m3u8 / DASH / MSS 链接就能下载，不用开电脑也不用记命令。任务进度、速度、分片数、 剩余时间通过轮询引擎日志实时刷新，多端打开看到的是同一份状态。 支持点播与直播录制、多线程分片下载、自动挑选最佳音视频、AES 解密、 字幕单独下载，完成后可自动混流成 mp4 或 mkv（包内自带静态 ffmpeg， 不依赖系统）。引擎的全部命令行参数都做成了中文表单，勾选即可。 已下载文件按任务归类，可以在应用里直接下载回电脑，也可以在文件管理器中定位。 核心引擎支持在应用内一键升级到上游最新版，不影响已有任务。 使用前请在应用设置里选择下载目录，应用只能访问选中的文件夹。",
+      "homepage_url": "https://github.com/Youngxj/N_m3u8DL-RE-FN",
+      "updated_at": "2026-10-17",
+      "version": "0.6.0",
+      "upk_version": "0.6.0.0001",
+      "release_tag": "nm3u8dlre/v0.6.0",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/nm3u8dlre/v0.6.0/amd64_nasync_com.personal.nm3u8dlre_0.6.0.0001.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/nm3u8dlre/v0.6.0/arm64_nasync_com.personal.nm3u8dlre_0.6.0.0001.upk"
+      },
+      "service_port": 28940,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/nm3u8dlre/com.personal.nm3u8dlre/rootfs_common/icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "download",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ]
+    },
+    {
       "appname": "com.tencent.octop",
       "display_name": "Octop AI 助手平台",
       "description": "腾讯开源的自托管多用户多智能体 AI 助手平台（MIT 协议），数据全部留在 NAS 本地（SQLite）。支持多专家智能体、飞书/钉钉/QQ/企业微信等 IM 渠道、 定时任务、RAG 知识库、MCP 连接器、浏览器自动化与终端 AI。\n首次启动自动创建管理员账号 admin，随机初始密码写在应用共享目录的 octop-login.txt（文件管理 → Octop 共享目录），登录后请立即在「设置」 中修改，并在控制台内配置 LLM 模型供应商。\n说明：内嵌模式经系统网关代理，单文件上传上限 20MB，知识库大文件请用 直连地址 http://NAS的IP:28088 上传（同一套账号）；应用内「浏览器 AI+」 等组件按需在线下载；深层子页面整页刷新会提示 404，从桌面重新打开即可。",

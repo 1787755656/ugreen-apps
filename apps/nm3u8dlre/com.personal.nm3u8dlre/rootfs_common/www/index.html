@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>m3u8下载器</title>
+  <link rel="stylesheet" href="vendor/bootstrap.min.css?v=1" />
+  <link rel="stylesheet" href="style.css?v=0.6.0.1" />
+</head>
+<body>
+  <!-- 顶栏 -->
+  <header class="topbar border-bottom">
+    <div class="brand">
+      <span class="logo">⬇</span>
+      <div class="brand-text">
+        <h1 class="mb-0">m3u8下载器</h1>
+        <p class="sub mb-0">基于 N_m3u8DL-RE · DASH / HLS / MSS 流媒体下载 · 绿联 UGOS</p>
+      </div>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+      <a class="icon-btn" href="https://github.com/Youngxj/N_m3u8DL-RE-FN" target="_blank" rel="noopener" title="项目主页（GitHub）">
+        <svg viewBox="0 0 16 16" width="20" height="20" fill="currentColor" aria-hidden="true">
+          <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+        </svg>
+      </a>
+      <button class="icon-btn" id="btn-theme" type="button" title="切换主题">
+        <svg viewBox="0 0 16 16" width="20" height="20" fill="currentColor" aria-hidden="true">
+          <path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="container main-wrap">
+    <!-- 新建任务 -->
+    <section class="card app-card">
+      <div class="card-header fw-semibold">新建下载任务</div>
+      <div class="card-body">
+        <form id="task-form">
+          <div class="row g-3 mb-3">
+            <div class="col-12 col-lg-8">
+              <label class="form-label" for="f-url">流媒体链接 / 文件 <span class="text-danger req">*</span></label>
+              <input type="url" class="form-control" id="f-url" placeholder="https://example.com/path/index.m3u8" required />
+            </div>
+            <div class="col-12 col-lg-4">
+              <label class="form-label" for="f-name">保存名称（可选）</label>
+              <input type="text" class="form-control" id="f-name" placeholder="自动命名" />
+            </div>
+          </div>
+
+          <div class="row g-3 mb-3">
+            <div class="col-12 col-lg-5">
+              <label class="form-label" for="f-dir">输出目录</label>
+              <select class="form-select" id="f-dir">
+                <option value="default">默认下载目录（应用设置里选择的文件夹）</option>
+                <option value="custom">自定义目录（浏览选择 / 手动输入）</option>
+              </select>
+            </div>
+            <div class="col-12 col-lg-7 custom-dir d-none">
+              <label class="form-label" for="f-custom-dir">自定义目录路径 <span class="text-danger req">*</span></label>
+              <div class="input-group">
+                <input type="text" class="form-control" id="f-custom-dir" placeholder="/volume1/<共享文件夹>/Downloads" />
+                <button type="button" class="btn btn-outline-primary" id="btn-browse">浏览…</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion mb-3" id="cfg-accordion">
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#cfg-basic" aria-expanded="false">
+                  基本配置
+                </button>
+              </h2>
+              <div id="cfg-basic" class="accordion-collapse collapse" data-bs-parent="#cfg-accordion">
+                <div class="accordion-body"></div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#cfg-advanced" aria-expanded="false">
+                  高级配置
+                </button>
+              </h2>
+              <div id="cfg-advanced" class="accordion-collapse collapse" data-bs-parent="#cfg-accordion">
+                <div class="accordion-body"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex align-items-center gap-3 flex-wrap">
+            <button type="submit" class="btn btn-primary px-4" id="btn-submit">开始下载</button>
+            <span id="form-msg" class="text-danger small"></span>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- 任务 / 文件 -->
+    <section class="card app-card">
+      <div class="card-header d-flex align-items-center justify-content-between flex-wrap gap-2">
+        <span class="fw-semibold">下载任务</span>
+        <ul class="nav nav-tabs card-header-tabs mb-0">
+          <li class="nav-item">
+            <button class="nav-link active" data-tab="tasks" type="button">任务 <span id="task-count" class="badge text-bg-primary ms-1">0</span></button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link" data-tab="files" type="button">已下载文件</button>
+          </li>
+        </ul>
+      </div>
+      <div class="card-body">
+        <div id="tab-tasks">
+          <div id="task-list" class="task-list"></div>
+        </div>
+        <div id="tab-files" class="d-none">
+          <div id="file-list" class="file-list"></div>
+        </div>
+      </div>
+    </section>
+    <!-- 应用与引擎更新 -->
+    <section class="card app-card">
+      <div class="card-header d-flex align-items-center justify-content-between flex-wrap gap-2">
+        <span class="fw-semibold">应用与引擎更新</span>
+        <button type="button" class="btn btn-sm btn-outline-primary" id="btn-check-update">检查更新</button>
+      </div>
+      <div class="card-body">
+        <div id="update-info">
+          <p class="empty">正在检查更新…</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot text-center text-secondary small py-3 px-3">
+    m3u8下载器 · 引擎：<a href="https://github.com/nilaoda/N_m3u8DL-RE" target="_blank" rel="noopener">N_m3u8DL-RE</a>（MIT）· 开发者 <a href="https://github.com/Youngxj" target="_blank" rel="noopener">Youngxj</a> · 项目主页：<a href="https://github.com/Youngxj/N_m3u8DL-RE-FN" target="_blank" rel="noopener">N_m3u8DL-RE-FN</a> · <span id="foot-version"></span> · 绿联移植：穿斯帕沃特
+  </footer>
+
+  <!-- 确认弹窗 -->
+  <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+      <div class="modal-content">
+        <div class="modal-header"><h5 class="modal-title">确认操作</h5></div>
+        <div class="modal-body" id="confirm-text"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" id="confirm-no" data-bs-dismiss="modal">取消</button>
+          <button type="button" class="btn btn-danger" id="confirm-yes">确认</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast 容器 -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toast-box" style="z-index:2000"></div>
+
+  <script src="vendor/bootstrap.bundle.min.js?v=1"></script>
+  <script src="app.js?v=0.6.0.1"></script>
+</body>
+</html>

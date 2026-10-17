@@ -69,3 +69,8 @@ scripts/apps/redis/.build-cache/
 scripts/apps/postgresql/.build-cache/
 apps/*/com.*/rootfs_arm64/images/
 apps/*/com.*/rootfs_amd64/images/
+
+# nm3u8dlre build.sh 的本地下载缓存（引擎 tar.gz / 静态 ffmpeg；CI 用 RUNNER_TEMP）。
+# 注意 rootfs_common/www 是【入库】的成品：上游 fnOS 界面经 patch-ui.py 改造后
+# 直接提交，保证每次构建的前端完全一致，所以不要 ignore。
+scripts/apps/nm3u8dlre/.build-cache/
