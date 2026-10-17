@@ -1,0 +1,157 @@
+# ============================================================
+# Octop — UGOS Pro 原生应用（inner 内嵌版，arm64）
+#
+# 上游：https://github.com/TencentCloud/Octop（v1.0.2b5，MIT）
+# 腾讯开源的自托管多用户多智能体 AI 助手平台。
+#
+# 本目录由 ugreen-apps 仓库的 CI 打包（scripts/apps/octop/）：
+#   - rootfs_<arch>/ 与 rootfs_common/www/ 都在 build.sh 里现场组装，不进 git
+#   - 版本跟上游 GitHub Release（tag 形如 v1.0.2b9），每天定时探测
+#   - 内容全部取上游发布的 fnOS native fpk（架构专用的那个）里的
+#     site-packages + dashboard，CI 里不编译、不 pip 装依赖
+#
+# 移植方式（未改上游业务代码）：
+#   - 内容源 = 官方 fnOS 原生包 Octop-fnos-native-1.0.2b5.fpk 的启动链逻辑
+#     （fpk 的 site-packages 全是 x86_64 .so，arm64 无法复用，
+#      故按 fpk 的 198 个钉版依赖在 linux/arm64 下重建 site-packages）
+#   - Python 运行时 = python-build-standalone cpython-3.12.14 aarch64（免系统依赖）
+#   - 前端 = wheel 内 octop/dashboard 原样铺 rootfs_common/www（inner 网关静态 serve）
+#   - 后端 = python -m octop.cli.main run，API/WS/SSE 全在 /api 前缀下，
+#     与 inner 网关的 /api 反代（含 WS Upgrade）天然对上
+#
+# 打包要点（改代码前先读）：
+# - open_type: inner。前端是 BrowserRouter：桌面打开（根路径）一切正常，
+#   客户端路由（含 WS/SSE）都走 /api 反代；只有「深层子路径整页刷新」会 404
+#   （网关静态 serve 无 SPA fallback），回桌面重新打开即可。
+# - 网关全局 client_max_body_size 20m：知识库/附件大文件上传走直连端口
+#   http://<NAS_IP>:28088（应用监听 0.0.0.0，局域网直连可用，Octop 自带登录）。
+# - Python 出站 HTTPS（LLM API）依赖 CA：start.sh 用 certifi 设 SSL_CERT_FILE。
+# - 应用内「在线升级」：OCTOP_FPK_SITE_PACKAGES 指向数据目录下的可写
+#   site-packages（PYTHONPATH 数据目录优先），升级装进 data/ 且升级保留。
+# - start.sh 是 shell -> SYSTEM.EXEC_SYSTEM_COMMAND；LLM/IM 渠道出站公网
+#   -> NETWORK.ACCESS_INTERNET。
+# - 沙箱没有 /etc/hosts：进程内部自连用 127.0.0.1；TMPDIR 指到 cache 目录。
+# ============================================================
+
+spec_version: "2.1"
+
+app_id: com.tencent.octop
+
+# 跟随上游版本 v1.0.2b5
+version: 1.0.2
+
+# arm64（RK3588 等）。amd64 未构建（用户明确不需要 x86）
+support_arch:
+  - arm64
+
+supports:
+  - app
+  - pc
+
+# --port 必须和下面的 port 一致。上游默认 8088，故意挪到 28088
+# （8088 是常见开发端口，真机占用概率高）
+start_cmd: bin/start.sh
+port: 28088
+
+# inner：根路径由网关从 www/ serve dashboard 静态资源，/api/ 反代到本应用端口
+open_type: inner
+
+# 网关转发时不剥前缀，上游前端/API 全部注册在 /api 下，正好
+proxy_path: api
+
+# Octop 是全功能 AI 平台（终端 AI+、远程桌面、知识库），桌面图标只给管理员；
+# 端口那一侧靠 Octop 自带的账号体系（JWT 登录）
+only_admin: true
+
+tag_types:
+  - utility
+
+depend_fw_version: 1.13.0.0000
+
+# 知识库可能要读用户共享目录，允许用户在应用中心手动添加访问路径
+allow_add_access_path: true
+
+support_migration: true
+
+permissions:
+  - NETWORK.ACCESS_INTERNET
+  - SYSTEM.EXEC_SYSTEM_COMMAND
+
+# path 型参数：选中即授权（平台写 path_permissions → unit BindPaths=，沙箱内按
+# 原路径挂载），Octop 在沙箱里直接按 /volume1/... 原路径读写这些目录。
+# 应用本身不读这个环境变量，授权才是目的。required:false —— 首启参数必空也能装。
+parameters:
+  - key: OCTOP_DATA_DIRS
+    type: path
+    multi: true
+    max_values_count: 8
+    changeable: true
+    required: false
+    i18n:
+      zh-CN:
+        name: 文件访问目录
+        description: >-
+          授权 Octop 读写的文件夹（及其子目录），可用于知识库导入、附件和
+          终端 AI 的文件操作，可添加多个。装好或修改后，请在应用中心
+          「停止 → 启动」一次才会生效。留空也能装，之后再在这里补选。
+      en-US:
+        name: Data folders
+        description: >-
+          Folders (and their subfolders) that Octop may read and write, for
+          knowledge-base import, attachments and terminal AI file operations.
+          Several folders are allowed. After installing or changing this,
+          stop and start the app once in the app center. May be left empty
+          and filled in later.
+
+license_agreement_link:
+  - https://github.com/TencentCloud/Octop/blob/main/LICENSE
+
+source_code_link:
+  - https://github.com/TencentCloud/Octop
+
+technical_support_link:
+  - https://github.com/TencentCloud/Octop/issues
+
+privacy_policy_link:
+  - https://github.com/TencentCloud/Octop
+
+i18n:
+  zh-CN:
+    name: Octop AI 助手平台
+    description: >-
+      腾讯开源的自托管多用户多智能体 AI 助手平台（MIT 协议），数据全部留在
+      NAS 本地（SQLite）。支持多专家智能体、飞书/钉钉/QQ/企业微信等 IM 渠道、
+      定时任务、RAG 知识库、MCP 连接器、浏览器自动化与终端 AI。
+
+      首次启动自动创建管理员账号 admin，随机初始密码写在应用共享目录的
+      octop-login.txt（文件管理 → Octop 共享目录），登录后请立即在「设置」
+      中修改，并在控制台内配置 LLM 模型供应商。
+
+      说明：内嵌模式经系统网关代理，单文件上传上限 20MB，知识库大文件请用
+      直连地址 http://NAS的IP:28088 上传（同一套账号）；应用内「浏览器 AI+」
+      等组件按需在线下载；深层子页面整页刷新会提示 404，从桌面重新打开即可。
+    author: TencentCloud OrcaKit
+    publisher: 穿斯帕沃特
+    official: https://github.com/TencentCloud/Octop
+    help: https://github.com/TencentCloud/Octop#readme
+    publisher_link: https://club.ugnas.com/home.php?mod=space&uid=10131
+  en-US:
+    name: Octop AI Assistant
+    description: >-
+      Self-hosted multi-user, multi-agent AI assistant platform by Tencent
+      Cloud (MIT). All data stays local (SQLite). Supports expert agents, IM
+      channels (Feishu/DingTalk/QQ/WeCom), cron tasks, RAG knowledge base,
+      MCP connectors, browser automation and terminal AI.
+
+      On first start an admin account is created with a random password,
+      saved to octop-login.txt in the app shared folder. Change it in
+      Settings right after login, then configure LLM providers in console.
+
+      Note: inner mode proxies through the system gateway with a 20MB upload
+      limit; use http://NAS_IP:28088 directly for large knowledge-base files.
+      Browser AI components download on demand inside the app.
+    author: TencentCloud OrcaKit
+    publisher: 穿斯帕沃特
+    official: https://github.com/TencentCloud/Octop
+    help: https://github.com/TencentCloud/Octop#readme
+    publisher_link: https://club.ugnas.com/home.php?mod=space&uid=10131

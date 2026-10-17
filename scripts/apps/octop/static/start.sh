@@ -1,0 +1,127 @@
+#!/bin/bash
+# ============================================================
+# Octop 绿联 UGOS Pro 原生版启动脚本（arm64）
+# 逻辑移植自官方 fnOS 包 app/bin/octop（适配 UGAPP_* 环境变量）
+#
+# 目录约定：
+#   <安装目录>/python/          python-build-standalone cpython 3.12（只读）
+#   <安装目录>/site-packages/   钉版依赖（只读，import 兜底）
+#   <数据目录>/home/            HOME（playwright 浏览器等用户级缓存落这里）
+#   <数据目录>/.octop/          OCTOP_HOME（数据库/配置/工作区，核心数据）
+#   <数据目录>/site-packages/   应用内「在线升级」的安装目标（可写、升级保留）
+#   <缓存目录>/pycache          PYTHONPYCACHEPREFIX（安装目录只读，字节码外置）
+# ============================================================
+set -uo pipefail
+
+APP_ID="com.tencent.octop"
+# UGAPP_* 由平台注入（新固件布局 /var/packages/<id>，旧布局 /volume1/@appstore/<id>）。
+# fallback 只在绕过平台手动跑时用，按真实存在者探测。
+if [ -z "${UGAPP_INSTALL_DIR:-}" ]; then
+    if [ -d "/var/packages/${APP_ID}" ]; then
+        INSTALL="/var/packages/${APP_ID}"; DATA="${INSTALL}/data"; LOGD="${INSTALL}/log"
+    else
+        INSTALL="/volume1/@appstore/${APP_ID}"; DATA="/volume1/@appdata/${APP_ID}"; LOGD="/volume1/@applog/${APP_ID}"
+    fi
+else
+    INSTALL="${UGAPP_INSTALL_DIR}"
+    DATA="${UGAPP_DATA_DIR:-${INSTALL}/data}"
+    LOGD="${UGAPP_LOG_DIR:-${INSTALL}/log}"
+fi
+CACHED="${UGAPP_CACHE_DIR:-${DATA}/cache}"
+SHARED="${UGAPP_SHARED_DIR:-}"
+
+PY="$INSTALL/python/bin/python3.12"
+
+# ---- 沙箱目录准备（shared 可能不挂，mkdir 必须容错）----
+mkdir -p "$DATA" "$LOGD" "$CACHED" 2>/dev/null || true
+mkdir -p "$DATA/home" "$DATA/tmp" "$DATA/site-packages" 2>/dev/null || true
+mkdir -p "$CACHED/pycache" 2>/dev/null || true
+[ -n "$SHARED" ] && mkdir -p "$SHARED" 2>/dev/null || true
+
+# ---- 沙箱没有 /tmp，所有临时文件指到数据目录 ----
+export TMPDIR="${DATA}/tmp"
+
+# ---- HOME / Octop 数据目录（与 fnOS 版 bin/octop 同名变量，语义一致）----
+export HOME="${DATA}/home"
+export OCTOP_HOME="${DATA}/.octop"
+export OCTOP_DATA_DIR="${DATA}"
+mkdir -p "$OCTOP_HOME"
+
+# ---- Python 运行时 ----
+# 数据目录的 site-packages 放最前：应用内在线升级装到这里（OCTOP_FPK_SITE_PACKAGES），
+# 重启即加载新版；安装目录里的钉版依赖只读兜底（self_update 的 fpk-native 分支约定）
+export PYTHONPATH="${DATA}/site-packages:${INSTALL}/site-packages"
+export OCTOP_INSTALL_MODE="fpk-native"
+export OCTOP_FPK_SITE_PACKAGES="${DATA}/site-packages"
+export PYTHONPYCACHEPREFIX="${CACHED}/pycache"
+export PYTHONUNBUFFERED=1
+# 沙箱 /etc 下无 CA bundle 保证，Python 出站 HTTPS（LLM API）用 certifi
+SSL_CERT_FILE="$("$PY" -c 'import certifi,sys;sys.stdout.write(certifi.where())' 2>/dev/null || true)"
+[ -n "$SSL_CERT_FILE" ] && export SSL_CERT_FILE
+
+# ---- 服务参数 ----
+export OCTOP_PORT="${OCTOP_PORT:-28088}"
+export OCTOP_BIND_HOST="${OCTOP_BIND_HOST:-0.0.0.0}"
+export OCTOP_LOG_LEVEL="${OCTOP_LOG_LEVEL:-info}"
+
+octop_cmd() { "$PY" -m octop.cli.main "$@"; }
+
+gen_password() {
+    "$PY" - <<'PYEOF'
+import secrets
+letters = 'abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ'
+digits = '23456789'
+pool = letters + digits
+pw = secrets.choice(letters)
+pw += ''.join(secrets.choice(pool) for _ in range(14))
+pw += secrets.choice(digits)
+print(pw)
+PYEOF
+}
+
+write_login_file() {
+    # $1=用户名 $2=密码；数据目录必写，共享目录能写也写一份（文件管理可见）
+    local user="$1" pw="$2" f
+    umask 077
+    for f in "${DATA}/octop-login.txt" "${SHARED:+${SHARED}/octop-login.txt}"; do
+        [ -z "$f" ] && continue
+        {
+            echo "Octop AI 助手平台（绿联 UGOS 版）"
+            echo "================================="
+            echo "生成时间: $(date '+%Y-%m-%d %H:%M:%S')"
+            echo "内嵌入口: 桌面 → Octop 图标"
+            echo "直连地址: http://<NAS_IP>:${OCTOP_PORT}"
+            echo "管理员账号: ${user}"
+            echo "初始密码: ${pw}"
+            echo "（登录后请在 控制台-设置 里修改密码；本文件可在改密后删除）"
+        } > "$f" 2>/dev/null || true
+    done
+    umask 022
+}
+
+# ---- 首次初始化管理员账号（与 fnOS 版一致的密码兜底链）----
+if [ ! -f "$OCTOP_HOME/octop.db" ]; then
+    echo "[octop-ugreen] 首次启动，初始化管理员账号 ..."
+    INIT_PW="${OCTOP_DEFAULT_PASSWORD:-}"
+    if [ -z "$INIT_PW" ]; then
+        INIT_PW="$(gen_password)"
+        echo "[octop-ugreen] 未配置初始密码，已自动生成随机密码。"
+    fi
+    if ! octop_cmd init --yes \
+        --admin-username "${OCTOP_ADMIN_USERNAME:-admin}" \
+        --admin-password "$INIT_PW"; then
+        echo "[octop-ugreen] 初始密码未通过应用密码策略，改用随机密码重试 ..."
+        INIT_PW="$(gen_password)"
+        octop_cmd init --yes \
+            --admin-username "${OCTOP_ADMIN_USERNAME:-admin}" \
+            --admin-password "$INIT_PW" || {
+            echo "[octop-ugreen] 错误：管理员账号初始化失败，请查看日志。" >&2
+            exit 1
+        }
+    fi
+    write_login_file "${OCTOP_ADMIN_USERNAME:-admin}" "$INIT_PW"
+    echo "[octop-ugreen] 管理员账号已创建，初始密码见 octop-login.txt（应用共享目录）。"
+fi
+
+echo "[octop-ugreen] 正在启动 Octop，${OCTOP_BIND_HOST}:${OCTOP_PORT} ..."
+exec "$PY" -m octop.cli.main run --host "$OCTOP_BIND_HOST" --port "$OCTOP_PORT" --log-level "$OCTOP_LOG_LEVEL"
