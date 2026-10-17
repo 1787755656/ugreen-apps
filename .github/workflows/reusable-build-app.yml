@@ -177,6 +177,11 @@ jobs:
         with:
           pattern: upk-${{ inputs.app }}-*
           path: artifacts
+          # merge-multiple：只匹配到 1 个制品时（单架构应用，例如 octop 只有
+          # arm64），download-artifact 会把文件直接铺在 path 下而不是
+          # artifacts/<artifact-name>/ —— 那样下面的子目录 glob 就一个都匹配不到，
+          # release 步骤会以 "no matches found" 失败。合并成一层就与制品数量无关。
+          merge-multiple: true
 
       - name: Create release
         env:
@@ -290,10 +295,21 @@ jobs:
           echo "---- release notes preview ----"
           head -n 80 "$NOTES_FILE" || true
 
+          # 制品已由 merge-multiple 合并到 artifacts/ 一层（单架构应用也一样）
+          UPKS=$(find artifacts -name '*.upk' -type f)
+          if [ -z "$UPKS" ]; then
+            echo "::error::artifacts/ 里没有 .upk —— 上游 build 产物没传上来" >&2
+            find artifacts -maxdepth 2 >&2 || true
+            exit 1
+          fi
+          echo "---- assets ----"
+          printf '%s\n' "$UPKS"
+
+          # shellcheck disable=SC2086
           gh release create "$RELEASE_TAG" \
             --title "$TITLE" \
             --notes-file "$NOTES_FILE" \
-            artifacts/upk-${{ inputs.app }}-*/*.upk
+            $UPKS
 
       - name: Cleanup old revisions and versions
         env:
