@@ -458,16 +458,16 @@
     },
     {
       "appname": "com.personal.nm3u8dlre",
-      "display_name": "m3u8下载器",
-      "description": "把开源工具 N_m3u8DL-RE 做成绿联 NAS 上的可视化流媒体下载器，粘贴 m3u8 / DASH / MSS 链接就能下载，不用开电脑也不用记命令。任务进度、速度、分片数、 剩余时间通过轮询引擎日志实时刷新，多端打开看到的是同一份状态。 支持点播与直播录制、多线程分片下载、自动挑选最佳音视频、AES 解密、 字幕单独下载，完成后可自动混流成 mp4 或 mkv（包内自带静态 ffmpeg， 不依赖系统）。引擎的全部命令行参数都做成了中文表单，勾选即可。 已下载文件按任务归类，可以在应用里直接下载回电脑，也可以在文件管理器中定位。 核心引擎支持在应用内一键升级到上游最新版，不影响已有任务。 使用前请在应用设置里选择下载目录，应用只能访问选中的文件夹。",
+      "display_name": "m3u8下载器 (N_m3u8DL-RE)",
+      "description": "把开源工具 N_m3u8DL-RE 做成绿联 NAS 上的可视化流媒体下载器，粘贴 m3u8 / DASH / MSS 链接就能下载，不用开电脑也不用记命令。任务进度、速度、分片数、 剩余时间通过轮询引擎日志实时刷新，多端打开看到的是同一份状态。 支持点播与直播录制、多线程分片下载、自动挑选最佳音视频、AES 解密、 字幕单独下载，完成后可自动混流成 mp4 或 mkv（包内自带静态 ffmpeg， 不依赖系统）。引擎的全部命令行参数都做成了中文表单，勾选即可。 已下载文件按任务归类，可以在应用里直接下载回电脑，也可以在文件管理器中定位。 核心引擎支持在应用内一键升级到上游最新版，不影响已有任务。 使用前请在应用设置里选择下载目录，应用只能访问选中的文件夹。 仅供学习与技术研究，请只下载拥有合法权限的内容。",
       "homepage_url": "https://github.com/Youngxj/N_m3u8DL-RE-FN",
       "updated_at": "2026-10-17",
       "version": "0.6.0",
       "upk_version": "0.6.0.0001",
-      "release_tag": "nm3u8dlre/v0.6.0",
+      "release_tag": "nm3u8dlre/v0.6.0-beta",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/nm3u8dlre/v0.6.0/amd64_nasync_com.personal.nm3u8dlre_0.6.0.0001.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/nm3u8dlre/v0.6.0/arm64_nasync_com.personal.nm3u8dlre_0.6.0.0001.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/nm3u8dlre/v0.6.0-beta/amd64_nasync_com.personal.nm3u8dlre_0.6.0.0001.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/nm3u8dlre/v0.6.0-beta/arm64_nasync_com.personal.nm3u8dlre_0.6.0.0001.upk"
       },
       "service_port": 28940,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/nm3u8dlre/com.personal.nm3u8dlre/rootfs_common/icon.png",
@@ -477,6 +477,13 @@
       "platforms": [
         "amd64",
         "arm64"
+      ],
+      "install_params": [
+        {
+          "key": "DOWNLOAD_DIR",
+          "name": "下载目录",
+          "description": "下载完成的视频保存到哪个文件夹。选中即完成授权，应用只能读写这里。 不选也能装，文件会落在应用自己的共享目录里。 装完或改动后请在应用中心把应用「停止 → 启动」一次。"
+        }
       ]
     },
     {
