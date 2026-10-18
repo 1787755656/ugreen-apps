@@ -1,5 +1,5 @@
 # ============================================================
-# Octop — UGOS Pro 原生应用（inner 内嵌版，arm64）
+# Octop — UGOS Pro 原生应用（inner 内嵌版，amd64 + arm64）
 #
 # 上游：https://github.com/TencentCloud/Octop（v1.0.2b5，MIT）
 # 腾讯开源的自托管多用户多智能体 AI 助手平台。
@@ -7,7 +7,7 @@
 # 本目录由 ugreen-apps 仓库的 CI 打包（scripts/apps/octop/）：
 #   - rootfs_<arch>/ 与 rootfs_common/www/ 都在 build.sh 里现场组装，不进 git
 #   - 版本跟上游 GitHub Release（tag 形如 v1.0.2b9），每天定时探测
-#   - 内容全部取上游发布的 fnOS native fpk（架构专用的那个）里的
+#   - 内容全部取上游发布的 fnOS native fpk（各架构对应那个）里的
 #     site-packages + dashboard，CI 里不编译、不 pip 装依赖
 #
 # 移植方式（未改上游业务代码）：
@@ -40,8 +40,10 @@ app_id: com.tencent.octop
 # 跟随上游版本 v1.0.2b5
 version: 1.0.2
 
-# arm64（RK3588 等）。amd64 未构建（用户明确不需要 x86）
+# amd64 + arm64：两个架构各自取上游对应架构的 fnOS native fpk
+# （通用版= x86_64、arm64 版= aarch64），Python 运行时也各配一份
 support_arch:
+  - amd64
   - arm64
 
 supports:

@@ -17,9 +17,10 @@ set -euo pipefail
 #   - crcmod 等包**根本不发 wheel**，`--only-binary :all:` 解析不出来；
 #   - evdev 只有 sdist，x86 runner 上编译不出 aarch64 的 .so（要 qemu + 交叉工具链，
 #     单个 C 扩展编译能过，整棵树在 qemu 里装一遍则是几十分钟起步且极易超时）。
-# 上游对较新的版本会额外发一份 `Octop-fnos-native-arm64-<ver>.fpk`（b5 那会儿
-# 只有通用版），里头就是人家自己在 arm64 上装好的同一棵树 —— 直接用，既快又
-# 不引入自建依赖树。该资产缺失时 build.sh 直接报错，不拿通用版凑（那是 x86_64）。
+# 上游对每个版本发两份 fnOS native fpk：通用版 `Octop-fnos-native-<ver>.fpk`
+# （x86_64 宿主用，不是「多架构合一」）与 `Octop-fnos-native-arm64-<ver>.fpk`
+# （b5 那会儿还没有）。里头就是人家自己在对应架构上装好的同一棵树 —— 直接用，
+# 既快又不引入自建依赖树。缺对应那份时 build.sh 直接报错，绝不拿另一架构的凑。
 #
 # 断言：
 #   - fpk 里所有 .so 必须是目标架构（逐文件 file 校验，混进错架构当场失败）
@@ -111,7 +112,7 @@ FPK_DIGEST=$(jq -r --arg n "$FPK_ASSET" '.assets[] | select(.name==$n) | .digest
 if [ -z "$FPK_URL" ]; then
   echo "::error::上游 ${UPSTREAM_TAG} 没有 ${FPK_ASSET} 资产。该版本实际资产：" >&2
   jq -r '.assets[].name' <<<"$REL_JSON" | LC_ALL=C grep -i 'fpk' >&2 || true
-  echo "::error::arm64 包要求上游发 Octop-fnos-native-arm64-*.fpk；上游某版本没发就别出包（不要拿通用版凑，那是 x86_64）" >&2
+  echo "::error::每个架构要的是自己的那份 fpk（arm64 → Octop-fnos-native-arm64-<ver>.fpk，amd64 → Octop-fnos-native-<ver>.fpk）；上游某版本没发对应那份就别出这个架构的包，也不要拿另一架构的凑" >&2
   exit 1
 fi
 
