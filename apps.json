@@ -183,7 +183,7 @@
       },
       "service_port": 20858,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/idphotos/com.chuan.idphotos/rootfs_common/icon.png",
-      "download_count": 5,
+      "download_count": 7,
       "app_type": "docker",
       "category": "system",
       "platforms": [
@@ -840,7 +840,7 @@
       },
       "service_port": 28750,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/ugtheme/com.personal.ugtheme/rootfs_common/icon.png",
-      "download_count": 11,
+      "download_count": 12,
       "app_type": "docker",
       "category": "utility",
       "platforms": [
