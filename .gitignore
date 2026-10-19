@@ -81,3 +81,11 @@ scripts/apps/nm3u8dlre/.build-cache/
 scripts/apps/deenmusic/.build-cache/
 # 本机（WorkBuddy 沙箱）跑构建用的 rm 包装器，不提交
 scripts/apps/deenmusic/.tmp-local-build.sh
+
+# Trilium 的 app/ 主体（上游 Server 独立包约 171MB 的 dist：main.mjs/chunks/public/
+# assets/node_modules）由 build.sh 现场从上游 tar.xz 铺出来，跟着上游版本走，不进 git；
+# 入库的只有 project.yaml、icon、www 占位页和 bin/bootstrap.mjs。
+apps/trilium/com.personal.trilium/rootfs_common/app/
+
+# Trilium build.sh 的本地下载缓存（上游 Server 独立包 tar.xz + 解压目录；CI 用 RUNNER_TEMP）。
+scripts/apps/trilium/.build-cache/

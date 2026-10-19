@@ -1,0 +1,95 @@
+# ============================================================
+# Trilium Notes — UGOS Pro 原生应用
+#
+# 上游：https://github.com/TriliumNext/Trilium （AGPL-3.0）
+# 上游发布的是「Server 独立包」（自带 Node 运行时 + 已构建的 Web 前端），
+# 本工程只做三件事，不动上游任何代码：
+#   1. 把 app/ 放进 rootfs_common，Node 运行时按架构各放一份 bin/node；
+#   2. bin/bootstrap.mjs 把平台注入的 UGAPP_* 目录翻译成 Trilium 的环境变量；
+#   3. project.yaml 让平台用 tab 打开应用自己的端口。
+#
+# 升级上游 = 换 app/ 目录 + 换 bin/node，project.yaml 不用动。
+# ============================================================
+
+spec_version: "2.1"
+
+app_id: com.personal.trilium
+
+# 上游版本 0.106.0。ugcli 对 version 的隐藏校验：中段最多两位数，
+# 所以按 AdGuardHome 那套确定性映射处理：去掉前导 `0.` 再补 `.0` → 106.0.0
+# （上游每次小版本递增时，首段单调递增，不会回退）。
+version: 106.0.0
+
+support_arch:
+  - amd64
+  - arm64
+
+supports:
+  - pc
+  - app
+
+# 平台只把 start_cmd 的【首个 token】绝对化，且 unit 的 WorkingDirectory 是 data/，
+# 所以不能写 `bin/node bin/bootstrap.mjs`（第二个 token 会被当成 <data>/bin/bootstrap.mjs）。
+# 用 -e 内联 JS 从 process.execPath 推出包内路径，再动态 import 引导脚本；
+# 这串必须用【双引号】，ExecStart 走 shell 风格分词，裸单引号会被剥掉。
+start_cmd: bin/node -e "import(require('url').pathToFileURL(require('path').join(require('path').dirname(process.execPath),'bootstrap.mjs')).href).catch(e=>{console.error('[trilium] 启动失败',e);process.exit(1)})"
+
+# 与 rootfs_common/bin/bootstrap.mjs 里的 PORT 保持一致。
+# 上游默认 8080（qBittorrent WebUI 等常用），这里挪到高位避开冲突。
+port: 28186
+
+# Trilium 自己 serve 完整的 SPA（/、/api、/share、/socket.io），
+# 静态页和接口在同一端口，inner 的「www 静态 + 只反代 /api」模型套不上，故用 tab。
+open_type: tab
+
+tag_types:
+  - utility
+
+# 占位值，正式上架前请联系绿联确认真实固件版本号
+depend_fw_version: 1.13.0.0000
+
+# 笔记数据默认落在应用自己的 data/ 目录；打开这个开关方便用户授权
+# 共享文件夹给 Trilium 做导入/导出与备份路径。
+allow_add_access_path: true
+
+support_migration: true
+
+# 只声明出站：Trilium 的「导入网页/远程图片」、更新检查要联网；
+# 启动链不经过 shell，exec 的是包内自带的 bin/node，不需要 SYSTEM.EXEC_SYSTEM_COMMAND。
+permissions:
+  - NETWORK.ACCESS_INTERNET
+
+license_agreement_link:
+  - https://github.com/TriliumNext/Trilium/blob/main/LICENSE
+source_code_link:
+  - https://github.com/TriliumNext/Trilium
+technical_support_link:
+  - https://github.com/TriliumNext/Trilium/issues
+
+i18n:
+  zh-CN:
+    name: Trilium 笔记
+    description: >-
+      装在 NAS 上的分层笔记与个人知识库。支持富文本、Markdown、代码、表格、
+      画布、思维导图、关系图、日历、Excalidraw 与 PDF 预览，带全文搜索、
+      属性查询、笔记版本历史和脚本扩展；数据全部保存在本机，多端打开同一个地址即可同步。
+      首次打开需要先设置管理员密码，之后凭该密码登录。
+    author: TriliumNext
+    official: https://github.com/TriliumNext/Trilium
+    help: https://triliumnext.github.io/Docs/
+    publisher: 穿斯帕沃特
+    publisher_link: https://club.ugnas.com/home.php?mod=space&uid=10131
+  en-US:
+    name: Trilium Notes
+    description: >-
+      Hierarchical notes and a personal knowledge base hosted on your NAS.
+      Rich text, Markdown, code, tables, canvas, mind maps, relation maps,
+      calendar, Excalidraw and PDF preview, with full-text search, attribute
+      queries, note version history and scripting. All data stays on your device;
+      open the same address from any client to sync. The first visit asks you to set
+      the administrator password, which you then use to sign in.
+    author: TriliumNext
+    official: https://github.com/TriliumNext/Trilium
+    help: https://triliumnext.github.io/Docs/
+    publisher: 穿斯帕沃特
+    publisher_link: https://club.ugnas.com/home.php?mod=space&uid=10131

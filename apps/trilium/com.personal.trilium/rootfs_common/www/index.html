@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trilium 笔记</title>
+<style>
+  :root { color-scheme: dark; }
+  body { margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
+         background:#101014; color:#e8e8ee;
+         font:15px/1.7 -apple-system,"PingFang SC","Microsoft YaHei",sans-serif; }
+  .box { max-width:520px; padding:32px 36px; border:1px solid #2a2a33; border-radius:14px; background:#17171d; }
+  h1 { margin:0 0 12px; font-size:19px; }
+  p { margin:8px 0; color:#a9a9b8; }
+  code { background:#23232c; padding:2px 6px; border-radius:5px; color:#d8d8e6; }
+  a { color:#8ab4ff; }
+</style>
+</head>
+<body>
+<div class="box">
+  <h1>Trilium 笔记</h1>
+  <p>这是一个 <code>tab</code> 型应用：应用中心/桌面会直接用浏览器打开 Trilium 自己的端口，本页不会被访问。</p>
+  <p>如果你是在这里看到这段文字，请访问 <a href="/" id="port">服务端口</a> 或到应用中心重新打开。</p>
+</div>
+<script>
+  // 仅在端口可达时给出直达链接（端口取自 project.yaml）。
+  var port = 28186, url = location.protocol + "//" + location.hostname + ":" + port + "/";
+  document.getElementById("port").href = url;
+</script>
+</body>
+</html>
