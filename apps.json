@@ -1010,6 +1010,99 @@
         "arm64"
       ],
       "post_install_note": "装好后请选好书库文件夹，并在应用中心「停止 → 启动」一次使其生效；初始账号 admin / admin123，登录后请修改密码。"
+    },
+    {
+      "appname": "com.personal.php56",
+      "display_name": "PHP 5.6 运行时",
+      "description": "PHP 5.6.40 的 FPM 运行时，配合应用中心里的 nginx 使用。 装好后监听 127.0.0.1:29056，在 nginx 站点里写一句 fastcgi_pass 127.0.0.1:29056; 即可跑 PHP 网站（管理页可一键复制片段）。 自带 mysql（老式）、mcrypt 这两个 PHP 7 已移除的扩展（老项目最常卡在这里），以及 mysqli、pdo_mysql、gd、zip、bcmath、intl、soap、exif、sockets、gettext、calendar、opcache。 php.ini 和进程池配置就放在你选的共享文件夹里，用文件管理器直接改； 应用内也带编辑器并在保存时自动检查。还可以开关扩展、查看 php -i、 看日志，以及实测某个网站目录本应用读不读得到 —— nginx 报 Primary script unknown 时先来这里对一眼。 管理界面使用绿联云账号，无需另设密码，仅管理员可进入。 注意：未申请互联网访问权限，PHP 脚本能访问局域网和本机，访问公网会超时。 ⚠ PHP 5.6 已于 2018 年 12 月 停止安全更新，之后的漏洞不会再修。请只用于跑不动新版本的老项目，且不要把站点直接暴露到公网。",
+      "homepage_url": "https://www.php.net/",
+      "updated_at": "2026-10-19",
+      "version": "5.6.40",
+      "upk_version": "5.6.40.0005",
+      "release_tag": "php56/v5.6.40-r1",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/php56/v5.6.40-r1/amd64_nasync_com.personal.php56_5.6.40.0005.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/php56/v5.6.40-r1/arm64_nasync_com.personal.php56_5.6.40.0005.upk"
+      },
+      "service_port": 28956,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/php56-icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "system",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ],
+      "post_install_note": "建议安装时就选一个共享文件夹作为「配置目录」（选好即完成授权）；留空也能装，但配置会落在应用数据目录里，文件管理器看不到。装好后到 nginx 站点里写 fastcgi_pass 127.0.0.1:29056; —— 管理页可一键复制这段。之后若要改配置目录，需要到管理页点一次「迁移配置目录」。",
+      "install_params": [
+        {
+          "key": "PHP_DIR",
+          "name": "配置目录",
+          "description": "选一个共享文件夹，本应用会在它下面建一个 php56 子目录， 里面放 php.ini、进程池配置和日志。选好即完成授权，之后你可以直接用 文件管理器打开这些文件来改。三个 PHP 版本可以放心选同一个文件夹， 它们各自在自己的子目录里互不干扰。留空也能装，配置会放在应用数据 目录里（那个目录在文件管理器里看不到，所以推荐选一个）。"
+        }
+      ]
+    },
+    {
+      "appname": "com.personal.php74",
+      "display_name": "PHP 7.4 运行时",
+      "description": "PHP 7.4.33 的 FPM 运行时，配合应用中心里的 nginx 使用。 装好后监听 127.0.0.1:29074，在 nginx 站点里写一句 fastcgi_pass 127.0.0.1:29074; 即可跑 PHP 网站（管理页可一键复制片段）。 自带 mysqli、pdo_mysql、gd、zip、bcmath、intl、soap、exif、sockets、gettext、calendar、opcache 等扩展，覆盖绝大多数 PHP 7 项目的依赖。 php.ini 和进程池配置就放在你选的共享文件夹里，用文件管理器直接改； 应用内也带编辑器并在保存时自动检查。还可以开关扩展、查看 php -i、 看日志，以及实测某个网站目录本应用读不读得到 —— nginx 报 Primary script unknown 时先来这里对一眼。 管理界面使用绿联云账号，无需另设密码，仅管理员可进入。 注意：未申请互联网访问权限，PHP 脚本能访问局域网和本机，访问公网会超时。 ⚠ PHP 7.4 已于 2022 年 11 月 停止安全更新，之后的漏洞不会再修。请只用于跑不动新版本的老项目，且不要把站点直接暴露到公网。",
+      "homepage_url": "https://www.php.net/",
+      "updated_at": "2026-10-19",
+      "version": "7.4.33",
+      "upk_version": "7.4.33.0005",
+      "release_tag": "php74/v7.4.33-r1",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/php74/v7.4.33-r1/amd64_nasync_com.personal.php74_7.4.33.0005.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/php74/v7.4.33-r1/arm64_nasync_com.personal.php74_7.4.33.0005.upk"
+      },
+      "service_port": 28974,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/php74-icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "system",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ],
+      "post_install_note": "建议安装时就选一个共享文件夹作为「配置目录」（选好即完成授权）；留空也能装，但配置会落在应用数据目录里，文件管理器看不到。装好后到 nginx 站点里写 fastcgi_pass 127.0.0.1:29074; —— 管理页可一键复制这段。之后若要改配置目录，需要到管理页点一次「迁移配置目录」。",
+      "install_params": [
+        {
+          "key": "PHP_DIR",
+          "name": "配置目录",
+          "description": "选一个共享文件夹，本应用会在它下面建一个 php74 子目录， 里面放 php.ini、进程池配置和日志。选好即完成授权，之后你可以直接用 文件管理器打开这些文件来改。三个 PHP 版本可以放心选同一个文件夹， 它们各自在自己的子目录里互不干扰。留空也能装，配置会放在应用数据 目录里（那个目录在文件管理器里看不到，所以推荐选一个）。"
+        }
+      ]
+    },
+    {
+      "appname": "com.personal.php83",
+      "display_name": "PHP 8.3 运行时",
+      "description": "PHP 8.3.32 的 FPM 运行时，配合应用中心里的 nginx 使用。 装好后监听 127.0.0.1:29083，在 nginx 站点里写一句 fastcgi_pass 127.0.0.1:29083; 即可跑 PHP 网站（管理页可一键复制片段）。 运行时是 static-php-cli 的 bulk 全静态构建，扩展非常齐全（mysqli、pdo_mysql、gd、zip、bcmath、intl、soap、redis、imagick、swoole 等一大批），且不依赖系统里的任何动态库。 php.ini 和进程池配置就放在你选的共享文件夹里，用文件管理器直接改； 应用内也带编辑器并在保存时自动检查。还可以开关扩展、查看 php -i、 看日志，以及实测某个网站目录本应用读不读得到 —— nginx 报 Primary script unknown 时先来这里对一眼。 管理界面使用绿联云账号，无需另设密码，仅管理员可进入。 注意：未申请互联网访问权限，PHP 脚本能访问局域网和本机，访问公网会超时。",
+      "homepage_url": "https://www.php.net/",
+      "updated_at": "2026-10-19",
+      "version": "8.3.32",
+      "upk_version": "8.3.32.0005",
+      "release_tag": "php83/v8.3.32-r1",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/php83/v8.3.32-r1/amd64_nasync_com.personal.php83_8.3.32.0005.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/php83/v8.3.32-r1/arm64_nasync_com.personal.php83_8.3.32.0005.upk"
+      },
+      "service_port": 28983,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/php83-icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "system",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ],
+      "post_install_note": "建议安装时就选一个共享文件夹作为「配置目录」（选好即完成授权）；留空也能装，但配置会落在应用数据目录里，文件管理器看不到。装好后到 nginx 站点里写 fastcgi_pass 127.0.0.1:29083; —— 管理页可一键复制这段。之后若要改配置目录，需要到管理页点一次「迁移配置目录」。",
+      "install_params": [
+        {
+          "key": "PHP_DIR",
+          "name": "配置目录",
+          "description": "选一个共享文件夹，本应用会在它下面建一个 php83 子目录， 里面放 php.ini、进程池配置和日志。选好即完成授权，之后你可以直接用 文件管理器打开这些文件来改。三个 PHP 版本可以放心选同一个文件夹， 它们各自在自己的子目录里互不干扰。留空也能装，配置会放在应用数据 目录里（那个目录在文件管理器里看不到，所以推荐选一个）。"
+        }
+      ]
     }
   ]
 }
