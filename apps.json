@@ -15,7 +15,7 @@
       },
       "service_port": 28737,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/100zip/com.personal.100zip/rootfs_common/icon.png",
-      "download_count": 5,
+      "download_count": 7,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -75,7 +75,7 @@
       },
       "service_port": 28686,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/clouddl/com.personal.clouddl/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 4,
       "app_type": "native",
       "category": "download",
       "platforms": [
@@ -87,6 +87,36 @@
           "key": "CLOUDDL_DOWNLOAD_DIR",
           "name": "下载保存目录",
           "description": "从网盘下载下来的文件放在哪。选一个你在文件管理器里看得到的目录即可， 选中的同时这个目录就被授权给本应用读写了。留空也能装， 文件会先落在应用私有数据目录里，之后可以在这里补选。 装好或改完之后请在应用中心「停止 → 启动」一次，新目录才会生效。"
+        }
+      ]
+    },
+    {
+      "appname": "com.cloudreve.cloudreve",
+      "display_name": "Cloudreve",
+      "description": "开源的私有云盘 / 文件分享系统。把 NAS 本机目录、WebDAV、S3、OneDrive、 阿里云 OSS、腾讯云 COS 等存储统一到一个网盘界面，支持多用户与用户组、 分享链接、离线下载、在线预览、WebDAV 挂载和直链。装好后用浏览器打开， 首次访问按页面提示创建管理员账号即可。需要访问 NAS 上的文件夹时，先在 应用设置里授权目录，再到「存储策略」里添加本机存储。数据保存在应用 数据目录，卸载应用会一并删除，重要数据请提前备份。",
+      "homepage_url": "https://cloudreve.org/",
+      "updated_at": "2026-10-19",
+      "version": "4.19.1",
+      "upk_version": "4.19.1.0001",
+      "release_tag": "cloudreve/v4.19.1",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/cloudreve/v4.19.1/amd64_nasync_com.cloudreve.cloudreve_4.19.1.0001.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/cloudreve/v4.19.1/arm64_nasync_com.cloudreve.cloudreve_4.19.1.0001.upk"
+      },
+      "service_port": 25212,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/cloudreve/com.cloudreve.cloudreve/rootfs_common/icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "system",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ],
+      "install_params": [
+        {
+          "key": "CR_STORAGE_PATHS",
+          "name": "本机存储目录",
+          "description": "想通过 Cloudreve 读写的 NAS 共享文件夹，可添加多个。选好即完成授权， 之后在 Cloudreve 管理面板「存储策略 → 添加 → 本机」里把同样的路径 填进去即可。只用网盘/对象存储的话可以不选；留空也能安装，装好后在 应用「访问路径」里授权同样可以。"
         }
       ]
     },
@@ -183,7 +213,7 @@
       },
       "service_port": 20858,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/idphotos/com.chuan.idphotos/rootfs_common/icon.png",
-      "download_count": 7,
+      "download_count": 8,
       "app_type": "docker",
       "category": "system",
       "platforms": [
@@ -321,7 +351,7 @@
       },
       "service_port": 28300,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/lunatv/com.personal.lunatv/rootfs_common/icon.png",
-      "download_count": 19,
+      "download_count": 21,
       "app_type": "native",
       "category": "media",
       "platforms": [
@@ -501,7 +531,7 @@
       },
       "service_port": 28088,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/octop/com.tencent.octop/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 3,
       "app_type": "native",
       "category": "ai",
       "platforms": [
@@ -842,7 +872,7 @@
       },
       "service_port": 28750,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/ugtheme/com.personal.ugtheme/rootfs_common/icon.png",
-      "download_count": 12,
+      "download_count": 21,
       "app_type": "docker",
       "category": "utility",
       "platforms": [
@@ -872,7 +902,7 @@
       },
       "service_port": 28085,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/zhiyinmusic/com.personal.zhiyinmusic/rootfs_common/icon.png",
-      "download_count": 6,
+      "download_count": 7,
       "app_type": "native",
       "category": "media",
       "platforms": [
