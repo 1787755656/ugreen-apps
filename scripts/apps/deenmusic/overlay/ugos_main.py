@@ -57,6 +57,34 @@ from werkzeug.serving import make_server  # noqa: E402
 logger = logging.getLogger("ugos")
 
 
+def _retarget_log_file() -> None:
+    """把上游的日志文件挪到可写的数据目录
+
+    上游在非 frozen 模式下写 `<service>/logs/webapp.log`，而安装目录在原生沙箱里
+    是只读的 —— 结果每次启动只有一行「日志文件初始化失败」，全部内容只能去平台
+    日志里翻。这里在 import 之后补一个指向 `data/logs/webapp.log` 的 FileHandler
+    （上游那个根本没建成，root 里只有 stdout 那个）。
+    """
+    data = (os.environ.get("APP_DATA_DIR") or "").strip()
+    if not data:
+        return
+    log_dir = Path(data) / "logs"
+    root = logging.getLogger()
+    if any(isinstance(h, logging.FileHandler) for h in root.handlers):
+        return   # 上游自己建成功了（比如 root 可写），别重复加
+    try:
+        log_dir.mkdir(parents=True, exist_ok=True)
+        handler = logging.FileHandler(log_dir / "webapp.log", encoding="utf-8")
+    except OSError as exc:
+        logger.warning("日志文件仍落在控制台（%s）：%s", log_dir, exc)
+        return
+    handler.setFormatter(
+        logging.Formatter("%(asctime)s [%(levelname)s] %(name)s - %(message)s")
+    )
+    root.addHandler(handler)
+    logger.info("日志文件：%s", handler.baseFilename)
+
+
 def _apply_download_dir() -> None:
     """把安装时选的下载目录写进上游的 output_dir（只在"还是默认值"时）
 
@@ -111,6 +139,7 @@ def main(argv=None) -> int:
         if args.data_dir:
             os.environ["APP_DATA_DIR"] = str(Path(args.data_dir).expanduser().resolve())
 
+    _retarget_log_file()
     _apply_download_dir()
 
     host, port = "127.0.0.1", args.port

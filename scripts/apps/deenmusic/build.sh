@@ -61,6 +61,13 @@ PY_REQ=(
   "APScheduler==3.11.3"
   "requests==2.34.2"
   "mutagen==1.48.1"
+  # ⚠ tzdata 是【必需品】，不是可选依赖（2026-10-19 真机 0001 就是漏了它）：
+  #   原生沙箱把 /usr 遮掉 → 没有 /usr/share/zoneinfo；APScheduler 构造
+  #   BackgroundScheduler 时会 get_localzone() → zoneinfo.ZoneInfo("Asia/Shanghai")
+  #   → 系统库找不到 → 再退回 import tzdata → 也没有 →
+  #   ZoneInfoNotFoundError，import app 阶段直接崩，应用无限重启。
+  #   SSH 里手工直跑不会暴露（宿主有 zoneinfo），只有装成应用才会。
+  "tzdata==2026.4"
 )
 
 # arm64 才用到的三个上游 API 源码项目（版本对齐上游内置二进制）
@@ -343,7 +350,35 @@ if [ ! -f "$APPDIR/rootfs_common/www/index.html" ]; then
   exit 1
 fi
 
-# ---- 6. 断言：架构、文件齐全、描述长度 ----
+# ---- 6. 断言：时区数据、架构、文件齐全、描述长度 ----
+# 沙箱里【没有 /usr/share/zoneinfo】，APScheduler 启动就要用本地时区，
+# 所以 tzdata 必须在包里并且真的能解析（0001 就是漏了它，真机无限重启）。
+echo "==> 校验时区数据（tzdata）"
+TZDATA_DIR="$dir/service/vendor/tzdata/zoneinfo"
+if [ ! -s "$TZDATA_DIR/Asia/Shanghai" ]; then
+  echo "!! vendor/tzdata 缺失或没有 Asia/Shanghai —— 装到 NAS 上会 ZoneInfoNotFoundError" >&2
+  exit 1
+fi
+# 用构建机的 python 读【包内那份】数据：PYTHONTZPATH 置空 = 屏蔽系统 zoneinfo，
+# 等价于沙箱环境（宿主 python 只负责跑，数据完全来自 vendor）。
+if PYTHONTZPATH= PYTHONPATH="$dir/service/vendor" python3 - <<'PY'
+import sys
+try:
+    from zoneinfo import ZoneInfo
+except ImportError:          # python < 3.9 的构建机：跳过（CI 是 3.12）
+    print("    构建机 python 无 zoneinfo，跳过解析测试")
+    sys.exit(0)
+try:
+    tz = ZoneInfo("Asia/Shanghai")
+except Exception as exc:     # noqa: BLE001
+    sys.exit(f"!! 屏蔽系统时区库后仍解析不到 Asia/Shanghai（{exc}）：tzdata 没装进 vendor？")
+print(f"    Asia/Shanghai 解析通过：{tz}")
+PY
+then :; else
+  echo "!! 时区数据自检失败" >&2
+  exit 1
+fi
+
 echo "==> [$ARCH] 校验 ELF 架构（应为 ${elf}）"
 assert_elf() {
   file "$1" | grep -qi 'ELF 64-bit' || { echo "!! $1 不是 ELF：$(file -b "$1")" >&2; exit 1; }
