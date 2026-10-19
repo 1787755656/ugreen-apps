@@ -1,0 +1,140 @@
+# ============================================================
+# Cloudreve — UGOS Pro 原生应用配置
+# 基于 cloudreve/cloudreve 4.x（Go 单二进制，前端 go:embed 在二进制里，
+# AGPL-3.0，自带完整 Web 界面与用户体系）
+#
+# 与官方 Docker 部署的差异（原生沙箱做不到的部分）：
+#   - 不含内置 Redis/MySQL：上游默认就是 SQLite（modernc.org/sqlite，纯 Go），
+#     原生版直接用 SQLite；要接外部数据库/Redis 可在 data/cloudreve/data/conf.ini
+#     里改，改完重启应用。
+#   - 安装目录只读：进程用 -w 把「可执行文件目录」换成工作目录，start.sh 先
+#     cd 到应用数据目录，所有相对路径（配置、SQLite、上传文件、缓存）都落在
+#     可写的 UGAPP_DATA_DIR 下。
+# ============================================================
+
+spec_version: "2.1"
+
+# 应用ID（上架后不可修改）
+app_id: com.cloudreve.cloudreve
+
+# 应用版本号 x.y.z（打包时 --build 追加构建号；CI 会按上游版本改写这一行）
+version: 4.19.1
+
+# 支持的 CPU 架构
+support_arch:
+  - amd64
+  - arm64
+
+# 支持的客户端类型（tab 应用在手机上会用浏览器打开）
+supports:
+  - pc
+  - app
+
+# 启动命令：封装脚本（GODEBUG 消毒 / 数据目录与配置落地 / CA / 端口钉死）
+start_cmd: bin/start.sh
+
+# Web 服务端口（须与 start.sh 中 WEBUI_PORT 一致，供系统探测启动状态）
+# 上游默认 5212，这里改成 25212：5212 段极易和用户自己跑的 Cloudreve
+# Docker 容器撞车（那边发布的就是 5212），原生应用抢不到会直接退出。
+port: 25212
+
+# 打开方式：Cloudreve 自带完整 Web 界面，路由遍布 /、/api、/dav、/s 等
+# 多个前缀，走 inner 网关只反代单个前缀会把它拆散（且网关有 20MB 上传上限，
+# 云盘上传必然超），所以用 tab 浏览器新标签直连。
+open_type: tab
+
+# 应用类别
+tag_types:
+  - utility
+
+# 依赖的最低固件版本（正式上架前请联系绿联开发确认可用版本号）
+depend_fw_version: 1.13.0.0000
+
+# 允许用户在应用设置中追加授权共享/个人文件夹
+# （Cloudreve 里建「本机存储」策略时要读写这些目录）
+allow_add_access_path: true
+
+# 支持迁移安装目录（数据目录靠 UGAPP_DATA_DIR 解析，迁移后自动跟上）
+support_migration: true
+
+# 安装/设置时选本机存储目录。
+#
+# type: path 参数做两件事：
+#   1. 在应用中心的安装/设置弹窗里渲染出文件夹选择器；
+#   2. 顺带授权 —— 选中的目录进 path_permissions 表（from_type=1），
+#      进而生成 systemd unit 的 BindPaths=，沙箱内读写得到。
+#
+# 注意：全新安装/升级后的首次启动，平台要 2~3 秒后才写入参数值与授权目录，
+#       首启读到的是空值；脚本只把值打日志，不影响启动。
+parameters:
+  - key: CR_STORAGE_PATHS
+    type: path
+    multi: true
+    max_values_count: 8
+    changeable: true
+    i18n:
+      zh-CN:
+        name: 本机存储目录
+        description: >-
+          想通过 Cloudreve 读写的 NAS 共享文件夹，可添加多个。选好即完成授权，
+          之后在 Cloudreve 管理面板「存储策略 → 添加 → 本机」里把同样的路径
+          填进去即可。只用网盘/对象存储的话可以不选；留空也能安装，装好后在
+          应用「访问路径」里授权同样可以。
+      en-US:
+        name: Local storage folders
+        description: >-
+          NAS shared folders Cloudreve is allowed to read and write; several
+          allowed. Choosing them grants access — then add the same paths in
+          Cloudreve's admin panel under Storage policies → Add → Local.
+          Leave empty if you only use remote storage; you can also grant
+          folders later from the app's access-path settings.
+
+# 权限声明：
+#   NETWORK.ACCESS_INTERNET   —— 对接 OneDrive/S3/WebDAV 等远端存储、检查更新
+#   SYSTEM.EXEC_SYSTEM_COMMAND —— start_cmd 是 shell 脚本，没有这条沙箱里连
+#                                 /bin/sh 都不存在（报 ENOENT），脚本里用到的
+#                                 base64/tr 等也从 /usr/bin 来
+permissions:
+  - NETWORK.ACCESS_INTERNET
+  - SYSTEM.EXEC_SYSTEM_COMMAND
+
+# 开源合规信息（AGPL-3.0）
+license_agreement_link:
+  - https://github.com/cloudreve/cloudreve/blob/master/LICENSE
+source_code_link:
+  - https://github.com/cloudreve/cloudreve
+technical_support_link:
+  - https://docs.cloudreve.org/
+
+# 应用展示信息（多语言）
+i18n:
+  zh-CN:
+    name: Cloudreve
+    description: >-
+      开源的私有云盘 / 文件分享系统。把 NAS 本机目录、WebDAV、S3、OneDrive、
+      阿里云 OSS、腾讯云 COS 等存储统一到一个网盘界面，支持多用户与用户组、
+      分享链接、离线下载、在线预览、WebDAV 挂载和直链。装好后用浏览器打开，
+      首次访问按页面提示创建管理员账号即可。需要访问 NAS 上的文件夹时，先在
+      应用设置里授权目录，再到「存储策略」里添加本机存储。数据保存在应用
+      数据目录，卸载应用会一并删除，重要数据请提前备份。
+    author: Cloudreve
+    official: https://cloudreve.org/
+    help: https://docs.cloudreve.org/
+    publisher: 穿斯帕沃特
+    publisher_link: https://club.ugnas.com/home.php?mod=space&uid=10131
+  en-US:
+    name: Cloudreve
+    description: >-
+      An open-source self-hosted cloud drive and file sharing platform. It
+      brings NAS folders, WebDAV, S3, OneDrive, Aliyun OSS and Tencent COS
+      together behind one web interface, with multi-user groups, share links,
+      offline downloads, in-browser previews, WebDAV access and direct links.
+      Open it in a browser and create the admin account on the first visit.
+      To use NAS folders, grant them in the app settings first, then add a
+      Local storage policy in Cloudreve. Data lives in the app data directory
+      and is removed on uninstall — back up anything important.
+    author: Cloudreve
+    official: https://cloudreve.org/
+    help: https://docs.cloudreve.org/
+    publisher: 穿斯帕沃特
+    publisher_link: https://club.ugnas.com/home.php?mod=space&uid=10131
