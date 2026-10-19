@@ -23,6 +23,9 @@ apps/*/*/rootfs_common/geoip/*.mmdb.gz
 # 打包成品只进 GitHub Releases，不进 git（根目录的本地手工构建产物）
 *.upk
 
+# 拾光便签的前端 (rootfs_common/www) 由 build.sh 现场从上游 vite 产物生成
+apps/shiguangnotes/com.personal.shiguangnotes/rootfs_common/www/
+
 # clouddl 的前端 (rootfs_common/www) 由 build.sh 现场从上游生成（上游 static
 # 拷贝 + UGOS 认证适配层 + 文案 patch），跟着上游 tag 走，不进 git。
 apps/clouddl/com.personal.clouddl/rootfs_common/www/
@@ -67,10 +70,14 @@ apps/octop/com.tencent.octop/rootfs_common/www/
 # 两应用的管理页前端是直接提交的静态文件，无需 ignore。
 scripts/apps/redis/.build-cache/
 scripts/apps/postgresql/.build-cache/
-apps/*/com.*/rootfs_arm64/images/
-apps/*/com.*/rootfs_amd64/images/
 
 # nm3u8dlre build.sh 的本地下载缓存（引擎 tar.gz / 静态 ffmpeg；CI 用 RUNNER_TEMP）。
 # 注意 rootfs_common/www 是【入库】的成品：上游 fnOS 界面经 patch-ui.py 改造后
 # 直接提交，保证每次构建的前端完全一致，所以不要 ignore。
 scripts/apps/nm3u8dlre/.build-cache/
+
+# deenmusic build.sh 的本地下载缓存（上游源码、CPython、npm/pkg 缓存；CI 用 RUNNER_TEMP）。
+# rootfs_common/www 只有一个静态跳转页，是【入库】的成品，不要 ignore。
+scripts/apps/deenmusic/.build-cache/
+# 本机（WorkBuddy 沙箱）跑构建用的 rm 包装器，不提交
+scripts/apps/deenmusic/.tmp-local-build.sh

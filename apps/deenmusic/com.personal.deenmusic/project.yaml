@@ -1,0 +1,168 @@
+# ============================================================
+# Deen 音乐下载器 — UGOS Pro 原生应用
+#
+# 上游：https://github.com/chongya369/music-downloader（作者 chongya369）
+# 上游原本是"Windows/Linux 可执行文件 + 飞牛 fnOS .fpk"三套分发，
+# 本工程把它搬成绿联原生 .upk，业务代码一行没改。
+#
+# 改动前先读：
+#   overlay/ugos_main.py   为什么整个站点活在 /api 前缀下（inner 的天然约束）
+#   launcher/main.go       为什么 Python 由管理壳 fork，而不是 start_cmd 直接指过去
+# ============================================================
+
+spec_version: "2.1"
+
+app_id: com.personal.deenmusic
+
+# 跟随上游版本号（上游 version.txt = 0.7.8，release tag 形如 v0.7.8）。
+version: 0.7.8
+
+support_arch:
+  - amd64
+  - arm64
+
+# 界面是 Bootstrap 响应式，手机上能用（inner 在移动端是跳浏览器打开）。
+supports:
+  - app
+  - pc
+
+# --port 必须和下面的 port 一致：这里起的是 Go 管理壳，
+# Python（Flask）由它拉起，监听同一个端口但只在 127.0.0.1 上。
+start_cmd: bin/deenmusic --port=25400
+
+# 管理壳的 HTTP 端口，平台靠它探活。
+#
+# ⚠ 上游默认端口是 45600，【故意没有照抄】：本机同时跑着 Docker 版或
+#   源码版时就会撞车。选之前 grep 过仓库内其它应用的 project.yaml（无冲突）。
+port: 25400
+
+# inner：网关把 /api/* 反代给本应用，其余路径由网关从 www/ 直接 serve。
+#
+# 上游本来就是"网关前缀模式"设计（fnOS 的 /app/deen-music-downloader），
+# 自带 PrefixMiddleware + url_for + window.APP_BASE，把前缀换成 /api 就能
+# 完整落进 inner 模型，见 overlay/ugos_main.py 的说明。
+open_type: inner
+
+proxy_path: api
+
+tag_types:
+  - download
+
+depend_fw_version: 1.13.0.0000
+
+# 装完之后想再加一个下载目录，走应用中心"文件夹授权"即可。
+allow_add_access_path: true
+
+# 安装目录迁移后数据目录跟着走（数据库、密钥、日志都在 data 下）。
+support_migration: true
+
+# 【权限画像】只要一条：访问互联网。
+#
+# 三个平台的 API 服务（内置的 Node/Python 进程）和歌曲文件下载全在公网；
+# 零权限沙箱对公网出站是 DROP 的（局域网与 loopback 零权限就通）。
+#
+# 不需要 SYSTEM.EXEC_SYSTEM_COMMAND：管理壳 exec 的是包内自带的 Python/Node
+# 解释器（绝对路径、不经过 shell），沙箱里没有 seccomp，execve 本身不受限。
+permissions:
+  - NETWORK.ACCESS_INTERNET
+
+parameters:
+  # 安装时选一次下载目录，选中的同时这个目录就被授权进沙箱
+  # （平台把 path 型参数写进 path_permissions → unit 的 BindPaths=）。
+  #
+  # ⚠ 不设 required：全新安装/升级后【第一次启动读到的参数是空的】，
+  #   平台先起服务、稍后才写 <appid>.env 和 unit。留空能装，读到空值不报错，
+  #   先落在应用私有数据目录里，用户重启一次或之后在应用里改即可。
+  #
+  # ⚠ 只留这一个目录参数，别再加"临时/缓存"之类的子目录参数 ——
+  #   父子目录同时出现在参数里时，平台反而不会授权父目录（踩过）。
+  - key: DEENMUSIC_DOWNLOAD_DIR
+    type: path
+    multi: false
+    changeable: true
+    required: false
+    i18n:
+      zh-CN:
+        name: 下载保存目录
+        description: >-
+          下载好的歌曲放在哪。选一个你在文件管理器里看得到的目录即可，
+          选中的同时这个目录就被授权给本应用读写了。留空也能装，
+          文件会先落在应用私有数据目录里，之后可以在应用「设置」里改。
+          装好或换过目录后请在应用中心「停止 → 启动」一次，新目录才会生效。
+      en-US:
+        name: Music folder
+        description: >-
+          Where downloaded tracks are written. Picking a folder here also grants
+          this app read/write access to it. May be left empty — tracks then land
+          in the app's private data folder; you can change it later in the app's
+          Settings page. After installing or changing this, stop and start the
+          app once.
+
+# 合规链接：必须指向上游项目与其许可证（本应用是它的移植 + 修改版）。
+license_agreement_link:
+  - https://github.com/chongya369/music-downloader/blob/main/LICENSE
+
+source_code_link:
+  - https://github.com/chongya369/music-downloader
+
+technical_support_link:
+  - https://github.com/chongya369/music-downloader/issues
+
+i18n:
+  zh-CN:
+    name: Deen 音乐下载器
+    description: >-
+      把网易云音乐、QQ 音乐和酷狗音乐上的歌曲直接下载到 NAS，支持歌单定时同步，
+      不经过电脑中转。
+
+      在应用里粘贴歌单链接或 ID 就能加入监控，可以设置多个同步时间点（带随机抖动），
+      到点自动把歌单里的新歌抓下来。下载支持断点续传、失败重试，
+      音质可以按平台分别设置（含会员高阶档，取不到时自动降档），
+      完成后会把封面、歌词、专辑等元数据写进文件，也可以在文件名里附加专辑防同名冲突。
+
+      三个平台都支持多账号：Cookie 粘贴或扫码登录都能用，账号之间可以选择接力或轮询，
+      还能按每月额度、每小时限额来分配。下载队列可以单个或批量暂停、继续、删除，
+      总览页实时显示速度与进度。
+
+      运行环境是内置的：三个平台的 API 服务随应用一起安装、随应用启动，不需要另外部署。
+      第一次打开用 admin / admin123 登录（会强制改密码）。
+      数据、账号凭据和下载记录都只保存在这台 NAS 上。
+
+      注意：本应用不是上述平台的官方产品，使用的是第三方接口，对方随时可能调整风控，
+      请自行承担账号风险，并确保下载的内容你有合法的使用权。
+
+      本应用由 chongya369 的开源项目 music-downloader 移植而来（已修改：适配绿联的
+      应用沙箱、网关前缀与登录方式），原项目地址见「源代码」链接。
+    author: chongya369
+    publisher: 穿斯帕沃特
+    official: https://github.com/chongya369/music-downloader
+    help: https://github.com/chongya369/music-downloader#readme
+    publisher_link: https://club.ugnas.com/home.php?mod=space&uid=10131
+  en-US:
+    name: Deen Music Downloader
+    description: >-
+      Download tracks from NetEase Cloud Music, QQ Music and Kugou straight onto
+      the NAS, with scheduled playlist syncing — no PC in the middle.
+
+      Paste a playlist link or ID to start watching it, pick several sync times
+      (with random jitter) and new tracks are fetched automatically. Downloads
+      resume after interruption and retry on failure; quality is set per platform
+      (premium tiers included, with fallback), and cover art, lyrics and album
+      tags are written into the files.
+
+      Multi-account works on all three platforms (cookie or QR login), with
+      round-robin or failover scheduling plus monthly and hourly quotas. The queue
+      can be paused, resumed or cleared in bulk.
+
+      Everything runs inside the package — all three API services come with the
+      app. Sign in with admin/admin123 (you must change it). Credentials, settings
+      and history stay on this NAS.
+
+      Not an official product of those services — it relies on third-party APIs
+      that may change or throttle at any time. Ported from music-downloader by
+      chongya369.
+    author: chongya369
+    publisher: 穿斯帕沃特
+    official: https://github.com/chongya369/music-downloader
+    help: https://github.com/chongya369/music-downloader#readme
+    publisher_link: https://club.ugnas.com/home.php?mod=space&uid=10131
