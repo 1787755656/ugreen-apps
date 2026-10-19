@@ -25,10 +25,49 @@ app.js 的 API 请求也带上它。
 """
 
 import argparse
+import errno
 import logging
 import os
 import sys
 from pathlib import Path
+
+logger = logging.getLogger("ugos")
+
+# 只读挂载上会出现的错误码：EROFS 是真正的"只读文件系统"，
+# EPERM/EACCES 是"没有权限改"（安装目录属 root，运行用户是 app_xxx）。
+_READONLY_ERRNOS = {errno.EROFS, errno.EPERM, errno.EACCES}
+
+
+def _patch_chmod_for_readonly_install() -> None:
+    """让只读安装目录上的 chmod 变成 no-op
+
+    上游三个 bridge 在 spawn API 服务前都会 `bin_path.chmod(0o755)` 兜底，
+    但只捕获 `PermissionError`；而绿联沙箱的安装目录是**只读挂载**，chmod 抛的是
+    `OSError(EROFS)` —— 异常一路冒到 `_start_api_bridges` 的宽泛 except，
+    症状是"三个平台 API 服务启动异常"，主界面正常、搜歌/下载全不可用
+    （2026-10-19 真机 0002 实测；/tmp 下测试目录可写，所以本地复现不出来）。
+
+    权限在打包时就是 0755，所以这里把只读文件系统上的 chmod 静默掉；
+    其他错误照常抛出，不掩盖真正的问题。
+    """
+    real_chmod = os.chmod
+    if getattr(real_chmod, "_ugos_readonly_patched", False):
+        return
+
+    def chmod(path, mode, *args, **kwargs):
+        try:
+            return real_chmod(path, mode, *args, **kwargs)
+        except OSError as exc:
+            if exc.errno in _READONLY_ERRNOS:
+                logger.debug("只读安装目录，忽略 chmod(%s, 0o%o)", path, mode)
+                return None
+            raise
+
+    chmod._ugos_readonly_patched = True
+    os.chmod = chmod
+
+
+_patch_chmod_for_readonly_install()
 
 _HERE = Path(__file__).resolve().parent          # <install>/service/webapp
 _ROOT = _HERE.parent                             # <install>/service
@@ -52,9 +91,103 @@ if _ARGS.data_dir:
     os.environ["APP_DATA_DIR"] = str(Path(_ARGS.data_dir).expanduser().resolve())
 
 import app as upstream  # noqa: E402  —— 上游入口：建库、注册蓝图、启动任务管理器
+from flask import request, session  # noqa: E402
+from flask.sessions import SecureCookieSessionInterface  # noqa: E402
 from werkzeug.serving import make_server  # noqa: E402
 
-logger = logging.getLogger("ugos")
+# ---- 不依赖 cookie 的会话通道（token 兜底）----
+#
+# 绿联网关会给 Set-Cookie 追加 `SameSite=Strict`（应用自己发的是默认 Lax）。
+# 一旦用户从"另一个站点"打开本应用（远程访问域名、手机 App、桌面客户端里
+# 跨站的窗口），浏览器就不再回传这个 cookie：登录 POST 明明返回 302 成功，
+# 紧接着 GET /api/ 却判未登录 → 又回到登录页，怎么登都进不去
+# （2026-10-19 真机 0002 实测；curl 同域测是通的，所以只在真实浏览器里复现）。
+#
+# 这里补一条与 cookie 无关的通道：
+#   · 登录/改密成功后，把签名过的会话值放进 302 的 **URL fragment**
+#     （fragment 不会发给服务端、也不进 nginx access log），
+#     跳到一个静态接收页把它写进 localStorage；
+#   · 之后每个页面都注入一段"给 fetch 补 X-Deen-Token 头"的脚本；
+#   · 服务端在 session 为空时用这个头恢复会话。
+# cookie 正常的环境里这条链只是多一跳，没有任何副作用。
+_TOKEN_HEADER = "X-Deen-Token"
+_TOKEN_MAX_AGE = 30 * 24 * 3600          # 30 天
+_TOKEN_RECEIVER = "/api/static/deen-token.html"
+
+_TOKEN_SNIPPET = """<script id="deen-token-bridge">
+(function(){
+  var KEY="deen_token";
+  try{
+    var h=location.hash||"";
+    if(h.indexOf("#t=")===0){
+      localStorage.setItem(KEY,h.slice(3));
+      history.replaceState(null,"",location.pathname+location.search);
+    }
+  }catch(e){}
+  var t=null; try{ t=localStorage.getItem(KEY); }catch(e){}
+  if(!t){ return; }
+  var orig=window.fetch;
+  if(!orig || orig.__deenWrapped){ return; }
+  window.fetch=function(input,init){
+    init=init||{};
+    try{
+      var hs=new Headers(init.headers||{});
+      if(!hs.has("__HEADER__")){ hs.set("__HEADER__", t); }
+      init.headers=hs;
+    }catch(e){}
+    return orig.call(this,input,init);
+  };
+  window.fetch.__deenWrapped=true;
+})();
+</script>"""
+
+
+def _install_token_bridge() -> None:
+    app = upstream.app
+    if getattr(app, "_deen_token_installed", False):
+        return
+    app._deen_token_installed = True
+    serializer = SecureCookieSessionInterface().get_signing_serializer(app)
+
+    @app.before_request
+    def _restore_session_from_token():
+        if session.get("uid"):
+            return None
+        token = (request.headers.get(_TOKEN_HEADER) or "").strip()
+        if not token:
+            return None
+        try:
+            data = serializer.loads(token, max_age=_TOKEN_MAX_AGE)
+        except Exception:  # noqa: BLE001 —— 过期/被改写的 token 直接忽略
+            return None
+        if isinstance(data, dict) and data.get("uid"):
+            session.update(data)
+        return None
+
+    @app.after_request
+    def _inject_token(resp):
+        if not session.get("uid"):
+            return resp
+        token = serializer.dumps(dict(session))
+        # 登录/改密成功的表单提交：把 token 交给静态接收页（fragment 不进日志）
+        if (resp.status_code in (301, 302, 303)
+                and request.method == "POST"
+                and request.path in ("/login", "/change_password")):
+            resp.headers["Location"] = f"{_TOKEN_RECEIVER}#t={token}"
+            return resp
+        if resp.mimetype != "text/html":
+            return resp
+        html = resp.get_data(as_text=True)
+        snippet = _TOKEN_SNIPPET.replace("__HEADER__", _TOKEN_HEADER).replace("__TOKEN__", token)
+        if "</head>" in html:
+            html = html.replace("</head>", snippet + "</head>", 1)
+        elif "<body" in html:
+            idx = html.index("<body")
+            html = html[:idx] + snippet + html[idx:]
+        else:
+            return resp
+        resp.set_data(html)
+        return resp
 
 
 def _retarget_log_file() -> None:
@@ -141,6 +274,7 @@ def main(argv=None) -> int:
 
     _retarget_log_file()
     _apply_download_dir()
+    _install_token_bridge()
 
     host, port = "127.0.0.1", args.port
 

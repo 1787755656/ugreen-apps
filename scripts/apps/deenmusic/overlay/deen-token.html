@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>正在进入 Deen 音乐下载器…</title>
+<style>
+  html,body{height:100%;margin:0;background:#17181c;color:#e8eaed;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+  .box{height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px}
+  .spinner{width:30px;height:30px;border:3px solid rgba(255,255,255,.16);border-top-color:#4c8dff;border-radius:50%;
+    animation:spin .8s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  p{font-size:14px;color:#9aa0a6;margin:0}
+</style>
+<script>
+  // 登录/改密成功后服务端把会话 token 放在 fragment 里跳到这里：
+  // fragment 不会发给服务端、也不进 nginx access log，浏览器这边读到即存。
+  (function () {
+    try {
+      var h = location.hash || "";
+      if (h.indexOf("#t=") === 0) {
+        localStorage.setItem("deen_token", h.slice(3));
+      }
+    } catch (e) {}
+    location.replace("/api/");
+  })();
+</script>
+</head>
+<body>
+  <div class="box">
+    <div class="spinner"></div>
+    <p>正在进入…</p>
+  </div>
+</body>
+</html>

@@ -126,6 +126,14 @@ func runNode(l layout, app, label string) {
 //
 // ⚠ 不改 cwd：bridge 会把 cwd 指到 <data>/qqmusic 并把 config.toml 复制过去，
 //   上游 run.py 就是在 cwd 里读配置、建 web/data 的。
+//
+// ⚠⚠ 但光有 cwd 不够（2026-10-19 真机 0002 实测）：上游把**相对**路径
+//   `web/data/{device.json,credentials.sqlite3,logs/app.log}` 用
+//   `PROJECT_ROOT`（= 源码目录 = 只读安装目录）拼成绝对路径，于是
+//   `PermissionError: [Errno 13] ... /service/apiqq/web/data`，
+//   Application startup failed → QQ 音乐 API 起不来。
+//   这里用环境变量（pydantic-settings：QQMUSIC_ 前缀 + `_` 分隔嵌套）把三项
+//   覆盖成可写目录下的绝对路径。绝对路径不会再被 PROJECT_ROOT 拼接。
 func runPython(l layout) {
 	pythonHome := filepath.Join(l.install, "runtime", "python")
 	python := filepath.Join(pythonHome, "bin", "python3.11")
@@ -133,15 +141,30 @@ func runPython(l layout) {
 	entry := filepath.Join(appDir, "web", "run.py")
 	mustExist(python, entry)
 
+	// cwd 由 bridge 设成 <data>/qqmusic；万一没设（或不可写），退回临时目录。
+	cwd, err := os.Getwd()
+	if err != nil {
+		cwd = os.TempDir()
+	}
+	dataDir := filepath.Join(cwd, "web", "data")
+	if err := os.MkdirAll(filepath.Join(dataDir, "logs"), 0o755); err != nil {
+		dataDir = filepath.Join(os.TempDir(), "qqmusic", "web", "data")
+		_ = os.MkdirAll(filepath.Join(dataDir, "logs"), 0o755)
+	}
+
 	env := withEnv(os.Environ(),
 		"PYTHONHOME="+pythonHome,
 		"PYTHONPATH="+filepath.Join(appDir, "vendor")+string(os.PathListSeparator)+appDir,
 		"PYTHONDONTWRITEBYTECODE=1",
 		"PYTHONUNBUFFERED=1",
 		"PYTHONIOENCODING=utf-8",
+		// 把上游硬拼到只读安装目录的三条路径挪到可写目录
+		"QQMUSIC_LOGGING_FILE_PATH="+filepath.Join(dataDir, "logs", "app.log"),
+		"QQMUSIC_CREDENTIAL_STORE_PATH="+filepath.Join(dataDir, "credentials.sqlite3"),
+		"QQMUSIC_CLIENT_DEVICE_PATH="+filepath.Join(dataDir, "device.json"),
 	)
 
-	fmt.Printf("[api-shim] QQ 音乐: exec %s %s\n", python, entry)
+	fmt.Printf("[api-shim] QQ 音乐: exec %s %s (cwd=%s, data=%s)\n", python, entry, cwd, dataDir)
 
 	// 直接 exec：pid 不变，bridge 的 terminate()/poll() 照常作用在真正的
 	// Python 进程上；多套一层 fork 会让它杀不到真正的服务。

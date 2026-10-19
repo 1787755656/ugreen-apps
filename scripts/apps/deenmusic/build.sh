@@ -179,6 +179,10 @@ cp "$UP/requirements.txt" "$dir/service/requirements.txt" 2>/dev/null || true
 
 # b. 适配层：唯一一个我们自己加进上游源码目录的文件（挂 /api 前缀 + 下载目录）。
 cp "$SLASH_DIR/overlay/ugos_main.py" "$dir/service/webapp/ugos_main.py"
+# token 接收页（登录成功后带 fragment 跳这里，把 token 写进 localStorage）：
+# 网关给 cookie 加了 SameSite=Strict，跨站打开时 cookie 不回收，只能靠 token 兜底。
+mkdir -p "$dir/service/webapp/static"
+cp "$SLASH_DIR/overlay/deen-token.html" "$dir/service/webapp/static/deen-token.html"
 
 # c. 运行时依赖：按目标架构从 PyPI 取 wheel（纯 Python 的随意，带 .so 的
 #    必须是对应架构）。--only-binary 保证不会去编源码 —— 交叉编译必然失败，
@@ -407,6 +411,7 @@ if find "$dir" -name '._*' -print -quit | grep -q .; then
 fi
 for f in "$dir/service/webapp/ugos_main.py" \
          "$dir/service/webapp/app.py" \
+         "$dir/service/webapp/static/deen-token.html" \
          "$dir/service/core" \
          "$dir/service/api/config.toml" \
          "$dir/service/version.txt"; do
