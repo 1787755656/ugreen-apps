@@ -75,7 +75,7 @@
       },
       "service_port": 28686,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/clouddl/com.personal.clouddl/rootfs_common/icon.png",
-      "download_count": 4,
+      "download_count": 5,
       "app_type": "native",
       "category": "download",
       "platforms": [
@@ -135,7 +135,7 @@
       },
       "service_port": 25400,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/deenmusic/com.personal.deenmusic/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 1,
       "app_type": "native",
       "category": "download",
       "platforms": [
@@ -561,7 +561,7 @@
       },
       "service_port": 28088,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/octop/com.tencent.octop/rootfs_common/icon.png",
-      "download_count": 3,
+      "download_count": 4,
       "app_type": "native",
       "category": "ai",
       "platforms": [
@@ -888,6 +888,30 @@
       ]
     },
     {
+      "appname": "com.personal.trilium",
+      "display_name": "Trilium 笔记",
+      "description": "装在 NAS 上的分层笔记与个人知识库。支持富文本、Markdown、代码、表格、 画布、思维导图、关系图、日历、Excalidraw 与 PDF 预览，带全文搜索、 属性查询、笔记版本历史和脚本扩展；数据全部保存在本机，多端打开同一个地址即可同步。 首次打开需要先设置管理员密码，之后凭该密码登录。",
+      "homepage_url": "https://github.com/TriliumNext/Trilium",
+      "updated_at": "2026-10-19",
+      "version": "106.0.0",
+      "upk_version": "106.0.0.0004",
+      "release_tag": "trilium/v0.106.0-r1",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/trilium/v0.106.0-r1/amd64_nasync_com.personal.trilium_106.0.0.0004.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/trilium/v0.106.0-r1/arm64_nasync_com.personal.trilium_106.0.0.0004.upk"
+      },
+      "service_port": 28186,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/trilium/com.personal.trilium/rootfs_common/icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "system",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ],
+      "install_params": null
+    },
+    {
       "appname": "com.personal.ugtheme",
       "display_name": "主题美化中心 (Theme Studio)",
       "description": "一键更换 UGOS 桌面应用图标主题，内置 iOS26 液态玻璃、锤子OS、拟物毛玻璃、绿联毛玻璃、官方默认五套主题（同名覆盖、可一键还原原版）。自动下载必应每日壁纸，同步更新登录页背景与桌面壁纸库（在 UGOS 壁纸设置中选择），支持自定义壁纸源、上传图片与 cron 定时刷新。所有修改前自动备份原版文件。首次打开需设置应用密码，管理员专用，请勿将端口暴露到公网。图标主题来自 ugreen-icon-replacer（MIT）。",
@@ -902,7 +926,7 @@
       },
       "service_port": 28750,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/ugtheme/com.personal.ugtheme/rootfs_common/icon.png",
-      "download_count": 21,
+      "download_count": 22,
       "app_type": "docker",
       "category": "utility",
       "platforms": [
