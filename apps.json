@@ -121,6 +121,36 @@
       ]
     },
     {
+      "appname": "com.personal.deenmusic",
+      "display_name": "Deen 音乐下载器 (Deen Music Downloader)",
+      "description": "把网易云音乐、QQ 音乐和酷狗音乐上的歌曲直接下载到 NAS，支持歌单定时同步， 不经过电脑中转。\n在应用里粘贴歌单链接或 ID 就能加入监控，可以设置多个同步时间点（带随机抖动）， 到点自动把歌单里的新歌抓下来。下载支持断点续传、失败重试， 音质可以按平台分别设置（含会员高阶档，取不到时自动降档）， 完成后会把封面、歌词、专辑等元数据写进文件，也可以在文件名里附加专辑防同名冲突。\n三个平台都支持多账号：Cookie 粘贴或扫码登录都能用，账号之间可以选择接力或轮询， 还能按每月额度、每小时限额来分配。下载队列可以单个或批量暂停、继续、删除， 总览页实时显示速度与进度。\n运行环境是内置的：三个平台的 API 服务随应用一起安装、随应用启动，不需要另外部署。 第一次打开用 admin / admin123 登录（会强制改密码）。 数据、账号凭据和下载记录都只保存在这台 NAS 上。\n注意：本应用不是上述平台的官方产品，使用的是第三方接口，对方随时可能调整风控， 请自行承担账号风险，并确保下载的内容你有合法的使用权。\n本应用由 chongya369 的开源项目 music-downloader 移植而来（已修改：适配绿联的 应用沙箱、网关前缀与登录方式），原项目地址见「源代码」链接。",
+      "homepage_url": "https://github.com/chongya369/music-downloader",
+      "updated_at": "2026-10-19",
+      "version": "0.7.8",
+      "upk_version": "0.7.8.0001",
+      "release_tag": "deenmusic/v0.7.8",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/deenmusic/v0.7.8/amd64_nasync_com.personal.deenmusic_0.7.8.0001.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/deenmusic/v0.7.8/arm64_nasync_com.personal.deenmusic_0.7.8.0001.upk"
+      },
+      "service_port": 25400,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/deenmusic/com.personal.deenmusic/rootfs_common/icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "download",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ],
+      "install_params": [
+        {
+          "key": "DEENMUSIC_DOWNLOAD_DIR",
+          "name": "下载保存目录",
+          "description": "下载好的歌曲放在哪。选一个你在文件管理器里看得到的目录即可， 选中的同时这个目录就被授权给本应用读写了。留空也能装， 文件会先落在应用私有数据目录里，之后可以在应用「设置」里改。 装好或换过目录后请在应用中心「停止 → 启动」一次，新目录才会生效。"
+        }
+      ]
+    },
+    {
       "appname": "com.personal.dnet",
       "display_name": "D-NET 动态网络管理",
       "description": "轻量级动态网络管理工具：CDN 源站自动跟随 IP 变化更新（DCDN）、 动态域名解析（DDNS）、TCP/UDP 端口转发（DPF），一个应用管完。\n动态 CDN：支持阿里云 CDN/DCDN/ESA、腾讯云 CDN/EdgeOne、百度云 CDN/DRCDN、Cloudflare、又拍云以及自定义回调，IP 变了源站自动跟上。 动态 DNS：支持 A/AAAA/CNAME/TXT 记录，覆盖阿里云、腾讯云、百度云、 Cloudflare、华为云、DNSPod、NameSilo、GoDaddy 与自定义回调。 端口转发：IPv4/IPv6 入口转发到指定 IP 或域名，支持来源白名单、 连接数限制、超时设置与运行日志。\n变更可实时通过 Webhook 推送通知。首次打开会进入初始设置页： 请在安装后 30 分钟内从内网完成账号密码设置（超时后在应用中心 停止再启动一次即可重新进入），配置保存在 NAS 本机。",
