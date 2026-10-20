@@ -287,17 +287,17 @@
       "display_name": "轻课堂 LiteClass",
       "description": "专为 NAS 用户打造的轻量级、多用户私有云学习管理系统。管理课程库、在线播放、 章节识别与自动封面、断点续播、倍速与字幕、带时间戳的课程笔记、学习时长统计、 考试与答题、AI 问答，支持多人一起看。数据只保存在自己的 NAS 上。 初始管理员为 admin / admin123，装好后请立刻在应用内改密码。",
       "homepage_url": "https://club.ugnas.com/home.php?mod=space&uid=10131",
-      "updated_at": "2026-09-29",
+      "updated_at": "2026-10-20",
       "version": "1.1.6",
-      "upk_version": "1.1.6.0005",
-      "release_tag": "liteclass/v1.1.6-r7",
+      "upk_version": "1.1.6.0006",
+      "release_tag": "liteclass/v1.1.6-r8",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/liteclass/v1.1.6-r7/amd64_nasync_com.personal.liteclass_1.1.6.0005.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/liteclass/v1.1.6-r7/arm64_nasync_com.personal.liteclass_1.1.6.0005.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/liteclass/v1.1.6-r8/amd64_nasync_com.personal.liteclass_1.1.6.0006.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/liteclass/v1.1.6-r8/arm64_nasync_com.personal.liteclass_1.1.6.0006.upk"
       },
       "service_port": 18083,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/liteclass/com.personal.liteclass/rootfs_common/icon.png",
-      "download_count": 13,
+      "download_count": 0,
       "app_type": "native",
       "category": "media",
       "platforms": [
