@@ -15,7 +15,7 @@
       },
       "service_port": 28737,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/100zip/com.personal.100zip/rootfs_common/icon.png",
-      "download_count": 7,
+      "download_count": 8,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -135,7 +135,7 @@
       },
       "service_port": 25400,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/deenmusic/com.personal.deenmusic/rootfs_common/icon.png",
-      "download_count": 1,
+      "download_count": 4,
       "app_type": "native",
       "category": "download",
       "platforms": [
@@ -381,7 +381,7 @@
       },
       "service_port": 28300,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/lunatv/com.personal.lunatv/rootfs_common/icon.png",
-      "download_count": 21,
+      "download_count": 23,
       "app_type": "native",
       "category": "media",
       "platforms": [
@@ -561,7 +561,7 @@
       },
       "service_port": 28088,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/octop/com.tencent.octop/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 2,
       "app_type": "native",
       "category": "ai",
       "platforms": [
@@ -664,17 +664,17 @@
       "display_name": "存钱罐 Piggy Bank",
       "description": "面向家庭的自托管积分管理系统。孩子完成任务、领取家长发布的临时任务获得积分，用积分在商店兑换商品或现金，所有申请由家长审核。内置积分项管理、任务发布、商店商品、积分流水与兑换审核，支持孩子 PIN 码登录、12 生肖头像和实时刷新。数据保存在 NAS 本机 SQLite 单文件，不上传任何云端。默认管理员账号 admin，初始密码 admin123，登录后可在应用内修改。",
       "homepage_url": "https://github.com/ASH-C776/piggy-bank",
-      "updated_at": "2026-09-29",
-      "version": "1.3.4",
-      "upk_version": "1.3.4.0010",
-      "release_tag": "piggybank/v1.3.4-r2",
+      "updated_at": "2026-10-20",
+      "version": "1.5.5",
+      "upk_version": "1.5.5.0011",
+      "release_tag": "piggybank/v1.5.5",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/piggybank/v1.3.4-r2/amd64_nasync_com.ashc776.piggybank_1.3.4.0010.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/piggybank/v1.3.4-r2/arm64_nasync_com.ashc776.piggybank_1.3.4.0010.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/piggybank/v1.5.5/amd64_nasync_com.ashc776.piggybank_1.5.5.0011.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/piggybank/v1.5.5/arm64_nasync_com.ashc776.piggybank_1.5.5.0011.upk"
       },
       "service_port": 23010,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/piggybank/com.ashc776.piggybank/rootfs_common/icon.png",
-      "download_count": 1,
+      "download_count": 0,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -926,7 +926,7 @@
       },
       "service_port": 28750,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/ugtheme/com.personal.ugtheme/rootfs_common/icon.png",
-      "download_count": 22,
+      "download_count": 27,
       "app_type": "docker",
       "category": "utility",
       "platforms": [
@@ -956,7 +956,7 @@
       },
       "service_port": 28085,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/zhiyinmusic/com.personal.zhiyinmusic/rootfs_common/icon.png",
-      "download_count": 7,
+      "download_count": 8,
       "app_type": "native",
       "category": "media",
       "platforms": [
