@@ -357,7 +357,7 @@
       },
       "service_port": 16601,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/lucky/com.gdy666.lucky/rootfs_common/icon.png",
-      "download_count": 4,
+      "download_count": 6,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -561,7 +561,7 @@
       },
       "service_port": 28088,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/octop/com.tencent.octop/rootfs_common/icon.png",
-      "download_count": 2,
+      "download_count": 6,
       "app_type": "native",
       "category": "ai",
       "platforms": [
@@ -650,7 +650,7 @@
       },
       "service_port": 18800,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/picoclaw/com.sipeed.picoclaw/rootfs_common/icon.png",
-      "download_count": 3,
+      "download_count": 5,
       "app_type": "native",
       "category": "ai",
       "platforms": [
@@ -674,7 +674,7 @@
       },
       "service_port": 23010,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/piggybank/com.ashc776.piggybank/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 1,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -926,7 +926,7 @@
       },
       "service_port": 28750,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/ugtheme/com.personal.ugtheme/rootfs_common/icon.png",
-      "download_count": 27,
+      "download_count": 30,
       "app_type": "docker",
       "category": "utility",
       "platforms": [
