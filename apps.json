@@ -135,7 +135,7 @@
       },
       "service_port": 25400,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/deenmusic/com.personal.deenmusic/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 1,
       "app_type": "native",
       "category": "download",
       "platforms": [
@@ -585,7 +585,7 @@
       },
       "service_port": 28088,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/octop/com.tencent.octop/rootfs_common/icon.png",
-      "download_count": 10,
+      "download_count": 11,
       "app_type": "native",
       "category": "ai",
       "platforms": [
@@ -938,19 +938,19 @@
     {
       "appname": "com.personal.ugtheme",
       "display_name": "主题美化中心 (Theme Studio)",
-      "description": "一键更换 UGOS 桌面应用图标主题，内置 iOS26 液态玻璃、锤子OS、拟物毛玻璃、绿联毛玻璃、官方默认五套主题（同名覆盖、可一键还原原版）。自动下载必应每日壁纸，同步更新登录页背景与桌面壁纸库（在 UGOS 壁纸设置中选择），支持自定义壁纸源、上传图片与 cron 定时刷新。所有修改前自动备份原版文件。首次打开需设置应用密码，管理员专用，请勿将端口暴露到公网。图标主题来自 ugreen-icon-replacer（MIT）。",
+      "description": "一键更换 UGOS 桌面应用图标主题，内置 iOS26 液态玻璃、锤子OS、拟物毛玻璃、绿联毛玻璃、官方默认五套主题（同名覆盖、可一键还原原版）。自动下载必应每日壁纸，跟随定时刷新自动更换，同步模式可选「登录背景 + 桌面壁纸 / 只换登录背景 / 只换桌面壁纸」，并带壁纸模块总开关；支持自定义壁纸源、上传图片与 cron 定时刷新。所有修改前自动备份原版文件。另含「文件管理增强」：给文件管理右键菜单加「以文本方式打开」，用官方编辑器打开任意后缀（含无扩展名）文件，补丁前自动备份、可一键还原（非必要不使用，UGOS 10 月更新已内置该能力）。首次打开需设置应用密码，管理员专用，请勿将端口暴露到公网。图标主题来自 ugreen-icon-replacer（MIT）。",
       "homepage_url": "https://club.ugnas.com/home.php?mod=space&uid=10131",
-      "updated_at": "2026-10-16",
-      "version": "1.1.1",
-      "upk_version": "1.1.1.0007",
-      "release_tag": "ugtheme/v1.1.1",
+      "updated_at": "2026-10-22",
+      "version": "1.2.2",
+      "upk_version": "1.2.2.0010",
+      "release_tag": "ugtheme/v1.2.2",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/ugtheme/v1.1.1/amd64_nasync_com.personal.ugtheme_1.1.1.0007.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/ugtheme/v1.1.1/arm64_nasync_com.personal.ugtheme_1.1.1.0007.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/ugtheme/v1.2.2/amd64_nasync_com.personal.ugtheme_1.2.2.0010.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/ugtheme/v1.2.2/arm64_nasync_com.personal.ugtheme_1.2.2.0010.upk"
       },
       "service_port": 28750,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/ugtheme/com.personal.ugtheme/rootfs_common/icon.png",
-      "download_count": 37,
+      "download_count": 0,
       "app_type": "docker",
       "category": "utility",
       "platforms": [
