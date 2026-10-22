@@ -38,7 +38,7 @@ func childEnv(p Paths) []string {
 
 		// 和上游镜像保持一致。日志走 unit 的 StandardOutput=append，
 		// 落在 /volume1/@appstore/<appid>/log/<appid>.log。
-		"RUST_LOG=" + envOr("RUST_LOG", "info"),
+		"RUST_LOG=" + envOr(os.Getenv, "RUST_LOG", "info"),
 		"RUST_BACKTRACE=1",
 	}
 

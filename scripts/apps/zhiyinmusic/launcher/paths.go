@@ -22,6 +22,11 @@ type Paths struct {
 	Data  string // 可写。数据库、封面库、config.toml、pepper
 	Cache string // 可写。转码缓存和 TMPDIR，掉了不心疼
 
+	// PlatformData 是平台给的数据目录（unit 里的 UGAPP_DATA_DIR），
+	// 也是"配置文件夹被改到别处"之后的状态锚点 —— 见 datadir.go。
+	// Data 默认等于它，用户选了「配置文件夹」之后才指向别处。
+	PlatformData string
+
 	Server string // 上游二进制 zhiyin-music 的绝对路径
 	Web    string // 前端构建产物目录（只读，给 config.toml 的 web.path 用）
 }
@@ -36,11 +41,20 @@ func resolvePaths() (Paths, error) {
 	if err != nil {
 		return Paths{}, fmt.Errorf("定位自身可执行文件失败：%w", err)
 	}
-	exe, err = filepath.EvalSymlinks(exe)
+	return resolvePathsFrom(exe, os.Getenv)
+}
+
+// resolvePathsFrom 是 resolvePaths 的可测版本：给定可执行文件路径和环境变量读取器。
+func resolvePathsFrom(exe string, getenv func(string) string) (Paths, error) {
+	exe, err := filepath.EvalSymlinks(exe)
 	if err != nil {
 		return Paths{}, fmt.Errorf("解析自身路径失败：%w", err)
 	}
 	root := filepath.Dir(filepath.Dir(exe)) // <root>/bin/zhiyin-launcher -> <root>
+
+	// Data 先落在平台给的数据目录上；用户选了「配置文件夹」时由
+	// useDataDir（datadir.go）改指向，并在需要时把数据搬过去。
+	data := envOr(getenv, "UGAPP_DATA_DIR", filepath.Join(root, "data"))
 
 	p := Paths{
 		Root: root,
@@ -48,8 +62,9 @@ func resolvePaths() (Paths, error) {
 		Lib:  filepath.Join(root, "lib"),
 		App:  filepath.Join(root, "app"),
 
-		Data:  envOr("UGAPP_DATA_DIR", filepath.Join(root, "data")),
-		Cache: envOr("UGAPP_CACHE_DIR", filepath.Join(root, "cache")),
+		Data:         data,
+		PlatformData: data,
+		Cache:        envOr(getenv, "UGAPP_CACHE_DIR", filepath.Join(root, "cache")),
 	}
 	p.Server = filepath.Join(p.Bin, "zhiyin-music")
 	p.Web = filepath.Join(p.App, "web")
@@ -142,8 +157,8 @@ func checkPortFree(port int) error {
 	return ln.Close()
 }
 
-func envOr(key, def string) string {
-	if v := os.Getenv(key); v != "" {
+func envOr(getenv func(string) string, key, def string) string {
+	if v := getenv(key); v != "" {
 		return v
 	}
 	return def

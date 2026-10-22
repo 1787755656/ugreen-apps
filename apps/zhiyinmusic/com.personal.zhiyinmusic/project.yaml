@@ -9,6 +9,7 @@
 # 改动前务必先读的注释：
 #   launcher/config.go   —— config.toml 是相对 cwd 解析的，以及哪几个键归我们管
 #   launcher/env.go      —— 那几个环境变量分别在填哪个坑
+#   launcher/datadir.go  —— 「配置文件夹」怎么选、换目录时数据怎么搬（别绕过它直接改 Data）
 #   scripts/build.sh 顶部 —— 上游产物是从哪个镜像 digest 里解出来的
 # ============================================================
 
@@ -102,7 +103,7 @@ support_migration: true
 permissions:
   - NETWORK.ACCESS_INTERNET
 
-# 【只有音乐目录这一个参数】
+# 【两个参数：音乐文件夹 + 配置文件夹】
 #
 # ⚠ 刻意【不做】"安装时设置管理员账号密码"：上游首次打开就有引导页让用户创建管理员，
 #   再加一份安装参数是画蛇添足 —— 而且首启参数是空的，那份参数注定要到第二次启动
@@ -115,9 +116,9 @@ parameters:
   #   平台先起服务、2~3 秒后才写 <appid>.env 和 unit。留空能装、
   #   读到空值不报错，用户重启一次就用上了。
   #
-  # ⚠ 只留这一个目录参数，别再加"封面目录/转码缓存目录"之类的子目录参数：
-  #   父子目录同时出现在参数里时，平台反而【不会】授权父目录。
-  #   （封面库和转码缓存都落在平台给的数据/缓存目录里，不占用户目录。）
+  # ⚠ 两个参数选的目录【不能互相嵌套】：父子目录同时出现在参数里时，平台反而
+  #   【不会】授权父目录（父目录在沙箱里退化成只剩已授权子目录的合成视图），
+  #   表现是"音乐突然全没了"。管理壳启动时会检测并点名警告，但文案里也得写清楚。
   - key: ZHIYIN_MUSIC_PATHS
     type: path
     multi: true
@@ -132,6 +133,8 @@ parameters:
           应用会自动把它们加进扫描目录。留空也能装，装好后在应用中心
           「停止 → 启动」一次再来补选。之后在这里去掉某个目录，它也会被移出扫描范围；
           你在应用内自己添加的目录不受影响。
+          注意：别选在下面「配置文件夹」里面（或把它选在这里面）——
+          父子目录同时被选中时平台不会授权父目录，可能扫不到音乐。
       en-US:
         name: Music folders
         description: >-
@@ -139,6 +142,42 @@ parameters:
           grants this app read/write access, and they are added to the scan list
           automatically. May be left empty — add them later, then stop and start
           the app once.
+          Do not pick a folder inside the config folder below (or put the config
+          folder inside one of these): when a parent and a child are both
+          selected the platform does not grant the parent.
+
+  # 配置文件夹 = 应用自己的数据目录。config.toml、db.sqlite、封面库、pepper 都在里面。
+  # 不给这个参数的话，它们只能待在 /volume1/@appdata/<appid> —— 用户在文件管理器里
+  # 看不见、也备份不了，想换块盘更无从下手（和 OpenList 的「数据目录」同一个思路）。
+  #
+  # ⚠ 换目录这件事由管理壳负责搬迁（launcher/datadir.go）：复制 → 校验 → 把旧数据
+  #   挪进 .migrated-<时间戳>/。这里只声明参数，别指望平台帮你搬。
+  - key: ZHIYIN_DATA_DIR
+    type: path
+    multi: false
+    changeable: true
+    required: false
+    i18n:
+      zh-CN:
+        name: 配置文件夹
+        description: >-
+          应用自己的东西都放这里：config.toml、曲库数据库、封面库，以及 Subsonic
+          客户端的密码密钥。选好即完成授权。留空也可以 —— 数据就留在应用自己的
+          数据目录里（文件管理器里看不到，卸载时一起删掉）。之后改到别的文件夹，
+          下次启动会把老数据自动搬过去，旧目录里的副本不删，确认没问题再自己清理。
+          备份这一个文件夹，曲库索引、封面和登录态就都保住了。
+          注意：别选音乐文件夹本身，也别和它互相包含。
+      en-US:
+        name: Config folder
+        description: >-
+          Everything the app owns lives here: config.toml, the library database,
+          cover art and the Subsonic password pepper. Picking a folder also
+          grants access. Leaving it empty is fine — data stays in the app's own
+          data directory (hidden from File Manager, removed on uninstall).
+          Change it later and the old data is copied over on the next start; the
+          old copy is kept, delete it yourself once you are happy. Backing up
+          this one folder keeps the library index, covers and logins.
+          Do not pick your music folder, or nest it with one.
 
 # 上游在 GitHub 上是 MIT 许可证，但那个仓库里【只有文档和配置示例，没有 Rust
 # 源码】—— 实际发布形式只有 Docker 镜像。这两个字段指向上游仓库，
@@ -168,9 +207,16 @@ i18n:
       除了网页版，它还提供一层 Subsonic API：手机上用音流、Symfonium、DSub
       这类客户端填上 NAS 地址和账号就能直接听，不必开着浏览器。
 
+      网页版和 API 都在 28085 端口上：浏览器打开 http://<NAS 的 IP>:28085，
+      Subsonic 客户端的服务器地址也填同一个。
+
       播放支持无缝拖动和多档音质（128k / 192k / 320k / 无损），转码由应用自带的
       ffmpeg 完成。另外支持 .strm 网盘直链文件，把阿里云盘等网盘里的音乐
       一并纳入音乐库。
+
+      ⚠ 装完之后请到应用中心把本应用「停止」再「启动」一次，否则会扫不到文件。
+      平台是先把服务起起来、两三秒后才写入安装参数和你选的文件夹授权的，
+      首次启动那一次读不到这些值；重启一次它们才生效，音乐才会出现在曲库里。
 
       ⚠ 本应用的端口在局域网上直接可达（Subsonic 客户端正是靠这个直连），
       装好后请立刻打开应用，在首次进入的引导页里把管理员账号创建掉。
@@ -186,20 +232,22 @@ i18n:
       Turns the music on your NAS into your own streaming service.
 
       Point it at your music folders and it scans them, reading embedded tags,
-      cover art and lyrics, and filing everything by artist and album. MP3, FLAC,
-      WAV, M4A, OGG, OPUS and APE are supported. Metadata and covers can be
-      scraped from several Chinese music services, and it recommends tracks from
-      your listening history.
+      cover art and lyrics and filing everything by artist and album (MP3, FLAC,
+      WAV, M4A, OGG, OPUS, APE). Metadata and covers can be scraped from Chinese
+      music services, and it recommends tracks from your listening history.
 
-      Besides the web player it exposes a Subsonic API, so phone apps such as
-      Symfonium or DSub can connect straight to your NAS.
+      The web UI and API listen on port 28085; a Subsonic API on the same port
+      lets phone apps such as Symfonium or DSub connect straight to your NAS.
 
-      Playback supports seeking and several quality tiers (128k / 192k / 320k /
-      lossless) via the bundled ffmpeg, plus .strm files pointing at cloud drives.
+      Playback supports seeking and quality tiers (128k / 192k / 320k /
+      lossless) via the bundled ffmpeg, plus .strm cloud-drive files.
 
-      Note: this app's port is reachable from your local network — that is how
-      Subsonic clients connect — so open the app right after installing and
-      create the administrator account on the first-run page.
+      Please stop and start the app once in App Center after installing,
+      otherwise nothing will be scanned — the install parameters and folder
+      grants are only written a few seconds after the service starts.
+
+      Note: that port is reachable from your LAN, so open the app right after
+      installing and create the admin account on the first-run page.
     author: qwex888
     official: https://github.com/qwex888/zhiyin-music
     publisher: 穿斯帕沃特

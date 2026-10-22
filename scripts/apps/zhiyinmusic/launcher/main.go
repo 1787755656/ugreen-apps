@@ -56,14 +56,20 @@ func run(port int) error {
 	if err := paths.checkPayload(); err != nil {
 		return err
 	}
+
+	params := readParams(os.Getenv)
+
+	// 配置文件夹（数据目录）：装参数里选了就切过去，顺带处理"用户在设置里换了目录"
+	// 这件事 —— 数据要跟着搬，搬不成就老老实实留在原地，绝不能让应用起不来。
+	for _, note := range paths.useDataDir(params) {
+		log.Print(note)
+	}
+
 	if err := paths.ensureDirs(); err != nil {
 		return err
 	}
 
-	params := readParams(os.Getenv)
-
 	log.Printf("知音音乐 —— 安装目录 %s", paths.Root)
-	log.Printf("数据目录 %s", paths.Data)
 	log.Printf("缓存目录 %s", paths.Cache)
 	logMusicPaths(params)
 
