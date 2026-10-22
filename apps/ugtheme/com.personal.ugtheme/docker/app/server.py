@@ -19,15 +19,15 @@ import base64
 from http import cookies
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
+import filemgr_patch as fmp
 import wallpaper as wp
 
-APP_VERSION = "1.1.1"
+APP_VERSION = "1.2.2"
 PORT = int(os.environ.get("UGTHEME_PORT", "28750"))
 DATA_DIR = wp.DATA_DIR
 THEME_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "icons")
 ICONS_TARGET = os.environ.get("ICONS_DIR", "/ugreen/static/icons")
 WEB_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "web")
-CONFIG_NAS_DIR = os.environ.get("CONFIG_NAS_DIR", "/ugreen/.config/.nas")
 
 CONFIG_FILE = os.path.join(DATA_DIR, "config.json")
 BACKUP_ICONS = os.path.join(DATA_DIR, "backup", "icons")
@@ -67,6 +67,9 @@ def load_json(path, default):
 
 
 def save_json(path, obj):
+    d = os.path.dirname(path)
+    if d and not os.path.isdir(d):
+        os.makedirs(d, exist_ok=True)
     tmp = path + ".tmp"
     with open(tmp, "w", encoding="utf-8") as f:
         json.dump(obj, f, ensure_ascii=False, indent=1)
@@ -98,13 +101,18 @@ def seed_crontab():
         cfg.setdefault("wallpaper_source", wp.DEFAULT_SOURCE)
         save_config(cfg)
         oplog("初始化配置，定时=%s" % cfg["cron"])
-    write_crontab(cfg["cron"], strict=False)
+    write_crontab(cfg["cron"], strict=False, enabled=cfg.get("wallpaper_enabled", True))
 
 
-def write_crontab(expr, strict=True):
+def write_crontab(expr, strict=True, enabled=True):
     if not CRON_RE.match(expr or ""):
         raise ValueError("cron 表达式不合法（需要 5 段）")
-    entry = "%s python3 /app/wallpaper.py >> %s 2>&1\n" % (expr, os.path.join(wp.LOG_DIR, "cron.log"))
+    if enabled:
+        entry = "%s python3 /app/wallpaper.py >> %s 2>&1\n" % (
+            expr, os.path.join(wp.LOG_DIR, "cron.log"))
+    else:
+        # 总开关关闭：只留注释，crond 不会执行（wallpaper.py 里还有第二道保险）
+        entry = "# 壁纸模块已关闭，定时刷新停用（原：%s）\n" % expr
     try:
         os.makedirs("/etc/crontabs", exist_ok=True)
         with open("/etc/crontabs/root", "w") as f:
@@ -221,99 +229,14 @@ def restore_icons():
     return {"restored": count}
 
 
-# ---------- 桌面壁纸（每用户 /ugreen/.config/.nas/<user>/private-settings.json）----------
-
-DESKTOP_BACKUP_FILE = os.path.join(DATA_DIR, "backup", "desktop_wallpapers.json")
-
-
-def _user_settings_files():
-    out = []
-    try:
-        names = os.listdir(CONFIG_NAS_DIR)
-    except OSError:
-        return out
-    for name in sorted(names):
-        p = os.path.join(CONFIG_NAS_DIR, name, "private-settings.json")
-        if os.path.isfile(p):
-            out.append((name, p))
-    return out
-
-
-def desktop_users():
-    users = []
-    for name, p in _user_settings_files():
-        cfg = load_json(p, {})
-        if isinstance(cfg, dict) and "wallpaper_value" in cfg:
-            users.append({"user": name, "wallpaper_value": cfg.get("wallpaper_value")})
-    return users
-
-
-def _write_settings(path, cfg):
-    tmp = path + ".ugtheme.tmp"
-    with open(tmp, "w", encoding="utf-8") as f:
-        json.dump(cfg, f, ensure_ascii=False)
-    os.replace(tmp, path)
-
-
+# 桌面壁纸的读写统一放在 wallpaper.py（定时任务以 CLI 方式跑同一份逻辑），
+# 这里只做转发，保证 Web 手动设置与定时自动刷新走的是同一套代码。
 def apply_desktop(wall_file):
-    """把池子里的一张图设为所有用户的桌面壁纸（先备份原指针）。"""
-    if not re.match(r"^bing_\d{8}\.jpg$", wall_file or ""):
-        raise ValueError("文件名不合法")
-    path = os.path.join(wp.WALLPAPER_DIR, wall_file)
-    if not os.path.isfile(path):
-        raise RuntimeError("壁纸文件不存在（先刷新 Bing 壁纸）")
-    with open(path, "rb") as f:
-        md5 = hashlib.md5(f.read()).hexdigest()
-    backup = load_json(DESKTOP_BACKUP_FILE, {})
-    changed = []
-    for name, p in _user_settings_files():
-        cfg = load_json(p, None)
-        if not isinstance(cfg, dict) or "wallpaper_value" not in cfg:
-            continue
-        if name not in backup:
-            backup[name] = {
-                "wallpaper_value": cfg.get("wallpaper_value"),
-                "wallpaper_hash": cfg.get("wallpaper_hash"),
-                "wallpaper_model": cfg.get("wallpaper_model"),
-            }
-        cfg["wallpaper_value"] = path
-        cfg["wallpaper_hash"] = md5
-        _write_settings(p, cfg)
-        changed.append(name)
-    save_json(DESKTOP_BACKUP_FILE, backup)
-    state = load_json(os.path.join(DATA_DIR, "state.json"), {})
-    state["last_desktop"] = wall_file
-    state["last_desktop_at"] = time.strftime("%Y-%m-%d %H:%M:%S")
-    save_json(os.path.join(DATA_DIR, "state.json"), state)
-    oplog("桌面壁纸已应用：%s（%d 个用户）" % (wall_file, len(changed)))
-    return {"users": changed, "md5": md5}
+    return wp.apply_desktop(wall_file)
 
 
 def restore_desktop():
-    backup = load_json(DESKTOP_BACKUP_FILE, {})
-    if not backup:
-        raise RuntimeError("没有备份可恢复（从未在本应用里改过桌面壁纸）")
-    restored = []
-    for name, p in _user_settings_files():
-        if name not in backup:
-            continue
-        cfg = load_json(p, None)
-        if not isinstance(cfg, dict) or "wallpaper_value" not in cfg:
-            continue
-        for k, v in backup[name].items():
-            if v is not None:
-                cfg[k] = v
-        _write_settings(p, cfg)
-        restored.append(name)
-    try:
-        os.remove(DESKTOP_BACKUP_FILE)
-    except OSError:
-        pass
-    state = load_json(os.path.join(DATA_DIR, "state.json"), {})
-    state["desktop_restored_at"] = time.strftime("%Y-%m-%d %H:%M:%S")
-    save_json(os.path.join(DATA_DIR, "state.json"), state)
-    oplog("桌面壁纸已从备份还原（%d 个用户）" % len(restored))
-    return {"restored": restored}
+    return wp.restore_desktop()
 
 
 # ---------- 状态汇总 ----------
@@ -361,11 +284,14 @@ def build_state():
         "schedule": cfg.get("cron"),
         "source": cfg.get("wallpaper_source") or wp.DEFAULT_SOURCE,
         "presets": WALLPAPER_PRESETS,
-        "desktop_users": desktop_users(),
+        "wallpaper_enabled": cfg.get("wallpaper_enabled", True),
+        "wallpaper_mode": cfg.get("wallpaper_mode") or "both",
+        "desktop_users": wp.desktop_users(),
         "last_desktop": state.get("last_desktop"),
         "last_desktop_at": state.get("last_desktop_at"),
         "desktop_restored_at": state.get("desktop_restored_at"),
-        "has_desktop_backup": os.path.exists(DESKTOP_BACKUP_FILE),
+        "has_desktop_backup": wp.has_desktop_backup(),
+        "filemgr": fmp.status(),
     }
 
 
@@ -519,14 +445,40 @@ class Handler(BaseHTTPRequestHandler):
                     result = restore_icons()
                 self._json({"ok": True, **result})
             elif path == "/api/wallpaper/refresh":
+                if not wp.is_enabled():
+                    self._json({"error": "壁纸模块已关闭，请先在上方开启"}, 400)
+                    return
                 with _lock:
                     wp.refresh()
-                self._json({"ok": True})
+                self._json({"ok": True, "mode": wp.get_mode()})
+            elif path == "/api/wallpaper/settings":
+                req = json.loads(body or b"{}")
+                with _lock:
+                    cfg = get_config()
+                    if "enabled" in req:
+                        cfg["wallpaper_enabled"] = bool(req["enabled"])
+                    if "mode" in req:
+                        m = req.get("mode")
+                        if m not in wp.WALLPAPER_MODES:
+                            raise ValueError("同步模式不合法")
+                        cfg["wallpaper_mode"] = m
+                    save_config(cfg)
+                    # 开关一变就重写 crontab，定时任务立刻跟着停/启
+                    write_crontab(cfg.get("cron") or "0 8 * * *", strict=False,
+                                  enabled=cfg.get("wallpaper_enabled", True))
+                oplog("壁纸模块设置：开关=%s 模式=%s" %
+                      (cfg.get("wallpaper_enabled", True), cfg.get("wallpaper_mode") or "both"))
+                self._json({"ok": True,
+                            "enabled": cfg.get("wallpaper_enabled", True),
+                            "mode": cfg.get("wallpaper_mode") or "both"})
             elif path == "/api/wallpaper/restore_login":
                 with _lock:
                     wp.restore_login()
                 self._json({"ok": True})
             elif path == "/api/wallpaper/upload":
+                if not wp.is_enabled():
+                    self._json({"error": "壁纸模块已关闭，请先在上方开启"}, 400)
+                    return
                 if not body or not wp.sniff(body):
                     self._json({"error": "仅支持 jpg/png 图片"}, 400)
                     return
@@ -534,6 +486,9 @@ class Handler(BaseHTTPRequestHandler):
                     wp.set_login_from_file(body)
                 self._json({"ok": True})
             elif path == "/api/wallpaper/desktop":
+                if not wp.is_enabled():
+                    self._json({"error": "壁纸模块已关闭，请先在上方开启"}, 400)
+                    return
                 req = json.loads(body or b"{}")
                 with _lock:
                     result = apply_desktop(req.get("file", ""))
@@ -541,6 +496,18 @@ class Handler(BaseHTTPRequestHandler):
             elif path == "/api/wallpaper/desktop_restore":
                 with _lock:
                     result = restore_desktop()
+                self._json({"ok": True, **result})
+            elif path == "/api/filemgr/apply":
+                with _lock:
+                    result = fmp.apply()
+                self._json({"ok": True, **result})
+            elif path == "/api/filemgr/restore":
+                with _lock:
+                    result = fmp.restore()
+                self._json({"ok": True, **result})
+            elif path == "/api/filemgr/check":
+                with _lock:
+                    result = fmp.check()
                 self._json({"ok": True, **result})
             elif path == "/api/schedule":
                 req = json.loads(body or b"{}")
@@ -552,7 +519,8 @@ class Handler(BaseHTTPRequestHandler):
                     cfg = get_config()
                     cfg["cron"] = expr
                     save_config(cfg)
-                    write_crontab(expr, strict=False)
+                    write_crontab(expr, strict=False,
+                                  enabled=cfg.get("wallpaper_enabled", True))
                 oplog("定时刷新已更新：%s" % expr)
                 self._json({"ok": True})
             elif path == "/api/source":

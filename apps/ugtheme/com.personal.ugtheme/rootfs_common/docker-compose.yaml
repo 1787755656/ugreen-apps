@@ -1,10 +1,10 @@
 # UGTheme 主题美化 — 安装时按 Go text/template 渲染（不是 ${VAR}）。
-# 图标目录与壁纸目录 bind 进容器读写；数据目录（备份/配置/日志）用安装时选择的路径。
+# 图标目录、壁纸目录、文件管理静态资源 bind 进容器读写；数据目录（备份/配置/日志）用安装时选择的路径。
 name: ugtheme-ugreen
 
 services:
   ugtheme:
-    image: "ugtheme/ugtheme:1.1.1"
+    image: "ugtheme/ugtheme:1.2.2"
     ports:
       - "28750:28750"
     environment:
@@ -23,4 +23,8 @@ services:
       - type: bind
         source: /ugreen/.config/.nas
         target: /ugreen/.config/.nas
+      # 文件管理「以文本方式打开」补丁要读写这份静态资源
+      - type: bind
+        source: /ugreen/@appstore/com.ugreen.filemgr/www
+        target: /ugreen/@appstore/com.ugreen.filemgr/www
     restart: unless-stopped

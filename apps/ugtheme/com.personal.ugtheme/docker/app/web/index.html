@@ -42,6 +42,8 @@ pre{background:#101613;color:#c7d4cd;border-radius:8px;padding:12px;font-size:11
 .msg.err{background:var(--danger)}
 .tag{display:inline-block;background:rgba(15,122,85,.1);color:var(--g2);font-size:11px;border-radius:6px;padding:1px 8px;margin-left:6px}
 ul.tips{color:var(--sub);font-size:12px;padding-left:18px}
+.notice{background:rgba(180,83,9,.08);border:1px solid rgba(180,83,9,.28);color:#7c4a03;border-radius:10px;padding:10px 14px;margin-bottom:16px;font-size:12.5px;line-height:1.65}
+.note{background:rgba(37,99,235,.07);border:1px solid rgba(37,99,235,.22);color:#1e40af;border-radius:10px;padding:9px 12px;margin-bottom:12px;font-size:12.5px;line-height:1.65}
 .auth{max-width:380px;margin:12vh auto 0;text-align:center}
 .auth h1{font-size:22px;color:var(--g2);margin-bottom:6px}
 .auth .sub{color:var(--sub);font-size:13px;margin-bottom:22px}
@@ -65,6 +67,10 @@ ul.tips{color:var(--sub);font-size:12px;padding-left:18px}
     <button id="outBtn">退出登录</button>
   </header>
 
+  <div class="notice">
+    提示：由于浏览器和 PC 客户端都有缓存，图标、壁纸等改动可能不会马上看到变化。可以先强制刷新（Ctrl+Shift+R / Cmd+Shift+R），若仍无变化，请<strong>换一个浏览器重新登录查看</strong>。
+  </div>
+
   <div class="card">
     <h2>图标主题</h2>
     <div class="hint">仅同名覆盖系统图标文件，替换前自动备份原版；应用图标不会新增或丢失。改完若未生效，桌面 Ctrl+F5 强刷或重启浏览器。系统更新可能还原图标，回这里点一下即可。</div>
@@ -77,7 +83,20 @@ ul.tips{color:var(--sub);font-size:12px;padding-left:18px}
 
   <div class="card">
     <h2>壁纸<span class="tag">登录背景</span><span class="tag">桌面壁纸库</span></h2>
-    <div class="hint">「刷新 Bing 壁纸」同时更新两处：登录页背景立即生效；桌面壁纸写入壁纸库（bing_日期.jpg）。点击下方缩略图可直接设为桌面壁纸——修改的是每个用户的壁纸指针（原指针自动备份，可一键还原），桌面刷新或重新登录后生效。首次修改前自动备份原版登录背景。</div>
+    <div class="hint">桌面壁纸与登录背景一样，<strong>每次刷新（含下面的定时刷新）都会自动更换</strong>：登录页背景立即生效，同时新图写入壁纸库（bing_日期.jpg）并自动设为所有用户的桌面壁纸，全程无需手动点选确认（原壁纸指针自动备份，可一键还原）。想临时换成库里任意一张，点下方缩略图即可，单击立即生效。具体换哪些由下面的「同步模式」决定。首次修改前自动备份原版登录背景。</div>
+
+    <label class="f">壁纸模块总开关</label>
+    <div class="row" style="margin-bottom:6px">
+      <button id="wpToggle">—</button>
+      <span class="hint" id="wpToggleHint" style="margin:0;align-self:center"></span>
+    </div>
+    <label class="f">同步模式（手动刷新与定时刷新都按此执行）</label>
+    <div class="row" id="modeBtns" style="gap:6px;margin-bottom:8px">
+      <button data-mode="both">登录背景 + 桌面壁纸</button>
+      <button data-mode="login">只换登录背景</button>
+      <button data-mode="desktop">只换桌面壁纸</button>
+    </div>
+
     <div class="wpbox">
       <div>
         <label class="f">当前登录背景（登录页实时读取此文件）</label>
@@ -99,12 +118,12 @@ ul.tips{color:var(--sub);font-size:12px;padding-left:18px}
           <input type="url" id="srcInput" class="grow" placeholder="https://…">
           <button id="saveSrc">保存</button>
         </div>
-        <label class="f">定时刷新（cron 表达式，默认每天 08:00）</label>
+        <label class="f">定时刷新（cron 表达式，默认每天 08:00）——到点自动换登录背景 <strong>和</strong> 桌面壁纸</label>
         <div class="row">
           <input type="text" id="cronInput" class="grow" placeholder="0 8 * * *">
           <button id="saveCron">保存</button>
         </div>
-        <label class="f">桌面壁纸库（保留最近 <span id="poolKeep">14</span> 张；点击缩略图设为桌面壁纸，再点一次确认）</label>
+        <label class="f">桌面壁纸库（保留最近 <span id="poolKeep">14</span> 张；点击缩略图即刻设为桌面壁纸）</label>
         <div class="row" id="pool" style="gap:6px"></div>
         <div class="row" style="margin-top:10px">
           <button class="danger" id="restoreDesktop">恢复原桌面壁纸</button>
@@ -115,10 +134,29 @@ ul.tips{color:var(--sub);font-size:12px;padding-left:18px}
   </div>
 
   <div class="card">
+    <h2>文件管理增强<span class="tag">以文本方式打开</span></h2>
+    <div class="note">非必要不使用：UGOS Pro 10 月系统更新已内置该项能力，基本能满足日常需求。仅在你的系统版本确实没有「以文本方式打开」时才需要打补丁。</div>
+    <div class="hint">给 UGOS「文件管理」右键菜单加一项「以文本方式打开」，用官方文本编辑器打开 .toml、Dockerfile、.conf、无扩展名等任意文件。补丁前自动备份，可一键还原；官方更新文件管理后补丁会被覆盖，回这里再点一次即可。</div>
+    <div class="row" style="margin-bottom:10px">
+      <button class="primary" id="fmApply">应用补丁</button>
+      <button class="danger" id="fmRestore">从备份还原</button>
+      <button id="fmCheck">先自检</button>
+    </div>
+    <div class="hint" id="fmState" style="margin:0"></div>
+    <ul class="tips" style="margin-top:10px">
+      <li>不改官方文件：补丁另存为一个新文件名，只把 index.html 的引用换过去，原 bundle 一个字节都不动。</li>
+      <li>因为文件名变了，浏览器和 PC 客户端都会当成新文件重新下载——<strong>不用强刷、不用清缓存</strong>。</li>
+      <li>备份里的永远是<strong>原版</strong>；还原会把 index.html 换回去并删掉补丁文件。</li>
+      <li>若同时装着「以文本方式打开」浏览器插件，右键菜单会出现两项，二选一保留即可。</li>
+    </ul>
+  </div>
+
+  <div class="card">
     <h2>使用须知</h2>
     <ul class="tips">
       <li>图标与登录背景修改前自动备份到应用数据目录；卸载应用前请先「还原」，否则备份随之删除。</li>
-      <li>更换壁纸后若登录页没变，是浏览器缓存，强刷（Ctrl+Shift+R）即可。</li>
+      <li>桌面壁纸跟随定时刷新自动更换（与登录背景同步），原指针自动备份，可用「恢复原桌面壁纸」一键还原。</li>
+      <li>更换壁纸后若登录页没变，是浏览器缓存，强刷（Ctrl+Shift+R）即可；仍无变化请换一个浏览器登录查看。</li>
       <li>数据目录建议在安装时选到共享文件夹（如 Docker 目录下新建文件夹），重装不丢备份。</li>
     </ul>
   </div>
@@ -212,10 +250,12 @@ function load(){
     $("poolKeep").textContent = st.pool_keep;
     renderThemes();
     $("bakInfo").textContent = st.icons_backup_count ? ("已有 " + st.icons_backup_count + " 个原图标备份") : "尚未替换过图标";
+    renderFilemgr(st.filemgr);
     $("loginPreview").src = "/api/preview/login?t=" + Date.now();
     $("wpState").textContent = st.last_bing ? ("上次 Bing 应用：" + st.last_bing) : "";
     $("srcInput").value = st.source;
     $("cronInput").value = st.schedule || "";
+    renderWallSettings();
     var poolHtml = "";
     st.pool.slice(0, 8).forEach(function(f){
       poolHtml += '<img src="/api/preview/pool/' + esc(f) + '" data-file="' + esc(f) + '" title="点击设为桌面壁纸（' + esc(f) + '）" style="width:64px;height:40px;object-fit:cover;border-radius:6px;border:1px solid var(--line);cursor:pointer' + (st.last_desktop === f ? ';outline:2px solid var(--g)' : '') + '">';
@@ -242,24 +282,47 @@ function load(){
   });
 }
 
+/* 点缩略图直接生效：不再需要"再点一次确认" */
+/* 壁纸模块：总开关 + 同步模式 */
+var MODE_TXT = {both:"登录背景 + 桌面壁纸", login:"仅登录背景", desktop:"仅桌面壁纸"};
+
+function renderWallSettings(){
+  var on = state.wallpaper_enabled !== false;
+  var mode = state.wallpaper_mode || "both";
+  var t = $("wpToggle");
+  t.textContent = on ? "已开启 · 点击关闭" : "已关闭 · 点击开启";
+  t.className = on ? "" : "danger";
+  $("wpToggleHint").textContent = on
+    ? "开启中：到点按下面的模式自动换壁纸，手动刷新 / 上传也可用。"
+    : "已关闭：定时刷新停用，壁纸不再被改动（两个「恢复」按钮仍可用，方便回滚）。";
+  document.querySelectorAll("#modeBtns button").forEach(function(b){
+    var cur = b.dataset.mode === mode;
+    b.style.borderColor = cur ? "var(--g)" : "var(--line)";
+    b.style.color = cur ? "var(--g)" : "var(--tx)";
+    b.style.background = cur ? "rgba(15,122,85,.08)" : "#fff";
+    b.style.fontSize = "12px";
+    b.disabled = !on;
+  });
+  ["refreshWp","saveSrc","saveCron","wpFile"].forEach(function(id){ $(id).disabled = !on; });
+}
+
 function bindPool(){
   document.querySelectorAll("#pool img").forEach(function(img){
     img.onclick = function(){
-      if (img.dataset.armed === "1"){
-        var f = img.dataset.file;
-        api("/api/wallpaper/desktop", {method:"POST", body:JSON.stringify({file:f})}, function(r){
-          toast("已设为 " + r.users.length + " 个用户的桌面壁纸，桌面刷新后生效");
-          load();
-        });
-      } else {
-        document.querySelectorAll("#pool img").forEach(function(o){
-          delete o.dataset.armed;
-          o.style.outline = (o.dataset.file === state.last_desktop) ? "2px solid var(--g)" : "";
-        });
-        img.dataset.armed = "1";
-        img.style.outline = "2px solid var(--warn)";
-        toast("再点一次确认：" + img.dataset.file);
-      }
+      if (state.wallpaper_enabled === false){ toast("壁纸模块已关闭，请先开启", true); return; }
+      var f = img.dataset.file;
+      if (img.dataset.busy === "1") return;
+      img.dataset.busy = "1";
+      img.style.opacity = ".6";
+      api("/api/wallpaper/desktop", {method:"POST", body:JSON.stringify({file:f})}, function(r){
+        img.dataset.busy = "";
+        img.style.opacity = "";
+        toast("已设为 " + r.users.length + " 个用户的桌面壁纸，桌面刷新后生效");
+        load();
+      }, function(){
+        img.dataset.busy = "";
+        img.style.opacity = "";
+      });
     };
   });
 }
@@ -290,6 +353,25 @@ function renderThemes(){
       });
     });
   });
+}
+
+function renderFilemgr(fm){
+  var el = $("fmState"), apply = $("fmApply"), restore = $("fmRestore");
+  if (!fm){ el.textContent = "状态未知"; apply.disabled = true; restore.disabled = true; return; }
+  if (!fm.mounted){
+    el.textContent = "不可用：" + (fm.reason || "容器没挂到文件管理目录");
+    apply.disabled = true; restore.disabled = true; return;
+  }
+  var p = [];
+  p.push("文件管理版本 " + (fm.app_version || "未知"));
+  p.push(fm.applied ? "补丁已生效" : "补丁未应用");
+  if (fm.backup) p.push("备份 " + fm.backup.files + " 个文件（" + fm.backup.at + "）");
+  else p.push("尚无备份");
+  if (fm.backup_stale) p.push("备份对应旧版本，当前无需还原");
+  if (!fm.applied && !fm.patchable && fm.reason) p.push("无法打补丁：" + fm.reason);
+  el.textContent = p.join(" · ");
+  apply.disabled = fm.applied || !fm.patchable;
+  restore.disabled = !fm.backup || fm.backup_stale;
 }
 
 function loadLogs(){
@@ -336,11 +418,27 @@ $("refreshWp").onclick = function(){
   var b = $("refreshWp"); b.disabled = true; b.textContent = "下载中…";
   api("/api/wallpaper/refresh", {method:"POST"}, function(){
     b.disabled = false; b.textContent = "刷新 Bing 每日壁纸";
-    toast("壁纸已更新（登录背景 + 壁纸库）"); load();
+    toast("壁纸已更新：" + (MODE_TXT[state.wallpaper_mode || "both"] || ""));
+    load();
   }, function(){
     b.disabled = false; b.textContent = "刷新 Bing 每日壁纸";
   });
 };
+
+$("wpToggle").onclick = function(){
+  var on = state.wallpaper_enabled !== false;
+  api("/api/wallpaper/settings", {method:"POST", body:JSON.stringify({enabled:!on})}, function(){
+    toast(on ? "壁纸模块已关闭，定时刷新已停用" : "壁纸模块已开启");
+    load();
+  });
+};
+document.querySelectorAll("#modeBtns button").forEach(function(b){
+  b.onclick = function(){
+    api("/api/wallpaper/settings", {method:"POST", body:JSON.stringify({mode:b.dataset.mode})}, function(){
+      toast("同步模式：" + MODE_TXT[b.dataset.mode]); load();
+    });
+  };
+});
 
 $("saveSrc").onclick = function(){
   api("/api/source", {method:"POST", body:JSON.stringify({url:$("srcInput").value})},
@@ -350,6 +448,23 @@ $("saveCron").onclick = function(){
   api("/api/schedule", {method:"POST", body:JSON.stringify({cron:$("cronInput").value})},
       function(){ toast("定时已保存"); load(); });
 };
+armConfirm($("fmApply"), "确认打补丁？", function(){
+  api("/api/filemgr/apply", {method:"POST"}, function(r){
+    toast(r.already ? "补丁已在生效状态" : ("已注入 " + r.menus + " 条菜单，重新打开文件管理即可"));
+    load();
+  });
+});
+armConfirm($("fmRestore"), "确认还原？", function(){
+  api("/api/filemgr/restore", {method:"POST"}, function(r){
+    toast("已从备份还原 " + r.restored + " 个文件"); load();
+  });
+});
+$("fmCheck").onclick = function(){
+  api("/api/filemgr/check", {method:"POST"}, function(r){
+    toast(r.applied ? "补丁已生效" : ("可以打：将注入 " + r.menus + " 条菜单"));
+  });
+};
+
 armConfirm($("restoreWp"), "确认恢复？", function(){
   api("/api/wallpaper/restore_login", {method:"POST"}, function(){
     toast("登录背景已恢复原版"); load();

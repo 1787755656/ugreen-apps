@@ -7,7 +7,7 @@ ENV UGTHEME_PORT=28750 \
 
 WORKDIR /app
 
-COPY --chmod=755 app/server.py app/wallpaper.py /app/
+COPY --chmod=755 app/server.py app/wallpaper.py app/filemgr_patch.py /app/
 COPY --chmod=755 app/entrypoint.sh /entrypoint.sh
 COPY app/icons /app/icons
 COPY app/web /app/web

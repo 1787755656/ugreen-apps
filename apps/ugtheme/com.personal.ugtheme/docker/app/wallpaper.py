@@ -2,9 +2,12 @@
 """壁纸下载与应用：登录背景 /ugreen/wallpaper/login/custom.jpg + 桌面壁纸池。
 
 server.py import 本模块做"立即刷新"；crond 定时任务以 CLI 方式运行同一份逻辑。
+刷新成功后会自动把这张新图设为所有用户的桌面壁纸（无需再去点缩略图确认）。
 """
+import hashlib
 import json
 import os
+import re
 import subprocess
 import time
 
@@ -13,14 +16,18 @@ WALLPAPER_DIR = os.environ.get("WALLPAPER_DIR", "/ugreen/wallpaper")
 DEFAULT_SOURCE = os.environ.get("WALLPAPER_SOURCE", "https://api.paugram.com/bing")
 POOL_PREFIX = "bing_"
 POOL_KEEP = 14
+CONFIG_NAS_DIR = os.environ.get("CONFIG_NAS_DIR", "/ugreen/.config/.nas")
 
 LOG_DIR = os.path.join(DATA_DIR, "logs")
 BACKUP_DIR = os.path.join(DATA_DIR, "backup")
 WALL_CACHE = os.path.join(DATA_DIR, "wallpaper")
 STATE_FILE = os.path.join(DATA_DIR, "state.json")
 CONFIG_FILE = os.path.join(DATA_DIR, "config.json")
+# 桌面壁纸指针备份（每个用户一份原 wallpaper_value）
+DESKTOP_BACKUP_FILE = os.path.join(DATA_DIR, "backup", "desktop_wallpapers.json")
 
 MAGIC = ((b"\xff\xd8\xff", "jpg"), (b"\x89PNG", "png"))
+POOL_FILE_RE = re.compile(r"^bing_\d{8}\.jpg$")
 
 
 def log(msg):
@@ -39,6 +46,9 @@ def load_json(path, default):
 
 
 def save_json(path, obj):
+    d = os.path.dirname(path)
+    if d and not os.path.isdir(d):
+        os.makedirs(d, exist_ok=True)
     tmp = path + ".tmp"
     with open(tmp, "w", encoding="utf-8") as f:
         json.dump(obj, f, ensure_ascii=False, indent=1)
@@ -132,25 +142,162 @@ def get_source():
     return cfg.get("wallpaper_source") or DEFAULT_SOURCE
 
 
-def apply_wallpaper(data, date_str=None):
-    """把一张已校验的壁纸写到登录背景 + 桌面壁纸池。返回 (login, pool)。"""
-    date_str = date_str or time.strftime("%Y%m%d")
-    login_target = os.path.join(WALLPAPER_DIR, "login", "custom.jpg")
-    pool_target = os.path.join(WALLPAPER_DIR, POOL_PREFIX + date_str + ".jpg")
-    bak = backup_once(login_target, os.path.join(BACKUP_DIR, "login_custom.jpg"))
+# ---------- 模块开关与同步模式 ----------
+# enabled: 壁纸模块总开关（关掉后定时刷新与所有写操作都停）
+# mode   : both=登录背景+桌面壁纸一起换；login=只换登录背景；desktop=只换桌面壁纸
+WALLPAPER_MODES = ("both", "login", "desktop")
 
-    write_bytes_atomic(login_target, data)
-    write_bytes_atomic(pool_target, data)
+
+def is_enabled():
+    return bool(load_json(CONFIG_FILE, {}).get("wallpaper_enabled", True))
+
+
+def get_mode():
+    m = load_json(CONFIG_FILE, {}).get("wallpaper_mode") or "both"
+    return m if m in WALLPAPER_MODES else "both"
+
+
+# ---------- 桌面壁纸（每用户 /ugreen/.config/.nas/<user>/private-settings.json）----------
+
+def _user_settings_files():
+    out = []
+    try:
+        names = os.listdir(CONFIG_NAS_DIR)
+    except OSError:
+        return out
+    for name in sorted(names):
+        p = os.path.join(CONFIG_NAS_DIR, name, "private-settings.json")
+        if os.path.isfile(p):
+            out.append((name, p))
+    return out
+
+
+def desktop_users():
+    users = []
+    for name, p in _user_settings_files():
+        cfg = load_json(p, {})
+        if isinstance(cfg, dict) and "wallpaper_value" in cfg:
+            users.append({"user": name, "wallpaper_value": cfg.get("wallpaper_value")})
+    return users
+
+
+def _write_settings(path, cfg):
+    tmp = path + ".ugtheme.tmp"
+    with open(tmp, "w", encoding="utf-8") as f:
+        json.dump(cfg, f, ensure_ascii=False)
+    os.replace(tmp, path)
+
+
+def has_desktop_backup():
+    return os.path.exists(DESKTOP_BACKUP_FILE)
+
+
+def apply_desktop(wall_file):
+    """把池子里的一张图设为所有用户的桌面壁纸（先备份原指针）。"""
+    if not POOL_FILE_RE.match(wall_file or ""):
+        raise ValueError("文件名不合法")
+    path = os.path.join(WALLPAPER_DIR, wall_file)
+    if not os.path.isfile(path):
+        raise RuntimeError("壁纸文件不存在（先刷新壁纸）")
+    with open(path, "rb") as f:
+        md5 = hashlib.md5(f.read()).hexdigest()
+    backup = load_json(DESKTOP_BACKUP_FILE, {})
+    changed = []
+    for name, p in _user_settings_files():
+        cfg = load_json(p, None)
+        if not isinstance(cfg, dict) or "wallpaper_value" not in cfg:
+            continue
+        if name not in backup:
+            backup[name] = {
+                "wallpaper_value": cfg.get("wallpaper_value"),
+                "wallpaper_hash": cfg.get("wallpaper_hash"),
+                "wallpaper_model": cfg.get("wallpaper_model"),
+            }
+        cfg["wallpaper_value"] = path
+        cfg["wallpaper_hash"] = md5
+        _write_settings(p, cfg)
+        changed.append(name)
+    save_json(DESKTOP_BACKUP_FILE, backup)
+    state = load_json(STATE_FILE, {})
+    state["last_desktop"] = wall_file
+    state["last_desktop_at"] = time.strftime("%Y-%m-%d %H:%M:%S")
+    save_json(STATE_FILE, state)
+    log("桌面壁纸已应用：%s（%d 个用户）" % (wall_file, len(changed)))
+    return {"users": changed, "md5": md5}
+
+
+def restore_desktop():
+    backup = load_json(DESKTOP_BACKUP_FILE, {})
+    if not backup:
+        raise RuntimeError("没有备份可恢复（从未在本应用里改过桌面壁纸）")
+    restored = []
+    for name, p in _user_settings_files():
+        if name not in backup:
+            continue
+        cfg = load_json(p, None)
+        if not isinstance(cfg, dict) or "wallpaper_value" not in cfg:
+            continue
+        for k, v in backup[name].items():
+            if v is not None:
+                cfg[k] = v
+        _write_settings(p, cfg)
+        restored.append(name)
+    try:
+        os.remove(DESKTOP_BACKUP_FILE)
+    except OSError:
+        pass
+    state = load_json(STATE_FILE, {})
+    state["desktop_restored_at"] = time.strftime("%Y-%m-%d %H:%M:%S")
+    save_json(STATE_FILE, state)
+    log("桌面壁纸已从备份还原（%d 个用户）" % len(restored))
+    return {"restored": restored}
+
+
+def apply_wallpaper(data, date_str=None, mode=None):
+    """按同步模式把一张已校验的壁纸写到登录背景 / 桌面壁纸池。
+
+    mode: both（默认，两处都换且桌面自动生效）/ login（只换登录背景）/
+    desktop（只写壁纸库并自动设为桌面壁纸）。返回 (login 或 None, pool 或 None)。
+    """
+    mode = mode or get_mode()
+    if mode not in WALLPAPER_MODES:
+        mode = "both"
+    do_login = mode in ("both", "login")
+    do_desktop = mode in ("both", "desktop")
+
+    date_str = date_str or time.strftime("%Y%m%d")
+    pool_name = POOL_PREFIX + date_str + ".jpg"
+    login_target = os.path.join(WALLPAPER_DIR, "login", "custom.jpg")
+    pool_target = os.path.join(WALLPAPER_DIR, pool_name)
+
+    login_done = None
+    if do_login:
+        bak = backup_once(login_target, os.path.join(BACKUP_DIR, "login_custom.jpg"))
+        write_bytes_atomic(login_target, data)
+        state = load_json(STATE_FILE, {})
+        state["last_bing"] = date_str
+        state["login_backup"] = True if bak else state.get("login_backup", False)
+        save_json(STATE_FILE, state)
+        login_done = login_target
+        log("登录背景已应用：%s (%d bytes)" % (login_target, len(data)))
+
+    # 预览缓存始终更新，它代表"最近拿到的那张图"
     write_bytes_atomic(os.path.join(WALL_CACHE, "current.jpg"), data)
 
-    prune_pool()
-    state = load_json(STATE_FILE, {})
-    state["last_bing"] = date_str
-    state["login_backup"] = True if bak else state.get("login_backup", False)
-    save_json(STATE_FILE, state)
-    log("壁纸已应用：登录背景 %s + 桌面池 %s (%d bytes)" %
-        (login_target, pool_target, len(data)))
-    return login_target, pool_target
+    pool_done = None
+    if do_desktop:
+        write_bytes_atomic(pool_target, data)
+        prune_pool()
+        state = load_json(STATE_FILE, {})
+        state["last_bing"] = state.get("last_bing") or date_str
+        save_json(STATE_FILE, state)
+        pool_done = pool_target
+        log("桌面壁纸池已应用：%s (%d bytes)" % (pool_target, len(data)))
+        try:
+            apply_desktop(pool_name)
+        except Exception as e:
+            log("桌面壁纸自动应用失败（不影响登录背景）：%s" % e)
+    return login_done, pool_done
 
 
 def prune_pool():
@@ -198,6 +345,10 @@ def set_login_from_file(data):
 
 
 def refresh(url=None):
+    """定时/手动刷新入口。总开关关闭时直接跳过，一个字节都不写。"""
+    if not is_enabled():
+        log("壁纸模块已关闭，跳过本次刷新")
+        return None, None
     data = download_wallpaper(url)
     login, pool = apply_wallpaper(data)
     return login, pool
@@ -207,8 +358,9 @@ if __name__ == "__main__":
     import sys
     os.makedirs(WALL_CACHE, exist_ok=True)
     try:
-        refresh()
-        print("wallpaper refresh ok")
+        login, pool = refresh()
+        print("wallpaper refresh skipped (module disabled)" if login is None
+              else "wallpaper refresh ok")
     except Exception as e:
         log("定时刷新失败: %s" % e)
         print("wallpaper refresh failed: %s" % e, file=sys.stderr)
