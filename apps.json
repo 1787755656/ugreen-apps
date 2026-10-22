@@ -135,7 +135,7 @@
       },
       "service_port": 25400,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/deenmusic/com.personal.deenmusic/rootfs_common/icon.png",
-      "download_count": 13,
+      "download_count": 15,
       "app_type": "native",
       "category": "download",
       "platforms": [
@@ -507,7 +507,7 @@
       },
       "service_port": 5866,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/mook/com.personal.mook/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 4,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -555,7 +555,7 @@
       },
       "service_port": 28940,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/nm3u8dlre/com.personal.nm3u8dlre/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 1,
       "app_type": "native",
       "category": "download",
       "platforms": [
@@ -585,7 +585,7 @@
       },
       "service_port": 28088,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/octop/com.tencent.octop/rootfs_common/icon.png",
-      "download_count": 7,
+      "download_count": 10,
       "app_type": "native",
       "category": "ai",
       "platforms": [
@@ -772,17 +772,17 @@
       "display_name": "qBittorrent (superng6)",
       "description": "免费开源的 BitTorrent 下载客户端，内置网页控制界面，支持磁力链接、种子文件、 RSS 订阅自动下载、下载队列与限速、做种比例控制。默认配置针对国内网络做过调整： 中文界面、内置一大批公共 tracker 并可在每次启动时自动更新、放开队列上限， 并自带 IP 地理数据库（无需联网即可显示 Peer 归属地）。 首次登录用户名 admin、密码 adminadmin，登录后请立即在「工具 → 选项 → Web UI」里修改。 需要在设置里选一个下载保存目录；想要更好的速度，请在路由器上把 BT 监听端口 转发到 NAS。注意：网页界面的端口对局域网开放，请务必设置一个强密码。 搜索插件需要 Python，本应用的运行环境里没有 Python，因此搜索功能不可用。",
       "homepage_url": "https://hub.docker.com/r/superng6/qbittorrent",
-      "updated_at": "2026-09-29",
-      "version": "5.2.4",
-      "upk_version": "5.2.4.0004",
-      "release_tag": "qbittorrent-ng6/v5.2.4_v2.0.15-r1",
+      "updated_at": "2026-10-22",
+      "version": "5.3.0",
+      "upk_version": "5.3.0.0005",
+      "release_tag": "qbittorrent-ng6/v5.3.0_v2.1.2",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/qbittorrent-ng6/v5.2.4_v2.0.15-r1/amd64_nasync_com.superng6.qbittorrent_5.2.4.0004.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/qbittorrent-ng6/v5.2.4_v2.0.15-r1/arm64_nasync_com.superng6.qbittorrent_5.2.4.0004.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/qbittorrent-ng6/v5.3.0_v2.1.2/amd64_nasync_com.superng6.qbittorrent_5.3.0.0005.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/qbittorrent-ng6/v5.3.0_v2.1.2/arm64_nasync_com.superng6.qbittorrent_5.3.0.0005.upk"
       },
       "service_port": 18081,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/qbittorrent-ng6/com.superng6.qbittorrent/rootfs_common/icon.png",
-      "download_count": 1,
+      "download_count": 0,
       "app_type": "native",
       "category": "download",
       "platforms": [
@@ -950,7 +950,7 @@
       },
       "service_port": 28750,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/ugtheme/com.personal.ugtheme/rootfs_common/icon.png",
-      "download_count": 36,
+      "download_count": 37,
       "app_type": "docker",
       "category": "utility",
       "platforms": [
@@ -980,7 +980,7 @@
       },
       "service_port": 28085,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/zhiyinmusic/com.personal.zhiyinmusic/rootfs_common/icon.png",
-      "download_count": 8,
+      "download_count": 9,
       "app_type": "native",
       "category": "media",
       "platforms": [
