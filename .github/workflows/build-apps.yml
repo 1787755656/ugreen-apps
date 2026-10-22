@@ -46,7 +46,15 @@ jobs:
 
           buildable_only() {
             while IFS= read -r app; do
-              [ -f "scripts/apps/$app/meta.env" ] && echo "$app"
+              [ -f "scripts/apps/$app/meta.env" ] || continue
+              # CI_SKIP=1：本地开发的自研应用，产物只从本机打包发布，
+              # 不参与自动构建（schedule / push）。手动 workflow_dispatch 仍可触发。
+              if grep -qE '^[[:space:]]*CI_SKIP=(1|true)[[:space:]]*$' \
+                  "scripts/apps/$app/meta.env"; then
+                echo "skip: $app (CI_SKIP=1)" >&2
+                continue
+              fi
+              echo "$app"
             done
           }
 
