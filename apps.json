@@ -127,11 +127,11 @@
       "homepage_url": "https://github.com/chongya369/music-downloader",
       "updated_at": "2026-10-22",
       "version": "0.7.8",
-      "upk_version": "0.7.8.0013",
-      "release_tag": "deenmusic/v0.7.8-r3",
+      "upk_version": "0.7.8.0002",
+      "release_tag": "deenmusic/v0.7.8-r4",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/deenmusic/v0.7.8-r3/amd64_nasync_com.personal.deenmusic_0.7.8.0013.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/deenmusic/v0.7.8-r3/arm64_nasync_com.personal.deenmusic_0.7.8.0013.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/deenmusic/v0.7.8-r4/amd64_nasync_com.personal.deenmusic_0.7.8.0002.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/deenmusic/v0.7.8-r4/arm64_nasync_com.personal.deenmusic_0.7.8.0002.upk"
       },
       "service_port": 25400,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/deenmusic/com.personal.deenmusic/rootfs_common/icon.png",
