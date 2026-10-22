@@ -81,8 +81,46 @@ func resolvePaths() Paths {
 	}
 }
 
+// caBundle 返回包内自带的 CA 证书束（certifi 的 cacert.pem）。
+//
+// 【为什么必须显式指定】沙箱里没有 /etc/ssl（连 /etc/passwd 都没有），
+// OpenSSL 在编译期默认路径里找不到任何根证书，等于"一个 CA 都不信"。
+//
+//   - Node 不受影响：根证书是编译进二进制的，所以网易云/酷狗这两个 Node 版
+//     API 一直正常，掩盖了问题。
+//   - Python 走 OpenSSL：QQ 音乐 API 的 HTTP 客户端是 niquests，它通过
+//     wassima 读**系统**信任库，读不到就带着空 CA 去做 TLS 校验。
+//
+// 表现（2026-10-22 真机）：三个 QQ 上游请求全部在 ~50ms 内失败，客户端重试
+// 3 次（1.5s + 3.0s），合计 4.5 秒后返回空 —— 二维码生成不出来、热门榜为空、
+// 扫码登录自然也就"登录不上"。
+func (p Paths) caBundle() string {
+	for _, c := range []string{
+		filepath.Join(p.Vendor, "certifi", "cacert.pem"),
+		filepath.Join(p.Service, "vendor", "certifi", "cacert.pem"),
+	} {
+		if fi, err := os.Stat(c); err == nil && !fi.IsDir() {
+			return c
+		}
+	}
+	return ""
+}
+
 func (p Paths) ensureDirs() error {
-	for _, dir := range []string{p.Data, p.Cache, p.Log, p.Tmp, filepath.Join(p.Data, "logs")} {
+	for _, dir := range []string{
+		p.Data, p.Cache, p.Log, p.Tmp,
+		filepath.Join(p.Data, "logs"),
+		// ncm 的 bridge 把 TMPDIR 设成 <data>/tmp（来自 APP_DATA_DIR），而上游
+		// ncm 启动时会无条件往 os.tmpdir() 写 anonymous_token 等；目录不存在
+		// node 即抛 ENOENT 退出 1。amd64 的 pkg 二进制也要解压到 TMPDIR。
+		// 这里显式建好它（arm64 的 api-shim 也会兜底 MkdirAll，双保险）。
+		filepath.Join(p.Data, "tmp"),
+		// QQ 音乐 API 的私有数据目录：device.json / credentials.sqlite3 都落这里。
+		// api-shim 与 qq bridge 各自也会 MkdirAll 一次，但 amd64 用的是上游
+		// PyInstaller 二进制（没有 shim），bridge 只建 <data>/qqmusic 这一层，
+		// web/data 得由我们建好 —— 否则第一次写 device.json 就是 ENOENT。
+		filepath.Join(p.Data, "qqmusic", "web", "data", "logs"),
+	} {
 		if err := os.MkdirAll(dir, 0o755); err != nil {
 			return err
 		}

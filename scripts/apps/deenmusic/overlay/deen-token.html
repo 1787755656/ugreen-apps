@@ -23,7 +23,8 @@
         localStorage.setItem("deen_token", h.slice(3));
       }
     } catch (e) {}
-    location.replace("/api/");
+    // tab 模式：整站在根路径，回到 "/"（inner 下才是 "/api/"）。
+    location.replace("/");
   })();
 </script>
 </head>

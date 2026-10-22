@@ -24,6 +24,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strconv"
+	"strings"
 	"sync"
 	"syscall"
 	"time"
@@ -77,8 +78,24 @@ func (s *Supervisor) childEnv() []string {
 		// 上游在「网关模式」才会把默认下载目录改到数据目录下；
 		// 这里的路径由管理壳算好，由入口层落到 Setting 里。
 		"UGOS_DOWNLOAD_DIR=" + s.download,
-		// inner 应用的网关只反代 /api/*，整个站点就活在 /api 前缀下。
-		"FNNAS_GATEWAY_PREFIX=/api",
+		// tab 模式：整站由本端口直连提供，没有网关前缀（置空 → 入口层回到根路径）。
+		"FNNAS_GATEWAY_PREFIX=",
+
+		// QQ 音乐 API（apiqq）自己的三条可写路径。
+		//
+		// ⚠ 为什么不用 QQMUSIC_CLIENT_DEVICE_PATH：上游 web/src/core/config.py 用
+		//   pydantic-settings 的 env_nested_delimiter="_"，它把变量名按 "_" 逐段
+		//   当字段名解析 —— client_device_path 会被拆成 client/device/path，而
+		//   ClientConfig 里只有 device_path、没有 device，整条值被静默丢弃，
+		//   于是回落到默认相对路径 + PROJECT_ROOT（=只读安装目录），
+		//   写 device.json 直接 FileNotFoundError → 所有 QQ 接口 500
+		//   （二维码出不来、cookie 登录测试失败）。2026-10-22 真机实测。
+		//   字段名带下划线的嵌套项只能用 JSON 整段覆盖（env 值是 JSON 时按
+		//   复杂字段解析）；QQMUSIC_CREDENTIAL_STORE_PATH 因为 credential/store/path
+		//   三段都是真字段名，扁平写法是有效的，保留。
+		"QQMUSIC_CLIENT=" + qqClientJSON(s.paths.Data),
+		"QQMUSIC_LOGGING=" + qqLoggingJSON(s.paths.Data),
+		"QQMUSIC_CREDENTIAL_STORE_PATH=" + filepath.Join(qqDataDir(s.paths.Data), "credentials.sqlite3"),
 
 		// ⚠ 沙箱里【没有 /tmp】。不重定向的话 tempfile.mkstemp 直接失败，
 		//   而上游保存设置、原子写文件都靠它 —— 表现是"设置保存不了"。
@@ -87,6 +104,20 @@ func (s *Supervisor) childEnv() []string {
 		"HOME=" + s.paths.Data,
 		"LANG=C.UTF-8",
 		"LC_ALL=C.UTF-8",
+	}
+	// CA 证书：沙箱里没有 /etc/ssl，OpenSSL 默认信任库为空。Node 的根证书编在
+	// 二进制里不受影响，Python 侧却会"谁都不信"—— 详见 Paths.caBundle 的注释。
+	// 三个变量：SSL_CERT_FILE 给 ssl.create_default_context / paho-mqtt，
+	// REQUESTS_CA_BUNDLE 与 CURL_CA_BUNDLE 分别给 requests 系和 niquests
+	// （niquests 优先读这两个，读不到才去问 wassima 要系统信任库）。
+	if ca := s.paths.caBundle(); ca != "" {
+		env = append(env,
+			"SSL_CERT_FILE="+ca,
+			"REQUESTS_CA_BUNDLE="+ca,
+			"CURL_CA_BUNDLE="+ca,
+		)
+	} else {
+		log.Print("[supervisor] 未找到包内 CA 证书束（certifi/cacert.pem），Python 侧 TLS 可能全部失败")
 	}
 	for _, key := range []string{"PATH", "LD_LIBRARY_PATH", "TZ"} {
 		if v := os.Getenv(key); v != "" {
@@ -191,6 +222,54 @@ func (s *Supervisor) runOnce() error {
 	return cmd.Wait()
 }
 
+// qqDataDir QQ 音乐 API 的私有数据目录。
+//
+// 与 qq bridge 选定的运行时目录对齐（<data>/qqmusic），这样 device.json /
+// credentials.sqlite3 / 子进程日志都落在同一棵可写树下，升级/迁移只搬 data。
+func qqDataDir(data string) string {
+	return filepath.Join(data, "qqmusic", "web", "data")
+}
+
+// qqClientJSON 生成 QQMUSIC_CLIENT 的值：{"device_path":"<绝对路径>"}。
+//
+// 只覆盖 device_path，其余键（将来上游加了新字段）由 config.toml / 默认值补齐
+// —— pydantic-settings 会把这个 dict 与更低优先级来源 deep-merge。
+func qqClientJSON(data string) string {
+	return `{"device_path":"` + jsonEscape(filepath.Join(qqDataDir(data), "device.json")) + `"}`
+}
+
+// qqLoggingJSON 生成 QQMUSIC_LOGGING 的值（只覆盖 file_path）。
+//
+// config.toml 里 mode=console，所以平时这条不产生文件；它存在的意义是：一旦
+// 用户在设置页把 mode 改成 file/both，日志也得落在可写目录，而不是只读安装目录
+// 里那个永远建不出来的 logs/app.log。
+func qqLoggingJSON(data string) string {
+	return `{"file_path":"` + jsonEscape(filepath.Join(qqDataDir(data), "logs", "app.log")) + `"}`
+}
+
+// jsonEscape 转义要嵌进 JSON 字符串字面量里的路径（引号/反斜杠/换行）。
+func jsonEscape(s string) string {
+	var b strings.Builder
+	for _, r := range s {
+		switch r {
+		case '"':
+			b.WriteString(`\"`)
+		case '\\':
+			b.WriteString(`\\`)
+		case '\n':
+			b.WriteString(`\n`)
+		case '\r':
+			b.WriteString(`\r`)
+		case '\t':
+			b.WriteString(`\t`)
+		default:
+			b.WriteRune(r)
+		}
+	}
+	return b.String()
+}
+
+// forwardLines 把子进程输出按行转发（带前缀），不阻塞 Wait。
 func forwardLines(r io.Reader, prefix string) {
 	scanner := bufio.NewScanner(r)
 	scanner.Buffer(make([]byte, 0, 64*1024), 1024*1024)

@@ -25,17 +25,23 @@
   a { color: #7fb0ff; text-decoration: none; }
   a:hover { text-decoration: underline; }
 </style>
-<script>
-  // 本应用是 inner 型：站点本体在 /api/ 前缀下（网关只反代 /api/*）。
-  // 这里做一次同源跳转，登录态由上游自己判断（已登录直接进总览）。
-  location.replace("/api/");
-</script>
 </head>
 <body>
   <div class="box">
     <div class="spinner"></div>
     <p>正在打开 Deen 音乐下载器…</p>
-    <p>如果没有自动跳转，请点 <a href="/api/">这里</a>。</p>
+    <p>如果没有自动跳转，请点 <a id="go" href="#">这里</a>。</p>
   </div>
+<script>
+  // open_type: tab —— 应用由自身端口 25400 提供完整 Web 服务，桌面正常情况下
+  // 会直接在新标签页打开那个端口，本页用不到。仅当有人从「网关地址」打开这个
+  // 入口时才兜底跳到应用自己的端口（与 liteclass 等 tab 应用一致的做法）。
+  (function () {
+    var url = "http://" + location.hostname + ":25400/";
+    var go = document.getElementById("go");
+    if (go) { go.href = url; }
+    location.replace(url);
+  })();
+</script>
 </body>
 </html>

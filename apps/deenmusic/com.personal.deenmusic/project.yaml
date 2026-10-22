@@ -36,14 +36,13 @@ start_cmd: bin/deenmusic --port=25400
 #   源码版时就会撞车。选之前 grep 过仓库内其它应用的 project.yaml（无冲突）。
 port: 25400
 
-# inner：网关把 /api/* 反代给本应用，其余路径由网关从 www/ 直接 serve。
+# tab：应用由自身端口（25400）提供完整 Web 服务，桌面点开会【在新标签页】
+# 直连 http://<NAS>:25400/（与 liteclass 等 tab 应用一致）。
 #
-# 上游本来就是"网关前缀模式"设计（fnOS 的 /app/deen-music-downloader），
-# 自带 PrefixMiddleware + url_for + window.APP_BASE，把前缀换成 /api 就能
-# 完整落进 inner 模型，见 overlay/ugos_main.py 的说明。
-open_type: inner
-
-proxy_path: api
+# 不再走 inner 的 /api 网关反代 + www 静态直出：Flask 回到根路径、绑 0.0.0.0，
+# rootfs_common/www 只保留一个兜底跳转页（有人从网关地址打开时才用到）。
+# 因此这里【不声明 proxy_path】—— tab 应用不需要它。
+open_type: tab
 
 tag_types:
   - download

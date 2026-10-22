@@ -1,23 +1,18 @@
 """绿联 UGOS Pro 启动入口（本移植版新增，不改上游任何业务代码）
 
-上游（Deen 音乐下载器）本身就是 Flask 应用，而且天然支持"统一网关前缀模式"：
-飞牛 fnOS 把 /app/deen-music-downloader/xxx 原样转发进来，模块里的
-`PrefixMiddleware` 剥掉前缀写进 SCRIPT_NAME，于是 url_for / 静态资源 /
-模板里的链接自动带前缀，前端 `window.APP_BASE = request.script_root` 再让
-app.js 的 API 请求也带上它。
+上游（Deen 音乐下载器）本身就是标准 Flask 应用，自带 PrefixMiddleware /
+url_for / window.APP_BASE 这套"网关前缀"机制。
 
-绿联的 inner 应用模型是：网关只把 `<proxy_path>/...` 反代给应用，其余路径由
-网关从 rootfs_common/www 直接 serve 静态文件。所以这里把前缀设成 `/api`
-（= project.yaml 的 proxy_path），整个站点就都活在 `/api/...` 之下：
+本应用用绿联的 **tab** 模型（project.yaml: open_type: tab）：桌面点开后在浏览器
+【新标签页】里直连本应用自己的端口（http://<NAS>:25400/），整站由 Flask 自己
+在根路径提供（/、/static、/api/...），不再经过网关的 /api 反代，也没有 www
+静态直出：
 
-    浏览器                     网关               本进程（Flask 路由）
-    /                       →  www/index.html（跳转页）
-    /api/login              →  /login            （页面）
-    /api/static/js/app.js   →  /static/js/app.js
-    /api/api/songs          →  /api/songs        （上游 API 蓝图挂在 /api 下）
+    浏览器 ──直连 25400──> 本进程（Flask 根路径）
 
-最后一行看着像双写，其实是前缀机制的必然结果：APP_BASE=/api 拼上上游写死的
-"/api/songs"。功能上完全等价，且【不需要改上游任何一行代码】。
+所以这里把网关前缀设成空（GATEWAY_PREFIX=""）：不启用前缀中间件，Flask 回到
+根路径，url_for / 静态资源 / 前端 APP_BASE 都是空前缀。rootfs_common/www 只剩
+一个"有人从网关地址打开时"的兜底跳转页。
 
 启动参数（由 Go 管理壳 launcher 注入，也能手工带上）：
     --port <端口>       监听端口，缺省取 UGOS_APP_PORT，再缺省 25400
@@ -77,8 +72,8 @@ for _p in (str(_ROOT), str(_HERE)):
         sys.path.insert(0, _p)
 
 # 必须在 import app 之前设置：上游在模块级读它，并据此把 SESSION_COOKIE_PATH
-# 收敛到前缀上（同域其它应用就读不到这个 cookie 了）。
-os.environ.setdefault("FNNAS_GATEWAY_PREFIX", "/api")
+# 收敛到前缀上。tab 模式下没有网关前缀（整站直连本端口），设为空串。
+os.environ.setdefault("FNNAS_GATEWAY_PREFIX", "")
 GATEWAY_PREFIX = (os.environ.get("FNNAS_GATEWAY_PREFIX") or "").strip().rstrip("/")
 
 # 参数也必须在 import app 之前解析：上游是在模块级就把数据目录（数据库、
@@ -94,6 +89,14 @@ import app as upstream  # noqa: E402  —— 上游入口：建库、注册蓝�
 from flask import request, session  # noqa: E402
 from flask.sessions import SecureCookieSessionInterface  # noqa: E402
 from werkzeug.serving import make_server  # noqa: E402
+
+# 会话 Cookie 策略（tab 模式）：
+# tab 下应用在浏览器【新标签页】里以"顶层同站"身份打开（http://<NAS>:25400/），
+# 不再是跨站 iframe，所以 SameSite 用 Lax 就够（顶层导航会带上）。
+# ⚠ 不能用 Secure：直连的是明文 HTTP 端口，带 Secure 的 Cookie 浏览器会拒绝
+#   保存/回传，登录会立刻坏掉（这一点和 inner 模式正好相反）。
+upstream.app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
+upstream.app.config["SESSION_COOKIE_SECURE"] = False
 
 # ---- 不依赖 cookie 的会话通道（token 兜底）----
 #
@@ -112,7 +115,7 @@ from werkzeug.serving import make_server  # noqa: E402
 # cookie 正常的环境里这条链只是多一跳，没有任何副作用。
 _TOKEN_HEADER = "X-Deen-Token"
 _TOKEN_MAX_AGE = 30 * 24 * 3600          # 30 天
-_TOKEN_RECEIVER = "/api/static/deen-token.html"
+_TOKEN_RECEIVER = f"{GATEWAY_PREFIX}/static/deen-token.html"
 
 _TOKEN_SNIPPET = """<script id="deen-token-bridge">
 (function(){
@@ -174,6 +177,12 @@ def _install_token_bridge() -> None:
                 and request.method == "POST"
                 and request.path in ("/login", "/change_password")):
             resp.headers["Location"] = f"{_TOKEN_RECEIVER}#t={token}"
+            return resp
+        # 静态文件（send_file）的响应是 direct_passthrough 流，对它调用 get_data()
+        # 会抛 RuntimeError("direct passthrough mode") → 500（真机 0008：登录后
+        # 跳 /static/deen-token.html 直接 Internal Server Error）。静态页本来也
+        # 不需要注入 token 脚本，直接放行。
+        if resp.direct_passthrough:
             return resp
         if resp.mimetype != "text/html":
             return resp
@@ -251,10 +260,10 @@ def _apply_download_dir() -> None:
 
 
 def _build_server(host: str, port: int):
-    """把上游 Flask app 包一层前缀中间件后起 HTTP 服务
+    """（tab 模式下前缀为空）起 HTTP 服务，直接 serve 上游 Flask app
 
     用 werkzeug 的 make_server 而不是 app.run()：后者会重新做一次参数解析和
-    reloader 判断，而这里要的就是"单进程、多线程、只监听回环"。
+    reloader 判断，而这里要的就是"单进程、多线程、绑 0.0.0.0"。
     """
     wrapped = (
         upstream.PrefixMiddleware(upstream.app, GATEWAY_PREFIX)
@@ -276,14 +285,15 @@ def main(argv=None) -> int:
     _apply_download_dir()
     _install_token_bridge()
 
-    host, port = "127.0.0.1", args.port
+    # tab 模式：浏览器要能从 NAS 的 IP 直连这个端口，必须绑 0.0.0.0（不能只听回环）。
+    host, port = "0.0.0.0", args.port
 
     # 直接复用上游 main()：它负责三件我们不想抄一遍的事 ——
     #   ① 按数据库里的设置（auto_start / 固定端口）拉起三个平台的 API 服务
     #   ② 启动任务管理器（定时同步、下载队列）
     #   ③ 退出时把 bridges / task_manager 干净收尾（finally 段）
-    # 我们只把它里面"怎么监听"这件事换掉：_read_web_bind 返回到我们的
-    # 回环端口，serve() 换成带前缀中间件、只听 127.0.0.1 的实现。
+    # 我们只把它里面"怎么监听"这件事换掉：_read_web_bind 返回到我们的端口，
+    # serve() 换成根路径（空前缀）、绑 0.0.0.0 的实现。
     upstream._read_web_bind = lambda: (host, port)
 
     def _serve(_app, _gateway_socket, _gateway_prefix, _host, _port):
