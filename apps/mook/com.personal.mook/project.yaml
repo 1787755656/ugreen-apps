@@ -1,0 +1,99 @@
+# ============================================================
+# Mook — UGOS Pro 原生应用（tab 浏览器直连版）
+#
+# 上游：https://github.com/NikoYomi/mook（v0.4.6，MIT）
+# 自托管 Web SSH 终端 + 服务器监控 + SFTP + AI 助手。
+# 后端 Go（纯 Go，CGO_ENABLED=0，modernc.org/sqlite），
+# 前端 React/Vite 构建产物由后端 serve（MOOK_DIST -> rootfs_common/app/dist）。
+#
+# 打包要点：
+# - open_type: tab。xterm.js 终端走 WebSocket、SFTP 传大文件，
+#   tab 浏览器直连后端端口（5866），无网关 20MB 限制，SFTP 大文件畅通。
+# - 上游 v0.4.6 已原生支持「直连端口 / 飞牛网关」两种形态：
+#   后端 ServeMux 对直连端口同时接受带/不带前缀路径，SPA 回退到 index.html，
+#   前端经后端注入的 <base href> 推导访问前缀、WebSocket 走 /ws/terminal。
+#   因此【无需】 v0.2.8 时代那 3 处补丁（router 双路径 / TerminalTab / HashRouter）。
+# - tab 端口直接暴露局域网，认证靠应用自带密码登录（所有业务接口过 RequireAuth）。
+# - SSH/SFTP 出站连公网 VPS、AI 接口走公网 -> 必须 NETWORK.ACCESS_INTERNET。
+# - start.sh 是 shell -> 需要 SYSTEM.EXEC_SYSTEM_COMMAND。
+# - AI 接口是 HTTPS：沙箱 /etc 下无 CA bundle，捆绑 cacert.pem + SSL_CERT_FILE。
+# - 时区：沙箱无 /usr/share/zoneinfo，编译时叠加 overlay/ugos_linux.go 嵌入 tzdata。
+#
+# 构建（CI 在 1787755656/ugreen-apps 自动完成，见 scripts/apps/mook/build.sh）：
+# 1) 克隆上游 tag -> 2) 构建前端 (npm ci && npm run build) -> rootfs_common/app/dist
+# 3) 拷贝 overlay/ugos_linux.go 进 backend，交叉编译 Go 二进制 -> rootfs_<arch>/bin/mook
+# 4) ugcli check + pack
+# ============================================================
+
+spec_version: "2.1"
+
+app_id: com.personal.mook
+
+# 跟随上游版本 v0.4.6（由 CI 按上游最新 release 自动 sed 覆盖）
+version: 0.4.6
+
+support_arch:
+  - amd64
+  - arm64
+
+supports:
+  - app
+  - pc
+
+start_cmd: bin/start.sh
+port: 5866
+
+open_type: tab
+
+tag_types:
+  - devtool
+
+depend_fw_version: 1.13.0.0000
+
+allow_add_access_path: false
+
+support_migration: true
+
+permissions:
+  - NETWORK.ACCESS_INTERNET
+  - SYSTEM.EXEC_SYSTEM_COMMAND
+
+parameters: []
+
+license_agreement_link:
+  - https://github.com/NikoYomi/mook/blob/main/LICENSE
+
+source_code_link:
+  - https://github.com/NikoYomi/mook
+
+technical_support_link:
+  - https://github.com/NikoYomi/mook/issues
+
+privacy_policy_link:
+  - https://github.com/NikoYomi/mook
+
+i18n:
+  zh-CN:
+    name: Mook SSH 运维工作台
+    description: >-
+      自托管服务器运维工作台：浏览器里的 Web SSH 终端（xterm.js，多标签并行会话、
+      断线自动重连）、服务器实时监控（延迟/CPU/内存/硬盘）、SFTP 文件管理
+      （浏览/上传/下载/重命名），以及对接 OpenAI 兼容接口的 AI 辅助。
+
+      数据（服务器凭据、AI 设置、常用命令）以 SQLite 存在 NAS 本地，
+      支持一键备份还原。首次使用：打开应用按引导设置管理员密码即可。
+    author: NikoYomi & contributors
+    publisher: 穿斯帕沃特
+  en-US:
+    name: Mook SSH Workbench
+    description: >-
+      Self-hosted server ops workbench: Web SSH terminal in the browser
+      (xterm.js, multi-tab sessions, auto reconnect), live server monitoring
+      (latency/CPU/memory/disk), SFTP file manager (browse/upload/download/
+      rename), and AI assistance via OpenAI-compatible APIs.
+
+      Data (server credentials, AI settings, snippets) stays in local SQLite.
+      First run: open the app and follow the setup guide to create the admin
+      password.
+    author: NikoYomi & contributors
+    publisher: 穿斯帕沃特
