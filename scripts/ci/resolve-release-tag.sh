@@ -59,13 +59,28 @@ fi
 # Escape dots for grep -E; empty APP_ID (no meta.env) degrades to matching
 # every .upk in the repo — an over-count, which is the safe direction.
 APP_ID_RE=$(printf '%s' "${APP_ID}" | sed 's/\./\\./g')
-MAX_ASSET_BUILD=$(gh api --paginate 'repos/{owner}/{repo}/releases' --jq '.[].assets[].name' 2>/dev/null \
+# ⚠ 这里【不能】把 `--paginate` 和 `--jq` 一起用：
+#   · gh 的 `--slurp` 与 `--jq` 互斥（直接报 "not supported with --jq"）；
+#   · 而 `--paginate ... --jq '.[].assets[].name'` 实测恒输出 0 行
+#     （gh 2.96；每页结果被分别喂给 jq，`.[]` 吃不到跨页数据）。
+#   原写法（2026-10-22 之前）因此永远拿不到资产里的构建号，
+#   MAX_ASSET_BUILD 恒为 0，BUILD_NUM 退化成"tag 数"；tag 又被 release 的
+#   --cleanup-tag 删过，号就往下掉 —— deenmusic 这次因此把本该是 0014 的
+#   发布打成了 0002（比上一版 0003 还低，商店版本回退）。
+#   正确姿势：gh 只输出原始 JSON（每页一个数组），交给 jq 逐页处理再合并。
+MAX_ASSET_BUILD=$(gh api --paginate "repos/{owner}/{repo}/releases?per_page=100" 2>/dev/null \
+  | jq -r '.[].assets[]?.name' 2>/dev/null \
   | grep -E "${APP_ID_RE}.*\.upk$" \
   | sed -E 's/.*\.([0-9]+)\.upk$/\1/' \
   | sort -n | tail -1 || true)
 # 10# forces base-10: asset names zero-pad ("0003"), and $(( )) would read
 # those as octal (0008 → error, 0010 → 8).
 MAX_ASSET_BUILD=$((10#${MAX_ASSET_BUILD:-0}))
+# 取不到资产号时是"静默降级"最危险的地方：号只会依赖 tag 数，而 tag 会被
+# cleanup 删掉。宁可让日志里留一条刺眼的 warning，也别再悄悄发低号包。
+if [ "${MAX_ASSET_BUILD}" -eq 0 ] && [ "${EXISTING_TAG_COUNT}" -gt 0 ]; then
+  echo "::warning::未能从 release 资产解析出构建号（gh api 鉴权/网络问题？）——BUILD_NUM 将退化为 tag 数 ${EXISTING_TAG_COUNT}，可能低于历史已发布号"
+fi
 BUILD_NUM=$((EXISTING_TAG_COUNT > MAX_ASSET_BUILD ? EXISTING_TAG_COUNT : MAX_ASSET_BUILD + 1))
 
 # ---- Existing tags for THIS specific version (base tag + any -rN) ----
