@@ -135,7 +135,7 @@
       },
       "service_port": 25400,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/deenmusic/com.personal.deenmusic/rootfs_common/icon.png",
-      "download_count": 1,
+      "download_count": 3,
       "app_type": "native",
       "category": "download",
       "platforms": [
@@ -273,7 +273,7 @@
       },
       "service_port": 25180,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/it-tools/com.personal.ittools/rootfs_common/icon.png",
-      "download_count": 6,
+      "download_count": 7,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -381,7 +381,7 @@
       },
       "service_port": 28300,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/lunatv/com.personal.lunatv/rootfs_common/icon.png",
-      "download_count": 30,
+      "download_count": 31,
       "app_type": "native",
       "category": "media",
       "platforms": [
@@ -507,7 +507,7 @@
       },
       "service_port": 5866,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/mook/com.personal.mook/rootfs_common/icon.png",
-      "download_count": 5,
+      "download_count": 6,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -650,7 +650,7 @@
       },
       "service_port": 21710,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/p2pee-proxy/com.xnkyn.p2peeproxy/rootfs_common/icon.png",
-      "download_count": 15,
+      "download_count": 17,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -826,17 +826,17 @@
       "display_name": "Readeck",
       "description": "Readeck 是一款开源自托管的书签与「稍后读」服务。保存文章、高亮、 打标签、归档并整理你的阅读列表，Web 界面清爽。数据保存在 安装时选择的目录中。",
       "homepage_url": "https://readeck.org/",
-      "updated_at": "2026-09-29",
-      "version": "0.23.4",
-      "upk_version": "0.23.4.0004",
-      "release_tag": "readeck/v0.23.4-r5",
+      "updated_at": "2026-10-23",
+      "version": "0.23.5",
+      "upk_version": "0.23.5.0005",
+      "release_tag": "readeck/v0.23.5",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/readeck/v0.23.4-r5/amd64_nasync_com.personal.readeck_0.23.4.0004.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/readeck/v0.23.4-r5/arm64_nasync_com.personal.readeck_0.23.4.0004.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/readeck/v0.23.5/amd64_nasync_com.personal.readeck_0.23.5.0005.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/readeck/v0.23.5/arm64_nasync_com.personal.readeck_0.23.5.0005.upk"
       },
       "service_port": 28180,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/readeck/com.personal.readeck/rootfs_common/icon.png",
-      "download_count": 1,
+      "download_count": 0,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -886,13 +886,13 @@
       "display_name": "Sub2API",
       "description": "AI 接口中转站（API Gateway）。把你的各大 LLM 服务商 key 统一管起来， 通过一个 OpenAI 兼容的地址对外提供接入，内置用量统计、配额限制、 多用户管理、WebAuthn 登录等。自带管理界面与账号体系。 需要本机已安装 PostgreSQL 15+ 与 Redis 7+。首次启动请在浏览器中完成初始化向导。",
       "homepage_url": "https://github.com/Wei-Shaw/sub2api",
-      "updated_at": "2026-10-16",
-      "version": "0.2.17",
-      "upk_version": "0.2.17.0010",
-      "release_tag": "sub2api/v0.2.17",
+      "updated_at": "2026-10-23",
+      "version": "0.2.18",
+      "upk_version": "0.2.18.0011",
+      "release_tag": "sub2api/v0.2.18",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/sub2api/v0.2.17/amd64_nasync_com.personal.sub2api_0.2.17.0010.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/sub2api/v0.2.17/arm64_nasync_com.personal.sub2api_0.2.17.0010.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/sub2api/v0.2.18/amd64_nasync_com.personal.sub2api_0.2.18.0011.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/sub2api/v0.2.18/arm64_nasync_com.personal.sub2api_0.2.18.0011.upk"
       },
       "service_port": 25435,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/sub2api/com.personal.sub2api/rootfs_common/icon.png",
@@ -950,7 +950,7 @@
       },
       "service_port": 28750,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/ugtheme/com.personal.ugtheme/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 6,
       "app_type": "docker",
       "category": "utility",
       "platforms": [
@@ -980,7 +980,7 @@
       },
       "service_port": 28085,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/zhiyinmusic/com.personal.zhiyinmusic/rootfs_common/icon.png",
-      "download_count": 10,
+      "download_count": 12,
       "app_type": "native",
       "category": "media",
       "platforms": [
