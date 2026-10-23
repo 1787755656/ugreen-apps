@@ -1,6 +1,7 @@
 # ============================================================
 # Lucky — UGOS Pro 原生应用配置
 # 3.4.0 起基于官方 wanji 发行版静态二进制 (release.66666.host, 自带 WebUI, 默认端口 16601)
+# 3.4.0.0009 起 open_type=inner: www/ 为完整前端镜像(爬取自二进制内嵌 dist), /api 网关反代
 # 注意: Lucky 3.4.0 为 go1.27+ 编译, start.sh 必须带 GODEBUG 消毒(UGOS 全局注入
 # GODEBUG=tlskyber=0 会让其启动即 fatal, 已实测)
 # ============================================================
@@ -31,8 +32,13 @@ start_cmd: bin/start.sh
 # 请勿在 Lucky 后台修改管理端口，否则应用图标将打不开管理页）
 port: 16601
 
-# 打开方式：Lucky 自带完整 WebUI，浏览器新标签直连
-open_type: tab
+# 打开方式：桌面内嵌窗口（网关 serve rootfs_common/www 的前端镜像 +
+# /api 反代后端 16601；WS 已全部挂在 /api 前缀，webterminal/SFTP 可用）
+open_type: inner
+
+# 反代前缀：Lucky v3 的 API/WebSocket 全部原生挂在 /api/* 下，
+# 网关不剥离前缀，直接透传
+proxy_path: api
 
 # 应用类别
 tag_types:
@@ -76,7 +82,10 @@ i18n:
       do not change the admin port (16601) or the app icon will break;
       v3 uses a brand-new config format — after upgrading from v2, Lucky
       starts with a fresh config. The wanji build's Docker container manager
-      needs docker.sock and is unavailable inside the app sandbox.
+      needs docker.sock and is unavailable inside the app sandbox. The app
+      opens embedded in the desktop; the gateway rejects request bodies over
+      20MB (413) — for large transfers open http://NAS_IP:16601 directly.
+      If the page misbehaves after an upgrade, force-refresh the browser.
     author: gdy666
     official: https://lucky666.cn
     help: https://lucky666.cn
@@ -94,6 +103,10 @@ i18n:
       请勿在 Lucky 后台修改管理端口(16601)，否则应用图标将无法打开管理页；
       v3 采用全新配置格式，与 v2 配置不互通，从 v2 升级后将以全新配置启动；
       万吉版内置的 Docker 容器管理模块依赖 docker.sock，在应用沙箱中不可用。
+      应用以桌面内嵌窗口方式打开；受系统网关限制，单次上传超过 20MB 的请求会被
+      拒绝(413)，大文件上传/下载请直连 http://NAS_IP:16601 使用；
+      设置安全入口后内嵌窗口可能无法访问，请改用浏览器直连；
+      应用升级后如页面显示异常，请强制刷新浏览器缓存。
     author: gdy666
     official: https://lucky666.cn
     help: https://lucky666.cn
