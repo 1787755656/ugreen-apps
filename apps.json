@@ -348,12 +348,12 @@
       "description": "Lucky(v3) —— 软硬路由公网神器/网络工具箱：反向代理、DDNS 动态域名、 STUN 内网穿透、IPv6/IPv4 端口转发、计划任务、ACME 证书自动申请、 WebDAV/FTP/文件浏览、网页唤醒(WOL)、Cloudflare Tunnel、IP 防火墙等， v3 新增 Coraza WAF、存储管理、Web 终端等模块，自带 Web 管理界面。 默认登录账号 666，密码 666，首次登录后请及时修改。 注意：应用以普通用户运行，无法监听 1024 以下端口(SMB 445/DLNA 1900 等请改高位端口)； 请勿在 Lucky 后台修改管理端口(16601)，否则应用图标将无法打开管理页； v3 采用全新配置格式，与 v2 配置不互通，从 v2 升级后将以全新配置启动； 万吉版内置的 Docker 容器管理模块依赖 docker.sock，在应用沙箱中不可用。 总览页的主机级监控(CPU/内存/进程/连接/流量)因应用沙箱无法读取系统 /proc 而恒为 0，属平台限制，Lucky 各功能模块不受影响。",
       "homepage_url": "https://github.com/gdy666/lucky",
       "updated_at": "2026-10-23",
-      "version": "2.27.2",
-      "upk_version": "2.27.2.0004",
-      "release_tag": "lucky/v2.27.2-r8",
+      "version": "3.4.0",
+      "upk_version": "3.4.0.0011",
+      "release_tag": "lucky/v3.4.0-r8",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/lucky/v2.27.2-r8/amd64_nasync_com.gdy666.lucky_2.27.2.0004.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/lucky/v2.27.2-r8/arm64_nasync_com.gdy666.lucky_2.27.2.0004.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/lucky/v3.4.0-r8/amd64_nasync_com.gdy666.lucky_3.4.0.0011.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/lucky/v3.4.0-r8/arm64_nasync_com.gdy666.lucky_3.4.0.0011.upk"
       },
       "service_port": 16601,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/lucky/com.gdy666.lucky/rootfs_common/icon.png",
