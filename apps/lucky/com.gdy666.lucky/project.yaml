@@ -1,6 +1,8 @@
 # ============================================================
 # Lucky — UGOS Pro 原生应用配置
-# 基于 gdy666/lucky 官方静态编译二进制 (自带 WebUI, 默认端口 16601)
+# 3.4.0 起基于官方 wanji 发行版静态二进制 (release.66666.host, 自带 WebUI, 默认端口 16601)
+# 注意: Lucky 3.4.0 为 go1.27+ 编译, start.sh 必须带 GODEBUG 消毒(UGOS 全局注入
+# GODEBUG=tlskyber=0 会让其启动即 fatal, 已实测)
 # ============================================================
 
 # 配置规范版本
@@ -10,7 +12,7 @@ spec_version: "2.1"
 app_id: com.gdy666.lucky
 
 # 应用版本号 x.y.z（打包时 --build 追加构建号）
-version: 2.27.2
+version: 3.4.0
 
 # 支持的 CPU 架构
 support_arch:
@@ -64,11 +66,17 @@ i18n:
   en-US:
     name: Lucky
     description: >-
-      Lucky — an all-in-one network toolbox: IPv6/IPv4 port forwarding,
-      reverse proxy, DDNS, Wake-on-LAN, STUN NAT traversal, cron tasks,
-      ACME certificates, FTP/WebDAV/file browser and more, with a built-in
-      Web UI. Default login: 666 / 666 — please change it after first login.
-      Note: running as a non-root app user, ports below 1024 cannot be bound.
+      Lucky (v3) — an all-in-one network toolbox: reverse proxy, DDNS,
+      STUN NAT traversal, IPv6/IPv4 port forwarding, cron tasks, ACME
+      certificates, WebDAV/FTP/file browser, Wake-on-LAN, Cloudflare Tunnel,
+      IP firewall, plus new v3 modules (Coraza WAF, storage management,
+      web terminal), with a built-in Web UI. Default login: 666 / 666 —
+      change it after first login. Notes: runs as a non-root app user, ports
+      below 1024 cannot be bound (SMB 445 / DLNA 1900 need high ports);
+      do not change the admin port (16601) or the app icon will break;
+      v3 uses a brand-new config format — after upgrading from v2, Lucky
+      starts with a fresh config. The wanji build's Docker container manager
+      needs docker.sock and is unavailable inside the app sandbox.
     author: gdy666
     official: https://lucky666.cn
     help: https://lucky666.cn
@@ -77,11 +85,15 @@ i18n:
   zh-CN:
     name: Lucky
     description: >-
-      Lucky —— 软硬路由公网神器/网络工具箱：IPv6/IPv4 端口转发、反向代理、
-      DDNS 动态域名、网页唤醒(WOL)、STUN 内网穿透、计划任务、ACME 证书自动申请、
-      FTP/WebDAV/文件浏览等，自带 Web 管理界面。默认登录账号 666，密码 666，
-      首次登录后请及时修改。注意：应用以普通用户运行，无法监听 1024 以下端口；
-      请勿在 Lucky 后台修改管理端口(16601)，否则应用图标将无法打开管理页。
+      Lucky(v3) —— 软硬路由公网神器/网络工具箱：反向代理、DDNS 动态域名、
+      STUN 内网穿透、IPv6/IPv4 端口转发、计划任务、ACME 证书自动申请、
+      WebDAV/FTP/文件浏览、网页唤醒(WOL)、Cloudflare Tunnel、IP 防火墙等，
+      v3 新增 Coraza WAF、存储管理、Web 终端等模块，自带 Web 管理界面。
+      默认登录账号 666，密码 666，首次登录后请及时修改。
+      注意：应用以普通用户运行，无法监听 1024 以下端口(SMB 445/DLNA 1900 等请改高位端口)；
+      请勿在 Lucky 后台修改管理端口(16601)，否则应用图标将无法打开管理页；
+      v3 采用全新配置格式，与 v2 配置不互通，从 v2 升级后将以全新配置启动；
+      万吉版内置的 Docker 容器管理模块依赖 docker.sock，在应用沙箱中不可用。
     author: gdy666
     official: https://lucky666.cn
     help: https://lucky666.cn

@@ -9,6 +9,49 @@
 # 接班进程死了才重新拉起；只有"短时间内连续快速崩溃"才放弃，让应用停用。
 set -u
 
+# ---------------------------------------------------------------
+# 0. GODEBUG 消毒（Go 1.27 fatal 防护，Lucky 3.4.0 实测必崩所以必带）
+# ---------------------------------------------------------------
+# UGOS 的 systemd 全局配置(/etc/systemd/system.conf)给【所有】服务注入了
+# DefaultEnvironment="GODEBUG=tlskyber=0"。Go 1.24 起陆续移除旧 GODEBUG 项，
+# 到 Go 1.27 已移除 9 项(x509sha1/tlskyber/gotypesalias/tlsunsafeekm/tlsrsakex/
+# tls3des/tls10server/x509keypairleaf/asynctimerchan)，规则是:环境里出现已移除
+# 项【且值等于旧默认值】时进程直接 fatal(https://go.dev/doc/godebug#go-124)。
+# Lucky 3.4.0(2026-10 构建, go1.27+)在 GODEBUG=tlskyber=0 的环境里启动即:
+#   fatal error: removed GODEBUG "tlskyber" set to old value "0" in environment
+# 修复:启动前把 GODEBUG 里所有已移除项剥掉,其余项原样保留。
+SANITIZE_GODEBUG() {
+    (   # 子 shell 里改,不影响外层
+        SAN_RAW="${GODEBUG:-}"
+        [ -n "${SAN_RAW}" ] || return 0
+        SAN_OUT=""
+        SAN_IFS="${IFS}"
+        IFS=','
+        for SAN_ITEM in ${SAN_RAW}; do
+            case "${SAN_ITEM}" in
+                x509sha1=*|tlskyber=*|gotypesalias=*|tlsunsafeekm=*|tlsrsakex=*|tls3des=*|tls10server=*|x509keypairleaf=*|asynctimerchan=*)
+                    echo "已剥离已移除的 GODEBUG 项: ${SAN_ITEM}（Go 1.27 运行时不再接受）" >&2
+                    continue
+                    ;;
+            esac
+            [ -n "${SAN_ITEM}" ] || continue
+            if [ -z "${SAN_OUT}" ]; then SAN_OUT="${SAN_ITEM}"; else SAN_OUT="${SAN_OUT},${SAN_ITEM}"; fi
+        done
+        IFS="${SAN_IFS}"
+        # 输出处理后的值;读到空串就 unset
+        if [ -n "${SAN_OUT}" ]; then
+            printf '%s' "${SAN_OUT}"
+        fi
+    )
+}
+SANITIZED="$(SANITIZE_GODEBUG)"
+if [ -n "${SANITIZED}" ]; then
+    export GODEBUG="${SANITIZED}"
+else
+    unset GODEBUG
+fi
+unset SANITIZED
+
 # ---- 目录准备（全部来自系统环境变量，带兜底） ----
 INSTALL_DIR="${UGAPP_INSTALL_DIR:-$(cd "$(dirname "$0")/.." && pwd)}"
 DATA_DIR="${UGAPP_DATA_DIR:-${INSTALL_DIR}/data}"
