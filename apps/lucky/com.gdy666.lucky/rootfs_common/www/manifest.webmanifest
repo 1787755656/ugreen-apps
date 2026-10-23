@@ -1,0 +1,20 @@
+{
+  "name": "Lucky-Admin",
+  "short_name": "Lucky",
+  "description": "Lucky 管理后台",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "theme_color": "#0f172a",
+  "background_color": "#f8fafc",
+  "icons": [
+    {
+      "src": "./logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
+
+

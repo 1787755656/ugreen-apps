@@ -1,0 +1,1 @@
+import{u as e}from"./lucky_vendor-vue-i18n-CzrRMQiM.js";const c="localesv2.settingsForm",l=()=>{const{t:o,te:n}=e({useScope:"global"});return{t:(t,r)=>{const s=`${c}.${t}`;return n(s)?o(s,r||{}):t}}};export{l as u};

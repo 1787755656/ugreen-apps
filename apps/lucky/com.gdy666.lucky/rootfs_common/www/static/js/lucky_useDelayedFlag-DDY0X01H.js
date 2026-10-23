@@ -1,0 +1,1 @@
+import{j as i,f as r,A as u,ax as f}from"./lucky_vendor-quasar-CMxWkm3q.js";function c(t,l=250){const a=r(!1);let e;const o=()=>{e!==void 0&&clearTimeout(e),e=void 0};return i(()=>!!f(t),s=>{if(o(),!s){a.value=!1;return}e=setTimeout(()=>{e=void 0,a.value=!0},l)},{immediate:!0}),u(o),a}export{c as u};
