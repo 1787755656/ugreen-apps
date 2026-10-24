@@ -35,13 +35,13 @@
       "display_name": "ass (ANI-RSS)",
       "description": "基于 RSS 自动追番、订阅、下载、刮削与洗版（上游 ANI-RSS）。应用内置 Eclipse Temurin JRE，无需 NAS 安装系统 Java。默认账号 admin / admin， 登录后请及时修改密码。请在应用设置中授权媒体/下载共享目录，并在 WebUI 中配置下载路径与下载器。",
       "homepage_url": "https://github.com/wushuo894/ani-rss",
-      "updated_at": "2026-10-21",
-      "version": "3.2.52",
-      "upk_version": "3.2.52.0011",
-      "release_tag": "ani-rss/v3.2.52",
+      "updated_at": "2026-10-24",
+      "version": "3.2.53",
+      "upk_version": "3.2.53.0012",
+      "release_tag": "ani-rss/v3.2.53",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/ani-rss/v3.2.52/amd64_nasync_com.wushuo.anirss_3.2.52.0011.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/ani-rss/v3.2.52/arm64_nasync_com.wushuo.anirss_3.2.52.0011.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/ani-rss/v3.2.53/amd64_nasync_com.wushuo.anirss_3.2.53.0012.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/ani-rss/v3.2.53/arm64_nasync_com.wushuo.anirss_3.2.53.0012.upk"
       },
       "service_port": 7789,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/ani-rss/com.wushuo.anirss/rootfs_common/icon.png",
@@ -135,7 +135,7 @@
       },
       "service_port": 25400,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/deenmusic/com.personal.deenmusic/rootfs_common/icon.png",
-      "download_count": 4,
+      "download_count": 6,
       "app_type": "native",
       "category": "download",
       "platforms": [
@@ -348,12 +348,12 @@
       "description": "Lucky(v3) —— 软硬路由公网神器/网络工具箱：反向代理、DDNS 动态域名、 STUN 内网穿透、IPv6/IPv4 端口转发、计划任务、ACME 证书自动申请、 WebDAV/FTP/文件浏览、网页唤醒(WOL)、Cloudflare Tunnel、IP 防火墙等， v3 新增 Coraza WAF、存储管理、Web 终端等模块，自带 Web 管理界面。 默认登录账号 666，密码 666，首次登录后请及时修改。 注意：应用以普通用户运行，无法监听 1024 以下端口(SMB 445/DLNA 1900 等请改高位端口)； 请勿在 Lucky 后台修改管理端口(16601)，否则应用图标将无法打开管理页； v3 采用全新配置格式，与 v2 配置不互通，从 v2 升级后将以全新配置启动； 万吉版内置的 Docker 容器管理模块依赖 docker.sock，在应用沙箱中不可用。 总览页的主机级监控(CPU/内存/进程/连接/流量)因应用沙箱无法读取系统 /proc 而恒为 0，属平台限制，Lucky 各功能模块不受影响。",
       "homepage_url": "https://github.com/gdy666/lucky",
       "updated_at": "2026-10-23",
-      "version": "3.4.0",
-      "upk_version": "3.4.0.0011",
-      "release_tag": "lucky/v3.4.0-r8",
+      "version": "2.27.2",
+      "upk_version": "2.27.2.0004",
+      "release_tag": "lucky/v2.27.2-r8",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/lucky/v3.4.0-r8/amd64_nasync_com.gdy666.lucky_3.4.0.0011.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/lucky/v3.4.0-r8/arm64_nasync_com.gdy666.lucky_3.4.0.0011.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/lucky/v2.27.2-r8/amd64_nasync_com.gdy666.lucky_2.27.2.0004.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/lucky/v2.27.2-r8/arm64_nasync_com.gdy666.lucky_2.27.2.0004.upk"
       },
       "service_port": 16601,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/lucky/com.gdy666.lucky/rootfs_common/icon.png",
@@ -555,7 +555,7 @@
       },
       "service_port": 28940,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/nm3u8dlre/com.personal.nm3u8dlre/rootfs_common/icon.png",
-      "download_count": 1,
+      "download_count": 2,
       "app_type": "native",
       "category": "download",
       "platforms": [
@@ -605,13 +605,13 @@
       "display_name": "OpenList",
       "description": "OpenList 是一款开源的文件列表程序，把 NAS 本机目录、WebDAV、S3、 FTP/SFTP 以及几十家网盘统一挂进同一个网页界面，支持文档/图片/音视频在线 预览、生成分享链接，并可再通过 WebDAV 对外提供。AList 的社区接续分支。 安装时选好数据目录与要挂载的本机目录即可使用。",
       "homepage_url": "https://doc.oplist.org/",
-      "updated_at": "2026-10-16",
-      "version": "4.2.7",
-      "upk_version": "4.2.7.0006",
-      "release_tag": "openlist/v4.2.7",
+      "updated_at": "2026-10-24",
+      "version": "4.2.8",
+      "upk_version": "4.2.8.0007",
+      "release_tag": "openlist/v4.2.8",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/openlist/v4.2.7/amd64_nasync_com.oplist.openlist_4.2.7.0006.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/openlist/v4.2.7/arm64_nasync_com.oplist.openlist_4.2.7.0006.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/openlist/v4.2.8/amd64_nasync_com.oplist.openlist_4.2.8.0007.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/openlist/v4.2.8/arm64_nasync_com.oplist.openlist_4.2.8.0007.upk"
       },
       "service_port": 28244,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/openlist/com.oplist.openlist/rootfs_common/icon.png",
@@ -916,17 +916,17 @@
       "display_name": "Trilium 笔记",
       "description": "装在 NAS 上的分层笔记与个人知识库。支持富文本、Markdown、代码、表格、 画布、思维导图、关系图、日历、Excalidraw 与 PDF 预览，带全文搜索、 属性查询、笔记版本历史和脚本扩展；数据全部保存在本机，多端打开同一个地址即可同步。 首次打开需要先设置管理员密码，之后凭该密码登录。",
       "homepage_url": "https://github.com/TriliumNext/Trilium",
-      "updated_at": "2026-10-19",
-      "version": "106.0.0",
-      "upk_version": "106.0.0.0004",
-      "release_tag": "trilium/v0.106.0-r1",
+      "updated_at": "2026-10-24",
+      "version": "106.1.0",
+      "upk_version": "106.1.0.0005",
+      "release_tag": "trilium/v0.106.1",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/trilium/v0.106.0-r1/amd64_nasync_com.personal.trilium_106.0.0.0004.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/trilium/v0.106.0-r1/arm64_nasync_com.personal.trilium_106.0.0.0004.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/trilium/v0.106.1/amd64_nasync_com.personal.trilium_106.1.0.0005.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/trilium/v0.106.1/arm64_nasync_com.personal.trilium_106.1.0.0005.upk"
       },
       "service_port": 28186,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/trilium/com.personal.trilium/rootfs_common/icon.png",
-      "download_count": 2,
+      "download_count": 0,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -950,7 +950,7 @@
       },
       "service_port": 28750,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/ugtheme/com.personal.ugtheme/rootfs_common/icon.png",
-      "download_count": 7,
+      "download_count": 11,
       "app_type": "docker",
       "category": "utility",
       "platforms": [
@@ -980,7 +980,7 @@
       },
       "service_port": 28085,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/zhiyinmusic/com.personal.zhiyinmusic/rootfs_common/icon.png",
-      "download_count": 13,
+      "download_count": 15,
       "app_type": "native",
       "category": "media",
       "platforms": [
