@@ -3,15 +3,15 @@
     {
       "appname": "com.personal.ugstore",
       "display_name": "三方应用商店",
-      "description": "面向 UGOS Pro 的第三方应用商店：浏览、安装、更新来自社区源的原生应用，全程走系统应用中心的正式安装通道，支持安装位置选择、更新检查与商店自更新。数据与账号只保存在自己的 NAS 上。\n桌面端经网关身份自动鉴权；手机端经网关访问、无宿主桥，使用「访问密码」闸，首帧即弹出密码验证（联子压缩 / 联子看图同款方案），通过后渲染应用界面。支持 amd64 / arm64 双架构。安装时可填写应用声明的路径参数（可留空）；路径写错或当前账号没有写权限时，会直接告诉你哪个目录有问题，而不是只回一句\"操作失败\"。设置里的 UGOS 管理员账号密码与网关地址以 AES-256-GCM 加密保存在应用数据目录，拷走备份或换机恢复都读不出明文。",
+      "description": "面向 UGOS Pro 的第三方应用商店：浏览、安装、更新来自社区源的原生应用，全程走系统应用中心的正式安装通道，支持安装位置选择、更新检查与商店自更新。数据与账号只保存在自己的 NAS 上。\n桌面端经网关身份自动鉴权；手机端经网关访问、无宿主桥，使用「访问密码」闸，首帧即弹出密码验证（联子压缩 / 联子看图同款方案），通过后渲染应用界面。支持 amd64 / arm64 双架构。安装时可填写应用声明的路径参数（可留空）；路径写错或当前账号没有写权限时，会直接告诉你哪个目录有问题，而不是只回一句\"操作失败\"。设置里的 UGOS 管理员账号密码与网关地址以 AES-256-GCM 加密保存在应用数据目录，拷走备份或换机恢复都读不出明文。设置里可配网络代理（HTTP/SOCKS5）从网络层加速 GitHub 访问，与镜像加速可叠加；应用图标经商店后端中转并缓存，浏览器不直连 GitHub，直连 GitHub 不通的环境图标照常显示。",
       "homepage_url": "https://club.ugnas.com/forum.php?mod=viewthread&tid=6529",
-      "updated_at": "2026-10-22",
+      "updated_at": "2026-10-25",
       "version": "0.1.0",
-      "upk_version": "0.1.0.0025",
-      "release_tag": "ugstore/0.1.0.0025",
+      "upk_version": "0.1.0.0027",
+      "release_tag": "ugstore/0.1.0.0027",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/ugstore/0.1.0.0025/amd64_nasync_com.personal.ugstore_0.1.0.0025.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/ugstore/0.1.0.0025/arm64_nasync_com.personal.ugstore_0.1.0.0025.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/ugstore/0.1.0.0027/amd64_nasync_com.personal.ugstore_0.1.0.0027.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/ugstore/0.1.0.0027/arm64_nasync_com.personal.ugstore_0.1.0.0027.upk"
       },
       "service_port": 21310,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/ugstore-icon.png",
