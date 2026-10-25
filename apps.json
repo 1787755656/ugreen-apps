@@ -209,17 +209,17 @@
       "display_name": "FastNet",
       "description": "FastNet 是 KoolCenter（原 KoolShare）出品的全平台网络测速与诊断工具。 打开应用即可在浏览器里对 NAS 本机做一次完整体检：延迟、多源 CDN 下载/上传速度、NAT 类型检测（RFC 5780 STUN）以及 IPv6 可用性评分。 适合用来分辨\"是 NAS 的宽带慢\"还是\"只有这一个下载慢\"，也可以核对 运营商给的带宽有没有跑满。无需注册、无需配置，不向存储空间写入任何 文件，测试结果只显示在浏览器里。 注意：控制台监听 28190 端口，同局域网内的任何设备都能打开（页面本身 不含任何凭据或个人数据，但每跑一次测速都会真实消耗上下行带宽）。 本应用需要访问互联网才能工作。",
       "homepage_url": "https://www.koolcenter.com/t/topic/9148",
-      "updated_at": "2026-09-29",
-      "version": "0.7.6",
-      "upk_version": "0.7.6.0003",
-      "release_tag": "fastnet/v0.7.6-r6",
+      "updated_at": "2026-10-25",
+      "version": "0.7.8",
+      "upk_version": "0.7.8.0004",
+      "release_tag": "fastnet/v0.7.8",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/fastnet/v0.7.6-r6/amd64_nasync_com.koolcenter.fastnet_0.7.6.0003.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/fastnet/v0.7.6-r6/arm64_nasync_com.koolcenter.fastnet_0.7.6.0003.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/fastnet/v0.7.8/amd64_nasync_com.koolcenter.fastnet_0.7.8.0004.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/fastnet/v0.7.8/arm64_nasync_com.koolcenter.fastnet_0.7.8.0004.upk"
       },
       "service_port": 28190,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/fastnet/com.koolcenter.fastnet/rootfs_common/icon.png",
-      "download_count": 9,
+      "download_count": 0,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -273,7 +273,7 @@
       },
       "service_port": 25180,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/it-tools/com.personal.ittools/rootfs_common/icon.png",
-      "download_count": 8,
+      "download_count": 9,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -297,7 +297,7 @@
       },
       "service_port": 18083,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/liteclass/com.personal.liteclass/rootfs_common/icon.png",
-      "download_count": 3,
+      "download_count": 5,
       "app_type": "native",
       "category": "media",
       "platforms": [
@@ -507,7 +507,7 @@
       },
       "service_port": 5866,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/mook/com.personal.mook/rootfs_common/icon.png",
-      "download_count": 6,
+      "download_count": 8,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -575,17 +575,17 @@
       "display_name": "Octop AI 助手平台",
       "description": "腾讯开源的自托管多用户多智能体 AI 助手平台（MIT 协议），数据全部留在 NAS 本地（SQLite）。支持多专家智能体、飞书/钉钉/QQ/企业微信等 IM 渠道、 定时任务、RAG 知识库、MCP 连接器、浏览器自动化与终端 AI。\n首次启动自动创建管理员账号 admin，随机初始密码写在应用共享目录的 octop-login.txt（文件管理 → Octop 共享目录），登录后请立即在「设置」 中修改，并在控制台内配置 LLM 模型供应商。\n说明：内嵌模式经系统网关代理，单文件上传上限 20MB，知识库大文件请用 直连地址 http://NAS的IP:28088 上传（同一套账号）；应用内「浏览器 AI+」 等组件按需在线下载；深层子页面整页刷新会提示 404，从桌面重新打开即可。",
       "homepage_url": "https://github.com/TencentCloud/Octop",
-      "updated_at": "2026-10-19",
-      "version": "1.0.2",
-      "upk_version": "1.0.2.0006",
-      "release_tag": "octop/v1.0.2",
+      "updated_at": "2026-10-25",
+      "version": "1.0.3",
+      "upk_version": "1.0.3.0007",
+      "release_tag": "octop/v1.0.3b1",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/octop/v1.0.2/amd64_nasync_com.tencent.octop_1.0.2.0006.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/octop/v1.0.2/arm64_nasync_com.tencent.octop_1.0.2.0006.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/octop/v1.0.3b1/amd64_nasync_com.tencent.octop_1.0.3.0007.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/octop/v1.0.3b1/arm64_nasync_com.tencent.octop_1.0.3.0007.upk"
       },
       "service_port": 28088,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/octop/com.tencent.octop/rootfs_common/icon.png",
-      "download_count": 15,
+      "download_count": 0,
       "app_type": "native",
       "category": "ai",
       "platforms": [
@@ -605,13 +605,13 @@
       "display_name": "OpenList",
       "description": "OpenList 是一款开源的文件列表程序，把 NAS 本机目录、WebDAV、S3、 FTP/SFTP 以及几十家网盘统一挂进同一个网页界面，支持文档/图片/音视频在线 预览、生成分享链接，并可再通过 WebDAV 对外提供。AList 的社区接续分支。 安装时选好数据目录与要挂载的本机目录即可使用。",
       "homepage_url": "https://doc.oplist.org/",
-      "updated_at": "2026-10-24",
-      "version": "4.2.8",
-      "upk_version": "4.2.8.0007",
-      "release_tag": "openlist/v4.2.8",
+      "updated_at": "2026-10-25",
+      "version": "4.2.9",
+      "upk_version": "4.2.9.0008",
+      "release_tag": "openlist/v4.2.9",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/openlist/v4.2.8/amd64_nasync_com.oplist.openlist_4.2.8.0007.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/openlist/v4.2.8/arm64_nasync_com.oplist.openlist_4.2.8.0007.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/openlist/v4.2.9/amd64_nasync_com.oplist.openlist_4.2.9.0008.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/openlist/v4.2.9/arm64_nasync_com.oplist.openlist_4.2.9.0008.upk"
       },
       "service_port": 28244,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/openlist/com.oplist.openlist/rootfs_common/icon.png",
@@ -950,7 +950,7 @@
       },
       "service_port": 28750,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/ugtheme/com.personal.ugtheme/rootfs_common/icon.png",
-      "download_count": 13,
+      "download_count": 15,
       "app_type": "docker",
       "category": "utility",
       "platforms": [
