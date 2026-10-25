@@ -135,7 +135,7 @@
       },
       "service_port": 25400,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/deenmusic/com.personal.deenmusic/rootfs_common/icon.png",
-      "download_count": 6,
+      "download_count": 8,
       "app_type": "native",
       "category": "download",
       "platforms": [
@@ -189,7 +189,7 @@
       },
       "service_port": 11211,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/easytier/com.personal.easytier/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 1,
       "app_type": "docker",
       "category": "system",
       "platforms": [
@@ -219,7 +219,7 @@
       },
       "service_port": 28190,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/fastnet/com.koolcenter.fastnet/rootfs_common/icon.png",
-      "download_count": 7,
+      "download_count": 9,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -273,7 +273,7 @@
       },
       "service_port": 25180,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/it-tools/com.personal.ittools/rootfs_common/icon.png",
-      "download_count": 7,
+      "download_count": 8,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -297,7 +297,7 @@
       },
       "service_port": 18083,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/liteclass/com.personal.liteclass/rootfs_common/icon.png",
-      "download_count": 2,
+      "download_count": 3,
       "app_type": "native",
       "category": "media",
       "platforms": [
@@ -348,16 +348,16 @@
       "description": "Lucky(v3) —— 软硬路由公网神器/网络工具箱：反向代理、DDNS 动态域名、 STUN 内网穿透、IPv6/IPv4 端口转发、计划任务、ACME 证书自动申请、 WebDAV/FTP/文件浏览、网页唤醒(WOL)、Cloudflare Tunnel、IP 防火墙等， v3 新增 Coraza WAF、存储管理、Web 终端等模块，自带 Web 管理界面。 默认登录账号 666，密码 666，首次登录后请及时修改。 注意：应用以普通用户运行，无法监听 1024 以下端口(SMB 445/DLNA 1900 等请改高位端口)； 请勿在 Lucky 后台修改管理端口(16601)，否则应用图标将无法打开管理页； v3 采用全新配置格式，与 v2 配置不互通，从 v2 升级后将以全新配置启动； 万吉版内置的 Docker 容器管理模块依赖 docker.sock，在应用沙箱中不可用。 总览页的主机级监控(CPU/内存/进程/连接/流量)因应用沙箱无法读取系统 /proc 而恒为 0，属平台限制，Lucky 各功能模块不受影响。",
       "homepage_url": "https://github.com/gdy666/lucky",
       "updated_at": "2026-10-23",
-      "version": "3.4.0",
-      "upk_version": "3.4.0.0011",
-      "release_tag": "lucky/v3.4.0-r8",
+      "version": "2.27.2",
+      "upk_version": "2.27.2.0004",
+      "release_tag": "lucky/v2.27.2-r8",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/lucky/v3.4.0-r8/amd64_nasync_com.gdy666.lucky_3.4.0.0011.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/lucky/v3.4.0-r8/arm64_nasync_com.gdy666.lucky_3.4.0.0011.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/lucky/v2.27.2-r8/amd64_nasync_com.gdy666.lucky_2.27.2.0004.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/lucky/v2.27.2-r8/arm64_nasync_com.gdy666.lucky_2.27.2.0004.upk"
       },
       "service_port": 16601,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/lucky/com.gdy666.lucky/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 2,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -585,7 +585,7 @@
       },
       "service_port": 28088,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/octop/com.tencent.octop/rootfs_common/icon.png",
-      "download_count": 11,
+      "download_count": 15,
       "app_type": "native",
       "category": "ai",
       "platforms": [
@@ -662,7 +662,7 @@
     {
       "appname": "com.sipeed.picoclaw",
       "display_name": "PicoClaw",
-      "description": "PicoClaw —— Sipeed 出品的超轻量个人 AI 助理/Agent（内存占用 <10MB， 单一静态二进制）。接入你自己的 LLM API Key（Claude、GPT、DeepSeek、 通义千问、Kimi、豆包、Ollama 及任意 OpenAI 兼容接口），即可通过 Telegram、Discord 等渠道对话，支持 MCP 工具、技能、定时任务和持久记忆。 首次使用：打开应用创建管理密码，进入 WebUI 管理台 1) 配置 Provider （填 LLM API Key）→ 2) 配置 Channel（聊天渠道）→ 3) 启动 Gateway 即可开聊。全部数据保存在应用数据目录，卸载保留数据/迁移安装目录均可 跟随。注意：Agent 可在应用沙箱内执行 NAS 上的 shell 命令，请只接入 你本人使用的聊天渠道。软件免费，仅需自付 LLM API 费用；PicoClaw 未 发行任何加密货币，声称关联的代币均为诈骗。",
+      "description": "PicoClaw —— Sipeed 出品的超轻量个人 AI 助理/Agent（内存占用 <10MB， 单一静态二进制）。接入你自己的 LLM API Key（Claude、GPT、DeepSeek、 通义千问、Kimi、豆包、Ollama 及任意 OpenAI 兼容接口），即可通过 Telegram、Discord 等渠道对话，支持 MCP 工具、技能、定时任务和持久记忆。 首次使用：打开应用进入 WebUI 管理台，1) 配置 Provider（填 LLM API Key） → 2) 配置 Channel（聊天渠道）→ 3) 启动 Gateway 即可开聊。全部数据 保存在应用数据目录，卸载保留数据/迁移安装目录均可跟随。注意：Agent 可在应用沙箱内执行 NAS 上的 shell 命令，请只接入你本人使用的聊天渠道。 软件免费，仅需自付 LLM API 费用；PicoClaw 未发行任何加密货币， 声称关联的代币均为诈骗。",
       "homepage_url": "https://github.com/sipeed/picoclaw",
       "updated_at": "2026-09-29",
       "version": "0.3.1",
@@ -926,7 +926,7 @@
       },
       "service_port": 28186,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/trilium/com.personal.trilium/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 1,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -950,7 +950,7 @@
       },
       "service_port": 28750,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/ugtheme/com.personal.ugtheme/rootfs_common/icon.png",
-      "download_count": 11,
+      "download_count": 13,
       "app_type": "docker",
       "category": "utility",
       "platforms": [
@@ -980,7 +980,7 @@
       },
       "service_port": 28085,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/zhiyinmusic/com.personal.zhiyinmusic/rootfs_common/icon.png",
-      "download_count": 15,
+      "download_count": 3,
       "app_type": "native",
       "category": "media",
       "platforms": [
