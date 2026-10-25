@@ -1007,11 +1007,11 @@
       "homepage_url": "https://club.ugnas.com/forum.php?mod=viewthread&tid=6529",
       "updated_at": "2026-10-25",
       "version": "0.1.0",
-      "upk_version": "0.1.0.0027",
-      "release_tag": "ugstore/0.1.0.0027",
+      "upk_version": "0.1.0.0028",
+      "release_tag": "ugstore/0.1.0.0028",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/ugstore/0.1.0.0027/amd64_nasync_com.personal.ugstore_0.1.0.0027.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/ugstore/0.1.0.0027/arm64_nasync_com.personal.ugstore_0.1.0.0027.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/ugstore/0.1.0.0028/amd64_nasync_com.personal.ugstore_0.1.0.0028.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/ugstore/0.1.0.0028/arm64_nasync_com.personal.ugstore_0.1.0.0028.upk"
       },
       "service_port": 21310,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/ugstore-icon.png",
