@@ -15,7 +15,7 @@
       },
       "service_port": 28737,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/100zip/com.personal.100zip/rootfs_common/icon.png",
-      "download_count": 9,
+      "download_count": 10,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -135,7 +135,7 @@
       },
       "service_port": 25400,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/deenmusic/com.personal.deenmusic/rootfs_common/icon.png",
-      "download_count": 8,
+      "download_count": 12,
       "app_type": "native",
       "category": "download",
       "platforms": [
@@ -219,7 +219,7 @@
       },
       "service_port": 28190,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/fastnet/com.koolcenter.fastnet/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 4,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -273,7 +273,7 @@
       },
       "service_port": 25180,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/it-tools/com.personal.ittools/rootfs_common/icon.png",
-      "download_count": 9,
+      "download_count": 10,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -531,7 +531,7 @@
       },
       "service_port": 7101,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/natfrp/com.natfrp.launcher/rootfs_common/icon.png",
-      "download_count": 5,
+      "download_count": 6,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -585,7 +585,7 @@
       },
       "service_port": 28088,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/octop/com.tencent.octop/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 1,
       "app_type": "native",
       "category": "ai",
       "platforms": [
@@ -950,7 +950,7 @@
       },
       "service_port": 28750,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/ugtheme/com.personal.ugtheme/rootfs_common/icon.png",
-      "download_count": 15,
+      "download_count": 20,
       "app_type": "docker",
       "category": "utility",
       "platforms": [
@@ -980,7 +980,7 @@
       },
       "service_port": 28085,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/zhiyinmusic/com.personal.zhiyinmusic/rootfs_common/icon.png",
-      "download_count": 4,
+      "download_count": 7,
       "app_type": "native",
       "category": "media",
       "platforms": [
