@@ -585,7 +585,7 @@
       },
       "service_port": 28088,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/octop/com.tencent.octop/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 1,
       "app_type": "native",
       "category": "ai",
       "platforms": [
@@ -1191,6 +1191,37 @@
           "key": "PHP_DIR",
           "name": "配置目录",
           "description": "选一个共享文件夹，本应用会在它下面建一个 php83 子目录， 里面放 php.ini、进程池配置和日志。选好即完成授权，之后你可以直接用 文件管理器打开这些文件来改。三个 PHP 版本可以放心选同一个文件夹， 它们各自在自己的子目录里互不干扰。留空也能装，配置会放在应用数据 目录里（那个目录在文件管理器里看不到，所以推荐选一个）。"
+        }
+      ]
+    },
+    {
+      "appname": "com.personal.nginx",
+      "display_name": "nginx",
+      "description": "nginx 网页服务器与反向代理，开箱即用。可以在 NAS 上托管静态网站、 给自建服务做反向代理、配 HTTPS 证书，也能配合应用中心里的 PHP 5.6 / 7.4 / 8.3 跑 WordPress、Typecho 这类 PHP 站点。 配置文件直接放在你选的共享文件夹里，用文件管理器就能改； 应用内也带一个配置编辑器，保存时自动做语法检查（nginx -t）， 确认无误再一键重载 —— 配置写错时正在跑的 nginx 会继续用旧配置， 网站不会因为一次手误而中断。 还提供运行状态、错误日志与访问日志查看、PHP 后端探测与配置片段一键复制。 管理界面直接使用绿联云的账号体系，无需另设密码，仅管理员可进入。 内置模块：SSL、HTTP/2、gzip、WebDAV、stream（TCP/UDP 代理）、 realip、sub、auth_request、slice、mp4/flv 等。 注意：应用以非 root 身份运行，【网站端口必须大于 1024】，默认是 28880。",
+      "homepage_url": "https://nginx.org",
+      "updated_at": "2026-10-28",
+      "version": "1.30.6",
+      "upk_version": "1.30.6.0003",
+      "release_tag": "nginx/v1.30.6-r1",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/nginx/v1.30.6-r1/amd64_nasync_com.personal.nginx_1.30.6.0003.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/nginx/v1.30.6-r1/arm64_nasync_com.personal.nginx_1.30.6.0003.upk"
+      },
+      "service_port": 28900,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/nginx-icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "system",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ],
+      "post_install_note": "建议安装时就选一个共享文件夹作为「配置与网站目录」（选好即完成授权），nginx 会在它下面建一个 nginx 子目录，里面放配置文件（conf/nginx.conf、conf/conf.d/）、网站文件（html/）和日志（logs/）；留空也能装，但配置会落在应用数据目录里，文件管理器看不到。之后若要改配置目录，需要到管理页点一次「迁移配置目录」。注意：应用以非 root 身份运行，网站端口必须大于 1024，默认站点是 28880。",
+      "install_params": [
+        {
+          "key": "NGINX_DIR",
+          "name": "配置与网站目录",
+          "description": "选一个共享文件夹，nginx 会在它下面建一个 nginx 子目录， 里面放配置文件（conf/nginx.conf、conf/conf.d/）、网站文件（html/） 和日志（logs/）。选好即完成授权，之后你可以直接用文件管理器打开 这些文件来改，也可以在应用里改。留空也能装，配置会放在应用数据目录里 （那个目录在文件管理器里看不到，所以推荐选一个）。"
         }
       ]
     }
