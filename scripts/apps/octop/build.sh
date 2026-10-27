@@ -12,6 +12,8 @@ set -euo pipefail
 #      与后端同版本；不额外下 wheel，避免前后端版本错位）
 #   3. Python 运行时  ← python-build-standalone cpython 3.12.14（钉 tag + sha256）
 #   4. tzdata         ← 无条件钉版覆盖（首启崩溃 0001 的根因，见 README）
+#   5. octop dist-info ← 从同一版本的官方 wheel 里补齐（应用内版本号的来源，
+#      缺了面板就显示 0.0.0 并一直提示有更新）
 #
 # 为什么不在 CI 里 pip install 那 198 个钉版依赖（本地手工版当初就是这么干的）：
 #   - crcmod 等包**根本不发 wheel**，`--only-binary :all:` 解析不出来；
@@ -197,15 +199,42 @@ if [ ! -f "$SP/tzdata/zoneinfo/Asia/Shanghai" ]; then
 fi
 echo "==> tzdata ${TZDATA_PIN} OK"
 
-# 顺带核对一下搬进来的这棵树确实是本次要打的版本（防止上游资产命名/内容错位）
-OCTOP_DIST=$(basename "$(ls -d "$SP"/octop-*.dist-info 2>/dev/null | head -1 || true)")
-if [ -n "$OCTOP_DIST" ]; then
-  DIST_LC=$(printf '%s' "$OCTOP_DIST" | tr '[:upper:]' '[:lower:]')
-  EXPECT_LC="octop-$(printf '%s' "$VERSION" | tr '[:upper:]' '[:lower:]').dist-info"
-  if [ "$DIST_LC" != "$EXPECT_LC" ]; then
-    echo "::warning::site-packages 里 octop 的 dist-info 是 ${OCTOP_DIST}，与预期 octop-${VERSION}.dist-info 不一致（上游版本号写法变了？）"
-  fi
+# ---- 4b. octop 自己的 dist-info：应用内「当前版本」的唯一来源 -----------------
+# 控制台显示的版本 = importlib.metadata.version("octop")
+# （上游 octop/infra/setup/self_update.py::get_local_version），查不到就**静默**
+# 返回 "0.0.0" —— 于是面板永远显示 0.0.0，并且因为 0.0.0 < 线上版本，
+# 一直提示「有新版本」。
+# 上游 fpk 的 site-packages 里带不带这个 dist-info 随版本波动（b5 有，后来的
+# 版本不一定，本仓 r1 包里就是缺的，真机因此显示 0.0.0），所以这里从**同一版本
+# 的官方 wheel**（18MB，随 release 一起发）里把 dist-info 补进来 —— 不再赌上游。
+if ! command -v unzip >/dev/null 2>&1; then
+  echo "::error::runner 上没有 unzip（要它从 wheel 里取 dist-info）" >&2
+  exit 1
 fi
+WHEEL_ASSET="octop-${VERSION}-py3-none-any.whl"
+WHEEL_URL=$(jq -r --arg n "$WHEEL_ASSET" '.assets[] | select(.name==$n) | .browser_download_url' <<<"$REL_JSON")
+if [ -z "$WHEEL_URL" ]; then
+  echo "::error::上游 ${UPSTREAM_TAG} 没有 ${WHEEL_ASSET} 资产（版本号来源要靠它，不能省）" >&2
+  exit 1
+fi
+download "$WHEEL_URL" "$WORK_DIR/octop.whl"
+rm -rf "$SP"/octop-*.dist-info
+mkdir -p "$WORK_DIR/wheeldist"
+unzip -q "$WORK_DIR/octop.whl" 'octop-*.dist-info/*' -d "$WORK_DIR/wheeldist"
+if ! ls -d "$WORK_DIR/wheeldist"/octop-*.dist-info >/dev/null 2>&1; then
+  echo "::error::wheel ${WHEEL_ASSET} 里没有 octop-*.dist-info，上游打包方式变了" >&2
+  unzip -l "$WORK_DIR/octop.whl" | head -20 >&2
+  exit 1
+fi
+cp -a "$WORK_DIR/wheeldist"/octop-*.dist-info "$SP"/
+
+DIST_DIR=$(ls -d "$SP"/octop-*.dist-info | head -1)
+DIST_VER=$(awk -F': ' '/^Version:/{sub(/\r$/,"",$2); print $2; exit}' "$DIST_DIR/METADATA")
+if [ "$DIST_VER" != "$VERSION" ]; then
+  echo "::error::octop dist-info 的 Version 是 '${DIST_VER}'，与目标 ${VERSION} 不一致" >&2
+  exit 1
+fi
+echo "==> octop dist-info OK: $(basename "$DIST_DIR") (Version: ${DIST_VER})"
 
 # ---- 5. 组装 rootfs ---------------------------------------------------------
 rm -rf "$ROOTFS"
@@ -259,7 +288,16 @@ import fastapi  # noqa: F401
 import uvicorn  # noqa: F401
 import octop.cli.main  # noqa: F401  （start.sh 真正跑的入口）
 
-print("smoke ok:", sys.version.split()[0], "tzpath:", zoneinfo.TZPATH)
+# 控制台显示的版本号：必须是 importlib.metadata 查得到的那一个。
+# 查不到 → 面板显示 0.0.0 且永远提示有更新（r1 包的真机反馈）。
+import os
+import importlib.metadata as md
+
+expect = os.environ["EXPECT_OCTOP_VERSION"]
+got = md.version("octop")
+assert got == expect, f"octop 版本号解析成 {got!r}，期望 {expect!r}（面板会显示 0.0.0）"
+
+print("smoke ok:", sys.version.split()[0], "tzpath:", zoneinfo.TZPATH, "octop:", got)
 PYEOF
 )
 
@@ -273,15 +311,16 @@ run_smoke() {
     echo "::warning::跳过 import 冒烟：无法运行 linux/${ARCH} 容器（缺 binfmt/qemu）"
     return 0
   fi
-  echo "==> 冒烟：linux/${ARCH} 容器内 import + 时区解析"
+  echo "==> 冒烟：linux/${ARCH} 容器内 import + 时区解析 + 版本号解析"
   if ! docker run --rm --platform "linux/${ARCH}" \
       -v "$ROOTFS:/r:ro" \
       -e HOME=/tmp/smokehome \
       -e PYTHONPATH=/r/site-packages \
       -e PYTHONTZPATH=/nonexistent-tzpath-for-smoke \
       -e PYTHONDONTWRITEBYTECODE=1 \
+      -e EXPECT_OCTOP_VERSION="$VERSION" \
       "$base" /r/python/bin/python3.12 -c "$SMOKE_PY"; then
-    echo "::error::冒烟失败：目标架构下 import 或时区解析不过（这棵树装到真机上起不来）" >&2
+    echo "::error::冒烟失败：目标架构下 import / 时区解析 / 版本号解析不过（这棵树装到真机上起不来，或者面板会显示 0.0.0）" >&2
     exit 1
   fi
 }

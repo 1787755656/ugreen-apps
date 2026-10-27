@@ -125,9 +125,10 @@ i18n:
       NAS 本地（SQLite）。支持多专家智能体、飞书/钉钉/QQ/企业微信等 IM 渠道、
       定时任务、RAG 知识库、MCP 连接器、浏览器自动化与终端 AI。
 
-      首次启动自动创建管理员账号 admin，随机初始密码写在应用共享目录的
-      octop-login.txt（文件管理 → Octop 共享目录），登录后请立即在「设置」
-      中修改，并在控制台内配置 LLM 模型供应商。
+      首次启动自动创建管理员账号，默认凭据 admin / octop2026，登录后请
+      立即在「控制台 → 设置」里修改密码，并在同一处配置 LLM 模型供应商。
+      （早期版本是随机密码 + 写文件到共享目录，但原生沙箱里共享目录不一定可写，
+      用户拿不到密码就进不去，故改为固定默认密码。）
 
       说明：内嵌模式经系统网关代理，单文件上传上限 20MB，知识库大文件请用
       直连地址 http://NAS的IP:28088 上传（同一套账号）；应用内「浏览器 AI+」
@@ -145,9 +146,11 @@ i18n:
       channels (Feishu/DingTalk/QQ/WeCom), cron tasks, RAG knowledge base,
       MCP connectors, browser automation and terminal AI.
 
-      On first start an admin account is created with a random password,
-      saved to octop-login.txt in the app shared folder. Change it in
-      Settings right after login, then configure LLM providers in console.
+      On first start an admin account is created with the default
+      credentials admin / octop2026. Change the password in
+      "Console → Settings" right after login, and configure LLM providers
+      there as well. (Earlier builds used a random password written to a
+      shared-folder file, which the native sandbox cannot always write.)
 
       Note: inner mode proxies through the system gateway with a 20MB upload
       limit; use http://NAS_IP:28088 directly for large knowledge-base files.

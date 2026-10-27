@@ -66,6 +66,16 @@ export OCTOP_LOG_LEVEL="${OCTOP_LOG_LEVEL:-info}"
 
 octop_cmd() { "$PY" -m octop.cli.main "$@"; }
 
+# ---- 管理员账号默认凭据 ------------------------------------------------------
+# 早期版本是「随机密码 + 写进共享目录的 octop-login.txt」，但原生沙箱里
+# UGAPP_SHARED_DIR 不保证可写/可见（真机上文件没落进授权目录，用户拿不到密码
+# 就等于进不去），所以改成固定默认密码，并写进应用介绍里，登录后自行修改。
+# 必须过上游密码策略：≥8 位、含字母和数字、不在弱口令黑名单（octop123 在黑名单里）。
+# 需要别的默认值可用 OCTOP_DEFAULT_PASSWORD 覆盖（例如自建流水线时）。
+DEFAULT_ADMIN_USER="admin"
+DEFAULT_ADMIN_PASSWORD="octop2026"
+
+# 兜底用：万一默认密码被上游策略改了，退回随机密码并打到应用日志里
 gen_password() {
     "$PY" - <<'PYEOF'
 import secrets
@@ -80,7 +90,8 @@ PYEOF
 }
 
 write_login_file() {
-    # $1=用户名 $2=密码；数据目录必写，共享目录能写也写一份（文件管理可见）
+    # $1=用户名 $2=密码。只是留个记录：数据目录必然可写；共享目录可写就再放一份
+    # （放不进去不算失败 —— 默认密码本来就写在应用介绍里，不依赖这个文件）
     local user="$1" pw="$2" f
     umask 077
     for f in "${DATA}/octop-login.txt" "${SHARED:+${SHARED}/octop-login.txt}"; do
@@ -93,34 +104,34 @@ write_login_file() {
             echo "直连地址: http://<NAS_IP>:${OCTOP_PORT}"
             echo "管理员账号: ${user}"
             echo "初始密码: ${pw}"
-            echo "（登录后请在 控制台-设置 里修改密码；本文件可在改密后删除）"
+            echo "（登录后请在「控制台 → 设置」里修改密码；本文件仅作记录，可删除）"
         } > "$f" 2>/dev/null || true
     done
     umask 022
 }
 
-# ---- 首次初始化管理员账号（与 fnOS 版一致的密码兜底链）----
+# ---- 首次初始化管理员账号（固定默认密码）----
 if [ ! -f "$OCTOP_HOME/octop.db" ]; then
-    echo "[octop-ugreen] 首次启动，初始化管理员账号 ..."
-    INIT_PW="${OCTOP_DEFAULT_PASSWORD:-}"
-    if [ -z "$INIT_PW" ]; then
-        INIT_PW="$(gen_password)"
-        echo "[octop-ugreen] 未配置初始密码，已自动生成随机密码。"
-    fi
+    ADMIN_USER="${OCTOP_ADMIN_USERNAME:-$DEFAULT_ADMIN_USER}"
+    INIT_PW="${OCTOP_DEFAULT_PASSWORD:-$DEFAULT_ADMIN_PASSWORD}"
+    echo "[octop-ugreen] 首次启动，初始化管理员账号 ${ADMIN_USER} ..."
     if ! octop_cmd init --yes \
-        --admin-username "${OCTOP_ADMIN_USERNAME:-admin}" \
+        --admin-username "$ADMIN_USER" \
         --admin-password "$INIT_PW"; then
-        echo "[octop-ugreen] 初始密码未通过应用密码策略，改用随机密码重试 ..."
+        # 走到这里说明默认密码没过上游策略（上游改了规则），退回随机密码，
+        # 并把密码打到 stdout —— 它会进应用日志，用户/客服都能查到。
+        echo "[octop-ugreen] 默认密码未通过上游密码策略，改用随机密码。"
         INIT_PW="$(gen_password)"
         octop_cmd init --yes \
-            --admin-username "${OCTOP_ADMIN_USERNAME:-admin}" \
+            --admin-username "$ADMIN_USER" \
             --admin-password "$INIT_PW" || {
             echo "[octop-ugreen] 错误：管理员账号初始化失败，请查看日志。" >&2
             exit 1
         }
     fi
-    write_login_file "${OCTOP_ADMIN_USERNAME:-admin}" "$INIT_PW"
-    echo "[octop-ugreen] 管理员账号已创建，初始密码见 octop-login.txt（应用共享目录）。"
+    write_login_file "$ADMIN_USER" "$INIT_PW"
+    echo "[octop-ugreen] 管理员账号：${ADMIN_USER}    初始密码：${INIT_PW}"
+    echo "[octop-ugreen] 登录后请到「控制台 → 设置」里修改密码。"
 fi
 
 echo "[octop-ugreen] 正在启动 Octop，${OCTOP_BIND_HOST}:${OCTOP_PORT} ..."
