@@ -297,7 +297,43 @@ expect = os.environ["EXPECT_OCTOP_VERSION"]
 got = md.version("octop")
 assert got == expect, f"octop 版本号解析成 {got!r}，期望 {expect!r}（面板会显示 0.0.0）"
 
-print("smoke ok:", sys.version.split()[0], "tzpath:", zoneinfo.TZPATH, "octop:", got)
+# 真机的版本号还有第二道坑：start.sh 会设 OCTOP_FPK_SITE_PACKAGES（应用内在线
+# 升级的安装目标），而上游 get_local_version() 在这个变量非空时【只认该目录里的
+# octop】，会起子进程把该目录插进 sys.path 后 import octop 读 __version__。
+# 目录空着（刚装完）→ 恒返回 0.0.0（1.0.3.0009 的真机现象）。
+# start.sh 的修法是把 octop + dist-info 同步进该目录，这里就照做一遍验证：
+# 同步后 get_local_version() 必须等于目标版本，否则面板还是会显示 0.0.0。
+import shutil
+import tempfile
+
+
+def _link_or_copy(src, dst):
+    try:
+        os.link(src, dst)  # 同盘硬链接：秒级、不额外占空间
+    except OSError:
+        shutil.copy2(src, dst)
+
+
+target = tempfile.mkdtemp(prefix="octop-fpk-site-")
+sp = "/r/site-packages"
+shutil.copytree(os.path.join(sp, "octop"), os.path.join(target, "octop"),
+                copy_function=_link_or_copy)
+for entry in os.listdir(sp):
+    if entry.startswith("octop-") and entry.endswith(".dist-info"):
+        shutil.copytree(os.path.join(sp, entry), os.path.join(target, entry),
+                        copy_function=_link_or_copy)
+os.environ["OCTOP_FPK_SITE_PACKAGES"] = target
+
+from octop.infra.setup.self_update import get_local_version
+
+probed = get_local_version()
+assert probed == expect, (
+    f"OCTOP_FPK_SITE_PACKAGES 目录里放好 octop 后，get_local_version() 仍返回 "
+    f"{probed!r}（期望 {expect!r}）—— 面板会显示 0.0.0，start.sh 的同步逻辑要复查"
+)
+
+print("smoke ok:", sys.version.split()[0], "tzpath:", zoneinfo.TZPATH,
+      "octop:", got, "probe:", probed)
 PYEOF
 )
 

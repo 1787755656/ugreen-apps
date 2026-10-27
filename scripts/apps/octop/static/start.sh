@@ -53,6 +53,42 @@ mkdir -p "$OCTOP_HOME"
 export PYTHONPATH="${DATA}/site-packages:${INSTALL}/site-packages"
 export OCTOP_INSTALL_MODE="fpk-native"
 export OCTOP_FPK_SITE_PACKAGES="${DATA}/site-packages"
+
+# ---- 面板版本号（当前版本 / 左上角 vX.Y.Z）的坑 -----------------------------
+# 上游 self_update.get_local_version() 的规则是：只要 OCTOP_FPK_SITE_PACKAGES
+# 非空，就不再查安装目录里的 dist-info，而是【起子进程只在这个目录里 import
+# octop】读版本（还要求 octop.__file__ 落在该目录内）。而这个目录是「应用内
+# 在线升级」的安装目标，刚装完是空的 → 探测必失败 → 恒返回 0.0.0，面板就一直
+# 显示 0.0.0 并提示有新版本（补 dist-info 治不了这个分支）。
+# 修法：启动时保证该目录里有一份 octop —— 空就硬链接安装目录里的那份（同盘
+# 秒级、不额外占空间，跨盘自动退回拷贝）；如果是应用内升级装进来的独立副本
+# （inode 不同）则原样保留，不能覆盖用户升级的成果。
+sync_octop_pkg_to_data() {
+    local src="${INSTALL}/site-packages" dst="${DATA}/site-packages"
+    [ -d "$src/octop" ] || return 0
+    local rebuild=0 src_di dst_di
+    if [ ! -f "$dst/octop/__init__.py" ]; then
+        rebuild=1
+    elif [ "$dst/octop/__init__.py" -ef "$src/octop/__init__.py" ]; then
+        # 是硬链接副本：只有安装目录换了版本（dist-info 目录名变了）才重建
+        src_di=$(basename "$(ls -d "$src"/octop-*.dist-info 2>/dev/null | head -1)" 2>/dev/null)
+        dst_di=$(basename "$(ls -d "$dst"/octop-*.dist-info 2>/dev/null | head -1)" 2>/dev/null)
+        [ "$src_di" != "$dst_di" ] && rebuild=1
+    fi
+    [ "$rebuild" = 1 ] || return 0
+    rm -rf "$dst/octop" "$dst"/octop-*.dist-info 2>/dev/null || true
+    if cp -al "$src/octop" "$dst/" 2>/dev/null; then
+        echo "[octop-ugreen] 已硬链接 octop 到数据目录（版本号探测用）"
+    elif cp -a "$src/octop" "$dst/" 2>/dev/null; then
+        echo "[octop-ugreen] 已拷贝 octop 到数据目录（版本号探测用，跨盘退回）"
+    else
+        echo "[octop-ugreen] 警告：octop 无法放进数据目录，面板版本号可能仍是 0.0.0" >&2
+        return 0
+    fi
+    cp -a "$src"/octop-*.dist-info "$dst/" 2>/dev/null || true
+}
+sync_octop_pkg_to_data
+
 export PYTHONPYCACHEPREFIX="${CACHED}/pycache"
 export PYTHONUNBUFFERED=1
 # 沙箱 /etc 下无 CA bundle 保证，Python 出站 HTTPS（LLM API）用 certifi
