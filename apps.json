@@ -219,7 +219,7 @@
       },
       "service_port": 28190,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/fastnet/com.koolcenter.fastnet/rootfs_common/icon.png",
-      "download_count": 5,
+      "download_count": 7,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -585,7 +585,7 @@
       },
       "service_port": 28088,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/octop/com.tencent.octop/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 1,
       "app_type": "native",
       "category": "ai",
       "platforms": [
@@ -836,7 +836,7 @@
       },
       "service_port": 28180,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/readeck/com.personal.readeck/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 1,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -980,7 +980,7 @@
       },
       "service_port": 28085,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/zhiyinmusic/com.personal.zhiyinmusic/rootfs_common/icon.png",
-      "download_count": 8,
+      "download_count": 10,
       "app_type": "native",
       "category": "media",
       "platforms": [
