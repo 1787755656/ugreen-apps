@@ -1,0 +1,79 @@
+<!--
+  Monaco self-host bootstrap（ugreen-apps 补丁，build.sh 插入 index.html）。
+
+  背景：上游 dashboard 用 @monaco-editor/react 的默认 jsdelivr CDN 加载 monaco
+  内核（config$1={paths:{vs:"https://cdn.jsdelivr.net/npm/monaco-editor@X/min/vs"}}），
+  而 UGOS 网关给所有 inner 应用页面注入 CSP，script-src 白名单没有
+  cdn.jsdelivr.net —— 工作区文件点「编辑」后 Monaco 永远停在默认 loading
+  文案 "Loading..."（后端 API 全部正常，纯前端被 CSP 拦死）。
+
+  修法：把 monaco 的 min/vs 树打进包里（www/monaco/vs，build.sh 落盘），
+  这里在页面加载早期做两件事：
+    1) 预置 window.require 配置对象（monaco AMD loader 会采纳它作为初始
+       config），并用 defineProperty 包住后续 require.config()，把任何
+       paths.vs 强制改写回本地路径 —— @monaco-editor/react 在 configureLoader
+       里会用它默认的 CDN paths 调 config()，必须在这层拦掉；
+    2) 包一层 document.createElement，把 loader 往 CDN 注入的 <script src>
+       / <link href> 改写到本地（loader.js 的 script 标签 src 是在 config()
+       之前用 CDN 常量拼出来的，只能在这层改）。
+
+  条件安装：直连 28088 时后端对未知路径 SPA-fallback 成 text/html，
+  /monaco/vs 拿不到真 JS —— 此时什么都不做，维持上游 CDN 行为（28088 上
+  没有 CSP，CDN 本来就能用）。只有 HEAD 探测到 /monaco/vs/loader.js 真的
+  以 JavaScript 返回（网关静态 serve 的场景）才启用，保证两条路径都不回归。
+-->
+<script id="octop-boot-monaco">
+  (function () {
+    var VS = "/monaco/vs";
+    function install() {
+      window.require = { paths: { vs: VS } };
+      var _rq;
+      Object.defineProperty(window, "require", {
+        configurable: true,
+        get: function () { return _rq; },
+        set: function (v) {
+          _rq = v;
+          if (v && typeof v.config === "function" && !v.__octopVsPatched) {
+            v.__octopVsPatched = true;
+            var orig = v.config;
+            v.config = function (c) {
+              if (c && c.paths && c.paths.vs) { try { c.paths.vs = VS; } catch (e) {} }
+              return orig.apply(this, arguments);
+            };
+          }
+        }
+      });
+      var RE = /^https:\/\/cdn\.jsdelivr\.net\/npm\/monaco-editor@[0-9][^\/]*\/min\/vs\//;
+      function rewrite(u) {
+        if (typeof u === "string" && RE.test(u)) {
+          return VS + u.slice(u.indexOf("/min/vs/") + 7);
+        }
+        return u;
+      }
+      var oc = document.createElement.bind(document);
+      document.createElement = function (tag) {
+        var el = oc.apply(null, arguments);
+        try {
+          var t = String(tag).toLowerCase();
+          var d = t === "script" ? Object.getOwnPropertyDescriptor(HTMLScriptElement.prototype, "src")
+                : t === "link" ? Object.getOwnPropertyDescriptor(HTMLLinkElement.prototype, "href") : null;
+          if (d && d.set) {
+            var prop = t === "script" ? "src" : "href";
+            Object.defineProperty(el, prop, {
+              configurable: true,
+              set: function (v) { d.set.call(this, rewrite(v)); },
+              get: function () { return d.get.call(this); }
+            });
+          }
+        } catch (e) {}
+        return el;
+      };
+    }
+    try {
+      fetch(VS + "/loader.js", { method: "HEAD" }).then(function (r) {
+        var ct = r.headers.get("content-type") || "";
+        if (r.ok && /javascript|ecmascript/i.test(ct)) install();
+      }).catch(function () {});
+    } catch (e) {}
+  })();
+</script>

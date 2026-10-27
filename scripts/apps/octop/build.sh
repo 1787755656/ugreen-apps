@@ -265,6 +265,78 @@ echo "==> Installing web dashboard -> rootfs_common/www"
 rm -rf "$ROOTFS_COMMON/www"
 cp -a "$SP/octop/dashboard" "$ROOTFS_COMMON/www"
 
+# ---- 5b. Monaco 自托管补丁（工作区「编辑」一直 Loading 的修复）----------------
+# 上游 dashboard 用 @monaco-editor/react 的默认 jsdelivr CDN 拉 monaco 内核，
+# UGOS 网关的 CSP（script-src）不放行 cdn.jsdelivr.net，真机上点「编辑」永远
+# "Loading..."。把与 dashboard 内嵌版本一致的 monaco min/vs 打进 www/monaco/vs，
+# 并给 index.html 插入引导脚本把 AMD loader 钉到本地路径（片段与原理见
+# static/monaco-boot.html 头部注释）。上游哪天自己自托管了（chunk 里没有
+# jsdelivr 引用），这段自动 no-op。
+MONACO_BOOT="$SCRIPT_DIR/static/monaco-boot.html"
+if grep -rqo "cdn\.jsdelivr\.net/npm/monaco-editor" "$ROOTFS_COMMON/www/assets/"; then
+  MONACO_VER=$(grep -roh "cdn\.jsdelivr\.net/npm/monaco-editor@[0-9][0-9.]*/min/vs" \
+    "$ROOTFS_COMMON/www/assets/" | head -1 | sed 's|.*/monaco-editor@\([0-9.]*\)/min/vs|\1|')
+  if [ -z "$MONACO_VER" ]; then
+    echo "::error::dashboard 引用了 monaco CDN 但提取不到版本号，手工核对" >&2
+    exit 1
+  fi
+  # 已知版本的 sha256 钉版；未知版本降级为仅告警（registry 的版本 tar 包不可变，
+  # 版本号本身已经是最小可复现锚点）
+  case "$MONACO_VER" in
+    0.55.1) MONACO_SHA256="eec3721fb6b1dc5a0bd1a73e38a5eb5d0c3791af684f7d2571efb90ad8634871" ;;
+    *) MONACO_SHA256=""
+       echo "::warning::monaco-editor@$MONACO_VER 没有钉 sha256（新版本），继续构建但请回填钉版表" >&2 ;;
+  esac
+  download "https://registry.npmjs.org/monaco-editor/-/monaco-editor-${MONACO_VER}.tgz" \
+    "$WORK_DIR/monaco.tgz"
+  if [ -n "$MONACO_SHA256" ]; then
+    ACTUAL_MONACO_SHA=$(sha256_of "$WORK_DIR/monaco.tgz")
+    if [ "$ACTUAL_MONACO_SHA" != "$MONACO_SHA256" ]; then
+      echo "::error::monaco-editor@$MONACO_VER sha256 校验失败：期望 $MONACO_SHA256，实际 $ACTUAL_MONACO_SHA" >&2
+      exit 1
+    fi
+  fi
+  mkdir -p "$WORK_DIR/monaco-pkg"
+  tar -xzf "$WORK_DIR/monaco.tgz" -C "$WORK_DIR/monaco-pkg"
+  rm -rf "$ROOTFS_COMMON/www/monaco"
+  mkdir -p "$ROOTFS_COMMON/www/monaco"
+  cp -a "$WORK_DIR/monaco-pkg/package/min/vs" "$ROOTFS_COMMON/www/monaco/vs"
+  # monaco 0.55+ 的 min/vs 里 worker 在 assets/、语言在 basic-languages|language/，
+  # 不再有 base/worker；不做结构假设，只断言 loader 与 editor 主入口在位
+  for f in loader.js editor/editor.main.js editor/editor.main.css; do
+    if [ ! -f "$ROOTFS_COMMON/www/monaco/vs/$f" ]; then
+      echo "::error::monaco-editor@$MONACO_VER 的 min/vs 里缺 $f（布局变了，修这里的断言）" >&2
+      exit 1
+    fi
+  done
+  python3 - "$ROOTFS_COMMON/www/index.html" "$MONACO_BOOT" <<'PYEOF'
+import sys
+index_path, boot_path = sys.argv[1], sys.argv[2]
+src = open(index_path, encoding="utf-8").read()
+boot = open(boot_path, encoding="utf-8").read()
+if 'id="octop-boot-monaco"' in src:
+    print("==> index.html 已含 monaco 引导（跳过）")
+    sys.exit(0)
+# 插到第一个 ESM 入口（或 </head>）之前，保证引导先于应用执行
+marker = '<script type="module"'
+pos = src.find(marker)
+if pos < 0:
+    pos = src.find("</head>")
+if pos < 0:
+    print("::error::index.html 里既没有 module script 也没有 </head>，插入点失效", file=sys.stderr)
+    sys.exit(1)
+open(index_path, "w", encoding="utf-8").write(src[:pos] + boot + "\n" + src[pos:])
+print("==> index.html 已插入 monaco 引导")
+PYEOF
+  if ! grep -q 'id="octop-boot-monaco"' "$ROOTFS_COMMON/www/index.html"; then
+    echo "::error::monaco 引导插入失败" >&2
+    exit 1
+  fi
+  echo "==> Monaco 自托管 OK: monaco-editor@$MONACO_VER -> www/monaco/vs"
+else
+  echo "==> dashboard 未引用 monaco CDN（上游已自托管或移除编辑器），跳过补丁"
+fi
+
 echo "==> Installing start.sh"
 cp "$SCRIPT_DIR/static/start.sh" "$ROOTFS/bin/start.sh"
 chmod 0755 "$ROOTFS/bin/start.sh"
