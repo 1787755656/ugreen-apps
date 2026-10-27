@@ -219,7 +219,7 @@
       },
       "service_port": 28190,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/fastnet/com.koolcenter.fastnet/rootfs_common/icon.png",
-      "download_count": 4,
+      "download_count": 5,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -297,7 +297,7 @@
       },
       "service_port": 18083,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/liteclass/com.personal.liteclass/rootfs_common/icon.png",
-      "download_count": 5,
+      "download_count": 6,
       "app_type": "native",
       "category": "media",
       "platforms": [
@@ -381,7 +381,7 @@
       },
       "service_port": 28300,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/lunatv/com.personal.lunatv/rootfs_common/icon.png",
-      "download_count": 31,
+      "download_count": 32,
       "app_type": "native",
       "category": "media",
       "platforms": [
@@ -573,19 +573,19 @@
     {
       "appname": "com.tencent.octop",
       "display_name": "Octop AI 助手平台",
-      "description": "腾讯开源的自托管多用户多智能体 AI 助手平台（MIT 协议），数据全部留在 NAS 本地（SQLite）。支持多专家智能体、飞书/钉钉/QQ/企业微信等 IM 渠道、 定时任务、RAG 知识库、MCP 连接器、浏览器自动化与终端 AI。\n首次启动自动创建管理员账号 admin，随机初始密码写在应用共享目录的 octop-login.txt（文件管理 → Octop 共享目录），登录后请立即在「设置」 中修改，并在控制台内配置 LLM 模型供应商。\n说明：内嵌模式经系统网关代理，单文件上传上限 20MB，知识库大文件请用 直连地址 http://NAS的IP:28088 上传（同一套账号）；应用内「浏览器 AI+」 等组件按需在线下载；深层子页面整页刷新会提示 404，从桌面重新打开即可。",
+      "description": "腾讯开源的自托管多用户多智能体 AI 助手平台（MIT 协议），数据全部留在 NAS 本地（SQLite）。支持多专家智能体、飞书/钉钉/QQ/企业微信等 IM 渠道、 定时任务、RAG 知识库、MCP 连接器、浏览器自动化与终端 AI。\n首次启动自动创建管理员账号，默认凭据 admin / octop2026，登录后请 立即在「控制台 → 设置」里修改密码，并在同一处配置 LLM 模型供应商。 （早期版本是随机密码 + 写文件到共享目录，但原生沙箱里共享目录不一定可写， 用户拿不到密码就进不去，故改为固定默认密码。）\n说明：内嵌模式经系统网关代理，单文件上传上限 20MB，知识库大文件请用 直连地址 http://NAS的IP:28088 上传（同一套账号）；应用内「浏览器 AI+」 等组件按需在线下载；深层子页面整页刷新会提示 404，从桌面重新打开即可。",
       "homepage_url": "https://github.com/TencentCloud/Octop",
-      "updated_at": "2026-10-25",
+      "updated_at": "2026-10-27",
       "version": "1.0.3",
-      "upk_version": "1.0.3.0007",
-      "release_tag": "octop/v1.0.3b1",
+      "upk_version": "1.0.3.0008",
+      "release_tag": "octop/v1.0.3b1-r1",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/octop/v1.0.3b1/amd64_nasync_com.tencent.octop_1.0.3.0007.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/octop/v1.0.3b1/arm64_nasync_com.tencent.octop_1.0.3.0007.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/octop/v1.0.3b1-r1/amd64_nasync_com.tencent.octop_1.0.3.0008.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/octop/v1.0.3b1-r1/arm64_nasync_com.tencent.octop_1.0.3.0008.upk"
       },
       "service_port": 28088,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/octop/com.tencent.octop/rootfs_common/icon.png",
-      "download_count": 1,
+      "download_count": 0,
       "app_type": "native",
       "category": "ai",
       "platforms": [
@@ -615,7 +615,7 @@
       },
       "service_port": 28244,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/openlist/com.oplist.openlist/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 1,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -950,7 +950,7 @@
       },
       "service_port": 28750,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/ugtheme/com.personal.ugtheme/rootfs_common/icon.png",
-      "download_count": 20,
+      "download_count": 21,
       "app_type": "docker",
       "category": "utility",
       "platforms": [
@@ -980,7 +980,7 @@
       },
       "service_port": 28085,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/zhiyinmusic/com.personal.zhiyinmusic/rootfs_common/icon.png",
-      "download_count": 7,
+      "download_count": 8,
       "app_type": "native",
       "category": "media",
       "platforms": [
