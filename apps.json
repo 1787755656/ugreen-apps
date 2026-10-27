@@ -45,7 +45,7 @@
       },
       "service_port": 7789,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/ani-rss/com.wushuo.anirss/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 1,
       "app_type": "native",
       "category": "download",
       "platforms": [
@@ -105,7 +105,7 @@
       },
       "service_port": 25212,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/cloudreve/com.cloudreve.cloudreve/rootfs_common/icon.png",
-      "download_count": 1,
+      "download_count": 2,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -577,15 +577,15 @@
       "homepage_url": "https://github.com/TencentCloud/Octop",
       "updated_at": "2026-10-27",
       "version": "1.0.3",
-      "upk_version": "1.0.3.0010",
-      "release_tag": "octop/v1.0.3b1-r3",
+      "upk_version": "1.0.3.0011",
+      "release_tag": "octop/v1.0.3b1-r4",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/octop/v1.0.3b1-r3/amd64_nasync_com.tencent.octop_1.0.3.0010.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/octop/v1.0.3b1-r3/arm64_nasync_com.tencent.octop_1.0.3.0010.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/octop/v1.0.3b1-r4/amd64_nasync_com.tencent.octop_1.0.3.0011.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/octop/v1.0.3b1-r4/arm64_nasync_com.tencent.octop_1.0.3.0011.upk"
       },
       "service_port": 28088,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/octop/com.tencent.octop/rootfs_common/icon.png",
-      "download_count": 1,
+      "download_count": 0,
       "app_type": "native",
       "category": "ai",
       "platforms": [
@@ -615,7 +615,7 @@
       },
       "service_port": 28244,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/openlist/com.oplist.openlist/rootfs_common/icon.png",
-      "download_count": 1,
+      "download_count": 2,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -896,7 +896,7 @@
       },
       "service_port": 25435,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/sub2api/com.personal.sub2api/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 1,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -950,7 +950,7 @@
       },
       "service_port": 28750,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/ugtheme/com.personal.ugtheme/rootfs_common/icon.png",
-      "download_count": 21,
+      "download_count": 23,
       "app_type": "docker",
       "category": "utility",
       "platforms": [
