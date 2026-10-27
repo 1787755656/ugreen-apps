@@ -224,6 +224,37 @@
           "description": "选一个共享文件夹，nginx 会在它下面建一个 nginx 子目录， 里面放配置文件（conf/nginx.conf、conf/conf.d/）、网站文件（html/） 和日志（logs/）。选好即完成授权，之后你可以直接用文件管理器打开 这些文件来改，也可以在应用里改。留空也能装，配置会放在应用数据目录里 （那个目录在文件管理器里看不到，所以推荐选一个）。"
         }
       ]
+    },
+    {
+      "appname": "com.personal.1panel",
+      "display_name": "1Panel 服务器管理面板",
+      "description": "Linux 服务器在线管理面板（1Panel 官方开源项目）。以 Docker 应用运行，已映射宿主机 Docker 权限，面板内可直接查看、启停、重建 NAS 上的全部容器与镜像，一键安装 1Panel 应用商店里的各类容器应用，并管理网络、存储卷与编排模板。内置资源监控、文件管理、计划任务、容器日志与终端。初始账号密码随机生成，装好后到应用日志里查看，首次登录请立即修改；访问地址 http://NAS_IP:21086/entrance（entrance 是安全入口）。注意：面板为容器化运行，文件管理与计划任务只覆盖面板数据目录和容器内文件；面板内一键升级不可用，更新请走商店进行，数据保留在挂载目录不受影响。",
+      "homepage_url": "https://1panel.cn",
+      "updated_at": "2026-10-28",
+      "version": "2.4.1",
+      "upk_version": "2.4.1.0001",
+      "release_tag": "1panel/2.4.1.0001",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/1panel/2.4.1.0001/amd64_nasync_com.personal.1panel_2.4.1.0001.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/1panel/2.4.1.0001/arm64_nasync_com.personal.1panel_2.4.1.0001.upk"
+      },
+      "service_port": 21086,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/1panel-icon.png",
+      "download_count": 0,
+      "app_type": "docker",
+      "category": "system",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ],
+      "post_install_note": "初始密码是随机生成的：装好后到应用日志（或 Docker 套件的容器日志）里找「随机密码」一行，浏览器打开 http://NAS_IP:21086/entrance 登录（entrance 是安全入口），首次登录请立即改密。建议安装时就选一个共享文件夹作为数据目录（选好即完成授权），1Panel 的面板数据和应用商店装的应用都存那里，文件管理器可见、方便备份；留空则落在应用数据目录。面板里新建容器选 bind 挂载时，看到的路径就是宿主机真实路径，可直接生效。面板内不要点一键升级，更新走商店即可。",
+      "install_params": [
+        {
+          "key": "DATA_DIR",
+          "name": "数据目录",
+          "description": "选一个共享文件夹，1Panel 的面板数据和应用商店所装应用都存这里，选好即完成授权，文件管理器可见、方便备份。留空则使用应用自身的数据目录。修改此参数需要卸载后重新安装。"
+        }
+      ]
     }
   ]
 }
