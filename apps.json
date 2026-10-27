@@ -577,11 +577,11 @@
       "homepage_url": "https://github.com/TencentCloud/Octop",
       "updated_at": "2026-10-27",
       "version": "1.0.3",
-      "upk_version": "1.0.3.0009",
-      "release_tag": "octop/v1.0.3b1-r2",
+      "upk_version": "1.0.3.0010",
+      "release_tag": "octop/v1.0.3b1-r3",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/octop/v1.0.3b1-r2/amd64_nasync_com.tencent.octop_1.0.3.0009.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/octop/v1.0.3b1-r2/arm64_nasync_com.tencent.octop_1.0.3.0009.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/octop/v1.0.3b1-r3/amd64_nasync_com.tencent.octop_1.0.3.0010.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/octop/v1.0.3b1-r3/arm64_nasync_com.tencent.octop_1.0.3.0010.upk"
       },
       "service_port": 28088,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/octop/com.tencent.octop/rootfs_common/icon.png",
