@@ -105,6 +105,36 @@ parameters:
           stop and start the app once in the app center. May be left empty
           and filled in later.
 
+  # 管理员密码：留空 = 用默认值 octop2026。填了就以这里为准 —— 首次安装用它
+  # 建账号；之后改这里会在下次启动时自动重置 admin 的密码（忘记密码的找回口）。
+  # start.sh 里用记号文件（只存 sha256）区分「应用中心改的」和「应用内改的」，
+  # 所以留空时用户在应用内自己改的密码不会被重启冲掉。
+  - key: OCTOP_ADMIN_PASSWORD
+    type: password
+    multi: false
+    changeable: true
+    required: false
+    i18n:
+      zh-CN:
+        name: 管理员密码
+        description: >-
+          Octop 管理员账号 admin 的密码。留空 = 用默认密码 octop2026
+          （登录后可在应用内「控制台 → 设置」自行修改，留空时这里不会再动它）。
+          填了则以这里为准：首次安装用它创建账号；之后改这个值并
+          「停止 → 启动」应用，就会把 admin 密码重置成新值 ——
+          忘记密码时也是从这儿找回。密码要求≥8 位、含字母和数字，
+          且不能是 octop123 这类常见弱口令。
+      en-US:
+        name: Admin password
+        description: >-
+          Password for the admin account. Leave empty to use the built-in
+          default (octop2026), which you can then change inside the app under
+          Console → Settings (the app center will not touch it while this is
+          empty). If set, this value wins: it is used for first-time setup,
+          and changing it here + stop/start the app resets the admin password
+          — which is also how you recover a forgotten one. At least 8 chars,
+          letters and digits, not a common weak password.
+
 license_agreement_link:
   - https://github.com/TencentCloud/Octop/blob/main/LICENSE
 
@@ -125,10 +155,10 @@ i18n:
       NAS 本地（SQLite）。支持多专家智能体、飞书/钉钉/QQ/企业微信等 IM 渠道、
       定时任务、RAG 知识库、MCP 连接器、浏览器自动化与终端 AI。
 
-      首次启动自动创建管理员账号，默认凭据 admin / octop2026，登录后请
-      立即在「控制台 → 设置」里修改密码，并在同一处配置 LLM 模型供应商。
-      （早期版本是随机密码 + 写文件到共享目录，但原生沙箱里共享目录不一定可写，
-      用户拿不到密码就进不去，故改为固定默认密码。）
+      首次启动自动创建管理员账号，默认凭据 admin / octop2026；密码也可以在
+      应用中心「配置 → 管理员密码」里自己设定（留空则用默认值，忘记密码时
+      从那里填个新值再重启应用即可重置）。登录后请立即在「控制台 → 设置」里
+      修改密码，并在同一处配置 LLM 模型供应商。
 
       说明：内嵌模式经系统网关代理，单文件上传上限 20MB，知识库大文件请用
       直连地址 http://NAS的IP:28088 上传（同一套账号）；应用内「浏览器 AI+」
@@ -147,10 +177,11 @@ i18n:
       MCP connectors, browser automation and terminal AI.
 
       On first start an admin account is created with the default
-      credentials admin / octop2026. Change the password in
-      "Console → Settings" right after login, and configure LLM providers
-      there as well. (Earlier builds used a random password written to a
-      shared-folder file, which the native sandbox cannot always write.)
+      credentials admin / octop2026. The password can also be set in the app
+      center (Configuration → Admin password; leave it empty for the default,
+      or set a new value there and restart to reset a forgotten one). Change
+      it in "Console → Settings" after login, and configure LLM providers
+      there as well.
 
       Note: inner mode proxies through the system gateway with a 20MB upload
       limit; use http://NAS_IP:28088 directly for large knowledge-base files.

@@ -110,17 +110,38 @@ write_login_file() {
     umask 022
 }
 
-# ---- 首次初始化管理员账号（固定默认密码）----
+# ---- 管理员密码：应用中心参数优先，留空用默认值 ------------------------------
+# 应用中心「配置」里的 OCTOP_ADMIN_PASSWORD（project.yaml 里 type: password）
+# 由平台以【同名环境变量】注入（同 openlist 的 OL_ADMIN_PASSWORD 用法）。
+#   - 首次初始化（没有 octop.db）：用参数值；没填就用默认 octop2026
+#   - 之后每次启动：参数里有值、且和上次应用过的不一样 → 用 `user passwd` 重置
+#     （所以「忘了密码」时到应用中心填个新值、重启应用就能拿回来）
+#   - 参数留空：完全不碰密码，由应用内「控制台 → 设置」自己管
+# 记号文件只存 sha256，不落明文（数据目录本身是应用私有的）。
+ADMIN_USER="${OCTOP_ADMIN_USERNAME:-$DEFAULT_ADMIN_USER}"
+PARAM_PW="${OCTOP_ADMIN_PASSWORD:-}"
+[ "$PARAM_PW" = "null" ] && PARAM_PW=""
+PW_MARK="$OCTOP_HOME/.ugos-admin-password.sha256"
+
+sha256_of_str() {
+    printf '%s' "$1" | "$PY" -c 'import sys,hashlib;print(hashlib.sha256(sys.stdin.buffer.read()).hexdigest())'
+}
+
+# ---- 首次初始化管理员账号 ----
 if [ ! -f "$OCTOP_HOME/octop.db" ]; then
-    ADMIN_USER="${OCTOP_ADMIN_USERNAME:-$DEFAULT_ADMIN_USER}"
-    INIT_PW="${OCTOP_DEFAULT_PASSWORD:-$DEFAULT_ADMIN_PASSWORD}"
-    echo "[octop-ugreen] 首次启动，初始化管理员账号 ${ADMIN_USER} ..."
+    if [ -n "$PARAM_PW" ]; then
+        INIT_PW="$PARAM_PW"
+        echo "[octop-ugreen] 首次启动，用应用中心配置的密码初始化管理员账号 ${ADMIN_USER} ..."
+    else
+        INIT_PW="${OCTOP_DEFAULT_PASSWORD:-$DEFAULT_ADMIN_PASSWORD}"
+        echo "[octop-ugreen] 首次启动，初始化管理员账号 ${ADMIN_USER}（默认密码）..."
+    fi
     if ! octop_cmd init --yes \
         --admin-username "$ADMIN_USER" \
         --admin-password "$INIT_PW"; then
-        # 走到这里说明默认密码没过上游策略（上游改了规则），退回随机密码，
+        # 走到这里说明密码没过上游策略（太长/太短/命中黑名单），退回随机密码，
         # 并把密码打到 stdout —— 它会进应用日志，用户/客服都能查到。
-        echo "[octop-ugreen] 默认密码未通过上游密码策略，改用随机密码。"
+        echo "[octop-ugreen] 配置的密码未通过上游密码策略，改用随机密码。"
         INIT_PW="$(gen_password)"
         octop_cmd init --yes \
             --admin-username "$ADMIN_USER" \
@@ -129,9 +150,30 @@ if [ ! -f "$OCTOP_HOME/octop.db" ]; then
             exit 1
         }
     fi
+    if [ -n "$PARAM_PW" ]; then
+        ( umask 077; printf '%s\n' "$(sha256_of_str "$PARAM_PW")" > "$PW_MARK" )
+    fi
     write_login_file "$ADMIN_USER" "$INIT_PW"
     echo "[octop-ugreen] 管理员账号：${ADMIN_USER}    初始密码：${INIT_PW}"
     echo "[octop-ugreen] 登录后请到「控制台 → 设置」里修改密码。"
+else
+    # 已有数据库：只有「应用中心里填了密码、且与上次应用过的不同」才重置，
+    # 免得用户自己在应用里改的密码每次重启被冲掉。
+    if [ -n "$PARAM_PW" ]; then
+        WANT_SHA="$(sha256_of_str "$PARAM_PW")"
+        APPLIED_SHA=""
+        [ -f "$PW_MARK" ] && IFS= read -r APPLIED_SHA < "$PW_MARK"
+        if [ "$WANT_SHA" != "$APPLIED_SHA" ]; then
+            echo "[octop-ugreen] 应用中心里的管理员密码有变化，正在重置 ${ADMIN_USER} 的密码 ..."
+            # 输出丢掉：这条命令会把明文密码打到 stdout，不该进应用日志
+            if octop_cmd user passwd "$ADMIN_USER" --password "$PARAM_PW" >/dev/null 2>&1; then
+                ( umask 077; printf '%s\n' "$WANT_SHA" > "$PW_MARK" )
+                echo "[octop-ugreen] 管理员密码已更新为应用中心里配置的值。"
+            else
+                echo "[octop-ugreen] 警告：重置管理员密码失败，本次沿用原密码。" >&2
+            fi
+        fi
+    fi
 fi
 
 echo "[octop-ugreen] 正在启动 Octop，${OCTOP_BIND_HOST}:${OCTOP_PORT} ..."
