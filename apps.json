@@ -75,7 +75,7 @@
       },
       "service_port": 28686,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/clouddl/com.personal.clouddl/rootfs_common/icon.png",
-      "download_count": 10,
+      "download_count": 11,
       "app_type": "native",
       "category": "download",
       "platforms": [
