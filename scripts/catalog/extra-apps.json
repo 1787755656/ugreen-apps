@@ -199,13 +199,13 @@
       "display_name": "nginx",
       "description": "nginx 网页服务器与反向代理，开箱即用。可以在 NAS 上托管静态网站、 给自建服务做反向代理、配 HTTPS 证书，也能配合应用中心里的 PHP 5.6 / 7.4 / 8.3 跑 WordPress、Typecho 这类 PHP 站点。 配置文件直接放在你选的共享文件夹里，用文件管理器就能改； 应用内也带一个配置编辑器，保存时自动做语法检查（nginx -t）， 确认无误再一键重载 —— 配置写错时正在跑的 nginx 会继续用旧配置， 网站不会因为一次手误而中断。 还提供运行状态、错误日志与访问日志查看、PHP 后端探测与配置片段一键复制。 管理界面直接使用绿联云的账号体系，无需另设密码，仅管理员可进入。 内置模块：SSL、HTTP/2、gzip、WebDAV、stream（TCP/UDP 代理）、 realip、sub、auth_request、slice、mp4/flv 等。 注意：应用以非 root 身份运行，【网站端口必须大于 1024】，默认是 28880。",
       "homepage_url": "https://nginx.org",
-      "updated_at": "2026-10-28",
+      "updated_at": "2026-10-29",
       "version": "1.30.6",
-      "upk_version": "1.30.6.0003",
-      "release_tag": "nginx/v1.30.6-r1",
+      "upk_version": "1.30.6.0004",
+      "release_tag": "nginx/v1.30.6-r2",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/nginx/v1.30.6-r1/amd64_nasync_com.personal.nginx_1.30.6.0003.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/nginx/v1.30.6-r1/arm64_nasync_com.personal.nginx_1.30.6.0003.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/nginx/v1.30.6-r2/amd64_nasync_com.personal.nginx_1.30.6.0004.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/nginx/v1.30.6-r2/arm64_nasync_com.personal.nginx_1.30.6.0004.upk"
       },
       "service_port": 28900,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/nginx-icon.png",
