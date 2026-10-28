@@ -1201,11 +1201,11 @@
       "homepage_url": "https://nginx.org",
       "updated_at": "2026-10-29",
       "version": "1.30.6",
-      "upk_version": "1.30.6.0004",
-      "release_tag": "nginx/v1.30.6-r2",
+      "upk_version": "1.30.6.0005",
+      "release_tag": "nginx/v1.30.6-r3",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/nginx/v1.30.6-r2/amd64_nasync_com.personal.nginx_1.30.6.0004.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/nginx/v1.30.6-r2/arm64_nasync_com.personal.nginx_1.30.6.0004.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/nginx/v1.30.6-r3/amd64_nasync_com.personal.nginx_1.30.6.0005.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/nginx/v1.30.6-r3/arm64_nasync_com.personal.nginx_1.30.6.0005.upk"
       },
       "service_port": 28900,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/nginx-icon.png",
