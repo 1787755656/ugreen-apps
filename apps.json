@@ -10,8 +10,8 @@
       "upk_version": "0.5.20.0003",
       "release_tag": "100zip/v0.5.20-r8",
       "download_urls": {
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/100zip/v0.5.20-r8/arm64_nasync_com.personal.100zip_0.5.20.0003.upk",
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/100zip/v0.5.20-r8/amd64_nasync_com.personal.100zip_0.5.20.0003.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/100zip/v0.5.20-r8/amd64_nasync_com.personal.100zip_0.5.20.0003.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/100zip/v0.5.20-r8/arm64_nasync_com.personal.100zip_0.5.20.0003.upk"
       },
       "service_port": 28737,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/100zip/com.personal.100zip/rootfs_common/icon.png",
@@ -35,17 +35,17 @@
       "display_name": "ass (ANI-RSS)",
       "description": "基于 RSS 自动追番、订阅、下载、刮削与洗版（上游 ANI-RSS）。应用内置 Eclipse Temurin JRE，无需 NAS 安装系统 Java。默认账号 admin / admin， 登录后请及时修改密码。请在应用设置中授权媒体/下载共享目录，并在 WebUI 中配置下载路径与下载器。",
       "homepage_url": "https://github.com/wushuo894/ani-rss",
-      "updated_at": "2026-10-24",
-      "version": "3.2.53",
-      "upk_version": "3.2.53.0012",
-      "release_tag": "ani-rss/v3.2.53",
+      "updated_at": "2026-10-28",
+      "version": "3.2.54",
+      "upk_version": "3.2.54.0013",
+      "release_tag": "ani-rss/v3.2.54",
       "download_urls": {
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/ani-rss/v3.2.53/arm64_nasync_com.wushuo.anirss_3.2.53.0012.upk",
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/ani-rss/v3.2.53/amd64_nasync_com.wushuo.anirss_3.2.53.0012.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/ani-rss/v3.2.54/amd64_nasync_com.wushuo.anirss_3.2.54.0013.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/ani-rss/v3.2.54/arm64_nasync_com.wushuo.anirss_3.2.54.0013.upk"
       },
       "service_port": 7789,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/ani-rss/com.wushuo.anirss/rootfs_common/icon.png",
-      "download_count": 1,
+      "download_count": 0,
       "app_type": "native",
       "category": "download",
       "platforms": [
@@ -70,12 +70,12 @@
       "upk_version": "1.5.9.0010",
       "release_tag": "clouddl/v1.5.9-r8",
       "download_urls": {
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/clouddl/v1.5.9-r8/arm64_nasync_com.personal.clouddl_1.5.9.0010.upk",
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/clouddl/v1.5.9-r8/amd64_nasync_com.personal.clouddl_1.5.9.0010.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/clouddl/v1.5.9-r8/amd64_nasync_com.personal.clouddl_1.5.9.0010.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/clouddl/v1.5.9-r8/arm64_nasync_com.personal.clouddl_1.5.9.0010.upk"
       },
       "service_port": 28686,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/clouddl/com.personal.clouddl/rootfs_common/icon.png",
-      "download_count": 9,
+      "download_count": 10,
       "app_type": "native",
       "category": "download",
       "platforms": [
@@ -135,7 +135,7 @@
       },
       "service_port": 25400,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/deenmusic/com.personal.deenmusic/rootfs_common/icon.png",
-      "download_count": 12,
+      "download_count": 13,
       "app_type": "native",
       "category": "download",
       "platforms": [
@@ -160,8 +160,8 @@
       "upk_version": "3.1.0.0004",
       "release_tag": "dnet/v3.1.0-r5",
       "download_urls": {
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/dnet/v3.1.0-r5/arm64_nasync_com.personal.dnet_3.1.0.0004.upk",
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/dnet/v3.1.0-r5/amd64_nasync_com.personal.dnet_3.1.0.0004.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/dnet/v3.1.0-r5/amd64_nasync_com.personal.dnet_3.1.0.0004.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/dnet/v3.1.0-r5/arm64_nasync_com.personal.dnet_3.1.0.0004.upk"
       },
       "service_port": 19877,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/dnet/com.personal.dnet/rootfs_common/icon.png",
@@ -219,7 +219,7 @@
       },
       "service_port": 28190,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/fastnet/com.koolcenter.fastnet/rootfs_common/icon.png",
-      "download_count": 7,
+      "download_count": 8,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -238,12 +238,12 @@
       "upk_version": "1.0.1.0003",
       "release_tag": "idphotos/v1.0.1",
       "download_urls": {
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/idphotos/v1.0.1/arm64_nasync_com.chuan.idphotos_1.0.1.0003.upk",
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/idphotos/v1.0.1/amd64_nasync_com.chuan.idphotos_1.0.1.0003.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/idphotos/v1.0.1/amd64_nasync_com.chuan.idphotos_1.0.1.0003.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/idphotos/v1.0.1/arm64_nasync_com.chuan.idphotos_1.0.1.0003.upk"
       },
       "service_port": 20858,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/idphotos/com.chuan.idphotos/rootfs_common/icon.png",
-      "download_count": 8,
+      "download_count": 11,
       "app_type": "docker",
       "category": "system",
       "platforms": [
@@ -268,8 +268,8 @@
       "upk_version": "2024.10.22.0001",
       "release_tag": "it-tools/v2024.10.22",
       "download_urls": {
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/it-tools/v2024.10.22/arm64_nasync_com.personal.ittools_2024.10.22.0001.upk",
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/it-tools/v2024.10.22/amd64_nasync_com.personal.ittools_2024.10.22.0001.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/it-tools/v2024.10.22/amd64_nasync_com.personal.ittools_2024.10.22.0001.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/it-tools/v2024.10.22/arm64_nasync_com.personal.ittools_2024.10.22.0001.upk"
       },
       "service_port": 25180,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/it-tools/com.personal.ittools/rootfs_common/icon.png",
@@ -292,8 +292,8 @@
       "upk_version": "1.1.6.0006",
       "release_tag": "liteclass/v1.1.6-r8",
       "download_urls": {
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/liteclass/v1.1.6-r8/arm64_nasync_com.personal.liteclass_1.1.6.0006.upk",
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/liteclass/v1.1.6-r8/amd64_nasync_com.personal.liteclass_1.1.6.0006.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/liteclass/v1.1.6-r8/amd64_nasync_com.personal.liteclass_1.1.6.0006.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/liteclass/v1.1.6-r8/arm64_nasync_com.personal.liteclass_1.1.6.0006.upk"
       },
       "service_port": 18083,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/liteclass/com.personal.liteclass/rootfs_common/icon.png",
@@ -322,8 +322,8 @@
       "upk_version": "0.5.7.0004",
       "release_tag": "litepan/v0.5.7-Beta",
       "download_urls": {
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/litepan/v0.5.7-Beta/arm64_nasync_com.ponphil.litepan_0.5.7.0004.upk",
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/litepan/v0.5.7-Beta/amd64_nasync_com.ponphil.litepan_0.5.7.0004.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/litepan/v0.5.7-Beta/amd64_nasync_com.ponphil.litepan_0.5.7.0004.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/litepan/v0.5.7-Beta/arm64_nasync_com.ponphil.litepan_0.5.7.0004.upk"
       },
       "service_port": 25211,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/litepan/com.ponphil.litepan/rootfs_common/icon.png",
@@ -352,8 +352,8 @@
       "upk_version": "2.27.2.0004",
       "release_tag": "lucky/v2.27.2-r8",
       "download_urls": {
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/lucky/v2.27.2-r8/arm64_nasync_com.gdy666.lucky_2.27.2.0004.upk",
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/lucky/v2.27.2-r8/amd64_nasync_com.gdy666.lucky_2.27.2.0004.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/lucky/v2.27.2-r8/amd64_nasync_com.gdy666.lucky_2.27.2.0004.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/lucky/v2.27.2-r8/arm64_nasync_com.gdy666.lucky_2.27.2.0004.upk"
       },
       "service_port": 16601,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/lucky/com.gdy666.lucky/rootfs_common/icon.png",
@@ -400,8 +400,8 @@
       "upk_version": "1.3.0.0003",
       "release_tag": "magicmail/v1.3.0",
       "download_urls": {
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/magicmail/v1.3.0/arm64_com.magiccode.magicmail_1.3.0.0003.upk",
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/magicmail/v1.3.0/amd64_com.magiccode.magicmail_1.3.0.0003.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/magicmail/v1.3.0/amd64_com.magiccode.magicmail_1.3.0.0003.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/magicmail/v1.3.0/arm64_com.magiccode.magicmail_1.3.0.0003.upk"
       },
       "service_port": 23232,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/magicmail/com.magiccode.magicmail/rootfs_common/icon.png",
@@ -424,8 +424,8 @@
       "upk_version": "1.14.0.0007",
       "release_tag": "magicpush/v1.14.0-r11",
       "download_urls": {
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/magicpush/v1.14.0-r11/arm64_nasync_com.magiccode.magicpush_1.14.0.0007.upk",
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/magicpush/v1.14.0-r11/amd64_nasync_com.magiccode.magicpush_1.14.0.0007.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/magicpush/v1.14.0-r11/amd64_nasync_com.magiccode.magicpush_1.14.0.0007.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/magicpush/v1.14.0-r11/arm64_nasync_com.magiccode.magicpush_1.14.0.0007.upk"
       },
       "service_port": 23020,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/magicpush/com.magiccode.magicpush/rootfs_common/icon.png",
@@ -448,8 +448,8 @@
       "upk_version": "11.4.12.0001",
       "release_tag": "mariadb/v11.4.12",
       "download_urls": {
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/mariadb/v11.4.12/arm64_nasync_com.personal.mariadb_11.4.12.0001.upk",
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/mariadb/v11.4.12/amd64_nasync_com.personal.mariadb_11.4.12.0001.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/mariadb/v11.4.12/amd64_nasync_com.personal.mariadb_11.4.12.0001.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/mariadb/v11.4.12/arm64_nasync_com.personal.mariadb_11.4.12.0001.upk"
       },
       "service_port": 23306,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/mariadb/com.personal.mariadb/rootfs_common/icon.png",
@@ -585,7 +585,7 @@
       },
       "service_port": 28088,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/octop/com.tencent.octop/rootfs_common/icon.png",
-      "download_count": 1,
+      "download_count": 6,
       "app_type": "native",
       "category": "ai",
       "platforms": [
@@ -610,8 +610,8 @@
       "upk_version": "4.2.9.0008",
       "release_tag": "openlist/v4.2.9",
       "download_urls": {
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/openlist/v4.2.9/arm64_nasync_com.oplist.openlist_4.2.9.0008.upk",
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/openlist/v4.2.9/amd64_nasync_com.oplist.openlist_4.2.9.0008.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/openlist/v4.2.9/amd64_nasync_com.oplist.openlist_4.2.9.0008.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/openlist/v4.2.9/arm64_nasync_com.oplist.openlist_4.2.9.0008.upk"
       },
       "service_port": 28244,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/openlist/com.oplist.openlist/rootfs_common/icon.png",
@@ -645,8 +645,8 @@
       "upk_version": "1.0.0.0003",
       "release_tag": "p2pee-proxy/v1.0.0",
       "download_urls": {
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/p2pee-proxy/v1.0.0/arm64_nasync_com.xnkyn.p2peeproxy_1.0.0.0003.upk",
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/p2pee-proxy/v1.0.0/amd64_nasync_com.xnkyn.p2peeproxy_1.0.0.0003.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/p2pee-proxy/v1.0.0/amd64_nasync_com.xnkyn.p2peeproxy_1.0.0.0003.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/p2pee-proxy/v1.0.0/arm64_nasync_com.xnkyn.p2peeproxy_1.0.0.0003.upk"
       },
       "service_port": 21710,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/p2pee-proxy/com.xnkyn.p2peeproxy/rootfs_common/icon.png",
@@ -669,12 +669,12 @@
       "upk_version": "0.3.1.0003",
       "release_tag": "picoclaw/v0.3.1-r10",
       "download_urls": {
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/picoclaw/v0.3.1-r10/arm64_nasync_com.sipeed.picoclaw_0.3.1.0003.upk",
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/picoclaw/v0.3.1-r10/amd64_nasync_com.sipeed.picoclaw_0.3.1.0003.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/picoclaw/v0.3.1-r10/amd64_nasync_com.sipeed.picoclaw_0.3.1.0003.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/picoclaw/v0.3.1-r10/arm64_nasync_com.sipeed.picoclaw_0.3.1.0003.upk"
       },
       "service_port": 18800,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/picoclaw/com.sipeed.picoclaw/rootfs_common/icon.png",
-      "download_count": 5,
+      "download_count": 6,
       "app_type": "native",
       "category": "ai",
       "platforms": [
@@ -717,8 +717,8 @@
       "upk_version": "1.0.0.0001",
       "release_tag": "postgresql/v1.0.0",
       "download_urls": {
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/postgresql/v1.0.0/arm64_nasync_com.personal.postgresql17_1.0.0.0001.upk",
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/postgresql/v1.0.0/amd64_nasync_com.personal.postgresql17_1.0.0.0001.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/postgresql/v1.0.0/amd64_nasync_com.personal.postgresql17_1.0.0.0001.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/postgresql/v1.0.0/arm64_nasync_com.personal.postgresql17_1.0.0.0001.upk"
       },
       "service_port": 25432,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/postgresql/com.personal.postgresql17/rootfs_common/icon.png",
@@ -747,8 +747,8 @@
       "upk_version": "5.2.4.0005",
       "release_tag": "qbittorrent/v5.2.4.10",
       "download_urls": {
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/qbittorrent/v5.2.4.10/arm64_nasync_com.qbee.qbittorrent_5.2.4.0005.upk",
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/qbittorrent/v5.2.4.10/amd64_nasync_com.qbee.qbittorrent_5.2.4.0005.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/qbittorrent/v5.2.4.10/amd64_nasync_com.qbee.qbittorrent_5.2.4.0005.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/qbittorrent/v5.2.4.10/arm64_nasync_com.qbee.qbittorrent_5.2.4.0005.upk"
       },
       "service_port": 28080,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/qbittorrent/com.qbee.qbittorrent/rootfs_common/icon.png",
@@ -807,8 +807,8 @@
       "upk_version": "0.1.0.0006",
       "release_tag": "randomvideo/v0.1.0",
       "download_urls": {
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/randomvideo/v0.1.0/arm64_nasync_com.personal.randomvideo_0.1.0.0006.upk",
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/randomvideo/v0.1.0/amd64_nasync_com.personal.randomvideo_0.1.0.0006.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/randomvideo/v0.1.0/amd64_nasync_com.personal.randomvideo_0.1.0.0006.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/randomvideo/v0.1.0/arm64_nasync_com.personal.randomvideo_0.1.0.0006.upk"
       },
       "service_port": 21166,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/randomvideo/com.personal.randomvideo/rootfs_common/icon.png",
@@ -861,8 +861,8 @@
       "upk_version": "8.10.0.0001",
       "release_tag": "redis/v8.10.0",
       "download_urls": {
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/redis/v8.10.0/arm64_nasync_com.personal.redis_8.10.0.0001.upk",
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/redis/v8.10.0/amd64_nasync_com.personal.redis_8.10.0.0001.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/redis/v8.10.0/amd64_nasync_com.personal.redis_8.10.0.0001.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/redis/v8.10.0/arm64_nasync_com.personal.redis_8.10.0.0001.upk"
       },
       "service_port": 26379,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/redis/com.personal.redis/rootfs_common/icon.png",
@@ -886,17 +886,17 @@
       "display_name": "Sub2API",
       "description": "AI 接口中转站（API Gateway）。把你的各大 LLM 服务商 key 统一管起来， 通过一个 OpenAI 兼容的地址对外提供接入，内置用量统计、配额限制、 多用户管理、WebAuthn 登录等。自带管理界面与账号体系。 需要本机已安装 PostgreSQL 15+ 与 Redis 7+。首次启动请在浏览器中完成初始化向导。",
       "homepage_url": "https://github.com/Wei-Shaw/sub2api",
-      "updated_at": "2026-10-23",
-      "version": "0.2.18",
-      "upk_version": "0.2.18.0011",
-      "release_tag": "sub2api/v0.2.18",
+      "updated_at": "2026-10-28",
+      "version": "0.2.19",
+      "upk_version": "0.2.19.0012",
+      "release_tag": "sub2api/v0.2.19",
       "download_urls": {
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/sub2api/v0.2.18/arm64_nasync_com.personal.sub2api_0.2.18.0011.upk",
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/sub2api/v0.2.18/amd64_nasync_com.personal.sub2api_0.2.18.0011.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/sub2api/v0.2.19/amd64_nasync_com.personal.sub2api_0.2.19.0012.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/sub2api/v0.2.19/arm64_nasync_com.personal.sub2api_0.2.19.0012.upk"
       },
       "service_port": 25435,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/sub2api/com.personal.sub2api/rootfs_common/icon.png",
-      "download_count": 1,
+      "download_count": 0,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -921,8 +921,8 @@
       "upk_version": "106.1.0.0005",
       "release_tag": "trilium/v0.106.1",
       "download_urls": {
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/trilium/v0.106.1/arm64_nasync_com.personal.trilium_106.1.0.0005.upk",
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/trilium/v0.106.1/amd64_nasync_com.personal.trilium_106.1.0.0005.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/trilium/v0.106.1/amd64_nasync_com.personal.trilium_106.1.0.0005.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/trilium/v0.106.1/arm64_nasync_com.personal.trilium_106.1.0.0005.upk"
       },
       "service_port": 28186,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/trilium/com.personal.trilium/rootfs_common/icon.png",
@@ -980,7 +980,7 @@
       },
       "service_port": 28085,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/zhiyinmusic/com.personal.zhiyinmusic/rootfs_common/icon.png",
-      "download_count": 10,
+      "download_count": 13,
       "app_type": "native",
       "category": "media",
       "platforms": [
