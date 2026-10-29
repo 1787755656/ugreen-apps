@@ -201,7 +201,10 @@ jobs:
           # shellcheck disable=SC1090
           source "scripts/apps/${APP}/meta.env"
 
-          if [[ "$RELEASE_TAG" == *-r* ]]; then
+          # 只认 "-r<数字>" 结尾的真正修订 tag（如 v1.2.3-r2）。用 *-r* 会把
+          # 上游版本自带的 -rc.4 这类预发布后缀误判成修订版（deepseek-harness
+          # 的 release 曾因此带上误导性的"需先卸载再重新安装"）。
+          if [[ "$RELEASE_TAG" =~ -r[0-9]+$ ]]; then
             REVISION_NOTE=$'\n\n- **打包修订**: '"${RELEASE_TAG##*-}"$'\n- 如果当前安装的版本运行正常，无需更新此修订版；需先卸载再重新安装。'
           else
             REVISION_NOTE=""
