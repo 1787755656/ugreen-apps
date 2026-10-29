@@ -140,7 +140,14 @@ func startNatfrp() {
 func spawnLocked() {
 	cmd := exec.Command(natfrpBin, "--daemon", "-c", confPath)
 	cmd.Dir = dataDir
-	cmd.Env = append(os.Environ(),
+	// UGOS 固件在 /etc/systemd/system.conf 里 DefaultEnvironment 注入
+	// GODEBUG=tlskyber=0（全机 systemd 服务都带着）。本 launcher 的 Go 工具链
+	// 钉在 1.26.x 还容忍它，但上游新 natfrp-service 用更新的 Go 编译，运行时
+	// 对已移除的 GODEBUG 设置直接 fatal（2026.10.23 版实测无限崩溃循环，
+	// 7102 WebUI 起不来）。子进程环境里必须剥掉 GODEBUG，让它按自己工具链
+	// 的默认值跑。
+	env := envWithoutGODEBUG(os.Environ())
+	cmd.Env = append(env,
 		"NATFRP_SERVICE_WD="+dataDir,
 		"NATFRP_FRPC_PATH="+frpcBin,
 	)
@@ -165,6 +172,18 @@ func spawnLocked() {
 			spawnLocked()
 		}
 	}()
+}
+
+// envWithoutGODEBUG 过滤掉继承环境里的 GODEBUG 条目。
+func envWithoutGODEBUG(environ []string) []string {
+	out := environ[:0:0]
+	for _, kv := range environ {
+		if strings.HasPrefix(kv, "GODEBUG=") {
+			continue
+		}
+		out = append(out, kv)
+	}
+	return out
 }
 
 func stopNatfrp() {
