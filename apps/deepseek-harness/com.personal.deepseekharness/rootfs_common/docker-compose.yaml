@@ -75,3 +75,15 @@ services:
         source: "/volume1/@appdata/com.personal.deepseekharness/data"
         target: /root/.dsh
       #{{ end }}
+      # 工作目录（容器内 /workspace）：在 DSH 界面「添加工作区」时选这个路径，
+      # 智能体生成/修改的文件都落在这里。留空用平台数据区（升级重建容器不丢）；
+      # 选共享文件夹则直接落在 NAS 上、文件管理器可见、可与其他应用共用。
+      #{{ if .WORK_DIR }}
+      - type: bind
+        source: "{{ index .WORK_DIR 0 }}"
+        target: /workspace
+      #{{ else }}
+      - type: bind
+        source: "/volume1/@appdata/com.personal.deepseekharness/workspace"
+        target: /workspace
+      #{{ end }}

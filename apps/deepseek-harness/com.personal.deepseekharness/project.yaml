@@ -84,6 +84,34 @@ parameters:
           Harness, pick the directory that was mounted as /root/.dsh. Stop
           and start the app once after install or change.
 
+  # 工作目录（容器内 /workspace）：智能体读写文件的地方。选填：留空用平台
+  # 数据区（升级保留）；选共享文件夹则文件直接落在 NAS 上、文件管理器可见。
+  - key: WORK_DIR
+    type: path
+    multi: false
+    changeable: true
+    required: false
+    i18n:
+      zh-CN:
+        name: 工作目录
+        description: >-
+          智能体工作文件的存放处（挂载为容器内 /workspace）。在 DSH 界面
+          「添加工作区」时选择 /workspace，生成的代码、文档等文件都保存在
+          这里，升级或重建容器不会丢失。留空则使用平台数据区（@appdata 下
+          本应用的工作区文件夹）；若想在文件管理器里直接浏览管理这些文件、
+          或与其他应用共用，请选择一个共享文件夹。安装或修改后请在应用中心
+          「停止 → 启动」一次使其生效。
+      en-US:
+        name: Working directory
+        description: >-
+          Where agent files are stored (mounted as /workspace in the
+          container). Pick /workspace when adding a workspace in the DSH UI;
+          generated code, documents and other files persist there across
+          upgrades. Leave empty to use the platform data folder (under
+          @appdata); to browse and manage these files in the file manager or
+          share them with other apps, pick a shared folder. Stop and start
+          the app once after install or change.
+
   # 局域网口令（HTTP Basic Auth）用户名/密码：安装必填（DSH 本身无登录体系，
   # 这是页面的唯一一道闸；上游语义两个都有值才启用，故两个都设为必填）。
   - key: PROXY_USERNAME
@@ -171,18 +199,16 @@ i18n:
       LAN-required browser polyfill and forwards the WebSocket channels.
 
       Open the app, enter the credentials set at install, then follow the
-      first-run guide to set your model API key. pnpm and uv are
-      preinstalled, so the dsh plugin marketplace and uvx-launched MCP
-      servers work out of the box.
+      first-run guide to set your model API key. Add /workspace as your
+      workspace in the DSH UI - agent files live there and survive
+      upgrades; a NAS shared folder can be set instead in the app
+      settings. pnpm and uv are preinstalled, so the dsh plugin marketplace
+      and uvx-launched MCP servers work out of the box.
 
       Access requires the HTTP Basic credentials set at install (the DSH
       UI has no login system; browsers remember them). Agents run commands
       inside the container and API keys live in the data directory - use a
       strong password, never expose this port.
-
-      Data lives in the platform data folder and survives upgrades; a
-      custom directory (e.g. a previous manual deployment's /root/.dsh)
-      can be set in the app settings.
     author: smanx
     official: https://github.com/smanx/deepseek-harness-docker
     help: https://github.com/deepseek-ai/deepseek-harness/discussions/1762
