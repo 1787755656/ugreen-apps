@@ -157,11 +157,11 @@
       "homepage_url": "https://hub.docker.com/r/smanx/deepseek-harness",
       "updated_at": "2026-10-29",
       "version": "0.2.1",
-      "upk_version": "0.2.1.0003",
-      "release_tag": "deepseek-harness/v0.2.1-rc.4-r2",
+      "upk_version": "0.2.1.0004",
+      "release_tag": "deepseek-harness/v0.2.1-rc.4-r3",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/deepseek-harness/v0.2.1-rc.4-r2/amd64_nasync_com.personal.deepseekharness_0.2.1.0003.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/deepseek-harness/v0.2.1-rc.4-r2/arm64_nasync_com.personal.deepseekharness_0.2.1.0003.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/deepseek-harness/v0.2.1-rc.4-r3/amd64_nasync_com.personal.deepseekharness_0.2.1.0004.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/deepseek-harness/v0.2.1-rc.4-r3/arm64_nasync_com.personal.deepseekharness_0.2.1.0004.upk"
       },
       "service_port": 23079,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/deepseek-harness/com.personal.deepseekharness/rootfs_common/icon.png",
@@ -177,6 +177,11 @@
           "key": "DSH_DATA",
           "name": "数据目录",
           "description": "存放 DSH 的配置、会话记录与凭据（对应容器内 /root/.dsh）。 留空则使用平台数据区（@appdata 下本应用的数据文件夹，升级、卸载 保留数据）。若你之前用 Docker 手动部署过 DeepSeek Harness，想沿用 旧数据，请选择旧容器挂载 /root/.dsh 的那个目录。安装或修改后请在 应用中心「停止 → 启动」一次使其生效。"
+        },
+        {
+          "key": "WORK_DIR",
+          "name": "工作目录",
+          "description": "智能体工作文件的存放处（挂载为容器内 /workspace）。在 DSH 界面 「添加工作区」时选择 /workspace，生成的代码、文档等文件都保存在 这里，升级或重建容器不会丢失。留空则使用平台数据区（@appdata 下 本应用的工作区文件夹）；若想在文件管理器里直接浏览管理这些文件、 或与其他应用共用，请选择一个共享文件夹。安装或修改后请在应用中心 「停止 → 启动」一次使其生效。"
         }
       ]
     },
