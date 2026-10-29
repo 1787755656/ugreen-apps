@@ -1,0 +1,56 @@
+# ============================================================
+# DeepSeek Harness (DSH) — Docker Compose 编排（UGOS Pro Docker 应用）
+#
+# ⚠ 这个文件是 Go text/template，不是 compose 的美元大括号变量语法（真机实测）。
+#   parameters 声明的值一律是列表，取值要用 index 取第 0 项；选填参数必须套
+#   if 判空（index 作用在空列表上会让安装渲染直接失败）。
+#   模板控制语句挂在井号注释位：YAML 当注释、模板照样执行，渲染后剩下的
+#   井号行仍是合法注释。注释里不要写双花括号字面量（会被模板当真执行）。
+#   TZ 是 Docker 套件注入的内置变量，标量，可以直接整页引用。
+#
+# 编排与上游镜像默认用法一致：
+#   容器内 DSH 监听 127.0.0.1:3079（官方安全限制，只允许回环），
+#   Node 反代监听 0.0.0.0:3080 对外，宿主端口 23079 映射到反代。
+#   /root/.dsh 是 DSH 的配置/会话/凭据目录。
+# ============================================================
+
+name: deepseek-harness
+
+services:
+  deepseek-harness:
+    # 镜像随包内置（rootfs_<arch>/images/deepseek-harness-<版本>-<arch>.tar，
+    # 安装时 docker load，离线可装、不依赖 Docker Hub 镜像源）。内容即
+    # smanx/deepseek-harness:devtools-min-<版本>（内置 pnpm 与 uv，
+    # dsh 插件市场与 uvx 启动的 MCP server 开箱即用）。上游仅提供
+    # 浮动 tag，平台禁止 latest，故钉版本 tag 并改标 personal/ 前缀；
+    # 具体版本由打包脚本 sed 改写。
+    image: personal/deepseek-harness:0.2.1-rc.4
+    container_name: deepseek-harness
+    restart: unless-stopped
+    ports:
+      # 宿主 23079（project.yaml 的探活端口）→ 容器内反代 3080
+      - "23079:3080"
+    environment:
+      TZ: "{{.TZ}}"
+      # 源端口：DSH 在容器内监听（仅回环），反代的 upstream
+      DSH_PORT: "3079"
+      # 代理端口：反代对容器外监听（与上方端口映射的容器侧一致）
+      PROXY_PORT: "3080"
+      # 局域网口令（HTTP Basic Auth）：两个参数都有值才注入（上游语义：
+      # 只填其一时完全放行）。凭据对 HTTP 与 WebSocket 都生效。
+      #{{ if and .PROXY_USERNAME .PROXY_PASSWORD }}
+      PROXY_USERNAME: "{{ index .PROXY_USERNAME 0 }}"
+      PROXY_PASSWORD: "{{ index .PROXY_PASSWORD 0 }}"
+      #{{ end }}
+    volumes:
+      # DSH 数据目录（容器内 /root/.dsh）：选了文件夹就绑它，留空用应用
+      # 安装目录内的 data 文件夹
+      #{{ if .DSH_DATA }}
+      - type: bind
+        source: "{{ index .DSH_DATA 0 }}"
+        target: /root/.dsh
+      #{{ else }}
+      - type: bind
+        source: ./data
+        target: /root/.dsh
+      #{{ end }}
