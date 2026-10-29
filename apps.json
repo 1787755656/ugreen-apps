@@ -15,7 +15,7 @@
       },
       "service_port": 28737,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/100zip/com.personal.100zip/rootfs_common/icon.png",
-      "download_count": 10,
+      "download_count": 11,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -45,7 +45,7 @@
       },
       "service_port": 7789,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/ani-rss/com.wushuo.anirss/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 3,
       "app_type": "native",
       "category": "download",
       "platforms": [
@@ -105,7 +105,7 @@
       },
       "service_port": 25212,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/cloudreve/com.cloudreve.cloudreve/rootfs_common/icon.png",
-      "download_count": 2,
+      "download_count": 3,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -135,7 +135,7 @@
       },
       "service_port": 25400,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/deenmusic/com.personal.deenmusic/rootfs_common/icon.png",
-      "download_count": 13,
+      "download_count": 14,
       "app_type": "native",
       "category": "download",
       "platforms": [
@@ -165,7 +165,7 @@
       },
       "service_port": 19877,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/dnet/com.personal.dnet/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 1,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -189,7 +189,7 @@
       },
       "service_port": 11211,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/easytier/com.personal.easytier/rootfs_common/icon.png",
-      "download_count": 1,
+      "download_count": 3,
       "app_type": "docker",
       "category": "system",
       "platforms": [
@@ -219,7 +219,7 @@
       },
       "service_port": 28190,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/fastnet/com.koolcenter.fastnet/rootfs_common/icon.png",
-      "download_count": 8,
+      "download_count": 10,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -243,7 +243,7 @@
       },
       "service_port": 20858,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/idphotos/com.chuan.idphotos/rootfs_common/icon.png",
-      "download_count": 11,
+      "download_count": 13,
       "app_type": "docker",
       "category": "system",
       "platforms": [
@@ -273,7 +273,7 @@
       },
       "service_port": 25180,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/it-tools/com.personal.ittools/rootfs_common/icon.png",
-      "download_count": 10,
+      "download_count": 12,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -327,7 +327,7 @@
       },
       "service_port": 25211,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/litepan/com.ponphil.litepan/rootfs_common/icon.png",
-      "download_count": 2,
+      "download_count": 3,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -357,7 +357,7 @@
       },
       "service_port": 16601,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/lucky/com.gdy666.lucky/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 3,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -381,7 +381,7 @@
       },
       "service_port": 28300,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/lunatv/com.personal.lunatv/rootfs_common/icon.png",
-      "download_count": 32,
+      "download_count": 33,
       "app_type": "native",
       "category": "media",
       "platforms": [
@@ -405,7 +405,7 @@
       },
       "service_port": 23232,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/magicmail/com.magiccode.magicmail/rootfs_common/icon.png",
-      "download_count": 10,
+      "download_count": 12,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -429,7 +429,7 @@
       },
       "service_port": 23020,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/magicpush/com.magiccode.magicpush/rootfs_common/icon.png",
-      "download_count": 4,
+      "download_count": 5,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -453,7 +453,7 @@
       },
       "service_port": 23306,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/mariadb/com.personal.mariadb/rootfs_common/icon.png",
-      "download_count": 3,
+      "download_count": 5,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -483,7 +483,7 @@
       },
       "service_port": 28173,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/metatube/com.metatube.server/rootfs_common/icon.png",
-      "download_count": 1,
+      "download_count": 3,
       "app_type": "native",
       "category": "media",
       "platforms": [
@@ -507,7 +507,7 @@
       },
       "service_port": 5866,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/mook/com.personal.mook/rootfs_common/icon.png",
-      "download_count": 8,
+      "download_count": 9,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -523,11 +523,11 @@
       "homepage_url": "https://www.natfrp.com",
       "updated_at": "2026-10-29",
       "version": "2026.10.23",
-      "upk_version": "2026.10.23.0006",
-      "release_tag": "natfrp/v2026.10.23",
+      "upk_version": "2026.10.23.0007",
+      "release_tag": "natfrp/v2026.10.23-r1",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/natfrp/v2026.10.23/amd64_nasync_com.natfrp.launcher_2026.10.23.0006.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/natfrp/v2026.10.23/arm64_nasync_com.natfrp.launcher_2026.10.23.0006.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/natfrp/v2026.10.23-r1/amd64_nasync_com.natfrp.launcher_2026.10.23.0007.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/natfrp/v2026.10.23-r1/arm64_nasync_com.natfrp.launcher_2026.10.23.0007.upk"
       },
       "service_port": 7101,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/natfrp/com.natfrp.launcher/rootfs_common/icon.png",
@@ -555,7 +555,7 @@
       },
       "service_port": 28940,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/nm3u8dlre/com.personal.nm3u8dlre/rootfs_common/icon.png",
-      "download_count": 2,
+      "download_count": 3,
       "app_type": "native",
       "category": "download",
       "platforms": [
@@ -585,7 +585,7 @@
       },
       "service_port": 28088,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/octop/com.tencent.octop/rootfs_common/icon.png",
-      "download_count": 6,
+      "download_count": 8,
       "app_type": "native",
       "category": "ai",
       "platforms": [
@@ -615,7 +615,7 @@
       },
       "service_port": 28244,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/openlist/com.oplist.openlist/rootfs_common/icon.png",
-      "download_count": 2,
+      "download_count": 3,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -650,7 +650,7 @@
       },
       "service_port": 21710,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/p2pee-proxy/com.xnkyn.p2peeproxy/rootfs_common/icon.png",
-      "download_count": 17,
+      "download_count": 18,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -698,7 +698,7 @@
       },
       "service_port": 23010,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/piggybank/com.ashc776.piggybank/rootfs_common/icon.png",
-      "download_count": 3,
+      "download_count": 4,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -722,7 +722,7 @@
       },
       "service_port": 25432,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/postgresql/com.personal.postgresql17/rootfs_common/icon.png",
-      "download_count": 2,
+      "download_count": 4,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -752,7 +752,7 @@
       },
       "service_port": 28080,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/qbittorrent/com.qbee.qbittorrent/rootfs_common/icon.png",
-      "download_count": 2,
+      "download_count": 3,
       "app_type": "native",
       "category": "download",
       "platforms": [
@@ -782,7 +782,7 @@
       },
       "service_port": 18081,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/qbittorrent-ng6/com.superng6.qbittorrent/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 2,
       "app_type": "native",
       "category": "download",
       "platforms": [
@@ -836,7 +836,7 @@
       },
       "service_port": 28180,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/readeck/com.personal.readeck/rootfs_common/icon.png",
-      "download_count": 1,
+      "download_count": 3,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -866,7 +866,7 @@
       },
       "service_port": 26379,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/redis/com.personal.redis/rootfs_common/icon.png",
-      "download_count": 3,
+      "download_count": 5,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -896,7 +896,7 @@
       },
       "service_port": 25435,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/sub2api/com.personal.sub2api/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 2,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -926,7 +926,7 @@
       },
       "service_port": 28186,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/trilium/com.personal.trilium/rootfs_common/icon.png",
-      "download_count": 1,
+      "download_count": 3,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -980,7 +980,7 @@
       },
       "service_port": 28085,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/zhiyinmusic/com.personal.zhiyinmusic/rootfs_common/icon.png",
-      "download_count": 13,
+      "download_count": 14,
       "app_type": "native",
       "category": "media",
       "platforms": [
