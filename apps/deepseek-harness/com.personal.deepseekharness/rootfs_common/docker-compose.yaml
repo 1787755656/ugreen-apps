@@ -27,6 +27,25 @@ services:
     image: personal/deepseek-harness:0.2.1-rc.4
     container_name: deepseek-harness
     restart: unless-stopped
+    # 【UGOS 打包补丁】DSH 给会话 cookie 加的是 SameSite=Strict，而 UGOS 桌面/客户端
+    # 点开本应用是从自家页面发起的跨站导航：Strict cookie 在整条导航链（含 303 跟随）
+    # 上浏览器都不回传，于是「根目录 401 → 携带 launch token 重发 → 303 → 浏览器跟随
+    # 但又不带 cookie」无限循环（真机 2026-10-30）。放宽为 Lax：顶层 GET 导航会携带
+    # （Lax 放行安全的顶层导航），跨站 POST 依旧不携带，CSRF 防护不损失；直接输网址
+    # 打开本就同站，无感。每次启动对反代源码就地生效；若上游改了代码导致不命中，只打
+    # 警告照常启动（退化为未打补丁的原行为，不会把应用搞挂）。上游若内置修复，可整段删除。
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        sed -i "s|hs\['Set-Cookie'\] = r.setCookies;|hs['Set-Cookie'] = r.setCookies.map((c) => c.replace(/SameSite=Strict/ig, 'SameSite=Lax'));|" /app/proxy/upstream-token.js
+        sed -i "s|proxy.on('proxyRes', (proxyRes, req, res) => {|&\n  const _sc = proxyRes.headers['set-cookie'];\n  if (_sc) proxyRes.headers['set-cookie'] = (Array.isArray(_sc) ? _sc : [_sc]).map((c) => c.replace(/SameSite=Strict/ig, 'SameSite=Lax'));|" /app/proxy/index.js
+        if grep -q "SameSite=Lax" /app/proxy/upstream-token.js && grep -q "SameSite=Lax" /app/proxy/index.js; then
+          echo "[ugos-patch] DSH 会话 cookie SameSite Strict→Lax 补丁已生效（修复跨站打开时的 401 重定向循环）"
+        else
+          echo "[ugos-patch] 警告：上游反代代码结构变化，SameSite 补丁未命中，跨站打开可能出现 401 重定向循环"
+        fi
+        exec /app/entrypoint.sh
     ports:
       # 宿主 23079（project.yaml 的探活端口）→ 容器内反代 3080
       - "23079:3080"
