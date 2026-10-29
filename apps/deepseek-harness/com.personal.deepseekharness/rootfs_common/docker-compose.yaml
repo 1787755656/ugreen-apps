@@ -62,14 +62,16 @@ services:
       PROXY_PASSWORD: "{{ index .PROXY_PASSWORD 0 }}"
       #{{ end }}
     volumes:
-      # DSH 数据目录（容器内 /root/.dsh）：选了文件夹就绑它，留空用应用
-      # 安装目录内的 data 文件夹
+      # DSH 数据目录（容器内 /root/.dsh）：选了文件夹就绑它，留空用平台数据区。
+      # ⚠ 不能用应用安装目录内的相对路径（./data）：平台升级会替换整个安装目录，
+      #   数据会被清掉（2026-10-30 真机踩坑）。/volume1/@appdata/<appid>/ 是平台
+      #   持久数据区，升级与卸载（保留数据）都不动它；目录不存在时 docker 会自建。
       #{{ if .DSH_DATA }}
       - type: bind
         source: "{{ index .DSH_DATA 0 }}"
         target: /root/.dsh
       #{{ else }}
       - type: bind
-        source: ./data
+        source: "/volume1/@appdata/com.personal.deepseekharness/data"
         target: /root/.dsh
       #{{ end }}

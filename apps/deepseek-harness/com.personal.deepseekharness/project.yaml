@@ -58,8 +58,8 @@ tag_types:
 
 parameters:
   # DSH 数据目录（配置、会话、凭据，容器内 /root/.dsh）。
-  # 选填：留空用应用安装目录内 data/；手动 Docker 部署过 DSH 的可选旧
-  # 数据目录（挂载过 /root/.dsh 的那个）直接沿用会话与配置。
+  # 选填：留空用平台数据区 /volume1/@appdata/<appid>/data（升级、卸载保留）；
+  # 手动 Docker 部署过 DSH 的可选旧数据目录（挂载过 /root/.dsh 的那个）直接沿用。
   - key: DSH_DATA
     type: path
     multi: false
@@ -70,60 +70,64 @@ parameters:
         name: 数据目录
         description: >-
           存放 DSH 的配置、会话记录与凭据（对应容器内 /root/.dsh）。
-          留空则使用应用安装目录内的 data 文件夹。若你之前用 Docker 手动
-          部署过 DeepSeek Harness，想沿用旧数据，请选择旧容器挂载
-          /root/.dsh 的那个目录。安装或修改后请在应用中心
-          「停止 → 启动」一次使其生效。
+          留空则使用平台数据区（@appdata 下本应用的数据文件夹，升级、卸载
+          保留数据）。若你之前用 Docker 手动部署过 DeepSeek Harness，想沿用
+          旧数据，请选择旧容器挂载 /root/.dsh 的那个目录。安装或修改后请在
+          应用中心「停止 → 启动」一次使其生效。
       en-US:
         name: Data directory
         description: >-
           Stores DSH configuration, sessions and credentials (mounted as
-          /root/.dsh in the container). Leave empty to use the data folder
-          inside the app install directory. To reuse data from a previous
-          manual Docker deployment of DeepSeek Harness, pick the directory
-          that was mounted as /root/.dsh. Stop and start the app once after
-          install or change.
+          /root/.dsh in the container). Leave empty to use the platform data
+          folder (under @appdata, preserved across upgrades and uninstall).
+          To reuse data from a previous manual Docker deployment of DeepSeek
+          Harness, pick the directory that was mounted as /root/.dsh. Stop
+          and start the app once after install or change.
 
-  # 局域网口令（HTTP Basic Auth）用户名/密码，两个都填才启用（上游语义）。
+  # 局域网口令（HTTP Basic Auth）用户名/密码：安装必填（DSH 本身无登录体系，
+  # 这是页面的唯一一道闸；上游语义两个都有值才启用，故两个都设为必填）。
   - key: PROXY_USERNAME
     type: string
     multi: false
     changeable: true
-    required: false
+    required: true
     i18n:
       zh-CN:
-        name: 代理认证用户名（可选）
+        name: 访问用户名
         description: >-
-          访问页面的 HTTP Basic Auth 用户名。必须与下面的密码【同时填写】
-          才启用认证；任一留空则局域网内任何设备都能直接打开页面。
-          请避免使用英文引号。修改后需「停止 → 启动」一次生效。
+          打开 DSH 页面的 HTTP Basic 认证用户名（安装必填）。DSH 界面本身
+          没有登录体系，这道口令是页面的唯一防护，智能体会在容器内执行命令、
+          数据目录存有 API Key，请勿使用弱口令。请避免英文引号。
+          修改后需「停止 → 启动」一次生效。
       en-US:
-        name: Proxy auth username (optional)
+        name: Access username
         description: >-
-          HTTP Basic Auth username for the web page. Authentication is
-          enabled only when BOTH this and the password below are filled;
-          if either is empty, any device on the LAN can open the page.
-          Avoid English quotes. Stop and start the app once to apply.
+          HTTP Basic auth username for the DSH page (required at install).
+          The DSH UI has no login system of its own — this credential is the
+          only gate for the page. Agents run commands inside the container
+          and API keys live in the data directory; do not use a weak
+          password. Avoid English quotes. Stop and start the app once to
+          apply changes.
 
   - key: PROXY_PASSWORD
     type: password
     multi: false
     changeable: true
-    required: false
+    required: true
     i18n:
       zh-CN:
-        name: 代理认证密码（可选）
+        name: 访问密码
         description: >-
-          访问页面的 HTTP Basic Auth 密码。必须与用户名【同时填写】才启用
-          认证（对 HTTP 与 WebSocket 都生效）。请避免使用英文引号。
-          修改后需「停止 → 启动」一次生效。
+          打开 DSH 页面的 HTTP Basic 认证密码（安装必填，对 HTTP 与
+          WebSocket 都生效；浏览器会弹出登录框，凭据由浏览器记住）。
+          请避免英文引号。修改后需「停止 → 启动」一次生效。
       en-US:
-        name: Proxy auth password (optional)
+        name: Access password
         description: >-
-          HTTP Basic Auth password for the web page. Enabled only when
-          filled together with the username (applies to both HTTP and
-          WebSocket). Avoid English quotes. Stop and start the app once
-          to apply.
+          HTTP Basic auth password for the DSH page (required at install;
+          applies to both HTTP and WebSocket — the browser shows a login
+          prompt and remembers the credentials). Avoid English quotes.
+          Stop and start the app once to apply changes.
 
 i18n:
   zh-CN:
@@ -142,15 +146,16 @@ i18n:
       内置 pnpm 与 uv：dsh 插件市场（dsh plugin）和以 uvx/uv 方式启动的
       MCP server 均可开箱即用。
 
-      可选局域网口令：DSH 界面本身没有登录体系，如需防止局域网内其他
-      设备访问，请在应用「配置」里填写代理认证用户名与密码（两个都填
-      才启用，HTTP 与 WebSocket 都会要求认证）。智能体会在容器内执行
-      命令、数据目录存有 API Key，请不要将端口暴露到公网。
+      访问口令（安装时设置）：DSH 界面本身没有登录体系，打开页面需输入
+      安装时设置的 HTTP Basic 认证用户名与密码（HTTP 与 WebSocket 都要求
+      认证，浏览器会记住凭据）。智能体会在容器内执行命令、数据目录存有
+      API Key，请设置强口令，且不要将端口暴露到公网。
 
-      数据目录可在「配置」中指定：留空用应用目录内 data 文件夹；之前
-      手动 Docker 部署过 DSH 的可选旧数据目录沿用会话。修改配置或安装后
-      请在应用中心「停止 → 启动」一次。容器名 deepseek-harness：若之前
-      手动跑过同名或同端口的容器，请先停止并删除旧容器。
+      数据默认存放在平台数据区（升级、卸载保留）；也可在「配置」中指定
+      自定义目录：之前手动 Docker 部署过 DSH 的可选旧数据目录沿用会话。
+      修改配置或安装后请在应用中心「停止 → 启动」一次。容器名
+      deepseek-harness：若之前手动跑过同名或同端口的容器，请先停止并
+      删除旧容器。
     author: smanx
     official: https://github.com/smanx/deepseek-harness-docker
     help: https://github.com/deepseek-ai/deepseek-harness/discussions/1762
@@ -159,25 +164,25 @@ i18n:
   en-US:
     name: DeepSeek Harness
     description: >-
-      DeepSeek Harness (DSH) is the official AI agent workbench from
-      DeepSeek: drive agents, plugins and MCP tools from the browser.
-      This app bundles the official DSH package with a Node reverse proxy
-      (smanx/deepseek-harness, devtools-min variant) that exposes the
-      loopback-only DSH on port 23079, injects the browser polyfill
-      required on LAN IPs and forwards the realtime WebSocket channels.
+      DeepSeek Harness (DSH) is DeepSeek's official AI agent workbench:
+      drive agents, plugins and MCP tools from the browser. It bundles DSH
+      with a Node reverse proxy (smanx image, devtools-min variant) that
+      exposes the loopback-only DSH on port 23079, injects the
+      LAN-required browser polyfill and forwards the WebSocket channels.
 
-      Open the app and follow the first-run guide to set your model API
-      key. pnpm and uv are preinstalled, so the dsh plugin marketplace
-      and uvx-launched MCP servers work out of the box.
+      Open the app, enter the credentials set at install, then follow the
+      first-run guide to set your model API key. pnpm and uv are
+      preinstalled, so the dsh plugin marketplace and uvx-launched MCP
+      servers work out of the box.
 
-      The DSH UI has no login system. To keep other LAN devices out, set
-      the proxy auth username and password in the app settings (both
-      required). Agents run commands inside the container and API keys
-      live in the data directory - never expose this port to the
-      internet.
+      Access requires the HTTP Basic credentials set at install (the DSH
+      UI has no login system; browsers remember them). Agents run commands
+      inside the container and API keys live in the data directory - use a
+      strong password, never expose this port.
 
-      The data directory can be changed in the app settings to reuse a
-      previous manual deployment's /root/.dsh.
+      Data lives in the platform data folder and survives upgrades; a
+      custom directory (e.g. a previous manual deployment's /root/.dsh)
+      can be set in the app settings.
     author: smanx
     official: https://github.com/smanx/deepseek-harness-docker
     help: https://github.com/deepseek-ai/deepseek-harness/discussions/1762
