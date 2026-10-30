@@ -1290,6 +1290,35 @@
           "description": "选一个共享文件夹，1Panel 的面板数据和应用商店所装应用都存这里，选好即完成授权，文件管理器可见、方便备份。留空则使用应用自身的数据目录。修改此参数需要卸载后重新安装。"
         }
       ]
+    },
+    {
+      "appname": "com.personal.handbrakerk",
+      "display_name": "HandBrake 硬件转码版",
+      "description": "打了 Rockchip RKMPP 补丁的 HandBrake，视频编解码跑在 RK3588 的 VPU 上而不是 CPU 上。实测 60 秒 1080p 转 H.265：硬件 6.2 秒、CPU 占用 10.5 秒；同机 x265 veryfast 需要 85 秒、CPU 511 秒，快 13 倍以上。浏览器里就是完整的 HandBrake 图形界面（含简体中文），在「视频编码」下拉框选 H.265 (Rockchip MPP) 或 H.264 (Rockchip MPP) 即可，选了 MPP 编码器会自动连解码一起走硬件。另可开启监控目录自动转码：放进监控目录的视频，等文件大小稳定后自动转码输出。\n注意：仅支持 RK3588/RK3588S 机型；RK3588 编码单元只支持 8-bit H.264/H.265，没有 10-bit 和 AV1；硬件编码是恒定 QP，不看源码率，转出来有可能比源文件更大；缩放/滤镜跑在 CPU 上，请保持源分辨率、关掉降噪，自带预设（如 Fast 1080p30）会强制缩放。\n许可说明：镜像内 FFmpeg 因 rkmpp 以 GPLv3 编译，与 HandBrake 的 GPLv2-only 在分发层面存在许可冲突，详见 release 说明。",
+      "homepage_url": "https://club.ugnas.com/forum.php?mod=viewthread&tid=5909",
+      "updated_at": "2026-10-30",
+      "version": "1.0.0",
+      "upk_version": "1.0.0.0006",
+      "release_tag": "handbrakerk/1.0.0.0006",
+      "download_urls": {
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/handbrakerk/1.0.0.0006/arm64_com.personal.handbrakerk_1.0.0.0006.upk"
+      },
+      "service_port": 25800,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/handbrakerk-icon.png",
+      "download_count": 0,
+      "app_type": "docker",
+      "category": "media",
+      "platforms": [
+        "arm64"
+      ],
+      "post_install_note": "装好后先到应用中心「停止 → 启动」一次：平台先起服务、2~3 秒后才写授权目录，首次启动媒体目录是空的。浏览器打开 http://NAS_IP:25800，「视频编码」选 H.265 (Rockchip MPP) 即走硬件转码；想自动转码就在应用中心「配置」里开启监控目录（监控/输出目录必须位于媒体目录内部）。媒体目录可在「配置」里追加多个（最多 8 个）。",
+      "install_params": [
+        {
+          "key": "MEDIA_PATH",
+          "name": "媒体目录",
+          "description": "存放待转码视频的共享文件夹，选好即完成授权；之后可在应用中心「配置」里追加更多目录（最多 8 个）。目录会以完全相同的路径挂进容器，HandBrake 界面里看到的路径和文件管理器里一致。"
+        }
+      ]
     }
   ]
 }
