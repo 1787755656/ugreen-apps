@@ -155,17 +155,17 @@
       "display_name": "DeepSeek Harness",
       "description": "DeepSeek Harness（DSH）是 DeepSeek 官方的 AI agent 工作台：浏览器里 即可驱动智能体执行任务、管理插件与 MCP 工具。本应用内置 DSH 官方 npm 包与一层 Node 反向代理（镜像来自 smanx/deepseek-harness 的 devtools-min 变体）。\n反向代理解决的问题：DSH 官方出于安全只允许监听回环地址，代理将其 转发到局域网可达的端口（本应用为 23079），并自动注入局域网访问 必需的浏览器兼容补丁、转发实时通信的 WebSocket 通道——开箱即用， 打开即见 DSH 界面，首次使用按页面引导配置模型 API Key 即可。\n内置 pnpm 与 uv：dsh 插件市场（dsh plugin）和以 uvx/uv 方式启动的 MCP server 均可开箱即用。\n访问口令（安装时设置）：DSH 界面本身没有登录体系，打开页面需输入 安装时设置的 HTTP Basic 认证用户名与密码（HTTP 与 WebSocket 都要求 认证，浏览器会记住凭据）。智能体会在容器内执行命令、数据目录存有 API Key，请设置强口令，且不要将端口暴露到公网。\n数据默认存放在平台数据区（升级、卸载保留）；也可在「配置」中指定 自定义目录：之前手动 Docker 部署过 DSH 的可选旧数据目录沿用会话。 修改配置或安装后请在应用中心「停止 → 启动」一次。容器名 deepseek-harness：若之前手动跑过同名或同端口的容器，请先停止并 删除旧容器。",
       "homepage_url": "https://hub.docker.com/r/smanx/deepseek-harness",
-      "updated_at": "2026-10-29",
+      "updated_at": "2026-10-30",
       "version": "0.2.1",
-      "upk_version": "0.2.1.0004",
-      "release_tag": "deepseek-harness/v0.2.1-rc.4-r3",
+      "upk_version": "0.2.1.0005",
+      "release_tag": "deepseek-harness/v0.2.1-rc.5",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/deepseek-harness/v0.2.1-rc.4-r3/amd64_nasync_com.personal.deepseekharness_0.2.1.0004.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/deepseek-harness/v0.2.1-rc.4-r3/arm64_nasync_com.personal.deepseekharness_0.2.1.0004.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/deepseek-harness/v0.2.1-rc.5/amd64_nasync_com.personal.deepseekharness_0.2.1.0005.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/deepseek-harness/v0.2.1-rc.5/arm64_nasync_com.personal.deepseekharness_0.2.1.0005.upk"
       },
       "service_port": 23079,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/deepseek-harness/com.personal.deepseekharness/rootfs_common/icon.png",
-      "download_count": 3,
+      "download_count": 0,
       "app_type": "docker",
       "category": "system",
       "platforms": [
