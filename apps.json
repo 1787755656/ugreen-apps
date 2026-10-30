@@ -923,15 +923,15 @@
       "homepage_url": "https://github.com/Wei-Shaw/sub2api",
       "updated_at": "2026-10-30",
       "version": "1.2.19",
-      "upk_version": "1.2.19.0013",
-      "release_tag": "sub2api/v0.2.19-r1",
+      "upk_version": "1.2.19.0014",
+      "release_tag": "sub2api/v0.2.19-r2",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/sub2api/v0.2.19-r1/amd64_nasync_com.personal.sub2api_1.2.19.0013.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/sub2api/v0.2.19-r1/arm64_nasync_com.personal.sub2api_1.2.19.0013.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/sub2api/v0.2.19-r2/amd64_nasync_com.personal.sub2api_1.2.19.0014.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/sub2api/v0.2.19-r2/arm64_nasync_com.personal.sub2api_1.2.19.0014.upk"
       },
       "service_port": 25435,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/sub2api/com.personal.sub2api/rootfs_common/icon.png",
-      "download_count": 2,
+      "download_count": 0,
       "app_type": "native",
       "category": "system",
       "platforms": [
