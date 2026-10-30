@@ -1296,12 +1296,12 @@
       "display_name": "HandBrake 硬件转码版",
       "description": "打了 Rockchip RKMPP 补丁的 HandBrake，视频编解码跑在 RK3588 的 VPU 上而不是 CPU 上。实测 60 秒 1080p 转 H.265：硬件 6.2 秒、CPU 占用 10.5 秒；同机 x265 veryfast 需要 85 秒、CPU 511 秒，快 13 倍以上。浏览器里就是完整的 HandBrake 图形界面（含简体中文），在「视频编码」下拉框选 H.265 (Rockchip MPP) 或 H.264 (Rockchip MPP) 即可，选了 MPP 编码器会自动连解码一起走硬件。另可开启监控目录自动转码：放进监控目录的视频，等文件大小稳定后自动转码输出。\n注意：仅支持 RK3588/RK3588S 机型；RK3588 编码单元只支持 8-bit H.264/H.265，没有 10-bit 和 AV1；硬件编码是恒定 QP，不看源码率，转出来有可能比源文件更大；缩放/滤镜跑在 CPU 上，请保持源分辨率、关掉降噪，自带预设（如 Fast 1080p30）会强制缩放。\n许可说明：镜像内 FFmpeg 因 rkmpp 以 GPLv3 编译，与 HandBrake 的 GPLv2-only 在分发层面存在许可冲突，详见 release 说明。",
       "homepage_url": "https://club.ugnas.com/forum.php?mod=viewthread&tid=5909",
-      "updated_at": "2026-10-30",
+      "updated_at": "2026-10-31",
       "version": "1.0.0",
-      "upk_version": "1.0.0.0006",
-      "release_tag": "handbrakerk/1.0.0.0006",
+      "upk_version": "1.0.0.0007",
+      "release_tag": "handbrakerk/1.0.0.0007",
       "download_urls": {
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/handbrakerk/1.0.0.0006/arm64_com.personal.handbrakerk_1.0.0.0006.upk"
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/handbrakerk/1.0.0.0007/arm64_nasync_com.personal.handbrakerk_1.0.0.0007.upk"
       },
       "service_port": 25800,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/handbrakerk-icon.png",
