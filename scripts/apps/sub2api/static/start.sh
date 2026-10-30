@@ -19,6 +19,11 @@
 
 set -u
 
+# UGOS 固件经 systemd DefaultEnvironment 给所有服务注入 GODEBUG=tlskyber=0；
+# Go 1.27+ 对已移除的 tlskyber 项直接 fatal（上游 0.2.x 起二进制用 Go 1.27
+# 编译，真机 2026-10-31 无限重启实锤），启动前整体剥离。对旧 Go 二进制无害。
+unset GODEBUG
+
 APP_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 
 DEFAULT_DIR="${UGAPP_DATA_DIR:-${APP_ROOT}/data}"
