@@ -23,14 +23,21 @@ fi
 # ugcli 对 version 有个没写进文档的校验：minor 与 patch 都【最多两位】。
 # 上游 patch 会到三位（0.1.173 之类），直接写进 project.yaml 会撞校验。
 #
-# 映射规则（用户 2026-08-09 拍板）：把 patch 的超出部分【往前挪一位】，
-# 即把 patch 的首位（百位）拼接到 minor 末尾，patch 只保留末两位：
-#   0.1.9   → 0.1.9     （patch 一位，不需挪）
-#   0.1.40  → 0.1.40    （patch 两位，不需挪）
-#   0.1.173 → 0.11.73   （patch 首位 1 拼进 minor → 11）
-#   0.2.173 → 0.21.73   （同上）
-# 这样 minor / patch 都保持最多两位，且同一 upstream 版本永远映射到同一
-# 个 project version（确定性，git tag 去重才不会误判）。
+# 映射规则（2026-10-30 修订）：应用 major = 上游 major + 1，minor/patch 原样
+# 保留；patch 到三位时仍把首位（百位）拼进 minor 末尾：
+#   0.2.19  → 1.2.19    （major+1，其余原样）
+#   0.3.0   → 1.3.0     （跨上游 minor 仍单调）
+#   0.2.173 → 1.21.73   （patch 首位 1 拼进 minor → 21）
+#
+# 为什么 major+1：旧规则（major 原样，patch 前移）在 2026-10 翻车——上游
+# 0.1.173~0.1.185 期间 patch 前移把 minor 抬到 11（0.1.176 → 0.11.76），
+# 上游随后进 0.2.x（patch 两位内不映射），应用版本从 0.11.x 掉回 0.2.x，
+# 数值倒挂后商店更新判定（upk_version 逐段比较）永远认为 0.11.76 更新，
+# 8 月初装机的那批用户从此收不到任何更新（真机 0.11.76.0002 实锤）。
+# major+1 让 1.2.x 同时大于受灾的 0.11.x 和现役的 0.2.x，两批用户都能收到更新。
+# 已知局限：上游在同一 minor 里 patch 冲上 100 且之后才 bump minor 时
+# （如 0.2.173 → 1.21.73，再来 0.3.0 → 1.3.0）会再次倒挂，届时再按同样
+# 思路抬 major；upstream 版本空间大于 x.y.z 可编码空间，完美映射不存在。
 if ! [[ "$VERSION" =~ ^[0-9]+(\.[0-9]+){1,2}$ ]]; then
   echo "VERSION '$VERSION' 不是 x.y 或 x.y.z 形态" >&2
   exit 1
@@ -38,17 +45,18 @@ fi
 
 IFS=. read -r MAJOR MINOR PATCH <<<"$VERSION"
 PATCH="${PATCH:-0}"
+APP_MAJOR=$((MAJOR + 1))
 if [ "${#PATCH}" -gt 2 ]; then
   LEAD="${PATCH%??}"         # patch 去除末两位后的首部（如 173 → 1）
-  PATCH2="${PATCH: -2}"      # 末两位（如 173 → 73）
+  PATCH2="$((10#${PATCH: -2}))"  # 末两位转十进制，顺带剥前导零（100 → 0 而非 "00"）
   NEW_MINOR="${MINOR}${LEAD}"
   if [ "${#NEW_MINOR}" -gt 2 ]; then
     echo "PROJECT_VERSION 无法映射：${MINOR} 拼上 ${LEAD} 后 minor 超两位，请手动调版本" >&2
     exit 1
   fi
-  PROJECT_VERSION="${MAJOR}.${NEW_MINOR}.${PATCH2}"
+  PROJECT_VERSION="${APP_MAJOR}.${NEW_MINOR}.${PATCH2}"
 else
-  PROJECT_VERSION="${MAJOR}.${MINOR}.${PATCH}"
+  PROJECT_VERSION="${APP_MAJOR}.${MINOR}.${PATCH}"
 fi
 
 # 双重保险：最终值再验一遍 x.y.z 且 y/z 都不超过两位。
