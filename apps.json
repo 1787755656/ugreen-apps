@@ -922,12 +922,12 @@
       "description": "AI 接口中转站（API Gateway）。把你的各大 LLM 服务商 key 统一管起来， 通过一个 OpenAI 兼容的地址对外提供接入，内置用量统计、配额限制、 多用户管理、WebAuthn 登录等。自带管理界面与账号体系。 需要本机已安装 PostgreSQL 15+ 与 Redis 7+。首次启动请在浏览器中完成初始化向导。",
       "homepage_url": "https://github.com/Wei-Shaw/sub2api",
       "updated_at": "2026-10-30",
-      "version": "1.2.19",
-      "upk_version": "1.2.19.0014",
-      "release_tag": "sub2api/v0.2.19-r2",
+      "version": "0.2.19",
+      "upk_version": "0.2.19.0015",
+      "release_tag": "sub2api/v0.2.19-r3",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/sub2api/v0.2.19-r2/amd64_nasync_com.personal.sub2api_1.2.19.0014.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/sub2api/v0.2.19-r2/arm64_nasync_com.personal.sub2api_1.2.19.0014.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/sub2api/v0.2.19-r3/amd64_nasync_com.personal.sub2api_0.2.19.0015.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/sub2api/v0.2.19-r3/arm64_nasync_com.personal.sub2api_0.2.19.0015.upk"
       },
       "service_port": 25435,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/sub2api/com.personal.sub2api/rootfs_common/icon.png",
