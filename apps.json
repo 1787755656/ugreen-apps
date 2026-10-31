@@ -600,6 +600,36 @@
       "install_params": null
     },
     {
+      "appname": "com.personal.navidrome",
+      "display_name": "Navidrome 音乐服务器",
+      "description": "Navidrome 是一个开源（GPL-3.0）的自托管音乐流媒体服务器：扫描 NAS 上的本地音乐库（MP3/FLAC/WAV/APE/ALAC/DSF 等几乎所有格式），提供 内嵌网页播放器与完整 Subsonic/OpenSubsonic API，音流、Symfonium、 play:Sub、Feishin 等手机/桌面客户端可直接连接。本包捆绑双架构 ffmpeg/ffprobe，实时转码与音频探测开箱即用；转码与封面缓存写入 应用缓存目录。安装时选择音乐库目录即可。首次打开网页会提示创建 管理员账号（先到先得，装完请立即访问并设置强密码）。默认端口 24533（非上游默认 4533，避免与用户自装的 Docker 版冲突）。艺术家 资料、Last.fm/ListenBrainz 听歌记录等外部服务需要联网，可在设置 中关闭。",
+      "homepage_url": "https://www.navidrome.org",
+      "updated_at": "2026-10-31",
+      "version": "0.64.2",
+      "upk_version": "0.64.2.0004",
+      "release_tag": "navidrome/v0.64.2-r4",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/navidrome/v0.64.2-r4/amd64_nasync_com.personal.navidrome_0.64.2.0004.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/navidrome/v0.64.2-r4/arm64_nasync_com.personal.navidrome_0.64.2.0004.upk"
+      },
+      "service_port": 24533,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/navidrome/com.personal.navidrome/rootfs_common/icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "media",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ],
+      "install_params": [
+        {
+          "key": "MUSIC_DIR",
+          "name": "音乐库目录",
+          "description": "选择存放音乐文件的共享文件夹，选择即完成沙箱读写授权，支持 MP3/FLAC/WAV/APE/ALAC/DSF 等几乎所有音频格式。可留空（使用 共享目录）。音乐库以首次成功启动时为准，之后可在 Navidrome 网页的设置里添加或调整音乐文件夹。"
+        }
+      ]
+    },
+    {
       "appname": "com.personal.nm3u8dlre",
       "display_name": "m3u8下载器 (N_m3u8DL-RE)",
       "description": "把开源工具 N_m3u8DL-RE 做成绿联 NAS 上的可视化流媒体下载器，粘贴 m3u8 / DASH / MSS 链接就能下载，不用开电脑也不用记命令。任务进度、速度、分片数、 剩余时间通过轮询引擎日志实时刷新，多端打开看到的是同一份状态。 支持点播与直播录制、多线程分片下载、自动挑选最佳音视频、AES 解密、 字幕单独下载，完成后可自动混流成 mp4 或 mkv（包内自带静态 ffmpeg， 不依赖系统）。引擎的全部命令行参数都做成了中文表单，勾选即可。 已下载文件按任务归类，可以在应用里直接下载回电脑，也可以在文件管理器中定位。 核心引擎支持在应用内一键升级到上游最新版，不影响已有任务。 使用前请在应用设置里选择下载目录，应用只能访问选中的文件夹。 仅供学习与技术研究，请只下载拥有合法权限的内容。",
@@ -1372,36 +1402,6 @@
           "key": "AELLUS_SAVE_DIR",
           "name": "文件保存目录",
           "description": "上传的文件存到这个共享文件夹（会在里面按设备名建子目录），选中即授权本应用读写。留空则存到应用私有目录，文件管理器里看不到。装好或改完请「停止 → 启动」一次。"
-        }
-      ]
-    },
-    {
-      "appname": "com.personal.navidrome",
-      "display_name": "Navidrome 音乐服务器",
-      "description": "Navidrome 是一个开源（GPL-3.0）的自托管音乐流媒体服务器：扫描 NAS 上的本地音乐库（MP3/FLAC/WAV/APE/ALAC/DSF 等几乎所有格式），提供 内嵌网页播放器与完整 Subsonic/OpenSubsonic API，音流、Symfonium、 play:Sub、Feishin 等手机/桌面客户端可直接连接。本包捆绑双架构 ffmpeg/ffprobe，实时转码与音频探测开箱即用；转码与封面缓存写入 应用缓存目录。安装时选择音乐库目录即可。首次打开网页会提示创建 管理员账号（先到先得，装完请立即访问并设置强密码）。默认端口 24533（非上游默认 4533，避免与用户自装的 Docker 版冲突）。艺术家 资料、Last.fm/ListenBrainz 听歌记录等外部服务需要联网，可在设置 中关闭。",
-      "homepage_url": "https://www.navidrome.org",
-      "updated_at": "2026-10-31",
-      "version": "0.64.2",
-      "upk_version": "0.64.2.0004",
-      "release_tag": "navidrome/v0.64.2-r4",
-      "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/navidrome/v0.64.2-r4/amd64_nasync_com.personal.navidrome_0.64.2.0004.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/navidrome/v0.64.2-r4/arm64_nasync_com.personal.navidrome_0.64.2.0004.upk"
-      },
-      "service_port": 24533,
-      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/navidrome/com.personal.navidrome/rootfs_common/icon.png",
-      "download_count": 0,
-      "app_type": "native",
-      "category": "media",
-      "platforms": [
-        "amd64",
-        "arm64"
-      ],
-      "install_params": [
-        {
-          "key": "MUSIC_DIR",
-          "name": "音乐库目录",
-          "description": "选择存放音乐文件的共享文件夹，选择即完成沙箱读写授权，支持 MP3/FLAC/WAV/APE/ALAC/DSF 等几乎所有音频格式。可留空（使用 共享目录）。音乐库以首次成功启动时为准，之后可在 Navidrome 网页的设置里添加或调整音乐文件夹。"
         }
       ]
     }
