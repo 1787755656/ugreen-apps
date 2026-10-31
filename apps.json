@@ -634,13 +634,13 @@
       "display_name": "Navidrome 音乐服务器",
       "description": "Navidrome 是一个开源（GPL-3.0）的自托管音乐流媒体服务器：扫描 NAS 上的本地音乐库（MP3/FLAC/WAV/APE/ALAC/DSF 等几乎所有格式），提供 内嵌网页播放器与完整 Subsonic/OpenSubsonic API，音流、Symfonium、 play:Sub、Feishin 等手机/桌面客户端可直接连接。本包捆绑双架构 ffmpeg/ffprobe，实时转码与音频探测开箱即用；转码与封面缓存写入 应用缓存目录。安装时选择音乐库目录即可。首次打开网页会提示创建 管理员账号（先到先得，装完请立即访问并设置强密码）。默认端口 24533（非上游默认 4533，避免与用户自装的 Docker 版冲突）。艺术家 资料、Last.fm/ListenBrainz 听歌记录等外部服务需要联网，可在设置 中关闭。",
       "homepage_url": "https://www.navidrome.org",
-      "updated_at": "2026-10-31",
+      "updated_at": "2026-11-01",
       "version": "0.64.2",
-      "upk_version": "0.64.2.0004",
-      "release_tag": "navidrome/v0.64.2-r4",
+      "upk_version": "0.64.2.0005",
+      "release_tag": "navidrome/v0.64.2-r5",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/navidrome/v0.64.2-r4/amd64_nasync_com.personal.navidrome_0.64.2.0004.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/navidrome/v0.64.2-r4/arm64_nasync_com.personal.navidrome_0.64.2.0004.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/navidrome/v0.64.2-r5/amd64_nasync_com.personal.navidrome_0.64.2.0005.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/navidrome/v0.64.2-r5/arm64_nasync_com.personal.navidrome_0.64.2.0005.upk"
       },
       "service_port": 24533,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/navidrome/com.personal.navidrome/rootfs_common/icon.png",
