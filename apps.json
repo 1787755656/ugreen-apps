@@ -644,11 +644,7 @@
       },
       "service_port": 24533,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/navidrome/com.personal.navidrome/rootfs_common/icon.png",
-<<<<<<< Updated upstream
-      "download_count": 0,
-=======
       "download_count": 3,
->>>>>>> Stashed changes
       "app_type": "native",
       "category": "media",
       "platforms": [
