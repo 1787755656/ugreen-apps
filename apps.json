@@ -61,6 +61,36 @@
       ]
     },
     {
+      "appname": "com.personal.chromium",
+      "display_name": "Chromium 浏览器",
+      "description": "把完整的桌面版 Chromium 搬进 NAS:点开应用就是浏览器,书签、扩展、登录态都 存在 NAS 上,换台设备接着用。自带登录页保护(安装时设用户名密码),支持网页 声音、页面自带文件管理器,可映射 NAS 目录当下载盘,内置中文字体。可配置专属 窗口模式,把 NAS 变成某个 Web 应用的专用入口。基于 jlesage/docker-chromium 上游镜像打包。",
+      "homepage_url": "https://github.com/jlesage/docker-chromium",
+      "updated_at": "2026-10-31",
+      "version": "26.10.1",
+      "upk_version": "26.10.1.0001",
+      "release_tag": "chromium/v26.10.1",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/chromium/v26.10.1/amd64_nasync_com.personal.chromium_26.10.1.0001.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/chromium/v26.10.1/arm64_nasync_com.personal.chromium_26.10.1.0001.upk"
+      },
+      "service_port": 25900,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/chromium/com.personal.chromium/rootfs_common/icon.png",
+      "download_count": 0,
+      "app_type": "docker",
+      "category": "system",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ],
+      "install_params": [
+        {
+          "key": "DOWNLOAD_PATH",
+          "name": "下载目录",
+          "description": "选填。映射进容器(路径与 NAS 上一致),Chromium 里下载的文件选这个目录保存, 文件管理器里直接可见。不填则只能通过页面自带的文件管理器取文件。"
+        }
+      ]
+    },
+    {
       "appname": "com.personal.clouddl",
       "display_name": "多网盘下载器 (Cloud Drive Downloader)",
       "description": "把百度网盘、夸克网盘和阿里云盘里的文件直接下载到 NAS 上，不经过电脑中转。\n在应用里浏览网盘目录、搜索文件，单个文件或整个文件夹都能下载， 文件夹会保持原有的多级目录结构。下载走标准 HTTP 分片， 分片大小、每个文件的连接数、同时下载的任务数、总限速都可以自己调， 任务列表实时显示速度和预计剩余时间。\n还有一些省心的小设计：可以只在指定时段下载；磁盘可用空间低于设定值时 任务自动暂停、空间恢复后继续；重名文件可以选择报错、重命名、覆盖或跳过； 日志能在界面上直接看，导出诊断包时会自动抹掉凭据和下载链接。\n使用前需要在「设置 - 账号与凭据」里填入对应网盘的登录凭据 （百度是 BDUSS + STOKEN，夸克是 Cookie，阿里云盘可以直接 App 扫码）。 凭据只保存在这台 NAS 上。\n注意：本应用不是百度网盘、夸克网盘或阿里云盘的官方产品，用的是第三方接口， 对方随时可能调整限速或风控策略，请自行承担账号风险， 并确保下载的内容你有合法的使用权。\n本应用由 xiaocheng154 的开源项目 nas-cloud-downloader 移植而来（已修改： 适配绿联的应用沙箱与登录认证），原项目地址见\"源代码\"链接。",
@@ -614,7 +644,11 @@
       },
       "service_port": 24533,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/navidrome/com.personal.navidrome/rootfs_common/icon.png",
+<<<<<<< Updated upstream
       "download_count": 0,
+=======
+      "download_count": 3,
+>>>>>>> Stashed changes
       "app_type": "native",
       "category": "media",
       "platforms": [

@@ -1,0 +1,186 @@
+# ============================================================
+# Chromium — UGOS Pro Docker 应用
+#
+# 上游: https://github.com/jlesage/docker-chromium (jlesage)
+# 镜像: jlesage/chromium:v26.10.1 (alpine, jlesage/baseimage-gui v4, noVNC)
+# 形态: Docker 型应用, tab 直连容器 5800 端口,浏览器里就是完整 Chromium 桌面。
+#
+# 版本对应: 上游 release v26.10.1 ↔ Docker tag v26.10.1 ↔ project.yaml 26.10.1
+#
+# 安全设计:
+#   - 页面绑 0.0.0.0(Docker 应用只能 tab),必须开 jlesage 自带的
+#     WEB_AUTHENTICATION 登录页;HTTP 明文故开 ALLOW_INSECURE(局域网场景)。
+#   - 不开 SYS_ADMIN/privileged:Chromium 自身沙箱按上游默认关闭。
+#   - WEB_TERMINAL 保持 0(不开网页终端)。
+#
+# compose 模板三约束(详见 ugos-pro-app-dev skill references/docker-apps.md):
+#   1. 这是 Go text/template:参数值一律列表,用 {{ index .X 0 }};选填参数必须 {{ if }} 守卫。
+#   2. 控制语法不能独立成行,挂在 # 注释位(YAML 当注释、模板照常执行)。
+#   3. 整个文件禁止出现 $ugcli 会扫描 $VAR,选填变量 check 直接拒;TZ 只能 {{.TZ}}。
+# ============================================================
+
+spec_version: "2.1"
+
+app_id: com.personal.chromium
+
+# 上游 release v26.10.1(2026-10-28,Chromium 155.0.8059.84)
+version: 26.10.1
+
+support_arch:
+  - amd64
+  - arm64
+
+supports:
+  - pc
+  - app
+
+is_docker_app: true
+
+depend_docker_version: 1.7.0.0000
+depend_fw_version: 1.13.0.0000
+
+# 宿主侧端口 25900 → 容器 5800。刻意不用上游默认 5800:用户可能同时跑着
+# 其它 jlesage 系列 Docker 容器(HandBrake 打包占 25800,同理避让)。
+port: 25900
+
+# Docker 应用只能 tab:浏览器直连容器端口
+open_type: tab
+
+tag_types:
+  - utility
+
+support_migration: true
+
+parameters:
+  - key: AUTH_PASSWORD
+    type: string
+    required: true
+    changeable: true
+    i18n:
+      zh-CN:
+        name: 登录密码
+        description: >-
+          打开应用页面时要输入的密码(必填)。页面在局域网上开放,没有这层登录的话
+          同网段任何设备都能用这台 NAS 上网、碰内网设备。走局域网 HTTP,介意明文
+          可后续自己加反向代理。注意:请避免使用英文双引号和反斜杠字符
+          (会破坏部署配置的渲染)。
+      en-US:
+        name: Login password
+        description: >-
+          Password for the login page (required). The page is reachable from the
+          whole LAN; without it any device on the network could browse from this
+          NAS. Sent over plain HTTP on the LAN. Avoid double quotes and
+          backslashes (they break the deployment config rendering).
+
+  - key: AUTH_USERNAME
+    type: string
+    required: false
+    changeable: true
+    i18n:
+      zh-CN:
+        name: 登录用户名
+        description: 留空为 admin。
+      en-US:
+        name: Login username
+        description: Defaults to admin.
+
+  - key: DOWNLOAD_PATH
+    type: path
+    multi: false
+    required: false
+    i18n:
+      zh-CN:
+        name: 下载目录
+        description: >-
+          选填。映射进容器(路径与 NAS 上一致),Chromium 里下载的文件选这个目录保存,
+          文件管理器里直接可见。不填则只能通过页面自带的文件管理器取文件。
+      en-US:
+        name: Downloads folder
+        description: >-
+          Optional. Mounted into the container at the identical path; pick it as
+          the download target in Chromium and files show up in the NAS file
+          manager. If left empty, fetch files via the built-in web file manager.
+
+  - key: APP_URL
+    type: string
+    required: false
+    changeable: true
+    i18n:
+      zh-CN:
+        name: 专属窗口网址
+        description: >-
+          选填。填一个网址(如 https://music.example.com)则启动时只开这个站点的
+          简化窗口(无地址栏/标签页),把 NAS 变成某个 Web 应用的专用入口。留空是
+          带地址栏的完整浏览器。
+      en-US:
+        name: App-mode URL
+        description: >-
+          Optional. If set (e.g. https://app.example.com), Chromium starts in a
+          minimalist window for that site only (no address bar or tabs) - a
+          dedicated portal for one web app. Empty for a full browser.
+
+  - key: UI_LANG
+    type: string
+    required: false
+    changeable: true
+    i18n:
+      zh-CN:
+        name: 浏览器界面语言
+        description: 留空为 zh_CN.UTF-8。若镜像未带对应语言包则界面回退英文,也可进 Chromium 设置里改。
+      en-US:
+        name: Browser UI language
+        description: Defaults to zh_CN.UTF-8. Falls back to English if the locale pack is missing.
+
+  - key: ALPINE_MIRROR
+    type: string
+    required: false
+    changeable: true
+    i18n:
+      zh-CN:
+        name: Alpine 软件源镜像
+        description: >-
+          首次启动会在线安装中文字体,默认走中科大镜像(https://mirrors.ustc.edu.cn/alpine),
+          国内更快更稳。NAS 在境外可改回官方 https://dl-cdn.alpinelinux.org/alpine。
+      en-US:
+        name: Alpine mirror
+        description: >-
+          The CJK font is installed at first start. Defaults to the USTC mirror,
+          fast in China. Set to https://dl-cdn.alpinelinux.org/alpine elsewhere.
+
+i18n:
+  zh-CN:
+    name: Chromium 浏览器
+    description: >-
+      把完整的桌面版 Chromium 搬进 NAS:点开应用就是浏览器,书签、扩展、登录态都
+      存在 NAS 上,换台设备接着用。自带登录页保护(安装时设用户名密码),支持网页
+      声音、页面自带文件管理器,可映射 NAS 目录当下载盘,内置中文字体。可配置专属
+      窗口模式,把 NAS 变成某个 Web 应用的专用入口。基于 jlesage/docker-chromium
+      上游镜像打包。
+    author: Jocelyn LeSage (jlesage)
+    official: https://github.com/jlesage/docker-chromium
+    help: https://github.com/jlesage/docker-chromium/issues
+    publisher: 穿斯帕沃特
+    publisher_link: https://club.ugnas.com/
+  en-US:
+    name: Chromium Browser
+    description: >-
+      Full desktop Chromium running on the NAS: bookmarks, extensions and logins
+      stay on the NAS and follow you across devices. Login-protected page
+      (credentials set at install), web audio, built-in file manager, optional
+      NAS folder as download target, CJK fonts included, and an optional
+      app-mode window that turns the NAS into a dedicated portal for one web
+      app. Packaged from the jlesage/docker-chromium upstream image.
+    author: Jocelyn LeSage (jlesage)
+    official: https://github.com/jlesage/docker-chromium
+    help: https://github.com/jlesage/docker-chromium/issues
+    publisher: ChuanSipaWote
+    publisher_link: https://club.ugnas.com/
+
+# 合规:docker 工程本身 MIT,Chromium 为 BSD 等多许可
+license_agreement_link:
+  - https://github.com/jlesage/docker-chromium/blob/master/LICENSE
+  - https://source.chromium.org/chromium/chromium/src/+/main:LICENSE
+source_code_link:
+  - https://github.com/jlesage/docker-chromium
+technical_support_link:
+  - https://github.com/jlesage/docker-chromium/issues
