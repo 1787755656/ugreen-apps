@@ -1343,6 +1343,37 @@
           "description": "存放待转码视频的共享文件夹，选好即完成授权；之后可在应用中心「配置」里追加更多目录（最多 8 个）。目录会以完全相同的路径挂进容器，HandBrake 界面里看到的路径和文件管理器里一致。"
         }
       ]
+    },
+    {
+      "appname": "com.personal.aellus",
+      "display_name": "Aellus 局域网传输",
+      "description": "把 NAS 变成一个「扫码即传」的局域网文件中转站：手机、平板、电脑用浏览器直连，上传 / 浏览 / 下载都不经过任何中转服务器，也不消耗流量。上传时填一次设备名就会记住，文件按「保存目录/设备名/」归档并带微秒时间戳，永不覆盖；图片视频可在线预览，单个文件能弹二维码让手机扫码直接下载，多选或整个目录一键打包 zip。\n端口 25115 在局域网内直接可达（这正是它的用法），删除文件与修改保存目录只对 NAS 本机发起的请求开放，其它设备只能浏览、上传和下载。",
+      "homepage_url": "https://github.com/YGQ8988/Aellus",
+      "updated_at": "2026-10-31",
+      "version": "1.0.6",
+      "upk_version": "1.0.6.0001",
+      "release_tag": "aellus/1.0.6.0001",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/aellus/1.0.6.0001/amd64_nasync_com.personal.aellus_1.0.6.0001.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/aellus/1.0.6.0001/arm64_nasync_com.personal.aellus_1.0.6.0001.upk"
+      },
+      "service_port": 25115,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/aellus-icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "utility",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ],
+      "post_install_note": "装好后到应用中心「配置」里选一个「文件保存目录」（选中即授权，文件管理器里能看到），再「停止 → 启动」一次——首次启动读到的安装参数一定是空的（平台先起服务、2~3 秒后才写参数）。留空则文件落在应用私有目录，文件管理器里看不到。删除文件 / 修改保存目录只能在 NAS 本机操作：浏览器直连端口没有身份注入，这是上游对裸端口入口的设计。",
+      "install_params": [
+        {
+          "key": "AELLUS_SAVE_DIR",
+          "name": "文件保存目录",
+          "description": "上传的文件存到这个共享文件夹（会在里面按设备名建子目录），选中即授权本应用读写。留空则存到应用私有目录，文件管理器里看不到。装好或改完请「停止 → 启动」一次。"
+        }
+      ]
     }
   ]
 }
