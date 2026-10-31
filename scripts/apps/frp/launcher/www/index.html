@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FRP 内网穿透管理</title>
+<link rel="icon" href="/favicon.ico">
+<style>
+  :root {
+    --bg: #0f172a; --panel: #1e293b; --panel2: #16223a; --line: #334155;
+    --text: #e2e8f0; --muted: #94a3b8; --accent: #38bdf8; --green: #22c55e;
+    --red: #ef4444; --amber: #f59e0b; --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 14px/1.6 -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  }
+  header {
+    display: flex; align-items: center; gap: 12px; padding: 14px 20px;
+    border-bottom: 1px solid var(--line); flex-wrap: wrap;
+  }
+  header h1 { font-size: 17px; margin: 0; font-weight: 600; }
+  header .spacer { flex: 1; }
+  .chip {
+    font-size: 12px; padding: 2px 10px; border-radius: 999px;
+    border: 1px solid var(--line); color: var(--muted); white-space: nowrap;
+  }
+  button {
+    background: #273449; color: var(--text); border: 1px solid var(--line);
+    border-radius: 8px; padding: 6px 14px; font-size: 13px; cursor: pointer;
+  }
+  button:hover { border-color: var(--accent); }
+  button:disabled { opacity: .45; cursor: not-allowed; }
+  button.primary { background: #0c4a6e; border-color: #0369a1; }
+  button.danger { background: #7f1d1d; border-color: #991b1b; }
+  input[type=password] {
+    background: var(--panel2); border: 1px solid var(--line); color: var(--text);
+    border-radius: 8px; padding: 8px 12px; font-size: 14px; width: 100%;
+  }
+  main { padding: 18px 20px 60px; max-width: 1400px; margin: 0 auto; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 1000px) { .grid { grid-template-columns: 1fr; } }
+  .card {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+    padding: 16px; display: flex; flex-direction: column; gap: 12px;
+  }
+  .card h2 { margin: 0; font-size: 15px; display: flex; align-items: center; gap: 8px; }
+  .card h2 .sub { font-size: 12px; color: var(--muted); font-weight: 400; }
+  .row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .state { font-size: 12px; padding: 2px 10px; border-radius: 999px; }
+  .state.run { background: rgba(34,197,94,.15); color: var(--green); }
+  .state.off { background: rgba(148,163,184,.12); color: var(--muted); }
+  .state.err { background: rgba(239,68,68,.15); color: var(--red); }
+  .state.pend { background: rgba(245,158,11,.15); color: var(--amber); }
+  .switch { position: relative; width: 40px; height: 22px; flex: none; cursor: pointer; }
+  .switch input { display: none; }
+  .switch .track {
+    position: absolute; inset: 0; border-radius: 999px; background: #334155; transition: .15s;
+  }
+  .switch .knob {
+    position: absolute; top: 2px; left: 2px; width: 18px; height: 18px;
+    border-radius: 50%; background: #cbd5e1; transition: .15s;
+  }
+  .switch input:checked + .track { background: #0369a1; }
+  .switch input:checked + .track .knob { left: 20px; background: #fff; }
+  textarea {
+    width: 100%; min-height: 300px; resize: vertical; background: #0b1220;
+    color: #d8e2f0; border: 1px solid var(--line); border-radius: 8px;
+    font-family: var(--mono); font-size: 12.5px; line-height: 1.5; padding: 10px;
+    white-space: pre; tab-size: 2;
+  }
+  textarea:focus { outline: 1px solid var(--accent); }
+  pre.log {
+    background: #0b1220; border: 1px solid var(--line); border-radius: 8px;
+    max-height: 260px; overflow: auto; margin: 0; padding: 10px;
+    font-family: var(--mono); font-size: 11.5px; line-height: 1.5;
+    color: #b8c4d8; white-space: pre-wrap; word-break: break-all;
+  }
+  .banner {
+    font-size: 12.5px; border-radius: 8px; padding: 8px 12px; display: none;
+    border: 1px solid var(--line); font-family: var(--mono); white-space: pre-wrap; word-break: break-all;
+  }
+  .banner.ok { display: block; border-color: rgba(34,197,94,.5); color: var(--green); background: rgba(34,197,94,.08); }
+  .banner.bad { display: block; border-color: rgba(239,68,68,.5); color: #fca5a5; background: rgba(239,68,68,.08); }
+  .muted { color: var(--muted); font-size: 12px; }
+  .err-text { color: #fca5a5; font-size: 12px; max-width: 100%; word-break: break-all; }
+  /* 登录 */
+  #loginView {
+    position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+    background: var(--bg);
+  }
+  .login-box {
+    width: 320px; background: var(--panel); border: 1px solid var(--line);
+    border-radius: 14px; padding: 28px; display: flex; flex-direction: column; gap: 12px;
+  }
+  .login-box h1 { font-size: 18px; margin: 0 0 4px; text-align: center; }
+  .login-box .muted { text-align: center; }
+  /* 密码弹窗 */
+  dialog {
+    background: var(--panel); color: var(--text); border: 1px solid var(--line);
+    border-radius: 14px; padding: 24px; width: 340px;
+  }
+  dialog::backdrop { background: rgba(0,0,0,.55); }
+  dialog h3 { margin: 0 0 12px; font-size: 15px; }
+  dialog .field { margin-bottom: 10px; }
+  dialog label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+  footer { text-align: center; color: var(--muted); font-size: 12px; padding: 18px; }
+  .toast {
+    position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%);
+    background: #052e16; color: #86efac; border: 1px solid rgba(34,197,94,.4);
+    padding: 8px 18px; border-radius: 999px; font-size: 13px; display: none; z-index: 50;
+  }
+  .toast.bad { background: #450a0a; color: #fca5a5; border-color: rgba(239,68,68,.4); }
+</style>
+</head>
+<body>
+
+<!-- 登录 -->
+<div id="loginView" style="display:none">
+  <form class="login-box" id="loginForm">
+    <h1>FRP 内网穿透管理</h1>
+    <div class="muted">请输入管理密码</div>
+    <input type="password" id="loginPw" autocomplete="current-password" autofocus>
+    <div class="err-text" id="loginErr"></div>
+    <button class="primary" type="submit" id="loginBtn">登 录</button>
+    <div class="muted" style="font-size:11px">首次使用:密码在应用数据目录的 凭据说明.txt</div>
+  </form>
+</div>
+
+<!-- 主界面 -->
+<div id="mainView" style="display:none">
+  <header>
+    <h1>FRP 内网穿透管理</h1>
+    <span class="chip" id="frpVer">frp -</span>
+    <span class="chip" id="shellVer">管理壳 -</span>
+    <span class="spacer"></span>
+    <button id="btnChangePw">修改密码</button>
+    <button id="btnLogout">退出登录</button>
+  </header>
+
+  <main>
+    <div class="grid">
+      <!-- frps -->
+      <section class="card" data-svc="frps">
+        <h2>服务端 frps <span class="sub">把本机做成穿透节点,供其它机器的 frpc 接入</span></h2>
+        <div class="row">
+          <label class="switch" title="启用后由管理壳拉起并守护">
+            <input type="checkbox" class="enable-toggle">
+            <span class="track"><span class="knob"></span></span>
+          </label>
+          <span class="state off">已停用</span>
+          <span class="spacer" style="flex:1"></span>
+          <button class="btn-restart">重启</button>
+        </div>
+        <div class="err-text" data-role="lasterr"></div>
+        <textarea class="cfg" spellcheck="false" aria-label="frps 配置"></textarea>
+        <div class="row">
+          <button class="primary btn-save">保存配置</button>
+          <span class="muted" data-role="dirty" style="display:none">有未保存的修改</span>
+        </div>
+        <div class="banner" data-role="banner"></div>
+        <div class="row">
+          <span class="muted">运行日志</span>
+          <button class="btn-log">刷新</button>
+          <label class="muted" style="display:flex;align-items:center;gap:4px">
+            <input type="checkbox" class="log-auto">自动刷新
+          </label>
+        </div>
+        <pre class="log">暂无日志</pre>
+      </section>
+
+      <!-- frpc -->
+      <section class="card" data-svc="frpc">
+        <h2>客户端 frpc <span class="sub">连接远端 frp 服务器,把 NAS 服务映射出去</span></h2>
+        <div class="row">
+          <label class="switch" title="启用后由管理壳拉起并守护">
+            <input type="checkbox" class="enable-toggle">
+            <span class="track"><span class="knob"></span></span>
+          </label>
+          <span class="state off">已停用</span>
+          <span class="spacer" style="flex:1"></span>
+          <button class="btn-restart">重启</button>
+        </div>
+        <div class="err-text" data-role="lasterr"></div>
+        <textarea class="cfg" spellcheck="false" aria-label="frpc 配置"></textarea>
+        <div class="row">
+          <button class="primary btn-save">保存配置</button>
+          <span class="muted" data-role="dirty" style="display:none">有未保存的修改</span>
+        </div>
+        <div class="banner" data-role="banner"></div>
+        <div class="row">
+          <span class="muted">运行日志</span>
+          <button class="btn-log">刷新</button>
+          <label class="muted" style="display:flex;align-items:center;gap:4px">
+            <input type="checkbox" class="log-auto">自动刷新
+          </label>
+        </div>
+        <pre class="log">暂无日志</pre>
+      </section>
+    </div>
+  </main>
+  <footer id="foot"></footer>
+</div>
+
+<dialog id="pwDialog">
+  <h3>修改管理密码</h3>
+  <div class="field"><label>当前密码</label><input type="password" id="pwOld" autocomplete="current-password"></div>
+  <div class="field"><label>新密码(至少 8 位)</label><input type="password" id="pwNew" autocomplete="new-password"></div>
+  <div class="field"><label>确认新密码</label><input type="password" id="pwNew2" autocomplete="new-password"></div>
+  <div class="err-text" id="pwErr"></div>
+  <div class="row" style="justify-content:flex-end;margin-top:8px">
+    <button id="pwCancel">取消</button>
+    <button class="primary" id="pwSave">保存</button>
+  </div>
+</dialog>
+
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+(function () {
+  var $ = function (sel, root) { return (root || document).querySelector(sel); };
+  var $$ = function (sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); };
+
+  var svcNames = { frps: "服务端", frpc: "客户端" };
+  var dirty = { frps: false, frpc: false };
+  var loadedContent = { frps: "", frpc: "" };
+
+  // ---------- 基础 ----------
+  function toast(msg, bad) {
+    var t = $("#toast");
+    t.textContent = msg;
+    t.className = "toast" + (bad ? " bad" : "");
+    t.style.display = "block";
+    clearTimeout(toast._t);
+    toast._t = setTimeout(function () { t.style.display = "none"; }, 2600);
+  }
+
+  function api(method, url, body) {
+    var opt = { method: method, headers: {}, credentials: "same-origin" };
+    if (body !== undefined) {
+      opt.headers["Content-Type"] = "application/json";
+      opt.body = JSON.stringify(body);
+    }
+    return fetch(url, opt).then(function (res) {
+      return res.json().catch(function () { return {}; }).then(function (data) {
+        if (res.status === 401 && url !== "/api/login") { showLogin(); throw new Error("未登录"); }
+        if (!res.ok) {
+          var e = new Error(data.error || ("HTTP " + res.status));
+          e.status = res.status; e.data = data;
+          throw e;
+        }
+        return data;
+      });
+    });
+  }
+
+  function showLogin() {
+    $("#mainView").style.display = "none";
+    $("#loginView").style.display = "flex";
+    $("#loginPw").focus();
+  }
+  function showMain() {
+    $("#loginView").style.display = "none";
+    $("#mainView").style.display = "block";
+  }
+
+  // ---------- 登录 ----------
+  $("#loginForm").addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    $("#loginErr").textContent = "";
+    $("#loginBtn").disabled = true;
+    api("POST", "/api/login", { password: $("#loginPw").value })
+      .then(function () {
+        $("#loginPw").value = "";
+        boot();
+      })
+      .catch(function (e) { $("#loginErr").textContent = e.message; })
+      .finally(function () { $("#loginBtn").disabled = false; });
+  });
+
+  $("#btnLogout").addEventListener("click", function () {
+    api("POST", "/api/logout").catch(function () {}).finally(showLogin);
+  });
+
+  // ---------- 状态轮询 ----------
+  function renderStatus(st) {
+    $$(".card").forEach(function (card) {
+      var svc = card.getAttribute("data-svc");
+      var s = (st.services || {})[svc] || {};
+      var chip = $(".state", card);
+      var restartBtn = $(".btn-restart", card);
+      chip.className = "state";
+      if (s.enabled && s.running) {
+        chip.classList.add("run");
+        chip.textContent = "运行中 · pid " + s.pid + (s.since ? " · 自 " + s.since : "");
+      } else if (s.enabled) {
+        chip.classList.add("pend");
+        chip.textContent = "已启用 · 进程未在运行";
+      } else {
+        chip.classList.add("off");
+        chip.textContent = "已停用";
+      }
+      $(".enable-toggle", card).checked = !!s.enabled;
+      restartBtn.disabled = !s.enabled;
+      $(".err-text", card).textContent = s.last_err ? ("最近异常: " + s.last_err) : "";
+    });
+    $("#frpVer").textContent = "frp v" + (st.frp_version || "?");
+    $("#shellVer").textContent = "管理壳 v" + (st.shell_version || "?");
+    $("#foot").textContent = "配置文件位于应用数据目录(frpc.toml / frps.toml),网页修改即时生效";
+  }
+
+  function pollStatus() {
+    if ($("#mainView").style.display === "none") return;
+    api("GET", "/api/status").then(renderStatus).catch(function () {});
+  }
+
+  // ---------- 每张服务卡 ----------
+  $$(".card").forEach(function (card) {
+    var svc = card.getAttribute("data-svc");
+    var cfgBox = $(".cfg", card);
+    var banner = $(".banner", card);
+    var dirtyEl = $("[data-role=dirty]", card);
+
+    function setDirty(v) {
+      dirty[svc] = v;
+      dirtyEl.style.display = v ? "" : "none";
+    }
+
+    // 启用开关
+    $(".enable-toggle", card).addEventListener("change", function (ev) {
+      var on = ev.target.checked;
+      api("POST", "/api/service", { svc: svc, action: on ? "enable" : "disable" })
+        .then(function () {
+          toast(svcNames[svc] + (on ? " 已启用" : " 已停用"));
+          pollStatus();
+        })
+        .catch(function (e) {
+          toast(e.message, true);
+          ev.target.checked = !on;
+          pollStatus();
+        });
+    });
+
+    // 重启
+    $(".btn-restart", card).addEventListener("click", function () {
+      var btn = this;
+      btn.disabled = true;
+      api("POST", "/api/service", { svc: svc, action: "restart" })
+        .then(function (res) {
+          if (res.verify_ok === false) {
+            banner.className = "banner bad";
+            banner.textContent = "重启被拒绝:配置校验未通过\n" + (res.verify_out || "");
+            toast("配置校验失败,未重启", true);
+          } else {
+            banner.className = "banner ok";
+            banner.textContent = "校验通过,已重启";
+            toast(svcNames[svc] + " 已重启");
+          }
+          pollStatus();
+        })
+        .catch(function (e) { toast(e.message, true); })
+        .finally(function () { btn.disabled = false; });
+    });
+
+    // 编辑
+    cfgBox.addEventListener("input", function () {
+      setDirty(cfgBox.value !== loadedContent[svc]);
+    });
+
+    // 保存
+    $(".btn-save", card).addEventListener("click", function () {
+      var btn = this;
+      btn.disabled = true;
+      banner.className = "banner";
+      api("POST", "/api/config", { svc: svc, content: cfgBox.value })
+        .then(function (res) {
+          if (res.verify_ok) {
+            loadedContent[svc] = cfgBox.value;
+            setDirty(false);
+            banner.className = "banner ok";
+            banner.textContent = "已保存,frp 校验通过" + (res.verify_out ? "\n" + res.verify_out : "");
+            toast("已保存,校验通过");
+          } else {
+            banner.className = "banner bad";
+            banner.textContent = "已保存,但 frp 校验未通过(启用/重启前请修正):\n" + (res.verify_out || "(无输出)");
+            toast("校验未通过,请检查配置", true);
+          }
+          pollStatus();
+        })
+        .catch(function (e) { toast(e.message, true); })
+        .finally(function () { btn.disabled = false; });
+    });
+
+    // 日志
+    var logBox = $(".log", card);
+    function atBottom() {
+      return logBox.scrollHeight - logBox.scrollTop - logBox.clientHeight < 40;
+    }
+    function refreshLog() {
+      api("GET", "/api/log?svc=" + svc + "&lines=300")
+        .then(function (res) {
+          var stick = atBottom();
+          var lines = res.lines || [];
+          logBox.textContent = lines.length ? lines.join("\n") : "暂无日志";
+          if (stick) logBox.scrollTop = logBox.scrollHeight;
+        })
+        .catch(function () {});
+    }
+    $(".btn-log", card).addEventListener("click", refreshLog);
+    var autoTimer = null;
+    $(".log-auto", card).addEventListener("change", function (ev) {
+      if (ev.target.checked) {
+        refreshLog();
+        autoTimer = setInterval(refreshLog, 5000);
+      } else if (autoTimer) {
+        clearInterval(autoTimer); autoTimer = null;
+      }
+    });
+  });
+
+  window.addEventListener("beforeunload", function (ev) {
+    if (dirty.frps || dirty.frpc) { ev.preventDefault(); ev.returnValue = ""; }
+  });
+
+  // ---------- 改密码 ----------
+  var dlg = $("#pwDialog");
+  $("#btnChangePw").addEventListener("click", function () {
+    $("#pwOld").value = ""; $("#pwNew").value = ""; $("#pwNew2").value = ""; $("#pwErr").textContent = "";
+    dlg.showModal();
+  });
+  $("#pwCancel").addEventListener("click", function () { dlg.close(); });
+  $("#pwSave").addEventListener("click", function () {
+    var oldPw = $("#pwOld").value, newPw = $("#pwNew").value, newPw2 = $("#pwNew2").value;
+    if (newPw.length < 8) { $("#pwErr").textContent = "新密码至少 8 位"; return; }
+    if (newPw !== newPw2) { $("#pwErr").textContent = "两次输入的新密码不一致"; return; }
+    api("POST", "/api/password", { old_password: oldPw, new_password: newPw })
+      .then(function () {
+        dlg.close();
+        toast("密码已修改,本会话仍有效");
+      })
+      .catch(function (e) { $("#pwErr").textContent = e.message; });
+  });
+
+  // ---------- 启动 ----------
+  function boot() {
+    api("GET", "/api/status").then(function (st) {
+      showMain();
+      renderStatus(st);
+      // 加载两份配置
+      return Promise.all(["frps", "frpc"].map(function (svc) {
+        return api("GET", "/api/config?svc=" + svc).then(function (res) {
+          var card = $('.card[data-svc="' + svc + '"]');
+          $(".cfg", card).value = res.content;
+          loadedContent[svc] = res.content;
+        });
+      }));
+    }).then(function () {
+      setInterval(pollStatus, 5000);
+    }).catch(function (e) {
+      if (e.status === 401) showLogin();
+    });
+  }
+
+  boot();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+# ============================================================
+# FRP 内网穿透 —— UGOS Pro 原生应用配置
+#
+# 上游: https://github.com/fatedier/frp  (Apache-2.0)
+# frpc/frps 取上游官方 release 静态二进制,不改动;
+# Go 管理壳(frp-mgr)负责:网页登录(首启随机密码)、frps.toml/frpc.toml
+# 编辑与 frp 内置 verify 校验、双进程守护(自动重启/退避)、日志查看。
+# tab 直连形态(管理页面与 API 均走自家密码会话,不依赖 UGOS 网关身份)。
+# 管理壳用 go1.26 线编译:固件注入的 GODEBUG 对 go1.27+ 二进制是 fatal;
+# 子进程 env 另做 GODEBUG 消毒(防上游换工具链)。
+# ============================================================
+
+spec_version: "2.1"
+
+app_id: com.personal.atou.frp
+
+# 跟随上游版本 v0.71.1
+version: 0.71.1
+
+support_arch:
+  - amd64
+  - arm64
+
+# tab 直连形态:管理页内嵌在管理壳里,手机浏览器同样可用。
+supports: []
+
+# 启动命令:Go 管理壳。--port 必须和下面的 port 一致。
+# 管理壳端口避开上游默认(7000/7500)与本机常见占用,取 28600。
+start_cmd: bin/frp-mgr --port=28600
+
+# 后端真实监听端口,平台用它探活。
+port: 28600
+
+# 浏览器新标签直连后端端口。
+open_type: tab
+
+tag_types:
+  - utility
+
+depend_fw_version: 1.13.0.0000
+
+# frpc 要连公网服务端、frps 要被公网客户端连入,默认 unit 只放私网,
+# 不声明 INTERNET 等于废掉一半功能。EXEC 不需要:壳只 exec 包内二进制。
+permissions:
+  - NETWORK.ACCESS_INTERNET
+
+# 开源合规(Apache-2.0)
+license_agreement_link:
+  - https://github.com/fatedier/frp/blob/dev/LICENSE
+source_code_link:
+  - https://github.com/fatedier/frp
+technical_support_link:
+  - https://github.com/fatedier/frp/issues
+
+i18n:
+  zh-CN:
+    name: FRP 内网穿透
+    description: >-
+      FRP 内网穿透(fatedier/frp)一体化管理,内置服务端 frps 与客户端
+      frpc 双角色,可单独或同时启用。服务端把 NAS 做成穿透节点供其它
+      机器接入,客户端把 NAS 上的 SSH、相册、下载工具等服务映射到远端
+      frp 服务器。自带网页管理壳:浏览器打开即用,直接编辑两份配置文件,
+      保存时自动调用 frp 内置校验防止写坏,支持一键启停、重启、实时
+      日志查看与修改管理密码。首次启动自动生成随机管理密码,见应用
+      数据目录下的凭据说明.txt。通过应用中心打开(浏览器标签直连
+      28600 端口)。
+    author: fatedier
+    official: https://gofrp.org
+    help: https://gofrp.org/zh-cn/docs/
+    publisher: atou
+  en-US:
+    name: FRP Tunnel
+    description: >-
+      All-in-one management for frp (fatedier/frp) with both roles
+      built in - run frps to turn the NAS into a tunnel server, or frpc
+      to expose NAS services (SSH, photos, downloads) through a remote
+      frp server. Ships a web console: edit both config files in the
+      browser with built-in frp validation on save, one-click start,
+      stop and restart, live logs and password management. A random
+      admin password is generated on first start - see the credentials
+      file in the app data directory. Open from the app center
+      (browser tab on port 28600).
+    author: fatedier
+    official: https://gofrp.org
+    help: https://gofrp.org/zh-cn/docs/
+    publisher: atou
