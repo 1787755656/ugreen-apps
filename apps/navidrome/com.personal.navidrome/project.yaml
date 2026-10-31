@@ -1,0 +1,125 @@
+# ============================================================
+# Navidrome — UGOS Pro 原生应用配置
+#
+# 上游: https://github.com/navidrome/navidrome  (GPL-3.0)
+# Go 静态单二进制（go1.27.1 编译，Web UI 内嵌），本工程直接采用官方
+# 发行版 linux 双架构 tar.gz，start.sh 负责沙箱适配：
+#   GODEBUG 消毒（go1.27 fatal 防护）/ TMPDIR / CA 证书 / ffmpeg 路径 /
+#   音乐库目录参数解析与首启授权自愈（os.Exit(3) 借 systemd 重启）。
+# ============================================================
+
+spec_version: "2.1"
+
+app_id: com.personal.navidrome
+
+# 跟随上游版本。ugcli 隐藏校验：中段最多两位数 —— 上游 0.x.y 正好合规。
+version: 0.64.2
+
+support_arch:
+  - amd64
+  - arm64
+
+supports:
+  - app
+  - pc
+
+# start.sh 是 shell 脚本 → 沙箱里要有 /bin/sh → 需要 EXEC 权限（EXEC 的全部
+# 作用就是 BindReadOnlyPaths=/bin /sbin /usr/bin /usr/sbin，让 /bin/sh 存在）。
+start_cmd: bin/start.sh
+
+# 上游默认 4533，按规矩挪到高位，避开用户自己可能跑着的 Navidrome Docker 版
+port: 24533
+
+# Navidrome 自带完整 Web 界面 + 自己的账号体系，Subsonic 客户端也要直连端口
+# （音流/Symfonium/play:Sub 等填 NAS_IP:端口）→ tab 形态，浏览器新标签直连后端
+open_type: tab
+
+tag_types:
+  - media
+
+depend_fw_version: 1.13.0.0000
+
+# 允许用户后续在应用中心手动追加共享目录授权（多音乐目录场景）
+allow_add_access_path: true
+
+support_migration: true
+
+# EXEC：start_cmd 是 shell 脚本（/bin/sh 必须存在）
+# INTERNET：艺术家资料/Last.fm/ListenBrainz 记录/播放列表导入等外部服务需要出公网
+permissions:
+  - SYSTEM.EXEC_SYSTEM_COMMAND
+  - NETWORK.ACCESS_INTERNET
+
+# GPL-3.0 合规（捆绑的 jellyfin-ffmpeg 为 GPL 构建）
+license_agreement_link:
+  - https://www.gnu.org/licenses/gpl-3.0.html
+source_code_link:
+  - https://github.com/navidrome/navidrome
+technical_support_link:
+  - https://github.com/navidrome/navidrome/issues
+
+parameters:
+  - key: MUSIC_DIR
+    type: path
+    multi: false
+    required: false
+    changeable: true
+    i18n:
+      zh-CN:
+        name: 音乐库目录
+        description: >-
+          选择存放音乐文件的共享文件夹，选择即完成沙箱读写授权，支持
+          MP3/FLAC/WAV/APE/ALAC/DSF 等几乎所有音频格式。可留空（使用
+          共享目录）。音乐库以首次成功启动时为准，之后可在 Navidrome
+          网页的设置里添加或调整音乐文件夹。
+      en-US:
+        name: Music library folder
+        description: >-
+          Pick the shared folder that holds your music files (MP3/FLAC/WAV/
+          APE/ALAC/DSF and virtually everything else); choosing it also
+          grants sandbox read-write access. May be left empty (falls back
+          to the app shared folder). The library is seeded on first
+          successful start; add or adjust music folders later in the
+          Navidrome web settings.
+
+i18n:
+  en-US:
+    name: Navidrome
+    description: >-
+      Navidrome is an open-source (GPL-3.0) self-hosted music streaming
+      server. It scans the local music library on your NAS (MP3/FLAC/WAV/
+      APE/ALAC/DSF and more) and serves a built-in web player plus a full
+      Subsonic/OpenSubsonic API, so mobile and desktop clients (Symfonium,
+      play:Sub, substreamer, Feishin and others) can connect directly.
+      This package bundles ffmpeg/ffprobe for both architectures, so
+      on-the-fly transcoding and audio probing work out of the box;
+      transcode/image caches go to the app cache folder. Pick your music
+      folder at install time. On first open the web UI asks you to create
+      the admin account — first come, first served, so visit it right
+      after installing. Default port is 24533 (upstream default 4533
+      remapped to avoid clashes with your own Docker deployments).
+      Artist info / Last.fm / ListenBrainz integrations need internet
+      access and can be turned off in settings.
+    author: deluan
+    official: https://www.navidrome.org
+    help: https://www.navidrome.org/docs/
+    publisher: 穿斯帕沃特
+    publisher_link: https://club.ugnas.com/home.php?mod=space&uid=10131
+  zh-CN:
+    name: Navidrome 音乐服务器
+    description: >-
+      Navidrome 是一个开源（GPL-3.0）的自托管音乐流媒体服务器：扫描 NAS
+      上的本地音乐库（MP3/FLAC/WAV/APE/ALAC/DSF 等几乎所有格式），提供
+      内嵌网页播放器与完整 Subsonic/OpenSubsonic API，音流、Symfonium、
+      play:Sub、Feishin 等手机/桌面客户端可直接连接。本包捆绑双架构
+      ffmpeg/ffprobe，实时转码与音频探测开箱即用；转码与封面缓存写入
+      应用缓存目录。安装时选择音乐库目录即可。首次打开网页会提示创建
+      管理员账号（先到先得，装完请立即访问并设置强密码）。默认端口
+      24533（非上游默认 4533，避免与用户自装的 Docker 版冲突）。艺术家
+      资料、Last.fm/ListenBrainz 听歌记录等外部服务需要联网，可在设置
+      中关闭。
+    author: deluan
+    official: https://www.navidrome.org
+    help: https://www.navidrome.org/docs/
+    publisher: 穿斯帕沃特
+    publisher_link: https://club.ugnas.com/home.php?mod=space&uid=10131
