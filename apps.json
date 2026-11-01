@@ -45,7 +45,7 @@
       },
       "service_port": 7789,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/ani-rss/com.wushuo.anirss/rootfs_common/icon.png",
-      "download_count": 3,
+      "download_count": 4,
       "app_type": "native",
       "category": "download",
       "platforms": [
@@ -75,7 +75,7 @@
       },
       "service_port": 25900,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/chromium/com.personal.chromium/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 4,
       "app_type": "docker",
       "category": "system",
       "platforms": [
@@ -165,7 +165,7 @@
       },
       "service_port": 25400,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/deenmusic/com.personal.deenmusic/rootfs_common/icon.png",
-      "download_count": 16,
+      "download_count": 17,
       "app_type": "native",
       "category": "download",
       "platforms": [
@@ -195,7 +195,7 @@
       },
       "service_port": 23079,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/deepseek-harness/com.personal.deepseekharness/rootfs_common/icon.png",
-      "download_count": 5,
+      "download_count": 6,
       "app_type": "docker",
       "category": "system",
       "platforms": [
@@ -284,7 +284,7 @@
       },
       "service_port": 28190,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/fastnet/com.koolcenter.fastnet/rootfs_common/icon.png",
-      "download_count": 12,
+      "download_count": 13,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -416,7 +416,7 @@
       },
       "service_port": 25211,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/litepan/com.ponphil.litepan/rootfs_common/icon.png",
-      "download_count": 5,
+      "download_count": 6,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -446,7 +446,7 @@
       },
       "service_port": 16601,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/lucky/com.gdy666.lucky/rootfs_common/icon.png",
-      "download_count": 7,
+      "download_count": 8,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -470,7 +470,7 @@
       },
       "service_port": 28300,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/lunatv/com.personal.lunatv/rootfs_common/icon.png",
-      "download_count": 35,
+      "download_count": 37,
       "app_type": "native",
       "category": "media",
       "platforms": [
@@ -634,7 +634,7 @@
       "display_name": "Navidrome 音乐服务器",
       "description": "Navidrome 是一个开源（GPL-3.0）的自托管音乐流媒体服务器：扫描 NAS 上的本地音乐库（MP3/FLAC/WAV/APE/ALAC/DSF 等几乎所有格式），提供 内嵌网页播放器与完整 Subsonic/OpenSubsonic API，音流、Symfonium、 play:Sub、Feishin 等手机/桌面客户端可直接连接。本包捆绑双架构 ffmpeg/ffprobe，实时转码与音频探测开箱即用；转码与封面缓存写入 应用缓存目录。安装时选择音乐库目录即可。首次打开网页会提示创建 管理员账号（先到先得，装完请立即访问并设置强密码）。默认端口 24533（非上游默认 4533，避免与用户自装的 Docker 版冲突）。艺术家 资料、Last.fm/ListenBrainz 听歌记录等外部服务需要联网，可在设置 中关闭。",
       "homepage_url": "https://www.navidrome.org",
-      "updated_at": "2026-11-01",
+      "updated_at": "2026-10-31",
       "version": "0.64.2",
       "upk_version": "0.64.2.0005",
       "release_tag": "navidrome/v0.64.2-r5",
@@ -644,7 +644,7 @@
       },
       "service_port": 24533,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/navidrome/com.personal.navidrome/rootfs_common/icon.png",
-      "download_count": 3,
+      "download_count": 8,
       "app_type": "native",
       "category": "media",
       "platforms": [
@@ -704,7 +704,7 @@
       },
       "service_port": 28088,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/octop/com.tencent.octop/rootfs_common/icon.png",
-      "download_count": 8,
+      "download_count": 9,
       "app_type": "native",
       "category": "ai",
       "platforms": [
@@ -734,7 +734,7 @@
       },
       "service_port": 28244,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/openlist/com.oplist.openlist/rootfs_common/icon.png",
-      "download_count": 4,
+      "download_count": 6,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -901,7 +901,7 @@
       },
       "service_port": 18081,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/qbittorrent-ng6/com.superng6.qbittorrent/rootfs_common/icon.png",
-      "download_count": 2,
+      "download_count": 3,
       "app_type": "native",
       "category": "download",
       "platforms": [
@@ -1015,7 +1015,7 @@
       },
       "service_port": 25435,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/sub2api/com.personal.sub2api/rootfs_common/icon.png",
-      "download_count": 3,
+      "download_count": 4,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -1069,7 +1069,7 @@
       },
       "service_port": 28750,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/ugtheme/com.personal.ugtheme/rootfs_common/icon.png",
-      "download_count": 25,
+      "download_count": 26,
       "app_type": "docker",
       "category": "utility",
       "platforms": [
