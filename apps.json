@@ -75,7 +75,7 @@
       },
       "service_port": 25900,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/chromium/com.personal.chromium/rootfs_common/icon.png",
-      "download_count": 4,
+      "download_count": 6,
       "app_type": "docker",
       "category": "system",
       "platforms": [
@@ -165,7 +165,7 @@
       },
       "service_port": 25400,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/deenmusic/com.personal.deenmusic/rootfs_common/icon.png",
-      "download_count": 17,
+      "download_count": 18,
       "app_type": "native",
       "category": "download",
       "platforms": [
@@ -446,7 +446,7 @@
       },
       "service_port": 16601,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/lucky/com.gdy666.lucky/rootfs_common/icon.png",
-      "download_count": 8,
+      "download_count": 9,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -494,7 +494,7 @@
       },
       "service_port": 23232,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/magicmail/com.magiccode.magicmail/rootfs_common/icon.png",
-      "download_count": 12,
+      "download_count": 13,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -542,7 +542,7 @@
       },
       "service_port": 23306,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/mariadb/com.personal.mariadb/rootfs_common/icon.png",
-      "download_count": 6,
+      "download_count": 7,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -694,17 +694,17 @@
       "display_name": "Octop AI 助手平台",
       "description": "腾讯开源的自托管多用户多智能体 AI 助手平台（MIT 协议），数据全部留在 NAS 本地（SQLite）。支持多专家智能体、飞书/钉钉/QQ/企业微信等 IM 渠道、 定时任务、RAG 知识库、MCP 连接器、浏览器自动化与终端 AI。\n首次启动自动创建管理员账号，默认凭据 admin / octop2026；密码也可以在 应用中心「配置 → 管理员密码」里自己设定（留空则用默认值，忘记密码时 从那里填个新值再重启应用即可重置）。登录后请立即在「控制台 → 设置」里 修改密码，并在同一处配置 LLM 模型供应商。\n说明：内嵌模式经系统网关代理，单文件上传上限 20MB，知识库大文件请用 直连地址 http://NAS的IP:28088 上传（同一套账号）；应用内「浏览器 AI+」 等组件按需在线下载；深层子页面整页刷新会提示 404，从桌面重新打开即可。",
       "homepage_url": "https://github.com/TencentCloud/Octop",
-      "updated_at": "2026-10-27",
+      "updated_at": "2026-11-02",
       "version": "1.0.3",
-      "upk_version": "1.0.3.0011",
-      "release_tag": "octop/v1.0.3b1-r4",
+      "upk_version": "1.0.3.0012",
+      "release_tag": "octop/v1.0.3b2",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/octop/v1.0.3b1-r4/amd64_nasync_com.tencent.octop_1.0.3.0011.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/octop/v1.0.3b1-r4/arm64_nasync_com.tencent.octop_1.0.3.0011.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/octop/v1.0.3b2/amd64_nasync_com.tencent.octop_1.0.3.0012.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/octop/v1.0.3b2/arm64_nasync_com.tencent.octop_1.0.3.0012.upk"
       },
       "service_port": 28088,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/octop/com.tencent.octop/rootfs_common/icon.png",
-      "download_count": 9,
+      "download_count": 0,
       "app_type": "native",
       "category": "ai",
       "platforms": [
@@ -793,7 +793,7 @@
       },
       "service_port": 18800,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/picoclaw/com.sipeed.picoclaw/rootfs_common/icon.png",
-      "download_count": 9,
+      "download_count": 10,
       "app_type": "native",
       "category": "ai",
       "platforms": [
@@ -841,7 +841,7 @@
       },
       "service_port": 25432,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/postgresql/com.personal.postgresql17/rootfs_common/icon.png",
-      "download_count": 4,
+      "download_count": 5,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -985,7 +985,7 @@
       },
       "service_port": 26379,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/redis/com.personal.redis/rootfs_common/icon.png",
-      "download_count": 7,
+      "download_count": 8,
       "app_type": "native",
       "category": "system",
       "platforms": [
