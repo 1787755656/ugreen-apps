@@ -52,6 +52,8 @@ esac
 echo "==> Building MagicPush ${VERSION} (${NODE_ARCH}) from main branch"
 
 # ---- 1. upstream source (main branch tarball) ----
+# Upstream 1.15.0 moved the project into apps/ (server/web/website/fnapp);
+# version.json stays at the repo root.
 SRC_URL="https://github.com/magiccode1412/magicpush/archive/refs/heads/main.tar.gz"
 echo "==> Downloading source: ${SRC_URL}"
 curl -fL -o "$WORK_DIR/src.tar.gz" "$SRC_URL"
@@ -68,7 +70,7 @@ fi
 # ---- 2. web frontend (vite build, runs on the CI host arch) ----
 echo "==> Building web frontend"
 (
-  cd "$WORK_DIR/src/web"
+  cd "$WORK_DIR/src/apps/web"
   # pnpm-lock.yaml is upstream's lockfile; corepack ships with Node ≥16.
   corepack enable >/dev/null 2>&1 || true
   if command -v pnpm >/dev/null 2>&1; then
@@ -79,12 +81,12 @@ echo "==> Building web frontend"
     npm run build
   fi
 )
-[ -d "$WORK_DIR/src/web/dist" ] || { echo "web build produced no dist/" >&2; exit 1; }
+[ -d "$WORK_DIR/src/apps/web/dist" ] || { echo "web build produced no dist/" >&2; exit 1; }
 
 # ---- 3. server prod dependencies (target arch) ----
 echo "==> Installing server production dependencies (target: linux/${NODE_ARCH})"
 (
-  cd "$WORK_DIR/src/server"
+  cd "$WORK_DIR/src/apps/server"
   # --ignore-scripts: deterministic across npm versions (npm ≥12 blocks
   # install scripts by default anyway). The only script that matters is
   # better-sqlite3's prebuild fetch, replaced by the direct download below.
@@ -92,7 +94,7 @@ echo "==> Installing server production dependencies (target: linux/${NODE_ARCH})
 )
 
 # better-sqlite3 prebuilt binary for the TARGET arch, fetched by URL.
-BSQL_DIR="$WORK_DIR/src/server/node_modules/better-sqlite3"
+BSQL_DIR="$WORK_DIR/src/apps/server/node_modules/better-sqlite3"
 BSQL_VER=$(jq -r '.version' "$BSQL_DIR/package.json")
 BSQL_URL="https://github.com/WiseLibs/better-sqlite3/releases/download/v${BSQL_VER}/better-sqlite3-v${BSQL_VER}-node-v${NODE_ABI}-linux-${NODE_ARCH}.tar.gz"
 echo "==> Downloading better-sqlite3 prebuild: ${BSQL_URL}"
@@ -113,7 +115,7 @@ fi
 #      if upstream ever refactors these lines, failing the build instead of
 #      shipping a package that cannot start.
 echo "==> Patching server log dirs to honor LOG_DIR"
-node "$SCRIPT_DIR/patch-log-dir.js" "$WORK_DIR/src/server"
+node "$SCRIPT_DIR/patch-log-dir.js" "$WORK_DIR/src/apps/server"
 
 # ---- 4. Node runtime ----
 NODE_TARBALL="node-v${NODE_VERSION}-linux-${NODE_ARCH}.tar.xz"
@@ -129,11 +131,11 @@ mkdir -p "$ROOTFS/bin" "$ROOTFS/app/web"
 cp "$WORK_DIR/node/bin/node" "$ROOTFS/bin/node"
 cp "$SCRIPT_DIR/static/start.sh" "$ROOTFS/bin/start.sh"
 chmod +x "$ROOTFS/bin/node" "$ROOTFS/bin/start.sh"
-cp -R "$WORK_DIR/src/web/dist" "$ROOTFS/app/web/dist"
+cp -R "$WORK_DIR/src/apps/web/dist" "$ROOTFS/app/web/dist"
 mkdir -p "$ROOTFS/app/server"
-cp "$WORK_DIR/src/server/package.json" "$ROOTFS/app/server/"
-cp -R "$WORK_DIR/src/server/src" "$ROOTFS/app/server/src"
-cp -R "$WORK_DIR/src/server/node_modules" "$ROOTFS/app/server/node_modules"
+cp "$WORK_DIR/src/apps/server/package.json" "$ROOTFS/app/server/"
+cp -R "$WORK_DIR/src/apps/server/src" "$ROOTFS/app/server/src"
+cp -R "$WORK_DIR/src/apps/server/node_modules" "$ROOTFS/app/server/node_modules"
 cp "$WORK_DIR/src/version.json" "$ROOTFS/app/version.json"
 
 echo "==> Done: $ROOTFS"
