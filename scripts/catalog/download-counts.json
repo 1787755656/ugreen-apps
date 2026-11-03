@@ -95,7 +95,9 @@
   "com.personal.1panel": {
     "assets": {
       "amd64_nasync_com.personal.1panel_2.4.1.0001.upk": 7,
-      "arm64_nasync_com.personal.1panel_2.4.1.0001.upk": 2
+      "amd64_nasync_com.personal.1panel_2.4.2.0002.upk": 0,
+      "arm64_nasync_com.personal.1panel_2.4.1.0001.upk": 2,
+      "arm64_nasync_com.personal.1panel_2.4.2.0002.upk": 0
     },
     "baseline": 0
   },
@@ -117,6 +119,13 @@
     "assets": {
       "amd64_nasync_com.personal.atou.musicsub_0.2.1.0003.upk": 3,
       "arm64_nasync_com.personal.atou.musicsub_0.2.1.0003.upk": 1
+    },
+    "baseline": 0
+  },
+  "com.personal.baota": {
+    "assets": {
+      "amd64_nasync_com.personal.baota_13.1.0.0001.upk": 0,
+      "arm64_nasync_com.personal.baota_13.1.0.0001.upk": 0
     },
     "baseline": 0
   },
