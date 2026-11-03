@@ -1,0 +1,46 @@
+# ============================================================
+# 1Panel — Docker Compose 编排（Go text/template）
+#
+# ⚠ 这个文件是 Go text/template，不是 compose 的变量替换语法。
+#   打包后存成 docker-compose.tmpl，安装时渲染出 docker-compose.yaml。
+#   parameters 声明的参数值一律是列表，取第 0 项要用 index；
+#   选填参数必须套 if 判断，空列表上 index 直接渲染报错。
+#   注释里【不能】出现字面的模板语法举例——模板引擎不认识 YAML
+#   注释，会把它当真的 action 执行。
+#
+# 镜像随包内置（rootfs_<arch>/images/1panel-<版本>-<arch>.tar，安装时
+#   docker load，离线可装、不依赖 Docker Hub 镜像源）。内容即
+#   moelin/1panel:v<版本>（1Panel 官方只发安装脚本，该镜像是社区事实
+#   标准），钉版本 tag 并按 deepseek-harness 等惯例改标 personal/ 前缀，
+#   避免 compose 意外从 Docker Hub 在线拉同名镜像；具体版本由打包脚本
+#   sed 改写。
+#
+# 路径约定（关键设计）：面板数据目录的容器内路径与宿主机真实路径
+#   完全同名（BASE_DIR 指向挂载点本身）。这样在面板里创建兄弟容器、
+#   选择 bind 挂载时，面板内看到的路径就是宿主机真实路径，
+#   传给宿主 Docker 的挂载路径无需任何翻译，直接生效。
+#   未选数据目录时落在应用安装目录的 data 子目录，
+#   对应的宿主绝对路径同样与容器内一致。
+# ============================================================
+
+name: ugos-1panel
+
+services:
+  panel:
+    image: personal/1panel:2.4.2
+    container_name: ugos-1panel
+    restart: unless-stopped
+    ports:
+      # 面板端口：容器内固定 10086（镜像默认），宿主侧 21086
+      - 21086:10086
+    environment:
+      TZ: "{{.TZ}}"
+      # 数据目录：选了共享文件夹就用它本身，没选就用安装目录 data 子目录
+      BASE_DIR: "{{ if .DATA_DIR }}{{ index .DATA_DIR 0 }}{{ else }}/volume1/@appstore/com.personal.1panel/data{{ end }}"
+    volumes:
+      # 核心权限：管理宿主机 Docker（容器/镜像/网络/卷）必须挂套接字
+      - /var/run/docker.sock:/var/run/docker.sock
+      # 面板数据：挂载点与宿主路径同名，兄弟容器 bind 路径免翻译
+      - type: bind
+        source: "{{ if .DATA_DIR }}{{ index .DATA_DIR 0 }}{{ else }}./data{{ end }}"
+        target: "{{ if .DATA_DIR }}{{ index .DATA_DIR 0 }}{{ else }}/volume1/@appstore/com.personal.1panel/data{{ end }}"

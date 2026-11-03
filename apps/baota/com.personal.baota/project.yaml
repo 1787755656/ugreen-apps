@@ -1,0 +1,124 @@
+# ============================================================
+# 宝塔面板 — UGOS Pro Docker 应用
+#
+# 上游：https://www.bt.cn（堡塔安全官方，面板为专有软件、免费使用）
+# 镜像：btpanel/baota:latest（堡塔安全官方 Docker 镜像，amd64/arm64 双
+#   架构；面板本体在镜像内 /www.tar.gz，首启解压——版本探测/内容断言
+#   从 tarball 里的 common.py 读 g.version，见 build.sh）。打包改标为
+#   personal/baota:<版本> 整包内置，未修改镜像内容。
+#
+# 为什么是 Docker 应用：宝塔的建站栈（Nginx/MySQL/PHP）整体跑在容器内，
+#   官方只以 Docker 镜像形态发布容器版；原生沙箱装不了这套。
+#
+# 双端口（根路径被宝塔防扫描名单硬编码 404，UGOS tab 打开的是根路径，
+#   所以入口 21888 是一个 302 重定向器，面板本体在 21889 直连）：
+#   21888 = 打开应用时的入口（302 → 面板登录页），也是系统探活端口
+#   21889 = 面板直连端口（登录后全部流量走这里）
+#
+# 初始账号：随机生成（每个安装实例不同），安装完成后在应用日志查看，
+#   首次登录请立即修改；安全入口固定 /btpanel，可在面板设置中修改。
+# ============================================================
+
+spec_version: "2.1"
+app_id: com.personal.baota
+version: 13.1.0
+
+support_arch:
+  - amd64
+  - arm64
+
+supports:
+  - pc
+  - app
+
+is_docker_app: true
+
+# 依赖 Docker 套件（Docker 应用必填）
+depend_docker_version: 1.7.0.0000
+
+# 最低固件版本
+depend_fw_version: 1.13.0.0000
+
+# 宿主侧入口端口（重定向器），与 docker-compose.yaml 的 ports 一致（系统探活）
+port: 21888
+
+# Docker 应用只能用 tab（inner 不会反代到容器端口，打开即 404）
+open_type: tab
+
+# 面板能管理建站全栈，只给管理员
+only_admin: true
+
+tag_types:
+  - system
+  - devtool
+
+support_migration: true
+
+parameters:
+  - key: DATA_DIR
+    type: path
+    multi: false
+    required: false
+    i18n:
+      zh-CN:
+        name: 数据目录
+        description: >-
+          可选。宝塔的全量数据目录（网站文件、数据库、面板配置，即容器内
+          /www），建议选一个共享文件夹，方便在文件管理里查看和备份。留空
+          则使用平台持久数据区（升级不丢）。修改此参数需要卸载后重新安装
+          才能生效。
+      en-US:
+        name: Data Folder
+        description: >-
+          Optional. Full Baota data folder (website files, databases and
+          panel config, i.e. /www inside the container). Pick a shared
+          folder so it stays visible in File Manager and easy to back up.
+          Leave empty to use the platform persistent area. Changing it
+          requires reinstall.
+
+i18n:
+  zh-CN:
+    name: 宝塔面板
+    description: >-
+      宝塔Linux面板（堡塔安全官方）容器版：在线建站运维面板，一键部署
+      Nginx/Apache、MySQL、PHP、FTP，带文件管理、计划任务、防火墙、
+      监控与软件商店。本包内置官方 Docker 镜像（btpanel/baota，未修改），
+      全量数据落在数据目录，面板内安装的网站环境升级应用包不丢失。打开
+      应用自动跳转面板登录页（面板直连地址为 http://NAS_IP:21889/btpanel/
+      login，安全入口 /btpanel 可在面板设置中修改）。初始账号密码随机
+      生成，安装完成后在应用日志中查看，首次登录请立即修改。说明：面板
+      管理的是容器内的建站环境，网站与数据库都存放在数据目录；面板内
+      一键更新可用，更新内容同样落在数据目录；宿主机容器管理不在面板
+      范围（官方 Docker 版默认隐藏该菜单）；软件商店安装与面板功能需按
+      宝塔官方要求注册账号绑定后使用。
+    author: 堡塔安全
+    official: https://www.bt.cn
+    help: https://www.bt.cn/bbs/
+    publisher: xw
+    publisher_link: https://github.com/1787755656
+  en-US:
+    name: BaoTa Panel
+    description: >-
+      BaoTa Linux Panel (official, by BaoTa Security) container edition:
+      a web hosting & ops panel to deploy Nginx/Apache, MySQL, PHP and
+      FTP with one click, plus file manager, cron jobs, firewall,
+      monitoring and an app store. Ships the official Docker image
+      (btpanel/baota, unmodified); all data lives in the data folder and
+      survives app upgrades. Opening the app redirects to the panel
+      login (direct panel URL is http://NAS_IP:21889/btpanel/login, the
+      secure entrance /btpanel can be changed in panel settings). A
+      random password is generated on first start; check the app log and
+      change it after login. Notes: the panel manages the hosting stack
+      inside the container; in-panel self-update is available; host
+      Docker management is out of scope (hidden by upstream in the
+      Docker image); the app store requires binding a BaoTa account per
+      upstream policy.
+    author: BaoTa Security
+    official: https://www.bt.cn
+    help: https://www.bt.cn/bbs/
+    publisher: xw
+    publisher_link: https://github.com/1787755656
+
+# 宝塔面板为专有软件（免费使用），不配置开源许可/源码链接（natfrp 先例）
+technical_support_link:
+  - https://www.bt.cn/bbs/

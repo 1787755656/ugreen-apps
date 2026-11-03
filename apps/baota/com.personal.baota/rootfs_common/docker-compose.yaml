@@ -1,0 +1,83 @@
+# ============================================================
+# 宝塔面板 — Docker Compose 编排（Go text/template）
+#
+# ⚠ 这个文件是 Go text/template，不是 compose 的变量替换语法。
+#   打包后存成 docker-compose.tmpl，安装时渲染出 docker-compose.yaml。
+#   parameters 声明的参数值一律是列表，取第 0 项要用 index；
+#   选填参数必须套 if 判断，空列表上 index 直接渲染报错。
+#   注释里【不能】出现字面的模板语法举例——模板引擎不认识 YAML
+#   注释，会把它当真的 action 执行。
+#   entrypoint 内联脚本里【不能】出现 $ 符号（compose/ugcli 都会扫
+#   $VAR 插值），Python 里要用格式化拼接代替 f-string。
+#
+# 镜像随包内置（rootfs_<arch>/images/baota-<版本>-<arch>.tar，安装时
+#   docker load，离线可装、不依赖 Docker Hub 镜像源）。内容即堡塔安全
+#   官方发布的 btpanel/baota:latest（未修改），钉版本并改标 personal/
+#   前缀；具体版本由打包脚本 sed 改写。
+#
+# 双端口设计（宝塔把根路径硬编码在防扫描保留名单里，BTPanel/__init__.py
+#   的 admin_path_checks 含 '/'，根路径永远 404，而 UGOS tab 应用打开的
+#   就是根路径）：
+#   21888 → 容器内 8887「入口重定向器」：任何请求 302 到面板登录页
+#           （从 Host 头取 NAS IP，跳到 21889）。project.yaml 的探活端口
+#           打这里，UGOS 桌面点开即达面板。
+#   21889 → 容器内 8888 面板直连。登录后的所有流量（含上传/WebSSH 终端）
+#           全走这个口，不经过任何代理层。
+#
+# 凭据机制（2026-11-04 实测）：面板首启随机生成账号密码（不烤在镜像里，
+#   每个安装实例不同），bt default 仅首次登录前能读。entrypoint 在面板
+#   就绪后把 bt default 打进容器日志（UGOS 应用日志可见），提示用户改密。
+#   安全入口固定为 /btpanel（admin_path.pl），可在面板设置中修改。
+#
+# 数据持久化：宝塔的网站、数据库、面板配置全在 /www 下（首启从镜像内
+#   /www.tar.gz 解出），整棵挂到数据目录（宿主路径与面板内一致，网站
+#   文件在文件管理里直接可见）；面板内一键更新写 /www/server/panel，
+#   同样落在数据目录，升级应用包（重建容器）不丢失。
+# ============================================================
+
+name: ugos-baota
+
+services:
+  baota:
+    image: personal/baota:13.1.0
+    container_name: ugos-baota
+    restart: unless-stopped
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        cat > /ugos-redirect.py <<'PYEOF'
+        from http.server import BaseHTTPRequestHandler, HTTPServer
+
+        class Redir(BaseHTTPRequestHandler):
+            def do_GET(self):
+                host = (self.headers.get('Host') or '127.0.0.1').rsplit(':', 1)[0]
+                self.send_response(302)
+                self.send_header('Location', 'http://' + host + ':21889/btpanel/login')
+                self.end_headers()
+
+            do_HEAD = do_GET
+
+            def log_message(self, *args):
+                pass
+
+        HTTPServer(('0.0.0.0', 8887), Redir).serve_forever()
+        PYEOF
+        python3 /ugos-redirect.py &
+        ( until curl -s -o /dev/null http://127.0.0.1:8888/; do sleep 3; done
+          echo '===== 宝塔面板初始账号（仅首次登录前有效，登录后请立即改密） ====='
+          bt default ) &
+        exec /bt.sh
+    ports:
+      # 入口重定向器（project.yaml 的探活端口，UGOS 桌面点开走这里）
+      - "21888:8887"
+      # 面板直连（登录后所有流量走这里，不过代理）
+      - "21889:8888"
+    environment:
+      TZ: "{{.TZ}}"
+    volumes:
+      # 宝塔全量数据（网站/数据库/面板配置）整棵 /www 落到数据目录：
+      # 选了共享文件夹就用它本身，没选用平台持久数据区（升级重建容器不丢）。
+      - type: bind
+        source: "{{ if .DATA_DIR }}{{ index .DATA_DIR 0 }}{{ else }}/volume1/@appdata/com.personal.baota/www{{ end }}"
+        target: /www

@@ -1,0 +1,127 @@
+# ============================================================
+# 1Panel — UGOS Pro Docker 应用
+#
+# 上游：https://github.com/1Panel-dev/1Panel （GPL-3.0）
+# 镜像：moelin/1panel:v<版本>（社区维护的 1Panel 官方 Docker 化镜像，
+#   Ubuntu 底包 + Supervisor，amd64/arm64 双架构自动构建；1Panel 官方
+#   只发安装脚本、不发自身 Docker 镜像，moelin 镜像是社区事实标准，
+#   README 与 compose 示例见 Docker Hub）。打包时改标为
+#   personal/1panel:<版本> 整包内置（build.sh docker load 免在线拉取）。
+#
+# 为什么是 Docker 应用：
+#   1Panel 的核心是管理宿主机 Docker（容器/镜像/网络/卷），
+#   必须挂载宿主机 /var/run/docker.sock——原生沙箱拿不到
+#   Docker 守护进程，这条路在原生侧是死的。
+#
+# 端口：容器内面板固定 10086（镜像默认），宿主侧映射 21086，
+#   与 project.yaml 的 port 一致（系统探活打这个口）。
+#
+# 初始账号：随机密码在容器日志里（安装完成后在应用日志中查看），
+#   安全入口默认 entrance，首次登录务必修改密码。
+# ============================================================
+
+spec_version: "2.1"
+app_id: com.personal.1panel
+version: 2.4.2
+
+support_arch:
+  - amd64
+  - arm64
+
+supports:
+  - pc
+  - app
+
+is_docker_app: true
+
+# 依赖 Docker 套件（Docker 应用必填）
+depend_docker_version: 1.7.0.0000
+
+# 最低固件版本
+depend_fw_version: 1.13.0.0000
+
+# 宿主侧面板端口，与 docker-compose.yaml 的 ports 一致（系统探活）
+port: 21086
+
+# Docker 应用只能用 tab（inner 不会反代到容器端口，打开即 404）
+open_type: tab
+
+# 面板能控制宿主机上的全部容器，只给管理员
+only_admin: true
+
+tag_types:
+  - system
+  - devtool
+
+support_migration: true
+
+parameters:
+  - key: DATA_DIR
+    type: path
+    multi: false
+    required: false
+    i18n:
+      zh-CN:
+        name: 数据目录
+        description: >-
+          可选。面板数据与 1Panel 应用商店所装应用的存放目录，建议选一个
+          共享文件夹，方便在文件管理里查看和备份。留空则使用应用自身的
+          数据目录。修改此参数需要卸载后重新安装才能生效。
+      en-US:
+        name: Data Folder
+        description: >-
+          Optional. Folder for panel data and apps installed from the
+          1Panel store. Pick a shared folder so it stays visible in File
+          Manager and easy to back up. Leave empty to use the app's own
+          data folder. Changing it requires reinstall.
+
+i18n:
+  zh-CN:
+    name: 1Panel 服务器管理面板
+    description: >-
+      Linux 服务器在线管理面板（1Panel 官方开源项目）。本包以 Docker
+      应用运行，已映射宿主机 Docker 权限，面板内可直接查看、启停、重建
+      NAS 上的全部容器与镜像，一键安装 1Panel 应用商店里的各类容器应用，
+      并管理网络、存储卷与编排模板。内置实时资源监控、文件管理、计划
+      任务、容器日志与终端等模块。初始账号密码随机生成，安装完成后在
+      应用日志中查看，首次登录请立即修改；访问地址为
+      http://NAS_IP:21086/entrance（entrance 是安全入口）。说明：面板
+      为容器化运行，文件管理与计划任务的可视范围限于面板数据目录和
+      容器内文件；面板内一键升级不可用，更新请走商店进行，数据保留在
+      挂载目录不受影响；新建容器的 bind 挂载路径即宿主机真实路径，
+      可直接生效。
+    author: 1Panel-dev
+    official: https://1panel.cn
+    help: https://1panel.cn/docs/v2/
+    publisher: xw
+    publisher_link: https://github.com/1787755656
+  en-US:
+    name: 1Panel Server Management Panel
+    description: >-
+      Open-source Linux server management panel (1Panel, GPL-3.0). This
+      package runs it as a Docker app with the host Docker socket mapped,
+      so you can view, start, stop and rebuild all containers and images
+      on the NAS, install apps from the 1Panel app store, and manage
+      networks, volumes and compose templates. Includes resource
+      monitoring, file manager, scheduled tasks, container logs and
+      terminal. A random password is generated on first start, check the
+      app log and change it after login. Panel URL is
+      http://NAS_IP:21086/entrance (entrance is the secure entry path).
+      Notes: the panel runs containerized, so its file manager and
+      scheduled tasks only see paths inside the panel container; in-panel
+      upgrade is disabled, update from the app store instead and data in
+      the mounted folder is kept; bind mounts of newly created containers
+      use real host paths.
+    author: 1Panel-dev
+    official: https://1panel.cn
+    help: https://1panel.cn/docs/v2/
+    publisher: xw
+    publisher_link: https://github.com/1787755656
+
+# 开源合规：上游 GPL-3.0
+license_agreement_link:
+  - https://github.com/1Panel-dev/1Panel/blob/main/LICENSE
+source_code_link:
+  - https://github.com/1Panel-dev/1Panel
+technical_support_link:
+  - https://github.com/1Panel-dev/1Panel/issues

@@ -246,8 +246,8 @@
   },
   "com.personal.myip": {
     "assets": {
-      "amd64_nasync_com.personal.myip_8.0.0.0001.upk": 0,
-      "arm64_nasync_com.personal.myip_8.0.0.0001.upk": 0
+      "amd64_nasync_com.personal.myip_8.0.0.0001.upk": 1,
+      "arm64_nasync_com.personal.myip_8.0.0.0001.upk": 2
     },
     "baseline": 0
   },
@@ -405,7 +405,7 @@
       "amd64_nasync_com.ponphil.litepan_0.5.6.0003.upk": 1,
       "amd64_nasync_com.ponphil.litepan_0.5.7.0004.upk": 4,
       "arm64_nasync_com.ponphil.litepan_0.5.6.0003.upk": 1,
-      "arm64_nasync_com.ponphil.litepan_0.5.7.0004.upk": 2
+      "arm64_nasync_com.ponphil.litepan_0.5.7.0004.upk": 3
     },
     "baseline": 0
   },

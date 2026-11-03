@@ -226,37 +226,6 @@
       ]
     },
     {
-      "appname": "com.personal.1panel",
-      "display_name": "1Panel 服务器管理面板",
-      "description": "Linux 服务器在线管理面板（1Panel 官方开源项目）。以 Docker 应用运行，已映射宿主机 Docker 权限，面板内可直接查看、启停、重建 NAS 上的全部容器与镜像，一键安装 1Panel 应用商店里的各类容器应用，并管理网络、存储卷与编排模板。内置资源监控、文件管理、计划任务、容器日志与终端。初始账号密码随机生成，装好后到应用日志里查看，首次登录请立即修改；访问地址 http://NAS_IP:21086/entrance（entrance 是安全入口）。注意：面板为容器化运行，文件管理与计划任务只覆盖面板数据目录和容器内文件；面板内一键升级不可用，更新请走商店进行，数据保留在挂载目录不受影响。",
-      "homepage_url": "https://1panel.cn",
-      "updated_at": "2026-10-28",
-      "version": "2.4.1",
-      "upk_version": "2.4.1.0001",
-      "release_tag": "1panel/2.4.1.0001",
-      "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/1panel/2.4.1.0001/amd64_nasync_com.personal.1panel_2.4.1.0001.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/1panel/2.4.1.0001/arm64_nasync_com.personal.1panel_2.4.1.0001.upk"
-      },
-      "service_port": 21086,
-      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/1panel-icon.png",
-      "download_count": 0,
-      "app_type": "docker",
-      "category": "system",
-      "platforms": [
-        "amd64",
-        "arm64"
-      ],
-      "post_install_note": "初始密码是随机生成的：装好后到应用日志（或 Docker 套件的容器日志）里找「随机密码」一行，浏览器打开 http://NAS_IP:21086/entrance 登录（entrance 是安全入口），首次登录请立即改密。建议安装时就选一个共享文件夹作为数据目录（选好即完成授权），1Panel 的面板数据和应用商店装的应用都存那里，文件管理器可见、方便备份；留空则落在应用数据目录。面板里新建容器选 bind 挂载时，看到的路径就是宿主机真实路径，可直接生效。面板内不要点一键升级，更新走商店即可。",
-      "install_params": [
-        {
-          "key": "DATA_DIR",
-          "name": "数据目录",
-          "description": "选一个共享文件夹，1Panel 的面板数据和应用商店所装应用都存这里，选好即完成授权，文件管理器可见、方便备份。留空则使用应用自身的数据目录。修改此参数需要卸载后重新安装。"
-        }
-      ]
-    },
-    {
       "appname": "com.personal.handbrakerk",
       "display_name": "HandBrake 硬件转码版",
       "description": "打了 Rockchip RKMPP 补丁的 HandBrake，视频编解码跑在 RK3588 的 VPU 上而不是 CPU 上。实测 60 秒 1080p 转 H.265：硬件 6.2 秒、CPU 占用 10.5 秒；同机 x265 veryfast 需要 85 秒、CPU 511 秒，快 13 倍以上。浏览器里就是完整的 HandBrake 图形界面（含简体中文），在「视频编码」下拉框选 H.265 (Rockchip MPP) 或 H.264 (Rockchip MPP) 即可，选了 MPP 编码器会自动连解码一起走硬件。另可开启监控目录自动转码：放进监控目录的视频，等文件大小稳定后自动转码输出。\n注意：仅支持 RK3588/RK3588S 机型；RK3588 编码单元只支持 8-bit H.264/H.265，没有 10-bit 和 AV1；硬件编码是恒定 QP，不看源码率，转出来有可能比源文件更大；缩放/滤镜跑在 CPU 上，请保持源分辨率、关掉降噪，自带预设（如 Fast 1080p30）会强制缩放。\n许可说明：镜像内 FFmpeg 因 rkmpp 以 GPLv3 编译，与 HandBrake 的 GPLv2-only 在分发层面存在许可冲突，详见 release 说明。",
