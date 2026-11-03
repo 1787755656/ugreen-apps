@@ -6,6 +6,10 @@
   - apps/<slug>/<appid>/project.yaml    tag_types（分类缺省映射）、icon(rootfs_common/icon.png)
   - GitHub Releases（tag 形如 <slug>/vX.Y.Z[-rN]） 资产文件名给出真实的 upk_version（x.y.z.000N）
 
+下载计数：download_count 按资产文件名里的 appid 跨该应用【全部】 release 累加，
+而不是只数最新一个 release——发新版后旧资产的计数仍在 GitHub 上持续增长，
+只取最新版会让每次自动构建更新都把计数清零重来。
+
 输出：仓库根 apps.json，字段契约见 ../（ugos-store 仓库）catalog/apps.json 与其 README。
 usage:  GITHUB_TOKEN=... python3 scripts/ci/generate-catalog.py   （token 可选，匿名有速率限制）
 """
@@ -84,18 +88,31 @@ def fetch_releases() -> list:
 def main() -> None:
     root = Path(__file__).resolve().parents[2]
     releases = fetch_releases()
-    by_slug: dict[str, dict] = {}
+    by_slug: dict[str, list[dict]] = {}
     for r in sorted(releases, key=lambda x: x.get("published_at") or "", reverse=True):
         slug = r["tag_name"].split("/", 1)[0]
-        by_slug.setdefault(slug, r)  # API 已按时间倒序，第一个即最新
+        by_slug.setdefault(slug, []).append(r)  # API 已按时间倒序，第一个即最新
+
+    # 下载计数按 appid 跨全部 release 累加（GitHub 的 asset download_count
+    # 永久保留，历史版本被下载也会涨；只数最新 release 等于发版即清零）。
+    downloads_by_appid: dict[str, int] = {}
+    for r in releases:
+        for a in r.get("assets", []):
+            m = ASSET_RE.match(a["name"])
+            if m:
+                appid = m.group("appid")
+                downloads_by_appid[appid] = downloads_by_appid.get(appid, 0) + a.get("download_count", 0)
 
     entries, missing = [], []
     for slug_dir in sorted((root / "apps").iterdir()):
+        if not slug_dir.is_dir():
+            continue  # 跳过 .DS_Store 之类混进来的文件
         slug = slug_dir.name
-        rel = by_slug.get(slug)
-        if rel is None:
+        rels = by_slug.get(slug)
+        if not rels:
             missing.append(slug)
             continue
+        rel = rels[0]
         meta = read_meta(root / "scripts/apps" / slug / "meta.env")
         app_id = meta.get("APP_ID", "")
         if not app_id:
@@ -103,7 +120,7 @@ def main() -> None:
             continue
         proj = read_project(slug_dir / app_id / "project.yaml")
 
-        urls, upk_version, platforms, downloads = {}, "", [], 0
+        urls, upk_version, platforms = {}, "", []
         for a in rel.get("assets", []):
             m = ASSET_RE.match(a["name"])
             if not m or m.group("appid") != app_id:
@@ -111,7 +128,7 @@ def main() -> None:
             urls[m.group(1)] = a["browser_download_url"]
             platforms.append(m.group(1))
             upk_version = m.group("ver")
-            downloads += a.get("download_count", 0)
+        downloads = downloads_by_appid.get(app_id, 0)
         if not urls:
             print(f"warn: {slug} 最新 release 无匹配 {app_id} 的 upk 资产，跳过", file=sys.stderr)
             continue
@@ -161,6 +178,12 @@ def main() -> None:
             for e in extra_apps:
                 name = e.get("appname")
                 if name and name not in seen:
+                    e = dict(e)
+                    # 计数同样从本仓 release 资产累加；仓库里没有该 appid 的
+                    # 资产（release 托管在别处）时保留条目手填的值。
+                    total = downloads_by_appid.get(name, 0)
+                    if total:
+                        e["download_count"] = total
                     entries.append(e)
                     seen.add(name)
         except Exception as e:  # noqa: BLE001
