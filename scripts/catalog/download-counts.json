@@ -54,9 +54,9 @@
   "com.magiccode.magicpush": {
     "assets": {
       "amd64_nasync_com.magiccode.magicpush_1.14.0.0007.upk": 3,
-      "amd64_nasync_com.magiccode.magicpush_1.15.0.0008.upk": 0,
+      "amd64_nasync_com.magiccode.magicpush_1.15.0.0008.upk": 1,
       "arm64_nasync_com.magiccode.magicpush_1.14.0.0007.upk": 3,
-      "arm64_nasync_com.magiccode.magicpush_1.15.0.0008.upk": 0
+      "arm64_nasync_com.magiccode.magicpush_1.15.0.0008.upk": 2
     },
     "baseline": 0
   },
@@ -241,6 +241,13 @@
       "amd64_nasync_com.personal.mook_0.4.6.0005.upk": 10,
       "arm64_nasync_com.personal.mook_0.2.8.0004.upk": 3,
       "arm64_nasync_com.personal.mook_0.4.6.0005.upk": 2
+    },
+    "baseline": 0
+  },
+  "com.personal.myip": {
+    "assets": {
+      "amd64_nasync_com.personal.myip_8.0.0.0001.upk": 0,
+      "arm64_nasync_com.personal.myip_8.0.0.0001.upk": 0
     },
     "baseline": 0
   },

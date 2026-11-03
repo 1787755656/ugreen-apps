@@ -518,7 +518,7 @@
       },
       "service_port": 23020,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/magicpush/com.magiccode.magicpush/rootfs_common/icon.png",
-      "download_count": 6,
+      "download_count": 9,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -597,6 +597,30 @@
       "service_port": 5866,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/mook/com.personal.mook/rootfs_common/icon.png",
       "download_count": 22,
+      "app_type": "native",
+      "category": "system",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ],
+      "install_params": null
+    },
+    {
+      "appname": "com.personal.myip",
+      "display_name": "MyIP (jason5ng32/MyIP)",
+      "description": "开源 IP 工具箱 MyIP（ipcheck.ing）的绿联原生应用版本。查看本机 IP 与浏览器指纹，查询任意 IP 或域名的归属地、ASN、WHOIS、DNS 记录， 支持 DNS 泄漏检测、WebRTC 隐身测试和基于 Cloudflare 的网速测试。 免费数据源开箱即用。",
+      "homepage_url": "https://ipcheck.ing",
+      "updated_at": "2026-11-03",
+      "version": "8.0.0",
+      "upk_version": "8.0.0.0001",
+      "release_tag": "myip/v8.0.0",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/myip/v8.0.0/amd64_nasync_com.personal.myip_8.0.0.0001.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/myip/v8.0.0/arm64_nasync_com.personal.myip_8.0.0.0001.upk"
+      },
+      "service_port": 28966,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/myip/com.personal.myip/rootfs_common/icon.png",
+      "download_count": 0,
       "app_type": "native",
       "category": "system",
       "platforms": [
