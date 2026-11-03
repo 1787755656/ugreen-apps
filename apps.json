@@ -35,17 +35,17 @@
       "display_name": "ass (ANI-RSS)",
       "description": "基于 RSS 自动追番、订阅、下载、刮削与洗版（上游 ANI-RSS）。应用内置 Eclipse Temurin JRE，无需 NAS 安装系统 Java。默认账号 admin / admin， 登录后请及时修改密码。请在应用设置中授权媒体/下载共享目录，并在 WebUI 中配置下载路径与下载器。",
       "homepage_url": "https://github.com/wushuo894/ani-rss",
-      "updated_at": "2026-10-28",
-      "version": "3.2.54",
-      "upk_version": "3.2.54.0013",
-      "release_tag": "ani-rss/v3.2.54",
+      "updated_at": "2026-11-03",
+      "version": "3.2.55",
+      "upk_version": "3.2.55.0014",
+      "release_tag": "ani-rss/v3.2.55",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/ani-rss/v3.2.54/amd64_nasync_com.wushuo.anirss_3.2.54.0013.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/ani-rss/v3.2.54/arm64_nasync_com.wushuo.anirss_3.2.54.0013.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/ani-rss/v3.2.55/amd64_nasync_com.wushuo.anirss_3.2.55.0014.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/ani-rss/v3.2.55/arm64_nasync_com.wushuo.anirss_3.2.55.0014.upk"
       },
       "service_port": 7789,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/ani-rss/com.wushuo.anirss/rootfs_common/icon.png",
-      "download_count": 4,
+      "download_count": 0,
       "app_type": "native",
       "category": "download",
       "platforms": [
@@ -75,7 +75,7 @@
       },
       "service_port": 25900,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/chromium/com.personal.chromium/rootfs_common/icon.png",
-      "download_count": 7,
+      "download_count": 8,
       "app_type": "docker",
       "category": "system",
       "platforms": [
@@ -165,7 +165,7 @@
       },
       "service_port": 25400,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/deenmusic/com.personal.deenmusic/rootfs_common/icon.png",
-      "download_count": 18,
+      "download_count": 19,
       "app_type": "native",
       "category": "download",
       "platforms": [
@@ -308,7 +308,7 @@
       },
       "service_port": 28600,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/frp/com.personal.atou.frp/rootfs_common/icon.png",
-      "download_count": 5,
+      "download_count": 6,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -596,7 +596,7 @@
       },
       "service_port": 5866,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/mook/com.personal.mook/rootfs_common/icon.png",
-      "download_count": 11,
+      "download_count": 12,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -704,7 +704,7 @@
       },
       "service_port": 28088,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/octop/com.tencent.octop/rootfs_common/icon.png",
-      "download_count": 1,
+      "download_count": 3,
       "app_type": "native",
       "category": "ai",
       "platforms": [
@@ -1069,7 +1069,7 @@
       },
       "service_port": 28750,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/ugtheme/com.personal.ugtheme/rootfs_common/icon.png",
-      "download_count": 27,
+      "download_count": 28,
       "app_type": "docker",
       "category": "utility",
       "platforms": [
@@ -1099,7 +1099,7 @@
       },
       "service_port": 28085,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/zhiyinmusic/com.personal.zhiyinmusic/rootfs_common/icon.png",
-      "download_count": 15,
+      "download_count": 18,
       "app_type": "native",
       "category": "media",
       "platforms": [
