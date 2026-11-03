@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>MyIP</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+         background: #0f172a; color: #e2e8f0; display: flex;
+         min-height: 100vh; margin: 0; align-items: center; justify-content: center; }
+  .card { text-align: center; padding: 2rem; }
+  h1 { font-size: 1.6rem; margin: 0 0 .5rem; }
+  p { color: #94a3b8; line-height: 1.8; margin: .4rem 0; }
+  a { color: #38bdf8; font-weight: 600; text-decoration: none; }
+  code { background: #1e293b; padding: .15rem .4rem; border-radius: 4px; }
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>MyIP — IP 工具箱</h1>
+  <p>这个页面是打包占位页。完整应用请在浏览器打开：</p>
+  <p><a id="go" href="/">http://<span id="host"></span>:28966</a></p>
+  <p>或直接访问 NAS 的 <code>28966</code> 端口。</p>
+</div>
+<script>
+  var h = location.hostname || 'NAS_IP';
+  document.getElementById('host').textContent = h;
+  document.getElementById('go').href = 'http://' + h + ':28966/';
+</script>
+</body>
+</html>

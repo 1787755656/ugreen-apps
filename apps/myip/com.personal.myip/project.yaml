@@ -1,0 +1,83 @@
+# ============================================================
+# MyIP — UGOS Pro 原生应用配置
+#
+# 上游：https://github.com/jason5ng32/MyIP（ipcheck.ing，MIT）
+# Node.js 24 运行时（官方 glibc 构建），免 shell 引导层单进程拉起两台服务器：
+#   backend-server.js  纯 API（127.0.0.1，只服务本地反代）
+#   frontend-server.js 静态 dist + SPA fallback + /api 反代（对外端口）
+# 应用零配置开箱即用；各 API key / MaxMind 凭据走应用数据目录下的 .env。
+# ============================================================
+
+spec_version: "2.1"
+
+app_id: com.personal.myip
+
+# 跟随上游 MyIP 版本，打包时 --build 追加构建号
+version: 8.0.0
+
+support_arch:
+  - amd64
+  - arm64
+
+supports:
+  - app
+  - pc
+
+# 免 shell 启动链：平台只绝对化首个 token，且 WorkingDirectory 固定 data/，
+# 所以用 -e 内联入口，由 process.execPath 反推安装目录再加载引导层。
+start_cmd: bin/node -e "require(require('path').join(require('path').dirname(process.execPath),'..','app','ugos-start.cjs'))"
+
+# frontend-server 的监听端口（平台探活）。避开上游默认 18966 ——
+# 用户可能同时跑着 Docker 版 MyIP，端口会撞。
+port: 28966
+
+# 后端已托管完整 WebUI（含 SPA fallback），浏览器直连端口即可。
+open_type: tab
+
+# 启动链不经过 shell（node -e → app/ugos-start.cjs，全包内绝对路径），
+# 不需要 SYSTEM.EXEC_SYSTEM_COMMAND —— 那条权限只是把 /bin /sbin /usr/bin
+# /usr/sbin 挂进沙箱给 #!/bin/sh 用。查 IP / 下载 MaxMind、CAIDA 数据集
+# 必须出公网（需要 INTERNET，声明后 unit 的私网放行段改为全放行）。
+permissions:
+  - NETWORK.ACCESS_INTERNET
+
+tag_types:
+  - utility
+
+depend_fw_version: 1.13.0.0000
+
+license_agreement_link:
+  - https://github.com/jason5ng32/MyIP/blob/main/LICENSE
+
+source_code_link:
+  - https://github.com/jason5ng32/MyIP
+
+technical_support_link:
+  - https://github.com/jason5ng32/MyIP/issues
+
+i18n:
+  en-US:
+    name: MyIP
+    description: >-
+      MyIP — the open-source IP toolbox (ipcheck.ing) as a native UGOS app.
+      Check your IPs and browser fingerprints, look up any IP or domain
+      (geolocation, ASN, WHOIS, DNS records), run DNS leak / WebRTC
+      invisibility tests and a Cloudflare-based speed test. Works out of
+      the box with free data sources.
+    author: jason5ng32
+    official: https://github.com/jason5ng32/MyIP
+    help: https://github.com/jason5ng32/MyIP/blob/main/README.md
+    publisher: 穿斯帕沃特
+    publisher_link: https://club.ugnas.com/home.php?mod=space&uid=10131
+  zh-CN:
+    name: MyIP
+    description: >-
+      开源 IP 工具箱 MyIP（ipcheck.ing）的绿联原生应用版本。查看本机 IP
+      与浏览器指纹，查询任意 IP 或域名的归属地、ASN、WHOIS、DNS 记录，
+      支持 DNS 泄漏检测、WebRTC 隐身测试和基于 Cloudflare 的网速测试。
+      免费数据源开箱即用。
+    author: jason5ng32
+    official: https://github.com/jason5ng32/MyIP
+    help: https://github.com/jason5ng32/MyIP/blob/main/README_ZH.md
+    publisher: 穿斯帕沃特
+    publisher_link: https://club.ugnas.com/home.php?mod=space&uid=10131
