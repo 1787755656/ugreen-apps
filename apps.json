@@ -45,7 +45,7 @@
       },
       "service_port": 7789,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/ani-rss/com.wushuo.anirss/rootfs_common/icon.png",
-      "download_count": 4,
+      "download_count": 6,
       "app_type": "native",
       "category": "download",
       "platforms": [
@@ -901,7 +901,7 @@
       },
       "service_port": 18081,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/qbittorrent-ng6/com.superng6.qbittorrent/rootfs_common/icon.png",
-      "download_count": 7,
+      "download_count": 5,
       "app_type": "native",
       "category": "download",
       "platforms": [

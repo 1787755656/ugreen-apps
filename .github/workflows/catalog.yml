@@ -34,12 +34,14 @@ jobs:
 
       - name: Commit (if changed)
         run: |
-          if git diff --quiet apps.json; then
+          # download-counts.json 是下载计数的持久化状态（资产被 release 清理时
+          # 计数折进 baseline），必须和 apps.json 一起提交，否则清理折算不落库。
+          if git diff --quiet apps.json scripts/catalog/download-counts.json; then
             echo "apps.json unchanged"
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add apps.json
+          git add apps.json scripts/catalog/download-counts.json
           git commit -m "chore: refresh apps.json catalog [skip ci]"
           git push

@@ -1,0 +1,455 @@
+{
+  "com.ashc776.piggybank": {
+    "assets": {
+      "amd64_nasync_com.ashc776.piggybank_1.3.4.0010.upk": 2,
+      "amd64_nasync_com.ashc776.piggybank_1.5.5.0011.upk": 2,
+      "arm64_nasync_com.ashc776.piggybank_1.3.4.0010.upk": 1,
+      "arm64_nasync_com.ashc776.piggybank_1.5.5.0011.upk": 3
+    },
+    "baseline": 0
+  },
+  "com.chuan.idphotos": {
+    "assets": {
+      "amd64_nasync_com.chuan.idphotos_1.0.0.0002.upk": 1,
+      "amd64_nasync_com.chuan.idphotos_1.0.1.0003.upk": 13,
+      "arm64_nasync_com.chuan.idphotos_1.0.0.0002.upk": 5,
+      "arm64_nasync_com.chuan.idphotos_1.0.1.0003.upk": 3
+    },
+    "baseline": 0
+  },
+  "com.cloudreve.cloudreve": {
+    "assets": {
+      "amd64_nasync_com.cloudreve.cloudreve_4.19.1.0001.upk": 2,
+      "arm64_nasync_com.cloudreve.cloudreve_4.19.1.0001.upk": 2
+    },
+    "baseline": 0
+  },
+  "com.gdy666.lucky": {
+    "assets": {
+      "amd64_nasync_com.gdy666.lucky_2.27.2.0004.upk": 4,
+      "amd64_nasync_com.gdy666.lucky_3.5.0.0012.upk": 7,
+      "arm64_nasync_com.gdy666.lucky_2.27.2.0004.upk": 1,
+      "arm64_nasync_com.gdy666.lucky_3.5.0.0012.upk": 2
+    },
+    "baseline": 0
+  },
+  "com.koolcenter.fastnet": {
+    "assets": {
+      "amd64_nasync_com.koolcenter.fastnet_0.7.6.0003.upk": 9,
+      "amd64_nasync_com.koolcenter.fastnet_0.7.8.0004.upk": 8,
+      "arm64_nasync_com.koolcenter.fastnet_0.7.6.0003.upk": 2,
+      "arm64_nasync_com.koolcenter.fastnet_0.7.8.0004.upk": 5
+    },
+    "baseline": 0
+  },
+  "com.magiccode.magicmail": {
+    "assets": {
+      "amd64_com.magiccode.magicmail_1.2.0.0002.upk": 1,
+      "amd64_com.magiccode.magicmail_1.3.0.0003.upk": 11,
+      "arm64_com.magiccode.magicmail_1.2.0.0002.upk": 1,
+      "arm64_com.magiccode.magicmail_1.3.0.0003.upk": 2
+    },
+    "baseline": 0
+  },
+  "com.magiccode.magicpush": {
+    "assets": {
+      "amd64_nasync_com.magiccode.magicpush_1.14.0.0007.upk": 3,
+      "amd64_nasync_com.magiccode.magicpush_1.15.0.0008.upk": 0,
+      "arm64_nasync_com.magiccode.magicpush_1.14.0.0007.upk": 3,
+      "arm64_nasync_com.magiccode.magicpush_1.15.0.0008.upk": 0
+    },
+    "baseline": 0
+  },
+  "com.metatube.server": {
+    "assets": {
+      "amd64_nasync_com.metatube.server_1.4.0.0003.upk": 3,
+      "arm64_nasync_com.metatube.server_1.4.0.0003.upk": 4
+    },
+    "baseline": 0
+  },
+  "com.natfrp.launcher": {
+    "assets": {
+      "amd64_nasync_com.natfrp.launcher_2026.10.23.0007.upk": 2,
+      "amd64_nasync_com.natfrp.launcher_2026.10.7.0005.upk": 4,
+      "arm64_nasync_com.natfrp.launcher_2026.10.23.0007.upk": 3,
+      "arm64_nasync_com.natfrp.launcher_2026.10.7.0005.upk": 4
+    },
+    "baseline": 0
+  },
+  "com.oplist.openlist": {
+    "assets": {
+      "amd64_nasync_com.oplist.openlist_4.2.8.0007.upk": 1,
+      "amd64_nasync_com.oplist.openlist_4.2.9.0008.upk": 4,
+      "arm64_nasync_com.oplist.openlist_4.2.8.0007.upk": 2,
+      "arm64_nasync_com.oplist.openlist_4.2.9.0008.upk": 2
+    },
+    "baseline": 0
+  },
+  "com.personal.100zip": {
+    "assets": {
+      "amd64_nasync_com.personal.100zip_0.5.20.0003.upk": 6,
+      "arm64_nasync_com.personal.100zip_0.5.20.0003.upk": 6
+    },
+    "baseline": 0
+  },
+  "com.personal.1panel": {
+    "assets": {
+      "amd64_nasync_com.personal.1panel_2.4.1.0001.upk": 7,
+      "arm64_nasync_com.personal.1panel_2.4.1.0001.upk": 2
+    },
+    "baseline": 0
+  },
+  "com.personal.aellus": {
+    "assets": {
+      "amd64_nasync_com.personal.aellus_1.0.6.0001.upk": 3,
+      "arm64_nasync_com.personal.aellus_1.0.6.0001.upk": 2
+    },
+    "baseline": 0
+  },
+  "com.personal.atou.frp": {
+    "assets": {
+      "amd64_nasync_com.personal.atou.frp_0.71.1.0001.upk": 3,
+      "arm64_nasync_com.personal.atou.frp_0.71.1.0001.upk": 3
+    },
+    "baseline": 0
+  },
+  "com.personal.atou.musicsub": {
+    "assets": {
+      "amd64_nasync_com.personal.atou.musicsub_0.2.1.0003.upk": 3,
+      "arm64_nasync_com.personal.atou.musicsub_0.2.1.0003.upk": 1
+    },
+    "baseline": 0
+  },
+  "com.personal.chromium": {
+    "assets": {
+      "amd64_nasync_com.personal.chromium_26.10.1.0001.upk": 5,
+      "arm64_nasync_com.personal.chromium_26.10.1.0001.upk": 3
+    },
+    "baseline": 0
+  },
+  "com.personal.clouddl": {
+    "assets": {
+      "amd64_nasync_com.personal.clouddl_1.5.9.0004.upk": 1,
+      "amd64_nasync_com.personal.clouddl_1.5.9.0010.upk": 12,
+      "arm64_nasync_com.personal.clouddl_1.5.9.0004.upk": 1,
+      "arm64_nasync_com.personal.clouddl_1.5.9.0010.upk": 3
+    },
+    "baseline": 0
+  },
+  "com.personal.deenmusic": {
+    "assets": {
+      "amd64_nasync_com.personal.deenmusic_0.7.8.0014.upk": 11,
+      "arm64_nasync_com.personal.deenmusic_0.7.8.0014.upk": 8
+    },
+    "baseline": 0
+  },
+  "com.personal.deepseekharness": {
+    "assets": {
+      "amd64_nasync_com.personal.deepseekharness_0.2.1.0004.upk": 1,
+      "amd64_nasync_com.personal.deepseekharness_0.2.1.0005.upk": 6,
+      "arm64_nasync_com.personal.deepseekharness_0.2.1.0004.upk": 2,
+      "arm64_nasync_com.personal.deepseekharness_0.2.1.0005.upk": 5
+    },
+    "baseline": 0
+  },
+  "com.personal.dnet": {
+    "assets": {
+      "amd64_nasync_com.personal.dnet_3.0.1.0002.upk": 2,
+      "amd64_nasync_com.personal.dnet_3.1.0.0004.upk": 1,
+      "arm64_nasync_com.personal.dnet_3.0.1.0002.upk": 2,
+      "arm64_nasync_com.personal.dnet_3.1.0.0004.upk": 1
+    },
+    "baseline": 0
+  },
+  "com.personal.easytier": {
+    "assets": {
+      "amd64_nasync_com.personal.easytier_2.6.4.0003.upk": 2,
+      "arm64_nasync_com.personal.easytier_2.6.4.0003.upk": 2
+    },
+    "baseline": 0
+  },
+  "com.personal.frpnet": {
+    "assets": {
+      "amd64_nasync_com.personal.frpnet_1.0.0.0002.upk": 3,
+      "arm64_nasync_com.personal.frpnet_1.0.0.0002.upk": 2
+    },
+    "baseline": 0
+  },
+  "com.personal.handbrakerk": {
+    "assets": {
+      "arm64_com.personal.handbrakerk_1.0.0.0006.upk": 2,
+      "arm64_nasync_com.personal.handbrakerk_1.0.0.0007.upk": 5
+    },
+    "baseline": 0
+  },
+  "com.personal.ittools": {
+    "assets": {
+      "amd64_nasync_com.personal.ittools_2024.10.22.0001.upk": 10,
+      "arm64_nasync_com.personal.ittools_2024.10.22.0001.upk": 2
+    },
+    "baseline": 0
+  },
+  "com.personal.junyaoktv": {
+    "assets": {
+      "amd64_nasync_com.personal.junyaoktv_1.0.0.0004.upk": 9,
+      "arm64_nasync_com.personal.junyaoktv_1.0.0.0004.upk": 15
+    },
+    "baseline": 0
+  },
+  "com.personal.liteclass": {
+    "assets": {
+      "amd64_com.personal.liteclass_1.1.5.0001.upk": 1,
+      "amd64_nasync_com.personal.liteclass_1.1.6.0006.upk": 5,
+      "arm64_com.personal.liteclass_1.1.5.0001.upk": 3,
+      "arm64_nasync_com.personal.liteclass_1.1.6.0006.upk": 3
+    },
+    "baseline": 0
+  },
+  "com.personal.liteparser": {
+    "assets": {
+      "amd64_nasync_com.personal.liteparser_0.3.0.0010.upk": 28,
+      "arm64_nasync_com.personal.liteparser_0.3.0.0010.upk": 7
+    },
+    "baseline": 0
+  },
+  "com.personal.litereader": {
+    "assets": {
+      "amd64_nasync_com.personal.litereader_1.2.3.0006.upk": 13,
+      "arm64_nasync_com.personal.litereader_1.2.3.0006.upk": 5
+    },
+    "baseline": 0
+  },
+  "com.personal.lunatv": {
+    "assets": {
+      "amd64_nasync_com.personal.lunatv_6.6.4.0002.upk": 1,
+      "amd64_nasync_com.personal.lunatv_6.6.5.0003.upk": 27,
+      "arm64_nasync_com.personal.lunatv_6.6.4.0002.upk": 1,
+      "arm64_nasync_com.personal.lunatv_6.6.5.0003.upk": 10
+    },
+    "baseline": 0
+  },
+  "com.personal.mariadb": {
+    "assets": {
+      "amd64_nasync_com.personal.mariadb_11.4.12.0001.upk": 5,
+      "arm64_nasync_com.personal.mariadb_11.4.12.0001.upk": 2
+    },
+    "baseline": 0
+  },
+  "com.personal.mook": {
+    "assets": {
+      "amd64_nasync_com.personal.mook_0.2.8.0004.upk": 7,
+      "amd64_nasync_com.personal.mook_0.4.6.0005.upk": 10,
+      "arm64_nasync_com.personal.mook_0.2.8.0004.upk": 3,
+      "arm64_nasync_com.personal.mook_0.4.6.0005.upk": 2
+    },
+    "baseline": 0
+  },
+  "com.personal.navidrome": {
+    "assets": {
+      "amd64_nasync_com.personal.navidrome_0.64.2.0004.upk": 2,
+      "amd64_nasync_com.personal.navidrome_0.64.2.0005.upk": 1,
+      "arm64_nasync_com.personal.navidrome_0.64.2.0004.upk": 1,
+      "arm64_nasync_com.personal.navidrome_0.64.2.0005.upk": 7
+    },
+    "baseline": 0
+  },
+  "com.personal.nginx": {
+    "assets": {
+      "amd64_nasync_com.personal.nginx_1.30.6.0003.upk": 3,
+      "amd64_nasync_com.personal.nginx_1.30.6.0004.upk": 3,
+      "amd64_nasync_com.personal.nginx_1.30.6.0005.upk": 4,
+      "arm64_nasync_com.personal.nginx_1.30.6.0003.upk": 3,
+      "arm64_nasync_com.personal.nginx_1.30.6.0004.upk": 4,
+      "arm64_nasync_com.personal.nginx_1.30.6.0005.upk": 3
+    },
+    "baseline": 0
+  },
+  "com.personal.nm3u8dlre": {
+    "assets": {
+      "amd64_nasync_com.personal.nm3u8dlre_0.6.0.0002.upk": 4,
+      "arm64_nasync_com.personal.nm3u8dlre_0.6.0.0002.upk": 2
+    },
+    "baseline": 0
+  },
+  "com.personal.php56": {
+    "assets": {
+      "amd64_nasync_com.personal.php56_5.6.40.0005.upk": 1,
+      "amd64_nasync_com.personal.php56_5.6.42.0006.upk": 2,
+      "arm64_nasync_com.personal.php56_5.6.40.0005.upk": 1,
+      "arm64_nasync_com.personal.php56_5.6.42.0006.upk": 2
+    },
+    "baseline": 0
+  },
+  "com.personal.php74": {
+    "assets": {
+      "amd64_nasync_com.personal.php74_7.4.33.0005.upk": 2,
+      "amd64_nasync_com.personal.php74_7.4.34.0006.upk": 3,
+      "arm64_nasync_com.personal.php74_7.4.33.0005.upk": 1,
+      "arm64_nasync_com.personal.php74_7.4.34.0006.upk": 11
+    },
+    "baseline": 0
+  },
+  "com.personal.php83": {
+    "assets": {
+      "amd64_nasync_com.personal.php83_8.3.32.0005.upk": 1,
+      "amd64_nasync_com.personal.php83_8.3.36.0006.upk": 2,
+      "arm64_nasync_com.personal.php83_8.3.32.0005.upk": 2,
+      "arm64_nasync_com.personal.php83_8.3.36.0006.upk": 3
+    },
+    "baseline": 0
+  },
+  "com.personal.postgresql17": {
+    "assets": {
+      "amd64_nasync_com.personal.postgresql17_1.0.0.0001.upk": 5,
+      "arm64_nasync_com.personal.postgresql17_1.0.0.0001.upk": 1
+    },
+    "baseline": 0
+  },
+  "com.personal.randomvideo": {
+    "assets": {
+      "amd64_nasync_com.personal.randomvideo_0.1.0.0006.upk": 11,
+      "arm64_nasync_com.personal.randomvideo_0.1.0.0006.upk": 1
+    },
+    "baseline": 0
+  },
+  "com.personal.readeck": {
+    "assets": {
+      "amd64_nasync_com.personal.readeck_0.23.4.0004.upk": 2,
+      "amd64_nasync_com.personal.readeck_0.23.5.0005.upk": 2,
+      "arm64_nasync_com.personal.readeck_0.23.4.0004.upk": 2,
+      "arm64_nasync_com.personal.readeck_0.23.5.0005.upk": 2
+    },
+    "baseline": 0
+  },
+  "com.personal.redis": {
+    "assets": {
+      "amd64_nasync_com.personal.redis_8.10.0.0001.upk": 6,
+      "arm64_nasync_com.personal.redis_8.10.0.0001.upk": 2
+    },
+    "baseline": 0
+  },
+  "com.personal.sub2api": {
+    "assets": {
+      "amd64_nasync_com.personal.sub2api_0.2.18.0011.upk": 3,
+      "amd64_nasync_com.personal.sub2api_0.2.19.0015.upk": 3,
+      "arm64_nasync_com.personal.sub2api_0.2.18.0011.upk": 1,
+      "arm64_nasync_com.personal.sub2api_0.2.19.0015.upk": 2
+    },
+    "baseline": 0
+  },
+  "com.personal.trilium": {
+    "assets": {
+      "amd64_nasync_com.personal.trilium_106.0.0.0004.upk": 2,
+      "amd64_nasync_com.personal.trilium_106.1.0.0005.upk": 4,
+      "arm64_nasync_com.personal.trilium_106.0.0.0004.upk": 4,
+      "arm64_nasync_com.personal.trilium_106.1.0.0005.upk": 3
+    },
+    "baseline": 0
+  },
+  "com.personal.ugstore": {
+    "assets": {
+      "amd64_nasync_com.personal.ugstore_0.1.0.0016.upk": 3,
+      "amd64_nasync_com.personal.ugstore_0.1.0.0017.upk": 13,
+      "amd64_nasync_com.personal.ugstore_0.1.0.0020.upk": 24,
+      "amd64_nasync_com.personal.ugstore_0.1.0.0021.upk": 13,
+      "amd64_nasync_com.personal.ugstore_0.1.0.0022.upk": 14,
+      "amd64_nasync_com.personal.ugstore_0.1.0.0023.upk": 8,
+      "amd64_nasync_com.personal.ugstore_0.1.0.0025.upk": 16,
+      "amd64_nasync_com.personal.ugstore_0.1.0.0027.upk": 3,
+      "amd64_nasync_com.personal.ugstore_0.1.0.0028.upk": 22,
+      "amd64_nasync_com.personal.ugstore_0.1.0.0029.upk": 2,
+      "amd64_nasync_com.personal.ugstore_0.1.0.0030.upk": 12,
+      "amd64_nasync_com.personal.ugstore_0.1.0.0031.upk": 15,
+      "arm64_nasync_com.personal.ugstore_0.1.0.0016.upk": 4,
+      "arm64_nasync_com.personal.ugstore_0.1.0.0017.upk": 3,
+      "arm64_nasync_com.personal.ugstore_0.1.0.0020.upk": 10,
+      "arm64_nasync_com.personal.ugstore_0.1.0.0021.upk": 4,
+      "arm64_nasync_com.personal.ugstore_0.1.0.0022.upk": 10,
+      "arm64_nasync_com.personal.ugstore_0.1.0.0023.upk": 6,
+      "arm64_nasync_com.personal.ugstore_0.1.0.0025.upk": 6,
+      "arm64_nasync_com.personal.ugstore_0.1.0.0027.upk": 3,
+      "arm64_nasync_com.personal.ugstore_0.1.0.0028.upk": 7,
+      "arm64_nasync_com.personal.ugstore_0.1.0.0029.upk": 3,
+      "arm64_nasync_com.personal.ugstore_0.1.0.0030.upk": 5,
+      "arm64_nasync_com.personal.ugstore_0.1.0.0031.upk": 9
+    },
+    "baseline": 0
+  },
+  "com.personal.ugtheme": {
+    "assets": {
+      "amd64_nasync_com.personal.ugtheme_1.1.1.0007.upk": 29,
+      "amd64_nasync_com.personal.ugtheme_1.2.2.0010.upk": 20,
+      "arm64_nasync_com.personal.ugtheme_1.1.1.0007.upk": 10,
+      "arm64_nasync_com.personal.ugtheme_1.2.2.0010.upk": 8
+    },
+    "baseline": 0
+  },
+  "com.personal.zhiyinmusic": {
+    "assets": {
+      "amd64_nasync_com.personal.zhiyinmusic_0.8.1.0005.upk": 11,
+      "amd64_nasync_com.personal.zhiyinmusic_0.8.1.0011.upk": 12,
+      "arm64_nasync_com.personal.zhiyinmusic_0.8.1.0005.upk": 10,
+      "arm64_nasync_com.personal.zhiyinmusic_0.8.1.0011.upk": 6
+    },
+    "baseline": 0
+  },
+  "com.ponphil.litepan": {
+    "assets": {
+      "amd64_nasync_com.ponphil.litepan_0.5.6.0003.upk": 1,
+      "amd64_nasync_com.ponphil.litepan_0.5.7.0004.upk": 4,
+      "arm64_nasync_com.ponphil.litepan_0.5.6.0003.upk": 1,
+      "arm64_nasync_com.ponphil.litepan_0.5.7.0004.upk": 2
+    },
+    "baseline": 0
+  },
+  "com.qbee.qbittorrent": {
+    "assets": {
+      "amd64_nasync_com.qbee.qbittorrent_5.2.3.0004.upk": 2,
+      "amd64_nasync_com.qbee.qbittorrent_5.2.4.0005.upk": 2,
+      "arm64_nasync_com.qbee.qbittorrent_5.2.3.0004.upk": 1,
+      "arm64_nasync_com.qbee.qbittorrent_5.2.4.0005.upk": 4
+    },
+    "baseline": 0
+  },
+  "com.sipeed.picoclaw": {
+    "assets": {
+      "amd64_nasync_com.sipeed.picoclaw_0.3.1.0003.upk": 7,
+      "arm64_nasync_com.sipeed.picoclaw_0.3.1.0003.upk": 3
+    },
+    "baseline": 0
+  },
+  "com.superng6.qbittorrent": {
+    "assets": {
+      "amd64_nasync_com.superng6.qbittorrent_5.2.4.0004.upk": 2,
+      "amd64_nasync_com.superng6.qbittorrent_5.3.0.0005.upk": 2,
+      "arm64_nasync_com.superng6.qbittorrent_5.2.4.0004.upk": 0,
+      "arm64_nasync_com.superng6.qbittorrent_5.3.0.0005.upk": 1
+    },
+    "baseline": 0
+  },
+  "com.tencent.octop": {
+    "assets": {
+      "amd64_nasync_com.tencent.octop_1.0.3.0011.upk": 12,
+      "amd64_nasync_com.tencent.octop_1.0.3.0012.upk": 1,
+      "arm64_nasync_com.tencent.octop_1.0.3.0011.upk": 2,
+      "arm64_nasync_com.tencent.octop_1.0.3.0012.upk": 2
+    },
+    "baseline": 0
+  },
+  "com.wushuo.anirss": {
+    "assets": {
+      "amd64_nasync_com.wushuo.anirss_3.2.54.0013.upk": 2,
+      "amd64_nasync_com.wushuo.anirss_3.2.55.0014.upk": 1,
+      "arm64_nasync_com.wushuo.anirss_3.2.54.0013.upk": 2,
+      "arm64_nasync_com.wushuo.anirss_3.2.55.0014.upk": 1
+    },
+    "baseline": 0
+  },
+  "com.xnkyn.p2peeproxy": {
+    "assets": {
+      "amd64_nasync_com.xnkyn.p2peeproxy_1.0.0.0003.upk": 18,
+      "arm64_nasync_com.xnkyn.p2peeproxy_1.0.0.0003.upk": 3
+    },
+    "baseline": 0
+  }
+}

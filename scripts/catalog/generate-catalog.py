@@ -6,9 +6,12 @@
   - apps/<slug>/<appid>/project.yaml    tag_types（分类缺省映射）、icon(rootfs_common/icon.png)
   - GitHub Releases（tag 形如 <slug>/vX.Y.Z[-rN]） 资产文件名给出真实的 upk_version（x.y.z.000N）
 
-下载计数：download_count 按资产文件名里的 appid 跨该应用【全部】 release 累加，
-而不是只数最新一个 release——发新版后旧资产的计数仍在 GitHub 上持续增长，
-只取最新版会让每次自动构建更新都把计数清零重来。
+下载计数：CI 的 release 清理只保留每应用最近 2 个上游版本（reusable-build-app
+的 MAX_VERSIONS），旧 release 连同资产的 download_count 一起消失，纯靠 GitHub
+数不出真实总量。因此计数持久化在 scripts/catalog/download-counts.json：
+按 appid 记 baseline（已被清理资产的计数总和，只增不减）+ assets（现存资产
+最近一次见到的计数）。每次刷新把消失资产的计数折进 baseline，总数 =
+baseline + 现存资产计数和，发新版 / 清理旧版都只会累加不会清零。
 
 输出：仓库根 apps.json，字段契约见 ../（ugos-store 仓库）catalog/apps.json 与其 README。
 usage:  GITHUB_TOKEN=... python3 scripts/ci/generate-catalog.py   （token 可选，匿名有速率限制）
@@ -88,20 +91,50 @@ def fetch_releases() -> list:
 def main() -> None:
     root = Path(__file__).resolve().parents[2]
     releases = fetch_releases()
+    if not releases:
+        # 空响应（限流/故障）时宁可失败：生成了空目录不说，还会把状态文件里
+        # 的存活资产全部当成"被清理"折进 baseline，下次数回来就重复计数。
+        print("error: releases API 返回空列表，跳过目录生成", file=sys.stderr)
+        sys.exit(1)
     by_slug: dict[str, list[dict]] = {}
     for r in sorted(releases, key=lambda x: x.get("published_at") or "", reverse=True):
         slug = r["tag_name"].split("/", 1)[0]
         by_slug.setdefault(slug, []).append(r)  # API 已按时间倒序，第一个即最新
 
-    # 下载计数按 appid 跨全部 release 累加（GitHub 的 asset download_count
-    # 永久保留，历史版本被下载也会涨；只数最新 release 等于发版即清零）。
-    downloads_by_appid: dict[str, int] = {}
+    # 下载计数持久化（机制见文件头注释）。
+    state_path = root / "scripts/catalog" / "download-counts.json"
+    try:
+        state: dict[str, dict] = (
+            json.loads(state_path.read_text(encoding="utf-8")) if state_path.exists() else {}
+        )
+    except Exception as e:  # noqa: BLE001 —— 状态损坏按空状态重建，计数从现存资产重攒
+        print(f"warn: 读取 {state_path.name} 失败，按空状态重建: {e}", file=sys.stderr)
+        state = {}
+
+    current: dict[str, dict[str, int]] = {}
     for r in releases:
         for a in r.get("assets", []):
             m = ASSET_RE.match(a["name"])
             if m:
-                appid = m.group("appid")
-                downloads_by_appid[appid] = downloads_by_appid.get(appid, 0) + a.get("download_count", 0)
+                current.setdefault(m.group("appid"), {})[a["name"]] = a.get("download_count", 0)
+
+    for appid, cur in current.items():
+        st = state.setdefault(appid, {"baseline": 0, "assets": {}})
+        for name in list(st["assets"]):
+            if name not in cur:  # 资产随旧 release 被清理，临走计数折进 baseline
+                st["baseline"] += st["assets"].pop(name)
+        for name, cnt in cur.items():
+            # GitHub 的 download_count 异步聚合，偶发读到偏小的旧值；
+            # 取历史最大值让展示计数单调不减，缓存追上来后自然对齐。
+            st["assets"][name] = max(st["assets"].get(name, 0), cnt)
+
+    downloads_by_appid = {
+        appid: st["baseline"] + sum(st["assets"].values()) for appid, st in state.items()
+    }
+
+    new_state = json.dumps(state, ensure_ascii=False, sort_keys=True, indent=2) + "\n"
+    if not state_path.exists() or state_path.read_text(encoding="utf-8") != new_state:
+        state_path.write_text(new_state, encoding="utf-8")
 
     entries, missing = [], []
     for slug_dir in sorted((root / "apps").iterdir()):
