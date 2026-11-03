@@ -38,6 +38,44 @@ emit_output() {
 
 BASE_TAG="${APP_SLUG}/v${VERSION}"
 
+# ---- BASE_VERSION_ONLY：快速开发期应用的「只跟基础版本」策略 ----
+# 名单里的应用（scripts/ci/base-version-only.conf）上游在同一 x.y.z 内连发
+# 预发布（octop 的 1.0.3b1→b2→…、deepseek-harness 的 0.2.1-rc.4→rc.5→…）。
+# 逐版自动出包的话 project.yaml 版本纹丝不动、只有 4 段构建号在涨，商店里
+# 看就是无意义刷版。schedule 跟上游时改为比对【基础版本 x.y.z】：base 已
+# 发布过 → 视为已发布跳过；base 真变了 → 照常构建。手动 workflow_dispatch
+# 不受限（指定 version/revision 仍可强出同 base 的包或 -rN 修订）。
+# 名单放 scripts/ci/ 独立 conf 而不是各 app 的 meta.env：scripts/ci/** 的
+# 改动不会触发任何应用的 push 构建（build-apps.yml 的 detect 明确排除），
+# 调整名单零副作用。
+BASE_VERSION_ONLY_CONF="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/base-version-only.conf"
+
+# 剥出基础版本：0.2.1-rc.4 → 0.2.1，1.0.3b2 → 1.0.3，1.0.3b1-r4 → 1.0.3
+# （先剥本仓库自己的 -rN 修订，再剥上游的 -<pre> 与裸字母数字后缀）
+version_base() {
+  printf '%s' "$1" \
+    | sed -E 's/-r[0-9]+$//' \
+    | sed -E 's/-[A-Za-z][A-Za-z0-9.]*$//' \
+    | sed -E 's/[A-Za-z][A-Za-z0-9.]*$//'
+}
+
+is_base_version_only() {
+  [ -f "${BASE_VERSION_ONLY_CONF}" ] && grep -Fxq -- "$1" "${BASE_VERSION_ONLY_CONF}"
+}
+
+# 该应用所有已发布 tag/release 归并出的基础版本集合（只留纯 x.y.z 形态，
+# import/000N 这类计数 tag 与其他杂项自然被过滤掉）
+released_bases() {
+  local slug="$1"
+  {
+    git ls-remote --tags origin "refs/tags/${slug}/*" 2>/dev/null | \
+      awk '{print $2}' | sed 's|^refs/tags/||' | sed 's|\^{}$||'
+    gh release list --limit 1000 --json tagName -q ".[] | .tagName | select(startswith(\"${slug}/v\"))" 2>/dev/null
+  } | sed "s|^${slug}/v||" | sort -u \
+    | sed -E 's/-r[0-9]+$//; s/-[A-Za-z][A-Za-z0-9.]*$//; s/[A-Za-z][A-Za-z0-9.]*$//' \
+    | grep -E '^[0-9]+(\.[0-9]+)*$' | sort -u || true
+}
+
 # ---- build_num: must never repeat a number ugcli has already handed out ----
 # A pure "tag count + 1" used to guarantee that trivially, but the release
 # job's cleanup step deletes superseded -rN tags (--cleanup-tag), so the
@@ -107,6 +145,20 @@ elif [ "${EVENT_NAME}" = "schedule" ]; then
     emit_output "should_build" "false"
     emit_output "build_num" "${BUILD_NUM}"
     exit 0
+  fi
+  # BASE_VERSION_ONLY 应用：精确版本没见过 ≠ 新版本——同 base 的预发布
+  # 迭代（新 bN / 新 rc）也算已发布，只有基础版本变化才值得出包。
+  if is_base_version_only "${APP_SLUG}"; then
+    INCOMING_BASE=$(version_base "${VERSION}")
+    RELEASED_BASES=$(released_bases "${APP_SLUG}")
+    if printf '%s\n' "${RELEASED_BASES}" | grep -Fxq -- "${INCOMING_BASE}"; then
+      echo "Scheduled run: base ${INCOMING_BASE} already released, same-base pre-release ${VERSION} skipped (BASE_VERSION_ONLY)"
+      emit_output "release_tag" "${BASE_TAG}"
+      emit_output "should_build" "false"
+      emit_output "build_num" "${BUILD_NUM}"
+      exit 0
+    fi
+    echo "Scheduled run: new base ${INCOMING_BASE} (${VERSION})"
   fi
   RELEASE_TAG="${BASE_TAG}"
   echo "Scheduled run: new version ${RELEASE_TAG}"
