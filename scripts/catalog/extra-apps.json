@@ -338,6 +338,30 @@
         "arm64"
       ],
       "post_install_note": "点开即在浏览器新标签进入游戏；目标站点为自签证书，浏览器首次打开出现证书提示时点「高级 → 继续前往」即可。"
+    },
+    {
+      "appname": "com.personal.atou.musicsub",
+      "display_name": "云音乐桥",
+      "description": "把官方「音乐」应用的曲库以标准 Subsonic/Navidrome API（1.16.1，对齐 Navidrome 兼容集）暴露给 Symfonium、play:Sub、DSub、Feishin 等标准客户端：浏览（歌手/专辑/流派）、搜索、无损原文件直播（Range 拖动）、封面、歌词、收藏、播放记录与歌单同步，全部实时转发官方应用，不直接读写它的数据库。\n从桌面打开应用进入管理页：先配置上游 UGOS 账号，再在客户端里添加服务器 http://NAS地址:21890。",
+      "homepage_url": "https://club.ugnas.com/forum.php?mod=viewthread&tid=7042",
+      "updated_at": "2026-11-03",
+      "version": "0.2.1",
+      "upk_version": "0.2.1.0003",
+      "release_tag": "musicsub/v0.2.1.0003",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/musicsub/v0.2.1.0003/amd64_nasync_com.personal.atou.musicsub_0.2.1.0003.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/musicsub/v0.2.1.0003/arm64_nasync_com.personal.atou.musicsub_0.2.1.0003.upk"
+      },
+      "service_port": 21890,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/musicsub-icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "media",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ],
+      "post_install_note": "首装默认管理账号 musicsub/musicsub，登录后请立即修改。"
     }
   ]
 }
