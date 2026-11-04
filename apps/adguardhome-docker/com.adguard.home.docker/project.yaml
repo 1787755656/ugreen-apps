@@ -1,0 +1,104 @@
+# ============================================================
+# AdGuard Home — UGOS Pro Docker 型应用（原生版副本）
+# 官方镜像 adguard/adguardhome，镜像 tar 打包进 upk 离线加载
+# DNS 标准 53 端口（docker 端口映射天然可绑，免 SSH 授权）；
+# 管理界面容器内 --web-addr 钉死 3080，向导改 Web 端口不生效
+# 机制与坑实录见 ugos-pro-app-dev skill references/docker-apps.md
+# ============================================================
+
+spec_version: "2.1"
+
+app_id: com.adguard.home.docker
+
+# 上游 v0.107.80 → 107.80.0（映射规则同原生版，见原生工程 scripts/get-latest-version.sh）
+version: 107.80.0
+
+product_series:
+  - nasync
+
+support_arch:
+  - amd64
+  - arm64
+
+supports:
+  - pc
+  - app
+
+is_docker_app: true
+
+# Docker 应用依赖 Docker 套件
+depend_docker_version: 1.7.0.0000
+
+depend_fw_version: 1.13.0.0000
+
+# WebUI 宿主端口（compose 里 3080:3080，供系统探测启动状态）
+port: 3080
+
+# Docker 应用只能 tab：浏览器新标签直连容器端口
+open_type: tab
+
+support_migration: true
+
+tag_types:
+  - utility
+
+# 开源合规信息（GPLv3）
+license_agreement_link:
+  - https://github.com/AdguardTeam/AdGuardHome/blob/master/LICENSE.txt
+source_code_link:
+  - https://github.com/AdguardTeam/AdGuardHome
+technical_support_link:
+  - https://github.com/AdguardTeam/AdGuardHome/issues
+
+parameters:
+  - key: DATA_PATH
+    type: path
+    required: false
+    changeable: true
+    multi: false
+    i18n:
+      en-US:
+        name: "Data directory"
+        description: "Optional: choose a folder for AdGuard Home config and query logs (e.g. a new folder under your Docker share) so data survives uninstall. Leave empty to store inside the app package directory (deleted on uninstall)."
+      zh-CN:
+        name: "数据目录"
+        description: "可选：选择存放 AdGuard Home 配置与查询日志的文件夹（建议在 Docker 共享目录下新建一个），卸载应用后数据仍保留。留空则存放在应用包内目录，卸载应用会一并删除。"
+
+# 应用展示信息（多语言）
+i18n:
+  en-US:
+    name: AdGuard Home
+    description: >-
+      AdGuard Home — network-wide ads & trackers blocking DNS server.
+      Covers ALL your home devices without any client-side software.
+      Docker edition: works out of the box on the standard DNS port 53
+      (no extra setup needed), admin UI is fixed on port 3080. The
+      first start is fully initialized — DEFAULT admin account:
+      admin, DEFAULT password: AdGuard@2026 (please change it right
+      after login). CN-friendly upstreams (223.5.5.5 / 119.29.29.29)
+      are preconfigured. Then point your router/clients' DNS to the
+      NAS IP. Optionally pick a data directory (parameter) to keep
+      config and query logs across uninstall. Image based on official
+      adguard/adguardhome. In-app self-upgrade is disabled; update via
+      the app center.
+    author: AdGuard
+    official: https://adguard.com/adguard-home/overview.html
+    help: https://github.com/AdguardTeam/AdGuardHome/wiki
+    publisher: Spawater
+    publisher_link: https://club.ugnas.com/home.php?mod=space&uid=10131
+  zh-CN:
+    name: AdGuard Home
+    description: >-
+      AdGuard Home —— 全网络广告与跟踪器拦截 DNS 服务器，无需在每台设备上
+      安装客户端即可保护家中所有设备。Docker 版开箱即用：DNS 使用标准 53
+      端口，管理界面固定 3080。首次启动已自动完成初始化——默认管理员账号
+      admin，默认密码 AdGuard@2026，登录后请立即在设置中修改密码；已预置
+      国内友好上游（223.5.5.5 / 119.29.29.29）。完成后把路由器或设备的
+      DNS 指向 NAS 的 IP 即可全局生效。可选「数据目录」参数持久化配置与
+      查询日志，卸载不丢。镜像基于官方 adguard/adguardhome（含默认配置
+      播种，已有配置不会被覆盖）。应用内自升级已禁用，升级走应用中心。
+    author: AdGuard
+    official: https://adguard.com/zh_cn/adguard-home/overview.html
+    help: https://github.com/AdguardTeam/AdGuardHome/wiki
+    publisher: 穿斯帕沃特
+    publisher_link: https://club.ugnas.com/home.php?mod=space&uid=10131
