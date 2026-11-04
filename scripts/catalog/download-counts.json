@@ -1,8 +1,8 @@
 {
   "com.adguard.home.docker": {
     "assets": {
-      "amd64_nasync_com.adguard.home.docker_107.80.0.0002.upk": 0,
-      "arm64_nasync_com.adguard.home.docker_107.80.0.0002.upk": 0
+      "amd64_nasync_com.adguard.home.docker_107.80.0.0002.upk": 2,
+      "arm64_nasync_com.adguard.home.docker_107.80.0.0002.upk": 2
     },
     "baseline": 0
   },
@@ -429,8 +429,8 @@
   },
   "com.pymumu.smartdns.docker": {
     "assets": {
-      "amd64_nasync_com.pymumu.smartdns.docker_48.4.0.0001.upk": 0,
-      "arm64_nasync_com.pymumu.smartdns.docker_48.4.0.0001.upk": 0
+      "amd64_nasync_com.pymumu.smartdns.docker_48.4.0.0001.upk": 1,
+      "arm64_nasync_com.pymumu.smartdns.docker_48.4.0.0001.upk": 1
     },
     "baseline": 0
   },

@@ -75,7 +75,7 @@
       },
       "service_port": 3080,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/adguardhome-docker/com.adguard.home.docker/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 4,
       "app_type": "docker",
       "category": "system",
       "platforms": [
@@ -1129,7 +1129,7 @@
       },
       "service_port": 6153,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/smartdns-docker/com.pymumu.smartdns.docker/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 2,
       "app_type": "docker",
       "category": "system",
       "platforms": [
