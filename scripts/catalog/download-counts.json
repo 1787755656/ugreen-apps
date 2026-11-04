@@ -1,4 +1,11 @@
 {
+  "com.adguard.home.docker": {
+    "assets": {
+      "amd64_nasync_com.adguard.home.docker_107.80.0.0001.upk": 0,
+      "arm64_nasync_com.adguard.home.docker_107.80.0.0001.upk": 0
+    },
+    "baseline": 0
+  },
   "com.ashc776.piggybank": {
     "assets": {
       "amd64_nasync_com.ashc776.piggybank_1.3.4.0010.upk": 2,
