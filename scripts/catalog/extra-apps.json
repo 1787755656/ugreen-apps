@@ -1,0 +1,336 @@
+{
+  "apps": [
+    {
+      "appname": "com.personal.ugstore",
+      "display_name": "三方应用商店",
+      "description": "面向 UGOS Pro 的第三方应用商店：浏览、安装、更新来自社区源的原生应用，全程走系统应用中心的正式安装通道，支持安装位置选择、更新检查与商店自更新。数据与账号只保存在自己的 NAS 上。\n桌面端经网关身份自动鉴权；手机端经网关访问、无宿主桥，使用「访问密码」闸，首帧即弹出密码验证（联子压缩 / 联子看图同款方案），通过后渲染应用界面。支持 amd64 / arm64 双架构。安装时可填写应用声明的路径参数（可留空）；路径写错或当前账号没有写权限时，会直接告诉你哪个目录有问题，而不是只回一句\"操作失败\"。设置里的 UGOS 管理员账号密码与网关地址以 AES-256-GCM 加密保存在应用数据目录，拷走备份或换机恢复都读不出明文。设置里可配网络代理（HTTP/SOCKS5）从网络层加速 GitHub 访问，与镜像加速可叠加；应用图标经商店后端中转并缓存，浏览器不直连 GitHub，直连 GitHub 不通的环境图标照常显示。",
+      "homepage_url": "https://club.ugnas.com/forum.php?mod=viewthread&tid=6529",
+      "updated_at": "2026-11-04",
+      "version": "0.1.0",
+      "upk_version": "0.1.0.0032",
+      "release_tag": "ugstore/0.1.0.0032",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/ugstore/0.1.0.0032/amd64_nasync_com.personal.ugstore_0.1.0.0032.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/ugstore/0.1.0.0032/arm64_nasync_com.personal.ugstore_0.1.0.0032.upk"
+      },
+      "service_port": 21310,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/ugstore-icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "utility",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ]
+    },
+    {
+      "appname": "com.personal.liteparser",
+      "display_name": "联子百解",
+      "description": "粘贴抖音/快手/B站/微博/小红书等平台的分享链接，解析出无水印视频并直接下载保存到 NAS 存储。支持 26 个平台，下载任务管理（并发/断电恢复/历史记录），也可经服务器中转直接下载到浏览器设备。",
+      "updated_at": "2026-09-22",
+      "version": "0.3.0",
+      "upk_version": "0.3.0.0010",
+      "release_tag": "v0.3.0.0010",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/liteparser/v0.3.0.0010/amd64_nasync_com.personal.liteparser_0.3.0.0010.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/liteparser/v0.3.0.0010/arm64_nasync_com.personal.liteparser_0.3.0.0010.upk"
+      },
+      "service_port": 21120,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/liteparser-icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "download",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ],
+      "post_install_note": "装好后请在「设置」页填写 NAS 保存目录；解析抖音需在「设置」粘贴抖音网页版 Cookie。"
+    },
+    {
+      "appname": "com.personal.junyaoktv",
+      "display_name": "骏耀K歌",
+      "description": "骏耀K歌 —— 局域网家庭 KTV 点歌系统的绿联原生应用版本。\n电视大屏沉浸播放、手机扫码点歌、网页端曲库管理三端一体，同一个端口（28083）；非 H.264 片源自动调用本机硬件转码服务（hwtranscode）硬解硬转，不可用时回退包内 ffmpeg 软件编码；曲库兼容 mp4/mkv/avi/flv/mov/webm/mpg，多音轨文件自动启用原唱/伴唱切换。",
+      "homepage_url": "https://github.com/ma303973022/junyao-ktv",
+      "updated_at": "2026-10-16",
+      "version": "1.0.0",
+      "upk_version": "1.0.0.0004",
+      "release_tag": "junyaoktv/1.0.0.0004",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/junyaoktv/1.0.0.0004/amd64_nasync_com.personal.junyaoktv_1.0.0.0004.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/junyaoktv/1.0.0.0004/arm64_nasync_com.personal.junyaoktv_1.0.0.0004.upk"
+      },
+      "service_port": 28083,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/junyaoktv-icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "media",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ],
+      "post_install_note": "首次启动读到的安装参数一定是空的（平台先起服务、2~3 秒后才写参数）：装好后到应用中心「停止 → 启动」一次，歌曲目录才会生效。硬件转码令牌 / 地址在应用中心「设置」里填。",
+      "install_params": [
+        {
+          "key": "MV_DIR",
+          "name": "歌曲目录",
+          "description": "存放 MV 歌曲文件（.mp4/.mkv/.avi/.flv/.mov/.webm/.mpg）的共享文件夹，选好即完成授权，曲库扫描就是扫它。文件名格式：\"歌手 - 歌名.mp4\" 或 \"歌名.mp4\"；多音轨文件自动启用原唱/伴唱切换。留空则用应用数据目录下的 mv 子目录。装好或改完请在应用中心「停止 → 启动」一次才生效。"
+        }
+      ]
+    },
+    {
+      "appname": "com.personal.litereader",
+      "display_name": "轻阅读",
+      "description": "把 NAS 变成自己的电子书库。选好书库文件夹后自动扫描并读出书名、作者和封面，支持 EPUB、MOBI、AZW3、PDF、TXT、FB2 和 CBZ/CBR 漫画。\n在浏览器里直接翻页阅读，进度、书签、笔记和高亮都存在 NAS 上，换一台设备接着看；TXT 会自动转成 EPUB 排版。还有阅读时长统计和成就系统。\n朗读支持本机离线合成（sherpa-onnx）或微软 Edge 在线语音；可选 AI 助手做摘要和问答（自带 OpenAI/Claude 兼容接口地址和密钥，不填不联网）。\n支持多用户，可按人分配可见书库。",
+      "homepage_url": "https://club.ugnas.com/home.php?mod=space&uid=10131",
+      "updated_at": "2026-10-16",
+      "version": "1.2.3",
+      "upk_version": "1.2.3.0006",
+      "release_tag": "litereader/1.2.3.0006",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/litereader/1.2.3.0006/amd64_nasync_com.personal.litereader_1.2.3.0006.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/litereader/1.2.3.0006/arm64_nasync_com.personal.litereader_1.2.3.0006.upk"
+      },
+      "service_port": 28082,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/litereader-icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "media",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ],
+      "post_install_note": "装好后请选好书库文件夹，并在应用中心「停止 → 启动」一次使其生效；初始账号 admin / admin123，登录后请修改密码。"
+    },
+    {
+      "appname": "com.personal.php56",
+      "display_name": "PHP 5.6 补丁修复版",
+      "description": "PHP 5.6.42 的 FPM 运行时，配合应用中心里的 nginx 使用。 装好后监听 127.0.0.1:29056，在 nginx 站点里写一句 fastcgi_pass 127.0.0.1:29056; 即可跑 PHP 网站（管理页可一键复制片段）。 自带 mysql（老式）、mcrypt 这两个 PHP 7 已移除的扩展（老项目最常卡在这里），以及 mysqli、pdo_mysql、gd、zip、bcmath、intl、soap、exif、sockets、gettext、calendar、opcache。 php.ini 和进程池配置就放在你选的共享文件夹里，用文件管理器直接改； 应用内也带编辑器并在保存时自动检查。还可以开关扩展、查看 php -i、 看日志，以及实测某个网站目录本应用读不读得到 —— nginx 报 Primary script unknown 时先来这里对一眼。 管理界面使用绿联云账号，无需另设密码，仅管理员可进入。 注意：未申请互联网访问权限，PHP 脚本能访问局域网和本机，访问公网会超时。 ⚠ PHP 5.6 已于 2018 年 12 月 停止官方安全更新。本包是 2026 年 10 月两个可未认证远程代码执行漏洞（CVE-2026-109618 / CVE-2026-109619）的修复版，修复补丁已随源码逐行核验（7.4 为官方回补分支，5.6 为宝塔面板按官方修法回移）；除此之外的新漏洞不会再修。请只用于跑不动新版本的老项目，且不要把站点直接暴露到公网。",
+      "homepage_url": "https://www.php.net/",
+      "updated_at": "2026-10-29",
+      "version": "5.6.42",
+      "upk_version": "5.6.42.0006",
+      "release_tag": "php56/v5.6.42-r1",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/php56/v5.6.42-r1/amd64_nasync_com.personal.php56_5.6.42.0006.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/php56/v5.6.42-r1/arm64_nasync_com.personal.php56_5.6.42.0006.upk"
+      },
+      "service_port": 28956,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/php56-icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "system",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ],
+      "post_install_note": "建议安装时就选一个共享文件夹作为「配置目录」（选好即完成授权）；留空也能装，但配置会落在应用数据目录里，文件管理器看不到。装好后到 nginx 站点里写 fastcgi_pass 127.0.0.1:29056; —— 管理页可一键复制这段。之后若要改配置目录，需要到管理页点一次「迁移配置目录」。",
+      "install_params": [
+        {
+          "key": "PHP_DIR",
+          "name": "配置目录",
+          "description": "选一个共享文件夹，本应用会在它下面建一个 php56 子目录， 里面放 php.ini、进程池配置和日志。选好即完成授权，之后你可以直接用 文件管理器打开这些文件来改。三个 PHP 版本可以放心选同一个文件夹， 它们各自在自己的子目录里互不干扰。留空也能装，配置会放在应用数据 目录里（那个目录在文件管理器里看不到，所以推荐选一个）。"
+        }
+      ]
+    },
+    {
+      "appname": "com.personal.php74",
+      "display_name": "PHP 7.4 补丁修复版",
+      "description": "PHP 7.4.34 的 FPM 运行时，配合应用中心里的 nginx 使用。 装好后监听 127.0.0.1:29074，在 nginx 站点里写一句 fastcgi_pass 127.0.0.1:29074; 即可跑 PHP 网站（管理页可一键复制片段）。 自带 mysqli、pdo_mysql、gd、zip、bcmath、intl、soap、exif、sockets、gettext、calendar、opcache 等扩展，覆盖绝大多数 PHP 7 项目的依赖。 php.ini 和进程池配置就放在你选的共享文件夹里，用文件管理器直接改； 应用内也带编辑器并在保存时自动检查。还可以开关扩展、查看 php -i、 看日志，以及实测某个网站目录本应用读不读得到 —— nginx 报 Primary script unknown 时先来这里对一眼。 管理界面使用绿联云账号，无需另设密码，仅管理员可进入。 注意：未申请互联网访问权限，PHP 脚本能访问局域网和本机，访问公网会超时。 ⚠ PHP 7.4 已于 2022 年 11 月 停止官方安全更新。本包是 2026 年 10 月两个可未认证远程代码执行漏洞（CVE-2026-109618 / CVE-2026-109619）的修复版，修复补丁已随源码逐行核验（7.4 为官方回补分支，5.6 为宝塔面板按官方修法回移）；除此之外的新漏洞不会再修。请只用于跑不动新版本的老项目，且不要把站点直接暴露到公网。",
+      "homepage_url": "https://www.php.net/",
+      "updated_at": "2026-10-29",
+      "version": "7.4.34",
+      "upk_version": "7.4.34.0006",
+      "release_tag": "php74/v7.4.34-r1",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/php74/v7.4.34-r1/amd64_nasync_com.personal.php74_7.4.34.0006.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/php74/v7.4.34-r1/arm64_nasync_com.personal.php74_7.4.34.0006.upk"
+      },
+      "service_port": 28974,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/php74-icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "system",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ],
+      "post_install_note": "建议安装时就选一个共享文件夹作为「配置目录」（选好即完成授权）；留空也能装，但配置会落在应用数据目录里，文件管理器看不到。装好后到 nginx 站点里写 fastcgi_pass 127.0.0.1:29074; —— 管理页可一键复制这段。之后若要改配置目录，需要到管理页点一次「迁移配置目录」。",
+      "install_params": [
+        {
+          "key": "PHP_DIR",
+          "name": "配置目录",
+          "description": "选一个共享文件夹，本应用会在它下面建一个 php74 子目录， 里面放 php.ini、进程池配置和日志。选好即完成授权，之后你可以直接用 文件管理器打开这些文件来改。三个 PHP 版本可以放心选同一个文件夹， 它们各自在自己的子目录里互不干扰。留空也能装，配置会放在应用数据 目录里（那个目录在文件管理器里看不到，所以推荐选一个）。"
+        }
+      ]
+    },
+    {
+      "appname": "com.personal.php83",
+      "display_name": "PHP 8.3 补丁修复版",
+      "description": "PHP 8.3.36 的 FPM 运行时，配合应用中心里的 nginx 使用。 装好后监听 127.0.0.1:29083，在 nginx 站点里写一句 fastcgi_pass 127.0.0.1:29083; 即可跑 PHP 网站（管理页可一键复制片段）。 运行时是 static-php-cli 的全静态构建（扩展集合与官方 bulk 一致），扩展非常齐全（mysqli、pdo_mysql、gd、zip、bcmath、intl、soap、redis、imagick、swoole 等一大批），且不依赖系统里的任何动态库。 php.ini 和进程池配置就放在你选的共享文件夹里，用文件管理器直接改； 应用内也带编辑器并在保存时自动检查。还可以开关扩展、查看 php -i、 看日志，以及实测某个网站目录本应用读不读得到 —— nginx 报 Primary script unknown 时先来这里对一眼。 管理界面使用绿联云账号，无需另设密码，仅管理员可进入。 注意：未申请互联网访问权限，PHP 脚本能访问局域网和本机，访问公网会超时。",
+      "homepage_url": "https://www.php.net/",
+      "updated_at": "2026-10-29",
+      "version": "8.3.36",
+      "upk_version": "8.3.36.0006",
+      "release_tag": "php83/v8.3.36-r1",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/php83/v8.3.36-r1/amd64_nasync_com.personal.php83_8.3.36.0006.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/php83/v8.3.36-r1/arm64_nasync_com.personal.php83_8.3.36.0006.upk"
+      },
+      "service_port": 28983,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/php83-icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "system",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ],
+      "post_install_note": "建议安装时就选一个共享文件夹作为「配置目录」（选好即完成授权）；留空也能装，但配置会落在应用数据目录里，文件管理器看不到。装好后到 nginx 站点里写 fastcgi_pass 127.0.0.1:29083; —— 管理页可一键复制这段。之后若要改配置目录，需要到管理页点一次「迁移配置目录」。",
+      "install_params": [
+        {
+          "key": "PHP_DIR",
+          "name": "配置目录",
+          "description": "选一个共享文件夹，本应用会在它下面建一个 php83 子目录， 里面放 php.ini、进程池配置和日志。选好即完成授权，之后你可以直接用 文件管理器打开这些文件来改。三个 PHP 版本可以放心选同一个文件夹， 它们各自在自己的子目录里互不干扰。留空也能装，配置会放在应用数据 目录里（那个目录在文件管理器里看不到，所以推荐选一个）。"
+        }
+      ]
+    },
+    {
+      "appname": "com.personal.nginx",
+      "display_name": "nginx",
+      "description": "nginx 网页服务器与反向代理，开箱即用。可以在 NAS 上托管静态网站、 给自建服务做反向代理、配 HTTPS 证书，也能配合应用中心里的 PHP 5.6 / 7.4 / 8.3 跑 WordPress、Typecho 这类 PHP 站点。 配置文件直接放在你选的共享文件夹里，用文件管理器就能改； 应用内也带一个配置编辑器，保存时自动做语法检查（nginx -t）， 确认无误再一键重载 —— 配置写错时正在跑的 nginx 会继续用旧配置， 网站不会因为一次手误而中断。 还提供运行状态、错误日志与访问日志查看、PHP 后端探测与配置片段一键复制。 管理界面直接使用绿联云的账号体系，无需另设密码，仅管理员可进入。 内置模块：SSL、HTTP/2、gzip、WebDAV、stream（TCP/UDP 代理）、 realip、sub、auth_request、slice、mp4/flv 等。 注意：应用以非 root 身份运行，【网站端口必须大于 1024】，默认是 28880。",
+      "homepage_url": "https://nginx.org",
+      "updated_at": "2026-10-29",
+      "version": "1.30.6",
+      "upk_version": "1.30.6.0005",
+      "release_tag": "nginx/v1.30.6-r3",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/nginx/v1.30.6-r3/amd64_nasync_com.personal.nginx_1.30.6.0005.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/nginx/v1.30.6-r3/arm64_nasync_com.personal.nginx_1.30.6.0005.upk"
+      },
+      "service_port": 28900,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/nginx-icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "system",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ],
+      "post_install_note": "建议安装时就选一个共享文件夹作为「配置与网站目录」（选好即完成授权），nginx 会在它下面建一个 nginx 子目录，里面放配置文件（conf/nginx.conf、conf/conf.d/）、网站文件（html/）和日志（logs/）；留空也能装，但配置会落在应用数据目录里，文件管理器看不到。之后若要改配置目录，需要到管理页点一次「迁移配置目录」。注意：应用以非 root 身份运行，网站端口必须大于 1024，默认站点是 28880。",
+      "install_params": [
+        {
+          "key": "NGINX_DIR",
+          "name": "配置与网站目录",
+          "description": "选一个共享文件夹，nginx 会在它下面建一个 nginx 子目录， 里面放配置文件（conf/nginx.conf、conf/conf.d/）、网站文件（html/） 和日志（logs/）。选好即完成授权，之后你可以直接用文件管理器打开 这些文件来改，也可以在应用里改。留空也能装，配置会放在应用数据目录里 （那个目录在文件管理器里看不到，所以推荐选一个）。"
+        }
+      ]
+    },
+    {
+      "appname": "com.personal.handbrakerk",
+      "display_name": "HandBrake 硬件转码版",
+      "description": "打了 Rockchip RKMPP 补丁的 HandBrake，视频编解码跑在 RK3588 的 VPU 上而不是 CPU 上。实测 60 秒 1080p 转 H.265：硬件 6.2 秒、CPU 占用 10.5 秒；同机 x265 veryfast 需要 85 秒、CPU 511 秒，快 13 倍以上。浏览器里就是完整的 HandBrake 图形界面（含简体中文），在「视频编码」下拉框选 H.265 (Rockchip MPP) 或 H.264 (Rockchip MPP) 即可，选了 MPP 编码器会自动连解码一起走硬件。另可开启监控目录自动转码：放进监控目录的视频，等文件大小稳定后自动转码输出。\n注意：仅支持 RK3588/RK3588S 机型；RK3588 编码单元只支持 8-bit H.264/H.265，没有 10-bit 和 AV1；硬件编码是恒定 QP，不看源码率，转出来有可能比源文件更大；缩放/滤镜跑在 CPU 上，请保持源分辨率、关掉降噪，自带预设（如 Fast 1080p30）会强制缩放。\n许可说明：镜像内 FFmpeg 因 rkmpp 以 GPLv3 编译，与 HandBrake 的 GPLv2-only 在分发层面存在许可冲突，详见 release 说明。",
+      "homepage_url": "https://club.ugnas.com/forum.php?mod=viewthread&tid=5909",
+      "updated_at": "2026-10-31",
+      "version": "1.0.0",
+      "upk_version": "1.0.0.0007",
+      "release_tag": "handbrakerk/1.0.0.0007",
+      "download_urls": {
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/handbrakerk/1.0.0.0007/arm64_nasync_com.personal.handbrakerk_1.0.0.0007.upk"
+      },
+      "service_port": 25800,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/handbrakerk-icon.png",
+      "download_count": 0,
+      "app_type": "docker",
+      "category": "media",
+      "platforms": [
+        "arm64"
+      ],
+      "post_install_note": "装好后先到应用中心「停止 → 启动」一次：平台先起服务、2~3 秒后才写授权目录，首次启动媒体目录是空的。浏览器打开 http://NAS_IP:25800，「视频编码」选 H.265 (Rockchip MPP) 即走硬件转码；想自动转码就在应用中心「配置」里开启监控目录（监控/输出目录必须位于媒体目录内部）。媒体目录可在「配置」里追加多个（最多 8 个）。",
+      "install_params": [
+        {
+          "key": "MEDIA_PATH",
+          "name": "媒体目录",
+          "description": "存放待转码视频的共享文件夹，选好即完成授权；之后可在应用中心「配置」里追加更多目录（最多 8 个）。目录会以完全相同的路径挂进容器，HandBrake 界面里看到的路径和文件管理器里一致。"
+        }
+      ]
+    },
+    {
+      "appname": "com.personal.aellus",
+      "display_name": "Aellus 局域网传输",
+      "description": "把 NAS 变成一个「扫码即传」的局域网文件中转站：手机、平板、电脑用浏览器直连，上传 / 浏览 / 下载都不经过任何中转服务器，也不消耗流量。上传时填一次设备名就会记住，文件按「保存目录/设备名/」归档并带微秒时间戳，永不覆盖；图片视频可在线预览，单个文件能弹二维码让手机扫码直接下载，多选或整个目录一键打包 zip。\n端口 25115 在局域网内直接可达（这正是它的用法），删除文件与修改保存目录只对 NAS 本机发起的请求开放，其它设备只能浏览、上传和下载。",
+      "homepage_url": "https://github.com/YGQ8988/Aellus",
+      "updated_at": "2026-10-31",
+      "version": "1.0.6",
+      "upk_version": "1.0.6.0001",
+      "release_tag": "aellus/1.0.6.0001",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/aellus/1.0.6.0001/amd64_nasync_com.personal.aellus_1.0.6.0001.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/aellus/1.0.6.0001/arm64_nasync_com.personal.aellus_1.0.6.0001.upk"
+      },
+      "service_port": 25115,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/aellus-icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "utility",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ],
+      "post_install_note": "装好后到应用中心「配置」里选一个「文件保存目录」（选中即授权，文件管理器里能看到），再「停止 → 启动」一次——首次启动读到的安装参数一定是空的（平台先起服务、2~3 秒后才写参数）。留空则文件落在应用私有目录，文件管理器里看不到。删除文件 / 修改保存目录只能在 NAS 本机操作：浏览器直连端口没有身份注入，这是上游对裸端口入口的设计。",
+      "install_params": [
+        {
+          "key": "AELLUS_SAVE_DIR",
+          "name": "文件保存目录",
+          "description": "上传的文件存到这个共享文件夹（会在里面按设备名建子目录），选中即授权本应用读写。留空则存到应用私有目录，文件管理器里看不到。装好或改完请「停止 → 启动」一次。"
+        }
+      ]
+    },
+    {
+      "appname": "com.personal.frpnet",
+      "display_name": "涂地大作战",
+      "description": "一个 Splatoon 风格的 4v4 涂地射击游戏，直接在浏览器里跑：涂满地面、潜进自己的墨里、把对面涂到没脾气。\n从应用中心点开即在浏览器新标签进入游戏（frp-net.com:61843），应用本身不存储任何数据、不中转任何流量。",
+      "updated_at": "2026-11-03",
+      "version": "1.0.0",
+      "upk_version": "1.0.0.0002",
+      "release_tag": "frpnet/v1.0.0.0002",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/frpnet/v1.0.0.0002/amd64_nasync_com.personal.frpnet_1.0.0.0002.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/frpnet/v1.0.0.0002/arm64_nasync_com.personal.frpnet_1.0.0.0002.upk"
+      },
+      "service_port": 28618,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/frpnet-icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "game",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ],
+      "post_install_note": "点开即在浏览器新标签进入游戏；目标站点为自签证书，浏览器首次打开出现证书提示时点「高级 → 继续前往」即可。"
+    },
+    {
+      "appname": "com.personal.atou.musicsub",
+      "display_name": "云音乐桥",
+      "description": "把官方「音乐」应用的曲库以标准 Subsonic/Navidrome API（1.16.1，对齐 Navidrome 兼容集）暴露给 Symfonium、play:Sub、DSub、Feishin 等标准客户端：浏览（歌手/专辑/流派）、搜索、无损原文件直播（Range 拖动）、封面、歌词、收藏、播放记录与歌单同步，全部实时转发官方应用，不直接读写它的数据库。\n从桌面打开应用进入管理页：先配置上游 UGOS 账号，再在客户端里添加服务器 http://NAS地址:21890。",
+      "homepage_url": "https://club.ugnas.com/forum.php?mod=viewthread&tid=7042",
+      "updated_at": "2026-11-03",
+      "version": "0.2.1",
+      "upk_version": "0.2.1.0003",
+      "release_tag": "musicsub/v0.2.1.0003",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/musicsub/v0.2.1.0003/amd64_nasync_com.personal.atou.musicsub_0.2.1.0003.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/musicsub/v0.2.1.0003/arm64_nasync_com.personal.atou.musicsub_0.2.1.0003.upk"
+      },
+      "service_port": 21890,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/musicsub-icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "media",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ],
+      "post_install_note": "首装默认管理账号 musicsub/musicsub，登录后请立即修改。"
+    }
+  ]
+}
