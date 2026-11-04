@@ -1,6 +1,3 @@
-# AdGuard Home Docker 版 — UGOS Pro 安装时按 Go text/template 渲染（不是 ${VAR}）。
-# 端口方案与原生版一致：DNS 标准 53、管理页 3080（--web-addr 钉在镜像 CMD 里，向导改 Web 端口不生效）。
-# 53 由 docker 端口映射完成绑定（守护进程 root 权限），无需任何 SSH 授权操作。
 name: adguardhome-ugreen
 services:
   adguardhome:
