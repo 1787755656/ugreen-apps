@@ -67,11 +67,11 @@
       "homepage_url": "https://github.com/AdguardTeam/AdGuardHome",
       "updated_at": "2026-11-04",
       "version": "107.80.0",
-      "upk_version": "107.80.0.0001",
-      "release_tag": "adguardhome-docker/v0.107.80",
+      "upk_version": "107.80.0.0002",
+      "release_tag": "adguardhome-docker/v0.107.80-r1",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/adguardhome-docker/v0.107.80/amd64_nasync_com.adguard.home.docker_107.80.0.0001.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/adguardhome-docker/v0.107.80/arm64_nasync_com.adguard.home.docker_107.80.0.0001.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/adguardhome-docker/v0.107.80-r1/amd64_nasync_com.adguard.home.docker_107.80.0.0002.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/adguardhome-docker/v0.107.80-r1/arm64_nasync_com.adguard.home.docker_107.80.0.0002.upk"
       },
       "service_port": 3080,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/adguardhome-docker/com.adguard.home.docker/rootfs_common/icon.png",
@@ -1111,6 +1111,36 @@
           "key": "REDIS_DATA_DIR",
           "name": "数据保存目录",
           "description": "选择存放 Redis 数据文件（dump.rdb / AOF）的共享文件夹，选好即完成授权。 数据会存到该目录下的 redis-data 子目录。留空也能安装，数据存到应用数据目录。 安装后再改这一项的话，打开应用会出现「迁移数据目录」的卡片， 点一次即可自动停服、复制、校验并在新位置启动。"
+        }
+      ]
+    },
+    {
+      "appname": "com.pymumu.smartdns.docker",
+      "display_name": "SmartDNS",
+      "description": "SmartDNS —— 本地 DNS 服务器：并发查询多个上游并返回访问速度最快的 IP， 支持 DoT/DoH/DoQ 加密上游、广告拦截规则、双栈 IP 优选、测速优选， 自带 Web 管理界面（默认账号 admin，密码 password，首次登录后请及时修改）。 DNS 端口 53（UDP+TCP）装完即用，无需任何额外设置，把路由器或客户端 DNS 指向 本机IP 即可（dnsmasq 写法：server=本机IP）。需要已安装 Docker 套件。 53 端口全机唯一：启动本应用前请先停掉其它占用 53 的 DNS 服务（如 AdGuardHome）。管理界面端口 6153。安装时请选择数据文件夹（必选）： 配置、日志与缓存都落在里面，配置文件 所选文件夹/conf/smartdns.conf 首次启动自动生成，之后用文件管理器直接编辑，改完重启应用生效。",
+      "homepage_url": "https://club.ugnas.com/home.php?mod=space&uid=10131",
+      "updated_at": "2026-11-04",
+      "version": "48.4.0",
+      "upk_version": "48.4.0.0001",
+      "release_tag": "smartdns-docker/v48.4",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/smartdns-docker/v48.4/amd64_nasync_com.pymumu.smartdns.docker_48.4.0.0001.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/smartdns-docker/v48.4/arm64_nasync_com.pymumu.smartdns.docker_48.4.0.0001.upk"
+      },
+      "service_port": 6153,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/smartdns-docker/com.pymumu.smartdns.docker/rootfs_common/icon.png",
+      "download_count": 0,
+      "app_type": "docker",
+      "category": "system",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ],
+      "install_params": [
+        {
+          "key": "DATA_PATH",
+          "name": "数据文件夹",
+          "description": "SmartDNS 的配置、日志与缓存都存放在这个文件夹，应用会在其中自动创建 conf / log / cache 等子目录。配置文件为 所选文件夹/conf/smartdns.conf，首次启动自动生成默认值，之后可用文件管理器直接编辑，改完重启应用生效。请为应用单独准备一个文件夹。"
         }
       ]
     },
