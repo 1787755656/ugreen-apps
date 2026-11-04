@@ -1,0 +1,110 @@
+# ============================================================
+# SmartDNS — UGOS Pro Docker 型应用
+# 基于 pymumu/smartdns 官方 linux-all 发行包（musl 自包含二进制 +
+# smartdns_ui.so Web 管理界面插件），alpine 底派生镜像打进 upk 离线加载。
+# DNS 53 端口装完即用（host 网络模式，容器进程直接绑定，无 NAT 层、
+# 不消耗 docker 地址池）；数据文件夹为必选安装参数，配置文件落在
+# 用户选的目录里，文件管理器可直接编辑。
+# 机制与坑实录见 ugos-pro-app-dev skill references/docker-apps.md
+# 与 ~/Desktop/绿联开发/smartdns-docker/开发文档.md
+# ============================================================
+
+spec_version: "2.1"
+
+app_id: com.pymumu.smartdns.docker
+
+# 跟上游 Release 版本（ReleaseX.Y → x.y.0，见 scripts/get-latest-version.sh）
+version: 48.4.0
+
+product_series:
+  - nasync
+
+support_arch:
+  - amd64
+  - arm64
+
+supports:
+  - pc
+  - app
+
+is_docker_app: true
+
+# Docker 应用依赖 Docker 套件
+depend_docker_version: 1.7.0.0000
+
+depend_fw_version: 1.13.0.0000
+
+# WebUI 宿主端口（host 网络模式下容器直接监听 6153，供系统探测启动状态）
+port: 6153
+
+# Docker 应用只能 tab：浏览器新标签直连容器端口
+open_type: tab
+
+support_migration: true
+
+tag_types:
+  - utility
+
+# 开源合规信息（GPL-3.0）
+license_agreement_link:
+  - https://github.com/pymumu/smartdns/blob/master/LICENSE
+source_code_link:
+  - https://github.com/pymumu/smartdns
+technical_support_link:
+  - https://github.com/pymumu/smartdns/issues
+
+# 数据文件夹：必选 path 参数，安装向导让用户指定授权目录。
+# ⚠ compose 模板用裸 index 取值（无 if 守卫），空列表渲染即报错装不上，
+#   因此本参数绝不能改成选填（required:true 是 index 的安全前提）。
+parameters:
+  - key: DATA_PATH
+    type: path
+    multi: false
+    required: true
+    i18n:
+      en-US:
+        name: "Data folder"
+        description: "SmartDNS stores config, logs and cache in this folder and creates conf/log/cache subfolders automatically. The config file <folder>/conf/smartdns.conf is generated on first start and editable later with the file manager; restart the app to apply. Prepare a dedicated folder for the app."
+      zh-CN:
+        name: "数据文件夹"
+        description: "SmartDNS 的配置、日志与缓存都存放在这个文件夹，应用会在其中自动创建 conf / log / cache 等子目录。配置文件为 所选文件夹/conf/smartdns.conf，首次启动自动生成默认值，之后可用文件管理器直接编辑，改完重启应用生效。请为应用单独准备一个文件夹。"
+
+# 应用展示信息（多语言）
+i18n:
+  en-US:
+    name: SmartDNS
+    description: >-
+      SmartDNS — a local DNS server that queries multiple upstream servers
+      concurrently and returns the fastest IP, with DoT/DoH/DoQ upstream
+      support, ad-blocking rules, dual-stack IP selection and a built-in
+      web dashboard (default login: admin / password — change it after
+      first login). DNS port 53 (UDP+TCP) works right after installation,
+      no extra setup — just point your router or clients' DNS at the NAS
+      IP (dnsmasq: server=NAS_IP). Requires the Docker suite. Port 53 is
+      unique per host: stop any other DNS service (e.g. AdGuardHome)
+      before starting this app. Web UI is on port 6153. Pick a data
+      folder during installation: the config file
+      (<folder>/conf/smartdns.conf) is generated on first start and
+      editable with the file manager; restart the app to apply.
+    author: pymumu
+    official: https://pymumu.github.io/smartdns/
+    help: https://pymumu.github.io/smartdns/
+    publisher: Spawater
+    publisher_link: https://club.ugnas.com/home.php?mod=space&uid=10131
+  zh-CN:
+    name: SmartDNS
+    description: >-
+      SmartDNS —— 本地 DNS 服务器：并发查询多个上游并返回访问速度最快的 IP，
+      支持 DoT/DoH/DoQ 加密上游、广告拦截规则、双栈 IP 优选、测速优选，
+      自带 Web 管理界面（默认账号 admin，密码 password，首次登录后请及时修改）。
+      DNS 端口 53（UDP+TCP）装完即用，无需任何额外设置，把路由器或客户端 DNS
+      指向 本机IP 即可（dnsmasq 写法：server=本机IP）。需要已安装 Docker 套件。
+      53 端口全机唯一：启动本应用前请先停掉其它占用 53 的 DNS 服务（如
+      AdGuardHome）。管理界面端口 6153。安装时请选择数据文件夹（必选）：
+      配置、日志与缓存都落在里面，配置文件 所选文件夹/conf/smartdns.conf
+      首次启动自动生成，之后用文件管理器直接编辑，改完重启应用生效。
+    author: pymumu
+    official: https://pymumu.github.io/smartdns/
+    help: https://pymumu.github.io/smartdns/
+    publisher: 穿斯帕沃特
+    publisher_link: https://club.ugnas.com/home.php?mod=space&uid=10131

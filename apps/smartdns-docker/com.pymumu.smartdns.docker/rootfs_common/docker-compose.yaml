@@ -1,0 +1,14 @@
+name: smartdns
+
+services:
+  smartdns:
+    image: "personal/smartdns:48.4"
+    container_name: smartdns
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      TZ: "{{.TZ}}"
+    volumes:
+      - type: bind
+        source: "{{ index .DATA_PATH 0 }}"
+        target: /data
