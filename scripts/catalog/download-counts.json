@@ -56,7 +56,7 @@
       "amd64_nasync_com.magiccode.magicpush_1.14.0.0007.upk": 3,
       "amd64_nasync_com.magiccode.magicpush_1.15.0.0008.upk": 1,
       "arm64_nasync_com.magiccode.magicpush_1.14.0.0007.upk": 3,
-      "arm64_nasync_com.magiccode.magicpush_1.15.0.0008.upk": 2
+      "arm64_nasync_com.magiccode.magicpush_1.15.0.0008.upk": 3
     },
     "baseline": 0
   },
@@ -95,9 +95,9 @@
   "com.personal.1panel": {
     "assets": {
       "amd64_nasync_com.personal.1panel_2.4.1.0001.upk": 7,
-      "amd64_nasync_com.personal.1panel_2.4.2.0002.upk": 0,
+      "amd64_nasync_com.personal.1panel_2.4.2.0002.upk": 4,
       "arm64_nasync_com.personal.1panel_2.4.1.0001.upk": 2,
-      "arm64_nasync_com.personal.1panel_2.4.2.0002.upk": 0
+      "arm64_nasync_com.personal.1panel_2.4.2.0002.upk": 3
     },
     "baseline": 0
   },
@@ -124,14 +124,14 @@
   },
   "com.personal.baota": {
     "assets": {
-      "amd64_nasync_com.personal.baota_13.1.0.0001.upk": 0,
-      "arm64_nasync_com.personal.baota_13.1.0.0001.upk": 0
+      "amd64_nasync_com.personal.baota_13.1.0.0001.upk": 1,
+      "arm64_nasync_com.personal.baota_13.1.0.0001.upk": 1
     },
     "baseline": 0
   },
   "com.personal.chromium": {
     "assets": {
-      "amd64_nasync_com.personal.chromium_26.10.1.0001.upk": 5,
+      "amd64_nasync_com.personal.chromium_26.10.1.0001.upk": 6,
       "arm64_nasync_com.personal.chromium_26.10.1.0001.upk": 3
     },
     "baseline": 0
@@ -157,7 +157,7 @@
       "amd64_nasync_com.personal.deepseekharness_0.2.1.0004.upk": 1,
       "amd64_nasync_com.personal.deepseekharness_0.2.1.0005.upk": 6,
       "arm64_nasync_com.personal.deepseekharness_0.2.1.0004.upk": 2,
-      "arm64_nasync_com.personal.deepseekharness_0.2.1.0005.upk": 5
+      "arm64_nasync_com.personal.deepseekharness_0.2.1.0005.upk": 6
     },
     "baseline": 0
   },
@@ -179,8 +179,8 @@
   },
   "com.personal.frpnet": {
     "assets": {
-      "amd64_nasync_com.personal.frpnet_1.0.0.0002.upk": 3,
-      "arm64_nasync_com.personal.frpnet_1.0.0.0002.upk": 2
+      "amd64_nasync_com.personal.frpnet_1.0.0.0002.upk": 4,
+      "arm64_nasync_com.personal.frpnet_1.0.0.0002.upk": 3
     },
     "baseline": 0
   },
@@ -247,7 +247,7 @@
   "com.personal.mook": {
     "assets": {
       "amd64_nasync_com.personal.mook_0.2.8.0004.upk": 7,
-      "amd64_nasync_com.personal.mook_0.4.6.0005.upk": 10,
+      "amd64_nasync_com.personal.mook_0.4.6.0005.upk": 15,
       "arm64_nasync_com.personal.mook_0.2.8.0004.upk": 3,
       "arm64_nasync_com.personal.mook_0.4.6.0005.upk": 2
     },
@@ -255,7 +255,7 @@
   },
   "com.personal.myip": {
     "assets": {
-      "amd64_nasync_com.personal.myip_8.0.0.0001.upk": 1,
+      "amd64_nasync_com.personal.myip_8.0.0.0001.upk": 3,
       "arm64_nasync_com.personal.myip_8.0.0.0001.upk": 2
     },
     "baseline": 0
@@ -282,7 +282,7 @@
   },
   "com.personal.nm3u8dlre": {
     "assets": {
-      "amd64_nasync_com.personal.nm3u8dlre_0.6.0.0002.upk": 4,
+      "amd64_nasync_com.personal.nm3u8dlre_0.6.0.0002.upk": 7,
       "arm64_nasync_com.personal.nm3u8dlre_0.6.0.0002.upk": 2
     },
     "baseline": 0
@@ -376,6 +376,7 @@
       "amd64_nasync_com.personal.ugstore_0.1.0.0029.upk": 2,
       "amd64_nasync_com.personal.ugstore_0.1.0.0030.upk": 12,
       "amd64_nasync_com.personal.ugstore_0.1.0.0031.upk": 15,
+      "amd64_nasync_com.personal.ugstore_0.1.0.0032.upk": 8,
       "arm64_nasync_com.personal.ugstore_0.1.0.0016.upk": 4,
       "arm64_nasync_com.personal.ugstore_0.1.0.0017.upk": 3,
       "arm64_nasync_com.personal.ugstore_0.1.0.0020.upk": 10,
@@ -387,14 +388,15 @@
       "arm64_nasync_com.personal.ugstore_0.1.0.0028.upk": 7,
       "arm64_nasync_com.personal.ugstore_0.1.0.0029.upk": 3,
       "arm64_nasync_com.personal.ugstore_0.1.0.0030.upk": 5,
-      "arm64_nasync_com.personal.ugstore_0.1.0.0031.upk": 9
+      "arm64_nasync_com.personal.ugstore_0.1.0.0031.upk": 9,
+      "arm64_nasync_com.personal.ugstore_0.1.0.0032.upk": 3
     },
     "baseline": 0
   },
   "com.personal.ugtheme": {
     "assets": {
       "amd64_nasync_com.personal.ugtheme_1.1.1.0007.upk": 29,
-      "amd64_nasync_com.personal.ugtheme_1.2.2.0010.upk": 20,
+      "amd64_nasync_com.personal.ugtheme_1.2.2.0010.upk": 25,
       "arm64_nasync_com.personal.ugtheme_1.1.1.0007.upk": 10,
       "arm64_nasync_com.personal.ugtheme_1.2.2.0010.upk": 8
     },
@@ -421,7 +423,7 @@
   "com.qbee.qbittorrent": {
     "assets": {
       "amd64_nasync_com.qbee.qbittorrent_5.2.3.0004.upk": 2,
-      "amd64_nasync_com.qbee.qbittorrent_5.2.4.0005.upk": 2,
+      "amd64_nasync_com.qbee.qbittorrent_5.2.4.0005.upk": 3,
       "arm64_nasync_com.qbee.qbittorrent_5.2.3.0004.upk": 1,
       "arm64_nasync_com.qbee.qbittorrent_5.2.4.0005.upk": 4
     },
@@ -446,7 +448,7 @@
   "com.tencent.octop": {
     "assets": {
       "amd64_nasync_com.tencent.octop_1.0.3.0011.upk": 12,
-      "amd64_nasync_com.tencent.octop_1.0.3.0012.upk": 1,
+      "amd64_nasync_com.tencent.octop_1.0.3.0012.upk": 2,
       "arm64_nasync_com.tencent.octop_1.0.3.0011.upk": 2,
       "arm64_nasync_com.tencent.octop_1.0.3.0012.upk": 2
     },

@@ -45,7 +45,7 @@
       },
       "service_port": 21086,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/1panel/com.personal.1panel/rootfs_common/icon.png",
-      "download_count": 9,
+      "download_count": 16,
       "app_type": "docker",
       "category": "system",
       "platforms": [
@@ -105,7 +105,7 @@
       },
       "service_port": 21888,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/baota/com.personal.baota/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 2,
       "app_type": "docker",
       "category": "system",
       "platforms": [
@@ -135,7 +135,7 @@
       },
       "service_port": 25900,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/chromium/com.personal.chromium/rootfs_common/icon.png",
-      "download_count": 8,
+      "download_count": 9,
       "app_type": "docker",
       "category": "system",
       "platforms": [
@@ -255,7 +255,7 @@
       },
       "service_port": 23079,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/deepseek-harness/com.personal.deepseekharness/rootfs_common/icon.png",
-      "download_count": 14,
+      "download_count": 15,
       "app_type": "docker",
       "category": "system",
       "platforms": [
@@ -578,7 +578,7 @@
       },
       "service_port": 23020,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/magicpush/com.magiccode.magicpush/rootfs_common/icon.png",
-      "download_count": 9,
+      "download_count": 10,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -656,7 +656,7 @@
       },
       "service_port": 5866,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/mook/com.personal.mook/rootfs_common/icon.png",
-      "download_count": 22,
+      "download_count": 27,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -680,7 +680,7 @@
       },
       "service_port": 28966,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/myip/com.personal.myip/rootfs_common/icon.png",
-      "download_count": 3,
+      "download_count": 5,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -758,7 +758,7 @@
       },
       "service_port": 28940,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/nm3u8dlre/com.personal.nm3u8dlre/rootfs_common/icon.png",
-      "download_count": 6,
+      "download_count": 9,
       "app_type": "native",
       "category": "download",
       "platforms": [
@@ -788,7 +788,7 @@
       },
       "service_port": 28088,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/octop/com.tencent.octop/rootfs_common/icon.png",
-      "download_count": 17,
+      "download_count": 18,
       "app_type": "native",
       "category": "ai",
       "platforms": [
@@ -955,7 +955,7 @@
       },
       "service_port": 28080,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/qbittorrent/com.qbee.qbittorrent/rootfs_common/icon.png",
-      "download_count": 9,
+      "download_count": 10,
       "app_type": "native",
       "category": "download",
       "platforms": [
@@ -1153,7 +1153,7 @@
       },
       "service_port": 28750,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/ugtheme/com.personal.ugtheme/rootfs_common/icon.png",
-      "download_count": 67,
+      "download_count": 72,
       "app_type": "docker",
       "category": "utility",
       "platforms": [
@@ -1218,7 +1218,7 @@
       },
       "service_port": 21310,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/ugstore-icon.png",
-      "download_count": 215,
+      "download_count": 226,
       "app_type": "native",
       "category": "utility",
       "platforms": [
@@ -1502,7 +1502,7 @@
       },
       "service_port": 28618,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/frpnet-icon.png",
-      "download_count": 5,
+      "download_count": 7,
       "app_type": "native",
       "category": "game",
       "platforms": [
