@@ -102,11 +102,11 @@
   "com.personal.1panel": {
     "assets": {
       "amd64_nasync_com.personal.1panel_2.4.1.0001.upk": 7,
-      "amd64_nasync_com.personal.1panel_2.4.2.0003.upk": 2,
+      "amd64_nasync_com.personal.1panel_2.4.2.0004.upk": 0,
       "arm64_nasync_com.personal.1panel_2.4.1.0001.upk": 2,
-      "arm64_nasync_com.personal.1panel_2.4.2.0003.upk": 2
+      "arm64_nasync_com.personal.1panel_2.4.2.0004.upk": 0
     },
-    "baseline": 7
+    "baseline": 11
   },
   "com.personal.aellus": {
     "assets": {
