@@ -93,8 +93,8 @@ i18n:
     author: 1Panel-dev
     official: https://1panel.cn
     help: https://1panel.cn/docs/v2/
-    publisher: xw
-    publisher_link: https://github.com/1787755656
+    publisher: 穿斯帕沃特
+    publisher_link: https://club.ugnas.com/home.php?mod=space&uid=10131
   en-US:
     name: 1Panel Server Management Panel
     description: >-
@@ -115,8 +115,8 @@ i18n:
     author: 1Panel-dev
     official: https://1panel.cn
     help: https://1panel.cn/docs/v2/
-    publisher: xw
-    publisher_link: https://github.com/1787755656
+    publisher: 穿斯帕沃特
+    publisher_link: https://club.ugnas.com/home.php?mod=space&uid=10131
 
 # 开源合规：上游 GPL-3.0
 license_agreement_link:
