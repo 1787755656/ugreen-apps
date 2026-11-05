@@ -136,6 +136,17 @@ def main() -> None:
     if not state_path.exists() or state_path.read_text(encoding="utf-8") != new_state:
         state_path.write_text(new_state, encoding="utf-8")
 
+    # 隐藏应用清单：列在 hidden-apps.json 里的 app_id 不产出目录条目（源内下架）。
+    # 打包配置、release 与下载计数都保留，把条目从清单删掉即可恢复上架。
+    hidden_path = root / "scripts/catalog" / "hidden-apps.json"
+    try:
+        hidden_apps = set(json.loads(hidden_path.read_text(encoding="utf-8")).get("apps", []))
+    except FileNotFoundError:
+        hidden_apps = set()
+    except Exception as e:  # noqa: BLE001 —— 清单坏了不阻塞目录生成
+        print(f"warn: 读取 {hidden_path.name} 失败，忽略隐藏清单: {e}", file=sys.stderr)
+        hidden_apps = set()
+
     entries, missing = [], []
     for slug_dir in sorted((root / "apps").iterdir()):
         if not slug_dir.is_dir():
@@ -150,6 +161,8 @@ def main() -> None:
         app_id = meta.get("APP_ID", "")
         if not app_id:
             print(f"warn: {slug} meta.env 缺 APP_ID，跳过", file=sys.stderr)
+            continue
+        if app_id in hidden_apps:
             continue
         proj = read_project(slug_dir / app_id / "project.yaml")
 
