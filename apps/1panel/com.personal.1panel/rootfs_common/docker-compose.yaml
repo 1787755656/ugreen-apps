@@ -37,6 +37,13 @@ services:
       TZ: "{{.TZ}}"
       # 数据目录：选了共享文件夹就用它本身，没选就用安装目录 data 子目录
       BASE_DIR: "{{ if .DATA_DIR }}{{ index .DATA_DIR 0 }}{{ else }}/volume1/@appstore/com.personal.1panel/data{{ end }}"
+    tmpfs:
+      # 镜像声明了 VOLUME /opt：容器被原地重建时 compose 会沿用旧匿名卷，卷里
+      # 残留的 /opt/1panel 软链若指向旧数据路径（悬空）会让 entrypoint 的
+      # mkdir -p 报 Already exists 退出，造成无限重启循环（2026-11-06 测试盒实测）。
+      # tmpfs 让 /opt 每次启动都是空的，软链由 entrypoint 每轮重建，自愈；
+      # 面板真实数据走 BASE_DIR 同名挂载，不经 /opt，无持久化损失。
+      - /opt
     volumes:
       # 核心权限：管理宿主机 Docker（容器/镜像/网络/卷）必须挂套接字
       - /var/run/docker.sock:/var/run/docker.sock
