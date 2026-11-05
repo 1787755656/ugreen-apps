@@ -121,36 +121,6 @@
       ]
     },
     {
-      "appname": "com.personal.baota",
-      "display_name": "宝塔面板",
-      "description": "宝塔Linux面板（堡塔安全官方）容器版：在线建站运维面板，一键部署 Nginx/Apache、MySQL、PHP、FTP，带文件管理、计划任务、防火墙、 监控与软件商店。本包内置官方 Docker 镜像（btpanel/baota，未修改）， 全量数据落在数据目录，面板内安装的网站环境升级应用包不丢失。打开 应用自动跳转面板登录页（面板直连地址为 http://NAS_IP:21889/btpanel/ login，安全入口 /btpanel 可在面板设置中修改）。初始账号密码随机 生成，安装完成后在应用日志中查看，首次登录请立即修改。说明：面板 管理的是容器内的建站环境，网站与数据库都存放在数据目录；面板内 一键更新可用，更新内容同样落在数据目录；宿主机容器管理不在面板 范围（官方 Docker 版默认隐藏该菜单）；软件商店安装与面板功能需按 宝塔官方要求注册账号绑定后使用。",
-      "homepage_url": "https://www.bt.cn",
-      "updated_at": "2026-11-03",
-      "version": "13.1.0",
-      "upk_version": "13.1.0.0001",
-      "release_tag": "baota/v13.1.0",
-      "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/baota/v13.1.0/amd64_nasync_com.personal.baota_13.1.0.0001.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/baota/v13.1.0/arm64_nasync_com.personal.baota_13.1.0.0001.upk"
-      },
-      "service_port": 21888,
-      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/baota/com.personal.baota/rootfs_common/icon.png",
-      "download_count": 5,
-      "app_type": "docker",
-      "category": "system",
-      "platforms": [
-        "amd64",
-        "arm64"
-      ],
-      "install_params": [
-        {
-          "key": "DATA_DIR",
-          "name": "数据目录",
-          "description": "可选。宝塔的全量数据目录（网站文件、数据库、面板配置，即容器内 /www），建议选一个共享文件夹，方便在文件管理里查看和备份。留空 则使用平台持久数据区（升级不丢）。修改此参数需要卸载后重新安装 才能生效。"
-        }
-      ]
-    },
-    {
       "appname": "com.personal.chromium",
       "display_name": "Chromium 浏览器",
       "description": "把完整的桌面版 Chromium 搬进 NAS:点开应用就是浏览器,书签、扩展、登录态都 存在 NAS 上,换台设备接着用。自带登录页保护(安装时设用户名密码),支持网页 声音、页面自带文件管理器,可映射 NAS 目录当下载盘,内置中文字体。可配置专属 窗口模式,把 NAS 变成某个 Web 应用的专用入口。基于 jlesage/docker-chromium 上游镜像打包。",
@@ -285,7 +255,7 @@
       },
       "service_port": 23079,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/deepseek-harness/com.personal.deepseekharness/rootfs_common/icon.png",
-      "download_count": 15,
+      "download_count": 17,
       "app_type": "docker",
       "category": "system",
       "platforms": [
@@ -398,7 +368,7 @@
       },
       "service_port": 28600,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/frp/com.personal.atou.frp/rootfs_common/icon.png",
-      "download_count": 7,
+      "download_count": 9,
       "app_type": "native",
       "category": "system",
       "platforms": [
