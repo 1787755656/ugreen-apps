@@ -31,36 +31,6 @@
       ]
     },
     {
-      "appname": "com.personal.1panel",
-      "display_name": "1Panel 服务器管理面板",
-      "description": "Linux 服务器在线管理面板（1Panel 官方开源项目）。本包以 Docker 应用运行，已映射宿主机 Docker 权限，面板内可直接查看、启停、重建 NAS 上的全部容器与镜像，一键安装 1Panel 应用商店里的各类容器应用， 并管理网络、存储卷与编排模板。内置实时资源监控、文件管理、计划 任务、容器日志与终端等模块。初始账号密码随机生成，安装完成后在 应用日志中查看，首次登录请立即修改；访问地址为 http://NAS_IP:21086/entrance（entrance 是安全入口）。说明：面板 为容器化运行，文件管理与计划任务的可视范围限于面板数据目录和 容器内文件；面板内一键升级不可用，更新请走商店进行，数据保留在 挂载目录不受影响；新建容器的 bind 挂载路径即宿主机真实路径， 可直接生效。",
-      "homepage_url": "https://1panel.cn",
-      "updated_at": "2026-11-05",
-      "version": "2.4.2",
-      "upk_version": "2.4.2.0003",
-      "release_tag": "1panel/v2.4.2-r1",
-      "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/1panel/v2.4.2-r1/amd64_nasync_com.personal.1panel_2.4.2.0003.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/1panel/v2.4.2-r1/arm64_nasync_com.personal.1panel_2.4.2.0003.upk"
-      },
-      "service_port": 21086,
-      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/1panel/com.personal.1panel/rootfs_common/icon.png",
-      "download_count": 19,
-      "app_type": "docker",
-      "category": "system",
-      "platforms": [
-        "amd64",
-        "arm64"
-      ],
-      "install_params": [
-        {
-          "key": "DATA_DIR",
-          "name": "数据目录",
-          "description": "可选。面板数据与 1Panel 应用商店所装应用的存放目录，建议选一个 共享文件夹，方便在文件管理里查看和备份。留空则使用应用自身的 数据目录。修改此参数需要卸载后重新安装才能生效。"
-        }
-      ]
-    },
-    {
       "appname": "com.adguard.home.docker",
       "display_name": "AdGuard Home",
       "description": "AdGuard Home —— 全网络广告与跟踪器拦截 DNS 服务器，无需在每台设备上 安装客户端即可保护家中所有设备。Docker 版开箱即用：DNS 使用标准 53 端口，管理界面固定 3080。首次启动已自动完成初始化——默认管理员账号 admin，默认密码 AdGuard@2026，登录后请立即在设置中修改密码；已预置 国内友好上游（223.5.5.5 / 119.29.29.29）。完成后把路由器或设备的 DNS 指向 NAS 的 IP 即可全局生效。可选「数据目录」参数持久化配置与 查询日志，卸载不丢。镜像基于官方 adguard/adguardhome（含默认配置 播种，已有配置不会被覆盖）。应用内自升级已禁用，升级走应用中心。",
@@ -255,7 +225,7 @@
       },
       "service_port": 23079,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/deepseek-harness/com.personal.deepseekharness/rootfs_common/icon.png",
-      "download_count": 17,
+      "download_count": 18,
       "app_type": "docker",
       "category": "system",
       "platforms": [
@@ -392,7 +362,7 @@
       },
       "service_port": 20858,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/idphotos/com.chuan.idphotos/rootfs_common/icon.png",
-      "download_count": 25,
+      "download_count": 26,
       "app_type": "docker",
       "category": "system",
       "platforms": [
@@ -788,7 +758,7 @@
       },
       "service_port": 28088,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/octop/com.tencent.octop/rootfs_common/icon.png",
-      "download_count": 20,
+      "download_count": 21,
       "app_type": "native",
       "category": "ai",
       "platforms": [
