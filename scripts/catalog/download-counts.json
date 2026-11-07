@@ -42,12 +42,12 @@
   },
   "com.koolcenter.fastnet": {
     "assets": {
-      "amd64_nasync_com.koolcenter.fastnet_0.7.6.0003.upk": 9,
       "amd64_nasync_com.koolcenter.fastnet_0.7.8.0004.upk": 10,
-      "arm64_nasync_com.koolcenter.fastnet_0.7.6.0003.upk": 2,
-      "arm64_nasync_com.koolcenter.fastnet_0.7.8.0004.upk": 5
+      "amd64_nasync_com.koolcenter.fastnet_0.8.0.0005.upk": 0,
+      "arm64_nasync_com.koolcenter.fastnet_0.7.8.0004.upk": 5,
+      "arm64_nasync_com.koolcenter.fastnet_0.8.0.0005.upk": 0
     },
-    "baseline": 0
+    "baseline": 11
   },
   "com.magiccode.magicmail": {
     "assets": {
@@ -86,7 +86,7 @@
   "com.oplist.openlist": {
     "assets": {
       "amd64_nasync_com.oplist.openlist_4.2.8.0007.upk": 1,
-      "amd64_nasync_com.oplist.openlist_4.2.9.0008.upk": 4,
+      "amd64_nasync_com.oplist.openlist_4.2.9.0008.upk": 5,
       "arm64_nasync_com.oplist.openlist_4.2.8.0007.upk": 2,
       "arm64_nasync_com.oplist.openlist_4.2.9.0008.upk": 2
     },
@@ -118,9 +118,9 @@
   "com.personal.atou.frp": {
     "assets": {
       "amd64_nasync_com.personal.atou.frp_0.71.1.0001.upk": 4,
-      "amd64_nasync_com.personal.atou.frp_0.72.0.0003.upk": 0,
+      "amd64_nasync_com.personal.atou.frp_0.72.0.0003.upk": 1,
       "arm64_nasync_com.personal.atou.frp_0.71.1.0001.upk": 3,
-      "arm64_nasync_com.personal.atou.frp_0.72.0.0003.upk": 0
+      "arm64_nasync_com.personal.atou.frp_0.72.0.0003.upk": 4
     },
     "baseline": 3
   },
@@ -272,7 +272,7 @@
   "com.personal.navidrome": {
     "assets": {
       "amd64_nasync_com.personal.navidrome_0.64.2.0004.upk": 2,
-      "amd64_nasync_com.personal.navidrome_0.64.2.0005.upk": 1,
+      "amd64_nasync_com.personal.navidrome_0.64.2.0005.upk": 2,
       "arm64_nasync_com.personal.navidrome_0.64.2.0004.upk": 1,
       "arm64_nasync_com.personal.navidrome_0.64.2.0005.upk": 7
     },
@@ -355,12 +355,12 @@
   },
   "com.personal.sub2api": {
     "assets": {
-      "amd64_nasync_com.personal.sub2api_0.2.18.0011.upk": 3,
       "amd64_nasync_com.personal.sub2api_0.2.19.0015.upk": 3,
-      "arm64_nasync_com.personal.sub2api_0.2.18.0011.upk": 1,
-      "arm64_nasync_com.personal.sub2api_0.2.19.0015.upk": 2
+      "amd64_nasync_com.personal.sub2api_0.2.20.0016.upk": 0,
+      "arm64_nasync_com.personal.sub2api_0.2.19.0015.upk": 2,
+      "arm64_nasync_com.personal.sub2api_0.2.20.0016.upk": 0
     },
-    "baseline": 0
+    "baseline": 4
   },
   "com.personal.trilium": {
     "assets": {
@@ -456,12 +456,12 @@
   },
   "com.wushuo.anirss": {
     "assets": {
-      "amd64_nasync_com.wushuo.anirss_3.2.54.0013.upk": 2,
       "amd64_nasync_com.wushuo.anirss_3.2.55.0014.upk": 1,
-      "arm64_nasync_com.wushuo.anirss_3.2.54.0013.upk": 2,
-      "arm64_nasync_com.wushuo.anirss_3.2.55.0014.upk": 4
+      "amd64_nasync_com.wushuo.anirss_3.2.56.0015.upk": 0,
+      "arm64_nasync_com.wushuo.anirss_3.2.55.0014.upk": 4,
+      "arm64_nasync_com.wushuo.anirss_3.2.56.0015.upk": 0
     },
-    "baseline": 0
+    "baseline": 4
   },
   "com.xnkyn.p2peeproxy": {
     "assets": {
