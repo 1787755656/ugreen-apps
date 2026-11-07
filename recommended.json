@@ -19,6 +19,16 @@
       "github_repo": "",
       "latest_version": "0.5.6",
       "updated_at": "2026-09-20"
+    },
+    {
+      "name": "com.kasbuky.frognas",
+      "app_type": "native",
+      "display_name": "旅行青蛙",
+      "description": "把《旅行青蛙·中国之旅》做成跑在绿联 NAS 上的原生网页应用（不依赖 Docker，包内自带 Node 运行时）。游戏引擎只在 NAS 上跑一份：手机、电脑、平板打开同一个地址看到的是同一个世界。时间轴在服务端，关掉浏览器青蛙照样出门、回家、寄明信片。存档在系统数据目录，升级不丢档。",
+      "source_url": "https://github.com/Kasbuky-sudo/frog-nas",
+      "github_repo": "Kasbuky-sudo/frog-nas",
+      "latest_version": "1.0.3",
+      "updated_at": "2026-11-07"
     }
   ]
 }

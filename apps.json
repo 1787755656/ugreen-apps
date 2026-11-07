@@ -1534,6 +1534,37 @@
         "arm64"
       ],
       "post_install_note": "首装默认管理账号 musicsub/musicsub，登录后请立即修改。"
+    },
+    {
+      "appname": "com.kasbuky.frognas",
+      "display_name": "旅行青蛙",
+      "description": "把《旅行青蛙·中国之旅》做成跑在绿联 NAS 上的原生网页应用（不依赖 Docker，包内自带 Node 运行时）。游戏引擎只在 NAS 上跑一份：手机、电脑、平板打开同一个地址看到的是同一个世界。时间轴在服务端，关掉浏览器青蛙照样出门、回家、寄明信片。存档在系统数据目录，升级不丢档。",
+      "homepage_url": "https://github.com/Kasbuky-sudo/frog-nas",
+      "updated_at": "2026-11-07",
+      "version": "1.0.3",
+      "upk_version": "1.0.3.0009",
+      "release_tag": "v1.0.3.0009",
+      "download_urls": {
+        "amd64": "https://github.com/banshengci/frognas-upk/releases/download/v1.0.3.0009/amd64_nasync_com.kasbuky.frognas_1.0.3.0009.upk",
+        "arm64": "https://github.com/banshengci/frognas-upk/releases/download/v1.0.3.0009/arm64_nasync_com.kasbuky.frognas_1.0.3.0009.upk"
+      },
+      "service_port": 8980,
+      "icon_url": "https://raw.githubusercontent.com/Kasbuky-sudo/frog-nas/main/packaging/fnOS/ui/images/icon_256.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "game",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ],
+      "install_params": [
+        {
+          "key": "DATA_PATH",
+          "name": "数据目录",
+          "description": "安装时让用户选择共享文件夹；留空也能安装。"
+        }
+      ],
+      "post_install_note": "安装后打开 http://<NAS_IP>:8980 游玩；管理/推送页 /admin；外网走 UGREENlink 域名 + /frog/"
     }
   ]
 }
