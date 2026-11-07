@@ -15,7 +15,7 @@
       },
       "service_port": 28737,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/100zip/com.personal.100zip/rootfs_common/icon.png",
-      "download_count": 12,
+      "download_count": 16,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -45,7 +45,7 @@
       },
       "service_port": 3080,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/adguardhome-docker/com.adguard.home.docker/rootfs_common/icon.png",
-      "download_count": 9,
+      "download_count": 13,
       "app_type": "docker",
       "category": "system",
       "platforms": [
@@ -135,7 +135,7 @@
       },
       "service_port": 28686,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/clouddl/com.personal.clouddl/rootfs_common/icon.png",
-      "download_count": 18,
+      "download_count": 19,
       "app_type": "native",
       "category": "download",
       "platforms": [
@@ -195,7 +195,7 @@
       },
       "service_port": 25400,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/deenmusic/com.personal.deenmusic/rootfs_common/icon.png",
-      "download_count": 19,
+      "download_count": 20,
       "app_type": "native",
       "category": "download",
       "platforms": [
@@ -225,7 +225,7 @@
       },
       "service_port": 23079,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/deepseek-harness/com.personal.deepseekharness/rootfs_common/icon.png",
-      "download_count": 24,
+      "download_count": 25,
       "app_type": "docker",
       "category": "system",
       "platforms": [
@@ -314,7 +314,7 @@
       },
       "service_port": 28190,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/fastnet/com.koolcenter.fastnet/rootfs_common/icon.png",
-      "download_count": 24,
+      "download_count": 26,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -326,15 +326,15 @@
     {
       "appname": "com.personal.atou.frp",
       "display_name": "FRP (fatedier/frp)",
-      "description": "FRP 内网穿透(fatedier/frp)一体化管理,内置服务端 frps 与客户端 frpc 双角色,可单独或同时启用。服务端把 NAS 做成穿透节点供其它 机器接入,客户端把 NAS 上的 SSH、相册、下载工具等服务映射到远端 frp 服务器。自带网页管理壳:浏览器打开即用,直接编辑两份配置文件, 保存时自动调用 frp 内置校验防止写坏,支持一键启停、重启、实时 日志查看与修改管理密码。首次启动自动生成随机管理密码,见应用 数据目录下的凭据说明.txt。通过应用中心打开(浏览器标签直连 28600 端口)。",
+      "description": "FRP 内网穿透(fatedier/frp)一体化管理,内置服务端 frps 与客户端 frpc 双角色,可单独或同时启用。服务端把 NAS 做成穿透节点供其它 机器接入,客户端把 NAS 上的 SSH、相册、下载工具等服务映射到远端 frp 服务器。自带网页管理壳:直接编辑两份配置文件,保存时自动 调用 frp 内置校验防止写坏,支持一键启停、重启与实时日志查看。 默认管理密码 frpadmin(区分大小写),登录后在页面右上角「修改 密码」里改成自己的密码,顶部提醒条会一直提示直到改掉。忘记密码 可删除应用数据目录下的 manager.json 再重启应用,密码恢复为默认 值(两个服务的启用状态会一并重置)。从桌面图标打开即可使用。",
       "homepage_url": "https://gofrp.org",
-      "updated_at": "2026-11-05",
+      "updated_at": "2026-11-07",
       "version": "0.72.0",
-      "upk_version": "0.72.0.0002",
-      "release_tag": "frp/v0.72.0",
+      "upk_version": "0.72.0.0003",
+      "release_tag": "frp/v0.72.0-r1",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/frp/v0.72.0/amd64_nasync_com.personal.atou.frp_0.72.0.0002.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/frp/v0.72.0/arm64_nasync_com.personal.atou.frp_0.72.0.0002.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/frp/v0.72.0-r1/amd64_nasync_com.personal.atou.frp_0.72.0.0003.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/frp/v0.72.0-r1/arm64_nasync_com.personal.atou.frp_0.72.0.0003.upk"
       },
       "service_port": 28600,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/frp/com.personal.atou.frp/rootfs_common/icon.png",
@@ -362,7 +362,7 @@
       },
       "service_port": 20858,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/idphotos/com.chuan.idphotos/rootfs_common/icon.png",
-      "download_count": 26,
+      "download_count": 28,
       "app_type": "docker",
       "category": "system",
       "platforms": [
@@ -500,7 +500,7 @@
       },
       "service_port": 28300,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/lunatv/com.personal.lunatv/rootfs_common/icon.png",
-      "download_count": 48,
+      "download_count": 51,
       "app_type": "native",
       "category": "media",
       "platforms": [
@@ -626,7 +626,7 @@
       },
       "service_port": 5866,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/mook/com.personal.mook/rootfs_common/icon.png",
-      "download_count": 27,
+      "download_count": 28,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -1153,7 +1153,7 @@
       },
       "service_port": 28750,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/ugtheme/com.personal.ugtheme/rootfs_common/icon.png",
-      "download_count": 73,
+      "download_count": 74,
       "app_type": "docker",
       "category": "utility",
       "platforms": [
@@ -1183,7 +1183,7 @@
       },
       "service_port": 28085,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/zhiyinmusic/com.personal.zhiyinmusic/rootfs_common/icon.png",
-      "download_count": 39,
+      "download_count": 40,
       "app_type": "native",
       "category": "media",
       "platforms": [
@@ -1218,7 +1218,7 @@
       },
       "service_port": 21310,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/ugstore-icon.png",
-      "download_count": 236,
+      "download_count": 242,
       "app_type": "native",
       "category": "utility",
       "platforms": [
@@ -1240,7 +1240,7 @@
       },
       "service_port": 21120,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/liteparser-icon.png",
-      "download_count": 35,
+      "download_count": 36,
       "app_type": "native",
       "category": "download",
       "platforms": [
@@ -1295,7 +1295,7 @@
       },
       "service_port": 28082,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/litereader-icon.png",
-      "download_count": 18,
+      "download_count": 19,
       "app_type": "native",
       "category": "media",
       "platforms": [
@@ -1526,7 +1526,7 @@
       },
       "service_port": 21890,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/musicsub-icon.png",
-      "download_count": 4,
+      "download_count": 5,
       "app_type": "native",
       "category": "media",
       "platforms": [
