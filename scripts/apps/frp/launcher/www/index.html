@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>FRP 内网穿透管理</title>
-<link rel="icon" href="/favicon.ico">
+<link rel="icon" href="/icon.png">
 <style>
   :root {
     --bg: #0f172a; --panel: #1e293b; --panel2: #16223a; --line: #334155;
@@ -112,6 +112,14 @@
     padding: 8px 18px; border-radius: 999px; font-size: 13px; display: none; z-index: 50;
   }
   .toast.bad { background: #450a0a; color: #fca5a5; border-color: rgba(239,68,68,.4); }
+  /* 默认密码提醒条 */
+  #pwWarn {
+    display: none; align-items: center; gap: 10px; flex-wrap: wrap;
+    background: rgba(245,158,11,.10); border: 1px solid rgba(245,158,11,.45);
+    color: #fcd34d; border-radius: 10px; padding: 10px 14px; font-size: 13px;
+    margin-bottom: 14px;
+  }
+  #pwWarn b { color: #fde68a; }
 </style>
 </head>
 <body>
@@ -124,7 +132,7 @@
     <input type="password" id="loginPw" autocomplete="current-password" autofocus>
     <div class="err-text" id="loginErr"></div>
     <button class="primary" type="submit" id="loginBtn">登 录</button>
-    <div class="muted" style="font-size:11px">首次使用:密码在应用数据目录的 凭据说明.txt</div>
+    <div class="muted" style="font-size:11px">初始密码见应用中心简介,登录后请点右上角「修改密码」改成自己的</div>
   </form>
 </div>
 
@@ -140,6 +148,10 @@
   </header>
 
   <main>
+    <div id="pwWarn">
+      <span>仍在使用出厂默认密码 <b>frpadmin</b> —— 同一个网络里的人都能登录,请改成自己的密码。</span>
+      <button id="btnChangePw2" class="primary">现在修改</button>
+    </div>
     <div class="grid">
       <!-- frps -->
       <section class="card" data-svc="frps">
@@ -227,6 +239,20 @@
   var dirty = { frps: false, frpc: false };
   var loadedContent = { frps: "", frpc: "" };
 
+  // ---------- 会话令牌 ----------
+  // inner 形态下页面跑在 UGOS 网关的跨站 iframe 里:网关会把 Set-Cookie 压成
+  // SameSite=Strict,PC 客户端还整体拒收第三方 Cookie,只靠 Cookie 必然登录回环。
+  // 所以登录拿到 token 后自己存起来,每个请求走 Authorization 头(后端两条路都认)。
+  var TOKEN_KEY = "frpmgr_token";
+  var tokenMem = "";
+  function getToken() {
+    try { return localStorage.getItem(TOKEN_KEY) || tokenMem; } catch (e) { return tokenMem; }
+  }
+  function setToken(t) {
+    tokenMem = t || "";
+    try { if (t) localStorage.setItem(TOKEN_KEY, t); else localStorage.removeItem(TOKEN_KEY); } catch (e) {}
+  }
+
   // ---------- 基础 ----------
   function toast(msg, bad) {
     var t = $("#toast");
@@ -239,13 +265,15 @@
 
   function api(method, url, body) {
     var opt = { method: method, headers: {}, credentials: "same-origin" };
+    var tok = getToken();
+    if (tok) opt.headers["Authorization"] = "Bearer " + tok;
     if (body !== undefined) {
       opt.headers["Content-Type"] = "application/json";
       opt.body = JSON.stringify(body);
     }
     return fetch(url, opt).then(function (res) {
       return res.json().catch(function () { return {}; }).then(function (data) {
-        if (res.status === 401 && url !== "/api/login") { showLogin(); throw new Error("未登录"); }
+        if (res.status === 401 && url !== "/api/login") { setToken(""); showLogin(); throw new Error("未登录"); }
         if (!res.ok) {
           var e = new Error(data.error || ("HTTP " + res.status));
           e.status = res.status; e.data = data;
@@ -272,7 +300,8 @@
     $("#loginErr").textContent = "";
     $("#loginBtn").disabled = true;
     api("POST", "/api/login", { password: $("#loginPw").value })
-      .then(function () {
+      .then(function (res) {
+        setToken(res.token || "");
         $("#loginPw").value = "";
         boot();
       })
@@ -281,7 +310,10 @@
   });
 
   $("#btnLogout").addEventListener("click", function () {
-    api("POST", "/api/logout").catch(function () {}).finally(showLogin);
+    api("POST", "/api/logout").catch(function () {}).finally(function () {
+      setToken("");
+      showLogin();
+    });
   });
 
   // ---------- 状态轮询 ----------
@@ -308,6 +340,7 @@
     });
     $("#frpVer").textContent = "frp v" + (st.frp_version || "?");
     $("#shellVer").textContent = "管理壳 v" + (st.shell_version || "?");
+    $("#pwWarn").style.display = st.using_default_password ? "flex" : "none";
     $("#foot").textContent = "配置文件位于应用数据目录(frpc.toml / frps.toml),网页修改即时生效";
   }
 
@@ -426,10 +459,12 @@
 
   // ---------- 改密码 ----------
   var dlg = $("#pwDialog");
-  $("#btnChangePw").addEventListener("click", function () {
+  function openPwDialog() {
     $("#pwOld").value = ""; $("#pwNew").value = ""; $("#pwNew2").value = ""; $("#pwErr").textContent = "";
     dlg.showModal();
-  });
+  }
+  $("#btnChangePw").addEventListener("click", openPwDialog);
+  $("#btnChangePw2").addEventListener("click", openPwDialog);
   $("#pwCancel").addEventListener("click", function () { dlg.close(); });
   $("#pwSave").addEventListener("click", function () {
     var oldPw = $("#pwOld").value, newPw = $("#pwNew").value, newPw2 = $("#pwNew2").value;
@@ -439,6 +474,7 @@
       .then(function () {
         dlg.close();
         toast("密码已修改,本会话仍有效");
+        pollStatus(); // 刷掉"仍在用默认密码"的提醒条
       })
       .catch(function (e) { $("#pwErr").textContent = e.message; });
   });

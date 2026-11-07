@@ -9,7 +9,8 @@ set -euo pipefail
 # 包结构(frp-ugreen-app 独立仓库同步而来,双架构容器冒烟 57 项断言全绿):
 #   - start_cmd 是自研 Go 管理壳 bin/frp-mgr(--port=28600),不是 shell 脚本。
 #     它托管 frpc/frps 子进程(守护循环+退避重启)、提供网页管理(登录/配置
-#     编辑带 frp verify 校验/日志),tab 直连形态。
+#     编辑带 frp verify 校验/日志),inner 形态(网关从 www/ serve 页面、
+#     /api 反代到管理壳,会话令牌走 Authorization 头,不依赖 Cookie)。
 #   - 子进程 env 由管理壳剥 GODEBUG(固件 DefaultEnvironment 注入的
 #     tlskyber=0 对 go1.27+ 二进制 fatal;管理壳自身钉 go1.26 线编译)。
 #   - frp 0.71.1 上游是 go1.26.8 编译,静态链接零运行时依赖,沙箱可用。
@@ -87,10 +88,20 @@ echo "==> [$ARCH] 编译管理壳 linux/$ARCH"
 )
 chmod +x "$ROOTFS/bin/frp-mgr"
 
-# 管理页单源:launcher 用 go:embed 打包 www/,rootfs_common/www 只是 tab 形态
-# 的占位页(独立提交),无需同步;但要确保两边素材同源的是图标(favicon)。
+# 管理页单源:launcher/www 是唯一源(go:embed 打进管理壳,直连 28600 时用),
+# inner 形态下 UGOS 网关是从 rootfs_common/www/ 静态 serve 的 —— 两份必须同源,
+# 所以这里直接覆盖同步,免得改了内嵌页面忘了拷(表现是"桌面打开还是旧界面")。
+[ -f "$SCRIPT_DIR/launcher/www/index.html" ] || {
+  echo "::error::缺少 $SCRIPT_DIR/launcher/www/index.html" >&2; exit 1;
+}
 [ -f "$SCRIPT_DIR/launcher/www/icon.png" ] || {
   echo "::error::缺少 $SCRIPT_DIR/launcher/www/icon.png —— 内嵌 favicon 素材丢了" >&2; exit 1;
+}
+mkdir -p "$COMMON/www"
+install -m 0644 "$SCRIPT_DIR/launcher/www/index.html" "$COMMON/www/index.html"
+install -m 0644 "$SCRIPT_DIR/launcher/www/icon.png"   "$COMMON/www/icon.png"
+cmp -s "$SCRIPT_DIR/launcher/www/index.html" "$COMMON/www/index.html" || {
+  echo "::error::rootfs_common/www/index.html 同步失败" >&2; exit 1;
 }
 cmp -s "$SCRIPT_DIR/launcher/www/icon.png" "$COMMON/icon.png" || {
   echo "::error::rootfs_common/icon.png 与 launcher/www/icon.png 不同源,重新 cp 一次" >&2; exit 1;

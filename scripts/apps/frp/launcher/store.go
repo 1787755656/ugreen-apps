@@ -26,6 +26,11 @@ const (
 	sessionCookie = "frpmgr_session"
 )
 
+// DefaultPassword 出厂管理密码:固定值而非随机串,便于写进应用简介让用户
+// 装上就能进页面(随机密码要求用户先去翻数据目录,手机端根本翻不到)。
+// 首次登录后页面顶部会提示改成自己的密码。
+const DefaultPassword = "frpadmin"
+
 // manager.json 持久化内容
 type managerState struct {
 	PasswordSalt string `json:"password_salt"` // base64
@@ -33,6 +38,9 @@ type managerState struct {
 	SessionKey   string `json:"session_key"`   // base64,HMAC 签名钥
 	FrpcEnabled  bool   `json:"frpc_enabled"`
 	FrpsEnabled  bool   `json:"frps_enabled"`
+	// PasswordIsDefault 仍是出厂密码时置 true:页面据此弹"请改密码"提示。
+	// 老版本 manager.json 没这个字段 → 零值 false,不会误提示。
+	PasswordIsDefault bool `json:"password_is_default"`
 }
 
 type store struct {
@@ -41,22 +49,22 @@ type store struct {
 	st   managerState
 }
 
-// loadOrCreateStore 读取 manager.json;不存在则生成初始状态(含随机首启密码)。
-// firstBoot=true 时返回生成的明文密码(仅此一次,哈希不可逆),调用方负责写凭据说明.txt。
-func loadOrCreateStore(path string) (*store, string, bool) {
+// loadOrCreateStore 读取 manager.json;不存在则用出厂密码初始化。
+// firstBoot=true 表示刚生成,调用方负责写凭据说明.txt。
+func loadOrCreateStore(path string) (*store, bool) {
 	s := &store{path: path}
 	b, err := os.ReadFile(path)
 	if err == nil {
 		if err := json.Unmarshal(b, &s.st); err == nil && s.st.PasswordHash != "" {
-			return s, "", false
+			return s, false
 		}
 		log.Printf("manager.json 缺失或损坏,重新初始化(旧文件保留为 manager.json.bak)")
 		_ = os.Rename(path, path+".bak")
 	}
-	plainPw := genPassword()
-	if err := s.resetPassword(plainPw); err != nil {
+	if err := s.resetPassword(DefaultPassword); err != nil {
 		log.Fatalf("初始化管理密码失败: %v", err)
 	}
+	s.st.PasswordIsDefault = true
 	key, err := randomToken(32)
 	if err != nil {
 		log.Fatalf("生成会话密钥失败: %v", err)
@@ -65,11 +73,18 @@ func loadOrCreateStore(path string) (*store, string, bool) {
 	if err := s.saveLocked(); err != nil {
 		log.Fatalf("写入 manager.json 失败: %v", err)
 	}
-	return s, plainPw, true
+	return s, true
 }
 
 func (s *store) frpcEnabled() bool { s.mu.Lock(); defer s.mu.Unlock(); return s.st.FrpcEnabled }
 func (s *store) frpsEnabled() bool { s.mu.Lock(); defer s.mu.Unlock(); return s.st.FrpsEnabled }
+
+// usingDefaultPassword 是否仍在用出厂密码(页面提示条用)
+func (s *store) usingDefaultPassword() bool {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	return s.st.PasswordIsDefault
+}
 
 // setEnabled 持久化某服务的启用开关
 func (s *store) setEnabled(name string, on bool) {
@@ -89,7 +104,12 @@ func (s *store) setEnabled(name string, on bool) {
 func (s *store) setPassword(newPw string) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
-	return s.resetPassword(newPw)
+	if err := s.resetPassword(newPw); err != nil {
+		return err
+	}
+	s.st.PasswordIsDefault = newPw == DefaultPassword
+	// 必须落盘:只改内存的话,管理壳重启后密码会回滚成旧值
+	return s.saveLocked()
 }
 
 func (s *store) resetPassword(pw string) error {
@@ -186,9 +206,9 @@ func (s *store) validSessionToken(tok string) bool {
 // ---------- 登录限流(单机内存版:连续失败锁 60s) ----------
 
 type limiter struct {
-	mu     sync.Mutex
-	fails  map[string]*failState
-	max    int
+	mu      sync.Mutex
+	fails   map[string]*failState
+	max     int
 	lockFor time.Duration
 }
 
@@ -231,19 +251,6 @@ func (l *limiter) reset(key string) {
 
 // ---------- 小工具 ----------
 
-func genPassword() string {
-	const charset = "ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789"
-	b := make([]byte, 12)
-	if _, err := rand.Read(b); err != nil {
-		return "frp" + fmt.Sprintf("%d", time.Now().UnixNano()%100000000)
-	}
-	out := make([]byte, 12)
-	for i, v := range b {
-		out[i] = charset[int(v)%len(charset)]
-	}
-	return string(out)
-}
-
 // randomToken 返回 n 字节随机数的 hex 字符串
 func randomToken(n int) (string, error) {
 	b := make([]byte, n)
@@ -253,16 +260,19 @@ func randomToken(n int) (string, error) {
 	return hex.EncodeToString(b), nil
 }
 
-// writeCredentialsFile 首启把随机明文密码落盘(与 CLIProxyAPI 凭据说明.txt 惯例一致)
-func writeCredentialsFile(plainPw string) string {
-	content := `FRP 内网穿透 —— 管理壳凭据
+// writeCredentialsFile 首启落一份说明(与 CLIProxyAPI 凭据说明.txt 惯例一致)
+func writeCredentialsFile() {
+	content := `FRP 内网穿透 —— 管理凭据
 =================================
 
-管理密码: ` + plainPw + `
-(首次启动自动生成;登录网页后请在右上角「修改密码」里更改)
+默认管理密码: ` + DefaultPassword + `
+(出厂固定值;登录后在页面右上角「修改密码」改成自己的密码)
 
-管理地址: 浏览器访问 http://<NAS_IP>:` + fmt.Sprintf("%d", defaultPort) + `
-        或从 UGOS 应用中心打开本应用。
+忘记密码怎么办:删除本目录下的 manager.json 再重启应用,
+密码恢复为默认值(两个服务的启用状态会一并重置)。
+
+管理地址: 从 UGOS 桌面/应用中心打开本应用;
+        局域网也可直接访问 http://<NAS_IP>:` + fmt.Sprintf("%d", defaultPort) + `
 
 配置文件(应用数据目录,网页里也可直接编辑):
   frps.toml   服务端配置
@@ -274,7 +284,6 @@ func writeCredentialsFile(plainPw string) string {
 	if err := os.WriteFile(p, []byte(content), 0o600); err != nil {
 		log.Printf("写入凭据说明.txt 失败: %v", err)
 	}
-	return plainPw
 }
 
 var errNotExist = errors.New("not exist")

@@ -56,10 +56,10 @@ func main() {
 	log.Printf("frp-mgr v%s 启动 port=%d", AppVersion, *port)
 	log.Printf("install=%s data=%s log=%s cache=%s", installDir, dataDir, logDir, cacheDir)
 
-	st, plainPw, firstBoot := loadOrCreateStore(filepath.Join(dataDir, "manager.json"))
+	st, firstBoot := loadOrCreateStore(filepath.Join(dataDir, "manager.json"))
 	if firstBoot {
-		writeCredentialsFile(plainPw)
-		log.Printf("首次启动:已生成管理密码与凭据说明.txt")
+		writeCredentialsFile()
+		log.Printf("首次启动:管理密码为出厂默认值 %q(登录后请在页面上修改)", DefaultPassword)
 	}
 	writeDefaultConfigs(firstBoot)
 

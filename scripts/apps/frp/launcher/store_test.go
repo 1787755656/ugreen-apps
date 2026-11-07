@@ -12,13 +12,27 @@ import (
 	"time"
 )
 
+// newTestStore 起一个首启状态的 store,返回它和出厂密码
 func newTestStore(t *testing.T) (*store, string) {
 	t.Helper()
-	st, pw, firstBoot := loadOrCreateStore(filepath.Join(t.TempDir(), "manager.json"))
-	if !firstBoot || pw == "" {
-		t.Fatalf("首次初始化应返回明文密码")
+	st, firstBoot := loadOrCreateStore(filepath.Join(t.TempDir(), "manager.json"))
+	if !firstBoot {
+		t.Fatalf("首次初始化应返回 firstBoot=true")
 	}
-	return st, pw
+	return st, DefaultPassword
+}
+
+func TestDefaultPasswordOnFirstBoot(t *testing.T) {
+	st, pw := newTestStore(t)
+	if pw != "frpadmin" {
+		t.Fatalf("出厂密码应为 frpadmin,实际 %q", pw)
+	}
+	if !st.checkPassword(pw) {
+		t.Fatalf("出厂密码校验失败")
+	}
+	if !st.usingDefaultPassword() {
+		t.Fatalf("首启应标记为仍在使用默认密码")
+	}
 }
 
 func TestPasswordRoundtrip(t *testing.T) {
@@ -38,26 +52,48 @@ func TestPasswordRoundtrip(t *testing.T) {
 	if !st.checkPassword("NewPassw0rd9") {
 		t.Fatalf("新密码应通过")
 	}
+	if st.usingDefaultPassword() {
+		t.Fatalf("改过密码后不应再标记为默认密码")
+	}
+}
+
+// 改密码必须落盘:早期版本 setPassword 只改内存,重启后密码会回滚
+func TestSetPasswordPersistsAcrossReload(t *testing.T) {
+	dir := t.TempDir()
+	path := filepath.Join(dir, "manager.json")
+	st, _ := loadOrCreateStore(path)
+	if err := st.setPassword("NewPassw0rd9"); err != nil {
+		t.Fatalf("改密码失败: %v", err)
+	}
+	st2, first2 := loadOrCreateStore(path)
+	if first2 {
+		t.Fatalf("重开不应重新初始化")
+	}
+	if st2.checkPassword(DefaultPassword) {
+		t.Fatalf("重启后出厂密码不应再生效(说明没落盘)")
+	}
+	if !st2.checkPassword("NewPassw0rd9") {
+		t.Fatalf("重启后新密码应仍有效")
+	}
+	if st2.usingDefaultPassword() {
+		t.Fatalf("重启后不应再标记为默认密码")
+	}
 }
 
 func TestLoadOrCreatePreservesPassword(t *testing.T) {
 	dir := t.TempDir()
 	path := filepath.Join(dir, "manager.json")
-	st1, pw1, first := loadOrCreateStore(path)
+	_, first := loadOrCreateStore(path)
 	if !first {
 		t.Fatalf("首次应为 firstBoot")
 	}
-	st2, pw2, first2 := loadOrCreateStore(path)
+	st2, first2 := loadOrCreateStore(path)
 	if first2 {
 		t.Fatalf("二次加载不应重新初始化")
 	}
-	if pw2 != "" {
-		t.Fatalf("非首启不应返回明文密码")
-	}
-	if !st2.checkPassword(pw1) {
+	if !st2.checkPassword(DefaultPassword) {
 		t.Fatalf("重启后密码应保持一致")
 	}
-	_ = st1
 }
 
 func TestCorruptedStoreReinitializes(t *testing.T) {
@@ -66,15 +102,15 @@ func TestCorruptedStoreReinitializes(t *testing.T) {
 	if err := os.WriteFile(path, []byte("\x00garbage"), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	st, pw, first := loadOrCreateStore(path)
-	if !first || pw == "" {
+	st, first := loadOrCreateStore(path)
+	if !first {
 		t.Fatalf("损坏文件应触发重新初始化")
 	}
 	if _, err := os.Stat(path + ".bak"); err != nil {
 		t.Fatalf("旧文件应保留为 .bak")
 	}
-	if !st.checkPassword(pw) {
-		t.Fatalf("重新初始化后密码校验应通过")
+	if !st.checkPassword(DefaultPassword) {
+		t.Fatalf("重新初始化后应回到出厂密码")
 	}
 }
 
@@ -90,6 +126,10 @@ func TestSessionToken(t *testing.T) {
 	// 篡改签名:换掉最后一段
 	if st.validSessionToken(tok[:len(tok)-4]+"AAAA") {
 		t.Fatalf("篡改后的令牌应无效")
+	}
+	// 空令牌(没带 Cookie 也没带 Authorization 头)必须无效
+	if st.validSessionToken("") {
+		t.Fatalf("空令牌应无效")
 	}
 	// 过期令牌:用同一把 key 手工签一个过去的时间戳
 	key, err := base64.StdEncoding.DecodeString(st.st.SessionKey)
@@ -123,33 +163,4 @@ func TestLimiterLockout(t *testing.T) {
 	if !l.allow(ip) {
 		t.Fatalf("reset 后应放行")
 	}
-}
-
-func TestGenPassword(t *testing.T) {
-	const charset = "ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789"
-	seen := map[string]bool{}
-	for i := 0; i < 20; i++ {
-		pw := genPassword()
-		if len(pw) != 12 {
-			t.Fatalf("密码长度应为 12: %q", pw)
-		}
-		for _, c := range pw {
-			if !containsRune(charset, c) {
-				t.Fatalf("密码含非法字符 %q: %q", c, pw)
-			}
-		}
-		seen[pw] = true
-	}
-	if len(seen) < 20 {
-		t.Fatalf("20 次生成出现重复,随机性异常")
-	}
-}
-
-func containsRune(s string, r rune) bool {
-	for _, c := range s {
-		if c == r {
-			return true
-		}
-	}
-	return false
 }
