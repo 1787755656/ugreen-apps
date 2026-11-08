@@ -31,7 +31,7 @@ COMMON="$APPDIR/rootfs_common"
 WORK_DIR=$(mktemp -d)
 trap 'rm -rf "$WORK_DIR"' EXIT
 
-NODE_VER="24.21.0" # 满足上游 engines（^24.15.0 || >=26）；运行时与主机工具链同源
+NODE_VER="26.13.0" # 上游 8.1.0 起 engines 收紧为 >=26.0.0，运行时跟着走 LTS；工具链如需下载也用它
 
 case "$ARCH" in
   amd64) NARCH="x64";  ELF_MACHINE="x86-64"  ;;
@@ -133,12 +133,18 @@ const BUILTIN = new Set(("assert,async_hooks,buffer,child_process,cluster,consol
 const used = new Set();
 for (const rel of files) {
   let code = fs.readFileSync(rel, "utf8");
+  // 先剥模板字符串再剥注释：模板里的日志文案（8.1.0 guards.js 的
+  // `from "${host}"`）会被下面的 import 正则误认成真实导入。真包名不会
+  // 落在反引号里（模板型动态 import 本就不被引号正则捕获，剥掉无损失）。
+  code = code.replace(/`(?:\\.|[^`\\])*`/g, " ");
   code = code.replace(/\/\*[\s\S]*?\*\//g, " ").replace(/(^|[^:])\/\/[^\n]*/g, "$1 ");
   const re = /(?:from\s+|\bimport\s+|\bimport\(\s*)(["\x27])([^"\x27]+)\1/g;
   let m;
   while ((m = re.exec(code))) {
     const spec = m[2];
     if (spec.startsWith(".") || spec.startsWith("node:")) continue;
+    // 包名字符集兜底：剥离边界残留（含空格/${} 等的假 spec）一律不算 import
+    if (!/^[@a-zA-Z0-9][@a-zA-Z0-9._/-]*$/.test(spec)) continue;
     const top = spec.startsWith("@") ? spec.split("/").slice(0, 2).join("/") : spec.split("/")[0];
     if (BUILTIN.has(top)) continue;
     used.add(top);
@@ -194,9 +200,10 @@ patch_file frontend-server.js \
   'http://127.0.0.1:${backEndPort}/api'
 
 # 7.2 backend 监听地址可配（ugos-start.cjs 设 127.0.0.1，不对外）
+# 8.1.0 起 listen 回调抽到 server/listen-callback.js（createListenCallback）
 patch_file backend-server.js \
-  'app.listen(backEndPort, () => {' \
-  's|app.listen(backEndPort, () => {|app.listen(backEndPort, process.env.BACKEND_HOST \|\| undefined, () => {|' \
+  'app.listen(backEndPort, createListenCallback({ port: backEndPort, logger }));' \
+  's|app.listen(backEndPort, createListenCallback({ port: backEndPort, logger }));|app.listen(backEndPort, process.env.BACKEND_HOST \|\| undefined, createListenCallback({ port: backEndPort, logger }));|' \
   'app.listen(backEndPort, process.env.BACKEND_HOST'
 
 # 7.3 Referer 白名单加禁用开关（NAS 无固定域名，白名单必挡正常访问）
