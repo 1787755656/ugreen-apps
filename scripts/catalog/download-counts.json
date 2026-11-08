@@ -265,7 +265,9 @@
   "com.personal.myip": {
     "assets": {
       "amd64_nasync_com.personal.myip_8.0.0.0001.upk": 7,
-      "arm64_nasync_com.personal.myip_8.0.0.0001.upk": 2
+      "amd64_nasync_com.personal.myip_8.1.0.0002.upk": 0,
+      "arm64_nasync_com.personal.myip_8.0.0.0001.upk": 2,
+      "arm64_nasync_com.personal.myip_8.1.0.0002.upk": 0
     },
     "baseline": 0
   },
