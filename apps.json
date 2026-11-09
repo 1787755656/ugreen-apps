@@ -1565,6 +1565,37 @@
         }
       ],
       "post_install_note": "安装后打开 http://<NAS_IP>:8980 游玩；管理/推送页 /admin；外网走 UGREENlink 域名 + /frog/"
+    },
+    {
+      "appname": "com.personal.supereditor",
+      "display_name": "SuperEditor",
+      "description": "本地优先的 Markdown 编辑器，装上 NAS 后可以直接浏览授权文件夹、逐层进入子目录，打开其中的 .md / .txt，并把编辑好的文档写回这些目录；支持 Markdown / Word / PDF / PPT 导入导出与演示模式。\n同步会先比较文件内容：相同的文件不重复写入、不重复导入，索引也不再带时间戳。文档工作区保存在应用数据目录，换设备或清浏览器缓存不会丢。\nUGOS Pro 原生应用，以 inner 方式打开；服务仅经系统网关反代访问，非本机来源且无网关头时拒绝请求。支持 amd64 / arm64 双架构。文件 → 同步设置 → 诊断信息 可查看授权目录的实际读写测试结果与最近错误。",
+      "homepage_url": "https://github.com/techjiang/SuperEditor",
+      "updated_at": "2026-11-09",
+      "version": "1.2.0",
+      "upk_version": "1.2.0.0004",
+      "release_tag": "supereditor/1.2.0.0004",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/supereditor/1.2.0.0004/amd64_nasync_com.personal.supereditor_1.2.0.0004.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/supereditor/1.2.0.0004/arm64_nasync_com.personal.supereditor_1.2.0.0004.upk"
+      },
+      "service_port": 21151,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/supereditor-icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "utility",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ],
+      "post_install_note": "装好后到应用中心「配置」里选「文档文件夹」（可多选，最多 8 个，选中即授权本应用读写），再「停止 → 启动」一次——平台首次启动读到的安装参数一定是空的。之后也可在应用内「文件 → 同步设置」里重新选择连接目录，无需重启。",
+      "install_params": [
+        {
+          "key": "SUPEREDITOR_DIRS",
+          "name": "文档文件夹",
+          "description": "可添加多个；应用只能读取和写入这里选中的目录及其子目录，留空也可稍后在应用内添加。装好或改完请「停止 → 启动」一次。"
+        }
+      ]
     }
   ]
 }
