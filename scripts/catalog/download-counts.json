@@ -42,12 +42,12 @@
   },
   "com.koolcenter.fastnet": {
     "assets": {
-      "amd64_nasync_com.koolcenter.fastnet_0.7.8.0004.upk": 10,
-      "amd64_nasync_com.koolcenter.fastnet_0.8.0.0005.upk": 3,
-      "arm64_nasync_com.koolcenter.fastnet_0.7.8.0004.upk": 5,
-      "arm64_nasync_com.koolcenter.fastnet_0.8.0.0005.upk": 3
+      "amd64_nasync_com.koolcenter.fastnet_0.8.0.0005.upk": 4,
+      "amd64_nasync_com.koolcenter.fastnet_0.8.1.0006.upk": 0,
+      "arm64_nasync_com.koolcenter.fastnet_0.8.0.0005.upk": 3,
+      "arm64_nasync_com.koolcenter.fastnet_0.8.1.0006.upk": 0
     },
-    "baseline": 11
+    "baseline": 26
   },
   "com.magiccode.magicmail": {
     "assets": {
@@ -140,8 +140,8 @@
   },
   "com.personal.chromium": {
     "assets": {
-      "amd64_nasync_com.personal.chromium_26.10.1.0001.upk": 9,
-      "arm64_nasync_com.personal.chromium_26.10.1.0001.upk": 3
+      "amd64_nasync_com.personal.chromium_26.10.1.0001.upk": 10,
+      "arm64_nasync_com.personal.chromium_26.10.1.0001.upk": 4
     },
     "baseline": 0
   },
@@ -156,8 +156,8 @@
   },
   "com.personal.deenmusic": {
     "assets": {
-      "amd64_nasync_com.personal.deenmusic_0.7.8.0014.upk": 12,
-      "arm64_nasync_com.personal.deenmusic_0.7.8.0014.upk": 10
+      "amd64_nasync_com.personal.deenmusic_0.7.8.0014.upk": 14,
+      "arm64_nasync_com.personal.deenmusic_0.7.8.0014.upk": 14
     },
     "baseline": 0
   },
@@ -265,9 +265,9 @@
   "com.personal.myip": {
     "assets": {
       "amd64_nasync_com.personal.myip_8.0.0.0001.upk": 7,
-      "amd64_nasync_com.personal.myip_8.1.0.0002.upk": 0,
+      "amd64_nasync_com.personal.myip_8.1.0.0002.upk": 2,
       "arm64_nasync_com.personal.myip_8.0.0.0001.upk": 2,
-      "arm64_nasync_com.personal.myip_8.1.0.0002.upk": 0
+      "arm64_nasync_com.personal.myip_8.1.0.0002.upk": 1
     },
     "baseline": 0
   },
@@ -364,14 +364,21 @@
     },
     "baseline": 4
   },
-  "com.personal.trilium": {
+  "com.personal.supereditor": {
     "assets": {
-      "amd64_nasync_com.personal.trilium_106.0.0.0004.upk": 2,
-      "amd64_nasync_com.personal.trilium_106.1.0.0005.upk": 5,
-      "arm64_nasync_com.personal.trilium_106.0.0.0004.upk": 4,
-      "arm64_nasync_com.personal.trilium_106.1.0.0005.upk": 3
+      "amd64_nasync_com.personal.supereditor_1.2.0.0004.upk": 2,
+      "arm64_nasync_com.personal.supereditor_1.2.0.0004.upk": 3
     },
     "baseline": 0
+  },
+  "com.personal.trilium": {
+    "assets": {
+      "amd64_nasync_com.personal.trilium_106.1.0.0005.upk": 5,
+      "amd64_nasync_com.personal.trilium_107.0.0.0006.upk": 0,
+      "arm64_nasync_com.personal.trilium_106.1.0.0005.upk": 3,
+      "arm64_nasync_com.personal.trilium_107.0.0.0006.upk": 0
+    },
+    "baseline": 6
   },
   "com.personal.ugstore": {
     "assets": {
@@ -379,7 +386,7 @@
       "amd64_nasync_com.personal.ugstore_0.1.0.0029.upk": 2,
       "amd64_nasync_com.personal.ugstore_0.1.0.0030.upk": 12,
       "amd64_nasync_com.personal.ugstore_0.1.0.0031.upk": 15,
-      "amd64_nasync_com.personal.ugstore_0.1.0.0032.upk": 19,
+      "amd64_nasync_com.personal.ugstore_0.1.0.0032.upk": 20,
       "arm64_nasync_com.personal.ugstore_0.1.0.0028.upk": 7,
       "arm64_nasync_com.personal.ugstore_0.1.0.0029.upk": 3,
       "arm64_nasync_com.personal.ugstore_0.1.0.0030.upk": 5,
@@ -400,7 +407,7 @@
   "com.personal.zhiyinmusic": {
     "assets": {
       "amd64_nasync_com.personal.zhiyinmusic_0.8.1.0005.upk": 11,
-      "amd64_nasync_com.personal.zhiyinmusic_0.8.1.0011.upk": 13,
+      "amd64_nasync_com.personal.zhiyinmusic_0.8.1.0011.upk": 14,
       "arm64_nasync_com.personal.zhiyinmusic_0.8.1.0005.upk": 10,
       "arm64_nasync_com.personal.zhiyinmusic_0.8.1.0011.upk": 6
     },
@@ -458,16 +465,16 @@
   },
   "com.wushuo.anirss": {
     "assets": {
-      "amd64_nasync_com.wushuo.anirss_3.2.55.0014.upk": 1,
       "amd64_nasync_com.wushuo.anirss_3.2.56.0015.upk": 1,
-      "arm64_nasync_com.wushuo.anirss_3.2.55.0014.upk": 4,
-      "arm64_nasync_com.wushuo.anirss_3.2.56.0015.upk": 1
+      "amd64_nasync_com.wushuo.anirss_3.2.57.0016.upk": 0,
+      "arm64_nasync_com.wushuo.anirss_3.2.56.0015.upk": 1,
+      "arm64_nasync_com.wushuo.anirss_3.2.57.0016.upk": 0
     },
-    "baseline": 4
+    "baseline": 9
   },
   "com.xnkyn.p2peeproxy": {
     "assets": {
-      "amd64_nasync_com.xnkyn.p2peeproxy_1.0.0.0003.upk": 21,
+      "amd64_nasync_com.xnkyn.p2peeproxy_1.0.0.0003.upk": 23,
       "arm64_nasync_com.xnkyn.p2peeproxy_1.0.0.0003.upk": 3
     },
     "baseline": 0
