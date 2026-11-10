@@ -19,6 +19,13 @@ set -euo pipefail
 # 从 tag 推不出文件名：URL 经 GitHub API release assets 端点做 endswith 匹配
 # （x86_64 与 32 位 x86 资产靠 endswith 天然区分）。
 #
+# ⚠ 镜像 tag / tar 名【固定不跟版本走】：UGOS 升级时只覆盖 docker-compose.tmpl，
+#   不重新渲染带用户 DATA_PATH 的 docker-compose.yaml（那是用户配置，被保留）。
+#   以前 tag 跟上上游版本（:48.4 → :48.5-RC1），结果新镜像导入了却没人引用、
+#   旧容器继续跑旧镜像，升级还留下 NeedRepair（2026-11-11 真机实测）。
+#   固定 tag 后 docker load 覆盖同一 tag 的镜像 ID，compose up 检测到 ID 变化
+#   就重建容器；VERSION 仍只用于上游资产定位与二进制版本断言。
+#
 # 断言（内容不明不出包）：
 #   - 派生镜像 Architecture 字段 == 目标架构
 #   - 二进制里嵌的版本串（ReleaseX.Y）== 目标上游版本
@@ -33,7 +40,11 @@ set -euo pipefail
 VERSION="${1:?VERSION is required}"
 ARCH="${2:?ARCH is required (amd64|arm64)}"
 UPSTREAM_TAG="Release${VERSION}"
-IMAGE_DST="personal/smartdns:${VERSION}"
+# 见文件头说明：固定 tag，绝不改成 "${VERSION}"。
+# ugcli check 按 <镜像最后段>-<tag>.tar 核对 images/ 里的离线镜像。
+IMAGE_TAG="ugos"
+IMAGE_DST="personal/smartdns:${IMAGE_TAG}"
+TAR_NAME="smartdns-${IMAGE_TAG}.tar"
 ALPINE_BASE="alpine:3.20"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -136,18 +147,29 @@ build_one() {
   }
   rm -f "$bin"
 
-  docker save -o "$APPDIR/rootfs_${platform}/images/smartdns-${VERSION}.tar" "$IMAGE_DST"
+  docker save -o "$APPDIR/rootfs_${platform}/images/${TAR_NAME}" "$IMAGE_DST"
   echo "==> [linux/$platform] saved"
 }
 
 build_one amd64
 build_one arm64
 
-# compose 镜像 tag 跟着版本走。sed 重定向 + mv：macOS 的 BSD sed 下
+# compose 镜像行统一写成固定 tag（与 images/ 里的 ${TAR_NAME} 对应）。
+# sed 重定向 + mv：macOS 的 BSD sed 下
 # `sed -i -E` 会把 -E 当备份后缀留下垃圾文件害 check 挂掉（1panel 同款坑）。
 COMPOSE="$APPDIR/rootfs_common/docker-compose.yaml"
 sed -E "s|^    image: .*|    image: \"${IMAGE_DST}\"|" "$COMPOSE" > "${COMPOSE}.tmp" && mv "${COMPOSE}.tmp" "$COMPOSE"
 grep -n "image:" "$COMPOSE"
+grep -q "image: \"${IMAGE_DST}\"" "$COMPOSE" || {
+  echo "::error::compose 的 image 与离线镜像 tar '${TAR_NAME}' 不一致" >&2
+  exit 1
+}
+for platform in amd64 arm64; do
+  [ -f "$APPDIR/rootfs_${platform}/images/${TAR_NAME}" ] || {
+    echo "::error::缺 ${platform} 的 ${TAR_NAME}（ugcli check 按固定名找镜像）" >&2
+    exit 1
+  }
+done
 
 echo "==> Done"
 ls -lh "$APPDIR"/rootfs_*/images/

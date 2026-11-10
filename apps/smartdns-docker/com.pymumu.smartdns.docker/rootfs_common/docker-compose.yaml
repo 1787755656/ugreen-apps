@@ -2,7 +2,7 @@ name: smartdns
 
 services:
   smartdns:
-    image: "personal/smartdns:48.4"
+    image: "personal/smartdns:ugos"
     container_name: smartdns
     restart: unless-stopped
     network_mode: host
