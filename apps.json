@@ -304,13 +304,13 @@
       "display_name": "FastNet",
       "description": "FastNet 是 KoolCenter（原 KoolShare）出品的全平台网络测速与诊断工具。 打开应用即可在浏览器里对 NAS 本机做一次完整体检：延迟、多源 CDN 下载/上传速度、NAT 类型检测（RFC 5780 STUN）以及 IPv6 可用性评分。 适合用来分辨\"是 NAS 的宽带慢\"还是\"只有这一个下载慢\"，也可以核对 运营商给的带宽有没有跑满。无需注册、无需配置，不向存储空间写入任何 文件，测试结果只显示在浏览器里。 注意：控制台监听 28190 端口，同局域网内的任何设备都能打开（页面本身 不含任何凭据或个人数据，但每跑一次测速都会真实消耗上下行带宽）。 本应用需要访问互联网才能工作。",
       "homepage_url": "https://www.koolcenter.com/t/topic/9148",
-      "updated_at": "2026-11-09",
-      "version": "0.8.1",
-      "upk_version": "0.8.1.0006",
-      "release_tag": "fastnet/v0.8.1",
+      "updated_at": "2026-11-10",
+      "version": "0.8.8",
+      "upk_version": "0.8.8.0007",
+      "release_tag": "fastnet/v0.8.8",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/fastnet/v0.8.1/amd64_nasync_com.koolcenter.fastnet_0.8.1.0006.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/fastnet/v0.8.1/arm64_nasync_com.koolcenter.fastnet_0.8.1.0006.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/fastnet/v0.8.8/amd64_nasync_com.koolcenter.fastnet_0.8.8.0007.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/fastnet/v0.8.8/arm64_nasync_com.koolcenter.fastnet_0.8.8.0007.upk"
       },
       "service_port": 28190,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/fastnet/com.koolcenter.fastnet/rootfs_common/icon.png",
