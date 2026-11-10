@@ -132,6 +132,14 @@ jobs:
           PROJECT_DIR="${{ needs.check-version.outputs.project_dir }}"
           PROJECT_VERSION="${{ needs.check-version.outputs.project_version }}"
           YAML="$PROJECT_DIR/project.yaml"
+          # ugcli 只接受纯数字 x.y.z。上游 tag 里的 -RC1 / b2 / rc.4 等后缀
+          # 必须由各 app 的 get-latest-version.sh 先剥掉（smartdns-docker 曾把
+          # 48.5-RC1.0 写进来、直到 ugcli check 才失败）。在这里提前拦下，
+          # 报错直接指向出问题的版本脚本，而不是留到 check 阶段猜。
+          if ! printf '%s' "$PROJECT_VERSION" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "::error::project_version '${PROJECT_VERSION}' 不是合法的 x.y.z —— 检查 scripts/apps/${{ inputs.app }}/get-latest-version.sh 的归一化逻辑"
+            exit 1
+          fi
           # In-place replace the `version:` line only — every other field
           # (parameters, permissions, i18n, etc.) is left untouched.
           sed -i -E "s/^version:.*/version: ${PROJECT_VERSION}/" "$YAML"

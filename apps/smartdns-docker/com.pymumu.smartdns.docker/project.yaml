@@ -13,7 +13,9 @@ spec_version: "2.1"
 
 app_id: com.pymumu.smartdns.docker
 
-# 跟上游 Release 版本（ReleaseX.Y → x.y.0，见 scripts/get-latest-version.sh）
+# 跟上游 Release 版本：ReleaseX.Y → x.y.0；预发布后缀（-RC1 等）不进版本号，
+# 由 scripts/apps/smartdns-docker/get-latest-version.sh 归一化，RC/正式版靠
+# 递增的 build 号区分。CI 每次构建都会覆写这一行。
 version: 48.4.0
 
 product_series:
