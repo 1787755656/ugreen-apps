@@ -15,7 +15,7 @@
       },
       "service_port": 28737,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/100zip/com.personal.100zip/rootfs_common/icon.png",
-      "download_count": 16,
+      "download_count": 21,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -1059,13 +1059,13 @@
       "display_name": "SmartDNS",
       "description": "SmartDNS —— 本地 DNS 服务器：并发查询多个上游并返回访问速度最快的 IP， 支持 DoT/DoH/DoQ 加密上游、广告拦截规则、双栈 IP 优选、测速优选， 自带 Web 管理界面（默认账号 admin，密码 password，首次登录后请及时修改）。 DNS 端口 53（UDP+TCP）装完即用，无需任何额外设置，把路由器或客户端 DNS 指向 本机IP 即可（dnsmasq 写法：server=本机IP）。需要已安装 Docker 套件。 53 端口全机唯一：启动本应用前请先停掉其它占用 53 的 DNS 服务（如 AdGuardHome）。管理界面端口 6153。安装时请选择数据文件夹（必选）： 配置、日志与缓存都落在里面，配置文件 所选文件夹/conf/smartdns.conf 首次启动自动生成，之后用文件管理器直接编辑，改完重启应用生效。",
       "homepage_url": "https://club.ugnas.com/home.php?mod=space&uid=10131",
-      "updated_at": "2026-11-05",
-      "version": "48.4.0",
-      "upk_version": "48.4.0.0002",
-      "release_tag": "smartdns-docker/v48.4-r1",
+      "updated_at": "2026-11-10",
+      "version": "48.5.0",
+      "upk_version": "48.5.0.0003",
+      "release_tag": "smartdns-docker/v48.5-RC1",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/smartdns-docker/v48.4-r1/amd64_nasync_com.pymumu.smartdns.docker_48.4.0.0002.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/smartdns-docker/v48.4-r1/arm64_nasync_com.pymumu.smartdns.docker_48.4.0.0002.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/smartdns-docker/v48.5-RC1/amd64_nasync_com.pymumu.smartdns.docker_48.5.0.0003.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/smartdns-docker/v48.5-RC1/arm64_nasync_com.pymumu.smartdns.docker_48.5.0.0003.upk"
       },
       "service_port": 6153,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/smartdns-docker/com.pymumu.smartdns.docker/rootfs_common/icon.png",

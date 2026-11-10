@@ -94,8 +94,8 @@
   },
   "com.personal.100zip": {
     "assets": {
-      "amd64_nasync_com.personal.100zip_0.5.20.0004.upk": 0,
-      "arm64_nasync_com.personal.100zip_0.5.20.0004.upk": 0
+      "amd64_nasync_com.personal.100zip_0.5.20.0004.upk": 3,
+      "arm64_nasync_com.personal.100zip_0.5.20.0004.upk": 2
     },
     "baseline": 16
   },
@@ -425,7 +425,9 @@
   "com.pymumu.smartdns.docker": {
     "assets": {
       "amd64_nasync_com.pymumu.smartdns.docker_48.4.0.0002.upk": 0,
-      "arm64_nasync_com.pymumu.smartdns.docker_48.4.0.0002.upk": 1
+      "amd64_nasync_com.pymumu.smartdns.docker_48.5.0.0003.upk": 0,
+      "arm64_nasync_com.pymumu.smartdns.docker_48.4.0.0002.upk": 1,
+      "arm64_nasync_com.pymumu.smartdns.docker_48.5.0.0003.upk": 0
     },
     "baseline": 2
   },
