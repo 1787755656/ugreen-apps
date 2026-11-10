@@ -29,11 +29,10 @@ support_arch:
   - amd64
   - arm64
 
-# app + pc：上游 v0.5.20 专门做了移动端适配，inner 应用在手机上跳转浏览器
-# 打开即可用。无桥环境的认证走 /api/session 的账号密码分支（管理壳到 UGOS
-# 验密后签会话 Cookie，仅 HTTPS 入口 + 限流），见 launcher/login.go。
+# 只出 PC 端：绿联桌面内嵌窗口。移动端不开放（DECISIONS/008）——
+# 手机浏览器没有宿主桥、拿不到 Ugreen-Ttk，认证无路可走；曾经做过的
+# 账号密码 + 一次性 RSA 公钥通道已随移动端支持一起删除。
 supports:
-  - app
   - pc
 
 # --port 必须和下面的 port 一致。

@@ -10,13 +10,7 @@ package main
 // 不走 devNoAuth，保证闸的代码路径被真实执行。
 
 import (
-	"crypto/rand"
-	"crypto/rsa"
-	"encoding/base64"
-	"encoding/json"
-	"fmt"
 	"io"
-	"math/big"
 	"net"
 	"net/http"
 	"net/http/httptest"
@@ -140,15 +134,7 @@ func TestAPIGate(t *testing.T) {
 	}
 }
 
-// ---- 3. /api/session：网关身份直签；无桥环境走账号密码（HTTPS + 限流）----
-
-func newTestServerWithLogin(fail func(u, p string) error) *Server {
-	s := newTestServer()
-	s.loginLimiter = &loginRateLimiter{}
-	s.loginKeys = newLoginKeyStore()
-	s.ugosLogin = fail
-	return s
-}
+// ---- 3. /api/session：只有网关身份这一条路 ----
 
 func TestSessionViaGatewayIdentity(t *testing.T) {
 	s := newTestServer()
@@ -162,11 +148,11 @@ func TestSessionViaGatewayIdentity(t *testing.T) {
 	}
 }
 
-func TestSessionNoIdentityNoBody(t *testing.T) {
+func TestSessionNoIdentity(t *testing.T) {
 	s := newTestServer()
 	w := get(t, s, s.handleSession, "POST", "/api/session", localAddr4, nil)
 	if w.Code != 401 {
-		t.Fatalf("无身份无凭据应 401，got %d", w.Code)
+		t.Fatalf("无身份应 401，got %d", w.Code)
 	}
 	w = get(t, s, s.handleSession, "GET", "/api/session", localAddr4, nil)
 	if w.Code != 401 {
@@ -174,216 +160,44 @@ func TestSessionNoIdentityNoBody(t *testing.T) {
 	}
 }
 
-func TestSessionViaCredentials(t *testing.T) {
-	calls := 0
-	s := newTestServerWithLogin(func(u, p string) error {
-		calls++
-		if u == "xw" && p == "right" {
-			return nil
-		}
-		return fmt.Errorf("UGOS 登录失败：密码错误")
-	})
-
-	// 明文入口拒绝（有凭据但没有 X-Forwarded-Proto=https）
-	w := credReq(t, s, lanAddr, map[string]string{"Content-Type": "application/json"}, "xw", "right")
-	if w.Code != 403 {
-		t.Fatalf("明文入口的密码登录应 403，got %d", w.Code)
-	}
-
-	// HTTPS + 正确凭据 → Cookie（来源是局域网手机，允许——这正是本分支存在的意义）
-	hdr := map[string]string{"Content-Type": "application/json", "X-Forwarded-Proto": "https"}
-	w = credReq(t, s, lanAddr, hdr, "xw", "right")
-	if w.Code != 200 {
-		t.Fatalf("HTTPS 正确凭据应 200，got %d body=%s", w.Code, w.Body.String())
-	}
-	if len(w.Result().Cookies()) == 0 {
-		t.Fatal("凭据登录没有下发会话 Cookie")
-	}
-	// 验密真的发生了一次
-	if calls != 1 {
-		t.Fatalf("UGOS 验密应被调用 1 次，实际 %d", calls)
-	}
-
-	// 错误凭据 → 401，且连错 5 次后 429 锁定
-	for i := 1; i <= 5; i++ {
-		w = credReq(t, s, lanAddr, hdr, "xw", "wrong")
-		if w.Code != 401 {
-			t.Fatalf("第 %d 次错误凭据应 401，got %d", i, w.Code)
-		}
-	}
-	w = credReq(t, s, lanAddr, hdr, "xw", "right") // 锁定期内正确密码也拒
-	if w.Code != 429 {
-		t.Fatalf("锁定期内应 429，got %d", w.Code)
-	}
-	if calls != 6 { // 1 成功 + 5 失败；锁定后不再调用 UGOS
-		t.Fatalf("限流后不应再调 UGOS 验密，调用数 %d", calls)
-	}
-}
-
-func credReq(t *testing.T, s *Server, remote string, hdr map[string]string, user, pass string) *httptest.ResponseRecorder {
-	t.Helper()
-	body := fmt.Sprintf(`{"username":%q,"password":%q}`, user, pass)
-	r := remoteReq(t, s, "POST", "/api/session", remote, hdr)
+// TestSessionRejectsLegacyCredentials 钉住"移动端账密登录已删除"：
+// 哪怕请求体带着 username/password（旧版前端的形态），也只能拿到 401，
+// 且不签发 Cookie。回归时最先暴露的就是这条。
+func TestSessionRejectsLegacyCredentials(t *testing.T) {
+	s := newTestServer()
+	body := `{"username":"admin","password":"whatever"}`
+	r := remoteReq(t, s, "POST", "/api/session", localAddr4,
+		map[string]string{"Content-Type": "application/json", "X-Forwarded-Proto": "https"})
 	r.Body = io.NopCloser(strings.NewReader(body))
 	w := httptest.NewRecorder()
 	s.handleSession(w, r)
-	return w
+	if w.Code != 401 {
+		t.Fatalf("旧版账密请求应 401，got %d", w.Code)
+	}
+	if len(w.Result().Cookies()) != 0 {
+		t.Fatalf("账密请求不得签发 Cookie，got %v", w.Result().Cookies())
+	}
 }
 
-func TestSessionCookieConfirmNoReissue(t *testing.T) {
+// TestSessionIgnoresSessionCookie 钉住"Cookie 换不出新 Cookie"。
+// 桌面端 boot 会先取 Ttk 再换 Cookie，不依赖"带 Cookie 探测返回 200"那条
+// 手机端专用分支（已随移动端一起删除）。
+func TestSessionIgnoresSessionCookie(t *testing.T) {
 	s := newTestServer()
 	tok, err := s.sessions.issue()
 	if err != nil {
 		t.Fatal(err)
 	}
-	// 拿已签发的 Cookie、无身份、无凭据 → 200 确认（手机端 reload 后的探测
-	// 靠这条活），但【不下发新 Cookie】——Cookie 换不出新 Cookie 的纪律不变。
 	r := remoteReq(t, s, "POST", "/api/session", localAddr4, nil)
 	r.AddCookie(&http.Cookie{Name: sessionCookieName, Value: tok})
 	w := httptest.NewRecorder()
 	s.handleSession(w, r)
-	if w.Code != 200 {
-		t.Fatalf("有效 Cookie 的会话确认应 200，got %d", w.Code)
+	if w.Code != 401 {
+		t.Fatalf("无网关身份时带 Cookie 也应 401，got %d", w.Code)
 	}
 	if len(w.Result().Cookies()) != 0 {
-		t.Fatalf("会话确认不应下发新 Cookie，got %v", w.Result().Cookies())
+		t.Fatalf("不得下发 Cookie，got %v", w.Result().Cookies())
 	}
-
-	// 没有会话时同样的探测照旧 401 —— 横幅与登录表单的触发条件不受影响。
-	s2 := newTestServer()
-	w2 := get(t, s2, s2.handleSession, "POST", "/api/session", localAddr4, nil)
-	if w2.Code != 401 {
-		t.Fatalf("无 Cookie 的会话探测应 401，got %d", w2.Code)
-	}
-}
-
-// ---- 3b. 登录加密通道：一次性 RSA 公钥 + 密文凭据（HTTP 入口的生命线）----
-
-func TestSessionKeyGate(t *testing.T) {
-	s := newTestServerWithLogin(nil)
-	gated := s.requireSameHost(s.handleSessionKey)
-
-	// 局域网直连端口拿不到钥匙
-	w := get(t, s, gated, "GET", "/api/session/key", lanAddr, nil)
-	if w.Code != 403 {
-		t.Fatalf("局域网直连取密钥应 403，got %d", w.Code)
-	}
-	// 手机端路径：所有流量经网关（源地址是本机）→ 200
-	w = get(t, s, gated, "GET", "/api/session/key", localAddr4, nil)
-	if w.Code != 200 {
-		t.Fatalf("本机来源取密钥应 200，got %d", w.Code)
-	}
-	// POST 不给钥匙
-	w = get(t, s, gated, "POST", "/api/session/key", localAddr4, nil)
-	if w.Code != 405 {
-		t.Fatalf("POST 取密钥应 405，got %d", w.Code)
-	}
-}
-
-func TestSessionEncryptedCredentialsOverHTTP(t *testing.T) {
-	calls := 0
-	s := newTestServerWithLogin(func(u, p string) error {
-		calls++
-		if u == "xw" && p == "right" {
-			return nil
-		}
-		return fmt.Errorf("UGOS 登录失败：密码错误")
-	})
-
-	// 从 /api/session/key 领一把公钥（走闸本身，路径真实）
-	r := remoteReq(t, s, "GET", "/api/session/key", localAddr4, nil)
-	w := httptest.NewRecorder()
-	s.requireSameHost(s.handleSessionKey)(w, r)
-	if w.Code != 200 {
-		t.Fatalf("取密钥应 200，got %d", w.Code)
-	}
-	var key struct {
-		KeyID string `json:"key_id"`
-		N     string `json:"n"`
-		E     string `json:"e"`
-	}
-	if err := json.Unmarshal(w.Body.Bytes(), &key); err != nil {
-		t.Fatalf("密钥响应解析失败：%v", err)
-	}
-
-	// HTTP 入口（没有 X-Forwarded-Proto）+ 密文密码 → 放行（这就是修手机端的通路）
-	enc := credCipher(t, key, "right")
-	hdr := map[string]string{"Content-Type": "application/json"}
-	w = encCredReq(t, s, lanAddr, hdr, "xw", key.KeyID, enc)
-	if w.Code != 200 {
-		t.Fatalf("HTTP 加密凭据应 200，got %d body=%s", w.Code, w.Body.String())
-	}
-	if len(w.Result().Cookies()) == 0 {
-		t.Fatal("加密凭据登录没有下发会话 Cookie")
-	}
-
-	// 密钥一次性：同一段密文重放 → 401（且计入限流）
-	w = encCredReq(t, s, lanAddr, hdr, "xw", key.KeyID, enc)
-	if w.Code != 401 {
-		t.Fatalf("重放同一密文应 401，got %d", w.Code)
-	}
-
-	// 伪造 key_id → 401
-	enc2 := credCipher(t, key, "wrong")
-	w = encCredReq(t, s, lanAddr, hdr, "xw", "deadbeef", enc2)
-	if w.Code != 401 {
-		t.Fatalf("伪造 key_id 应 401，got %d", w.Code)
-	}
-
-	// 新密钥 + 错误密码 → 401（验密路径真实发生）
-	r = remoteReq(t, s, "GET", "/api/session/key", localAddr4, nil)
-	w = httptest.NewRecorder()
-	s.requireSameHost(s.handleSessionKey)(w, r)
-	var key2 struct {
-		KeyID string `json:"key_id"`
-		N     string `json:"n"`
-		E     string `json:"e"`
-	}
-	if err := json.Unmarshal(w.Body.Bytes(), &key2); err != nil {
-		t.Fatal(err)
-	}
-	w = encCredReq(t, s, lanAddr, hdr, "xw", key2.KeyID, credCipher(t, key2, "wrong"))
-	if w.Code != 401 {
-		t.Fatalf("新密钥+错误密码应 401，got %d", w.Code)
-	}
-}
-
-// credCipher 用 /api/session/key 下发的 N/E 做 RSA PKCS#1 v1.5 加密，
-// 与前端 overlay 里的纯 JS 实现是同一算法两端。
-func credCipher(t *testing.T, key struct {
-	KeyID string `json:"key_id"`
-	N     string `json:"n"`
-	E     string `json:"e"`
-}, password string) []byte {
-	t.Helper()
-	nBytes, err := base64.StdEncoding.DecodeString(key.N)
-	if err != nil {
-		t.Fatal(err)
-	}
-	eBytes, err := base64.StdEncoding.DecodeString(key.E)
-	if err != nil {
-		t.Fatal(err)
-	}
-	pub := &rsa.PublicKey{
-		N: new(big.Int).SetBytes(nBytes),
-		E: int(new(big.Int).SetBytes(eBytes).Int64()),
-	}
-	ct, err := rsa.EncryptPKCS1v15(rand.Reader, pub, []byte(password))
-	if err != nil {
-		t.Fatal(err)
-	}
-	return ct
-}
-
-func encCredReq(t *testing.T, s *Server, remote string, hdr map[string]string, user, keyID string, ct []byte) *httptest.ResponseRecorder {
-	t.Helper()
-	body := fmt.Sprintf(`{"username":%q,"key_id":%q,"password_enc":%q}`,
-		user, keyID, base64.StdEncoding.EncodeToString(ct))
-	r := remoteReq(t, s, "POST", "/api/session", remote, hdr)
-	r.Body = io.NopCloser(strings.NewReader(body))
-	w := httptest.NewRecorder()
-	s.handleSession(w, r)
-	return w
 }
 
 // ---- 4. healthz：任何来源都 200 ----
@@ -415,32 +229,5 @@ func TestWriteErrShape(t *testing.T) {
 	body := w.Body.String()
 	if !strings.Contains(body, `"ok":false`) || !strings.Contains(body, `"error"`) || !strings.Contains(body, `"message"`) {
 		t.Fatalf("错误体应形如 {ok:false,error:{message}}，got %s", body)
-	}
-}
-
-// ---- 6. 路由接线：/api/session/key 必须赢过 /api/ 前缀，且闸真的挂着 ----
-
-func TestRoutesSessionKeyWiring(t *testing.T) {
-	s := newTestServerWithLogin(nil)
-	mux, ok := s.routes().(*http.ServeMux)
-	if !ok {
-		t.Fatal("routes() 应返回 ServeMux")
-	}
-	// 本机来源 → 命中 handleSessionKey（不是 /api/ 的 requireAuth 代理）
-	w := httptest.NewRecorder()
-	r := remoteReq(t, s, "GET", "/api/session/key", localAddr4, nil)
-	mux.ServeHTTP(w, r)
-	if w.Code != 200 {
-		t.Fatalf("本机取密钥应 200，got %d body=%s", w.Code, w.Body.String())
-	}
-	if !strings.Contains(w.Body.String(), `"key_id"`) {
-		t.Fatalf("密钥响应应含 key_id，got %s", w.Body.String())
-	}
-	// 局域网来源 → 被本机闸 403（证明注册的是 requireSameHost 包过的版本）
-	w = httptest.NewRecorder()
-	r = remoteReq(t, s, "GET", "/api/session/key", lanAddr, nil)
-	mux.ServeHTTP(w, r)
-	if w.Code != 403 {
-		t.Fatalf("局域网取密钥应 403，got %d", w.Code)
 	}
 }

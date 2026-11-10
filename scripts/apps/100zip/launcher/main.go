@@ -34,17 +34,14 @@ import (
 var version = "dev"
 
 type Server struct {
-	paths        Paths
-	child        *Supervisor
-	proxy        *httputil.ReverseProxy
-	sessions     *sessionStore
-	devNoAuth    bool
-	loginLimiter *loginRateLimiter
-	loginKeys    *loginKeyStore
-	ugosLogin    func(username, password string) error
-	roots        []string
-	rootsNote    string
-	startedAt    time.Time
+	paths     Paths
+	child     *Supervisor
+	proxy     *httputil.ReverseProxy
+	sessions  *sessionStore
+	devNoAuth bool
+	roots     []string
+	rootsNote string
+	startedAt time.Time
 }
 
 func main() {
@@ -89,17 +86,14 @@ func main() {
 	proxy.FlushInterval = 200 * time.Millisecond
 
 	srv := &Server{
-		paths:        paths,
-		child:        child,
-		proxy:        proxy,
-		sessions:     newSessionStore(),
-		loginLimiter: &loginRateLimiter{},
-		loginKeys:    newLoginKeyStore(),
-		ugosLogin:    newUgosLoginClient("https://127.0.0.1:9443").Login,
-		devNoAuth:    *devNoAuth,
-		roots:        roots,
-		rootsNote:    note,
-		startedAt:    time.Now(),
+		paths:     paths,
+		child:     child,
+		proxy:     proxy,
+		sessions:  newSessionStore(),
+		devNoAuth: *devNoAuth,
+		roots:     roots,
+		rootsNote: note,
+		startedAt: time.Now(),
 	}
 	proxy.ErrorHandler = srv.proxyError
 
@@ -153,14 +147,9 @@ func (s *Server) routes() http.Handler {
 	// 自查：不要求网关认证，但要求来自本机。鉴权链路不通时它是唯一的排查手段。
 	mux.HandleFunc("/api/diag", s.requireSameHost(s.handleDiag))
 
-	// 换会话 Cookie：桌面走网关身份（桥取 Ttk）；无桥环境（手机浏览器）
-	// 走账号密码（管理壳到 UGOS 验密）。策略都在 handler 内部，见 login.go。
+	// 换会话 Cookie：只认网关注入的身份（桌面路径）。
+	// 移动端支持已取消，无桥认证通路一并删除（DECISIONS/008）。
 	mux.HandleFunc("/api/session", s.handleSession)
-
-	// 登录加密通道的一次性公钥下发。压着本机闸：手机端全部流量经过网关
-	// （源地址是 NAS 本机）不受影响，局域网上直连端口的请求拿不到钥匙。
-	// 见 loginkeys.go。
-	mux.HandleFunc("/api/session/key", s.requireSameHost(s.handleSessionKey))
 
 	// 其余 /api/* 全部转给上游 100zip 服务。
 	mux.HandleFunc("/api/", s.requireAuth(s.handleProxy))
