@@ -975,13 +975,13 @@
       "display_name": "随机视频 Random Video",
       "description": "一个接一个随机刷短视频，支持进度拖动、静音切换与全屏。手机竖屏上滑换下一个，PC 以内嵌窗口打开。",
       "homepage_url": "",
-      "updated_at": "2026-09-22",
+      "updated_at": "2026-11-10",
       "version": "0.1.0",
-      "upk_version": "0.1.0.0006",
-      "release_tag": "randomvideo/v0.1.0",
+      "upk_version": "0.1.0.0010",
+      "release_tag": "randomvideo/0.1.0.0010",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/randomvideo/v0.1.0/amd64_nasync_com.personal.randomvideo_0.1.0.0006.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/randomvideo/v0.1.0/arm64_nasync_com.personal.randomvideo_0.1.0.0006.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/randomvideo/0.1.0.0010/amd64_nasync_com.personal.randomvideo_0.1.0.0010.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/randomvideo/0.1.0.0010/arm64_nasync_com.personal.randomvideo_0.1.0.0010.upk"
       },
       "service_port": 21166,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/randomvideo/com.personal.randomvideo/rootfs_common/icon.png",
