@@ -314,7 +314,7 @@
       },
       "service_port": 28190,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/fastnet/com.koolcenter.fastnet/rootfs_common/icon.png",
-      "download_count": 38,
+      "download_count": 40,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -476,7 +476,7 @@
       },
       "service_port": 16601,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/lucky/com.gdy666.lucky/rootfs_common/icon.png",
-      "download_count": 14,
+      "download_count": 16,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -1061,11 +1061,11 @@
       "homepage_url": "https://club.ugnas.com/home.php?mod=space&uid=10131",
       "updated_at": "2026-11-10",
       "version": "48.5.0",
-      "upk_version": "48.5.0.0003",
-      "release_tag": "smartdns-docker/v48.5-RC1",
+      "upk_version": "48.5.0.0004",
+      "release_tag": "smartdns-docker/v48.5-RC1-r1",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/smartdns-docker/v48.5-RC1/amd64_nasync_com.pymumu.smartdns.docker_48.5.0.0003.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/smartdns-docker/v48.5-RC1/arm64_nasync_com.pymumu.smartdns.docker_48.5.0.0003.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/smartdns-docker/v48.5-RC1-r1/amd64_nasync_com.pymumu.smartdns.docker_48.5.0.0004.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/smartdns-docker/v48.5-RC1-r1/arm64_nasync_com.pymumu.smartdns.docker_48.5.0.0004.upk"
       },
       "service_port": 6153,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/smartdns-docker/com.pymumu.smartdns.docker/rootfs_common/icon.png",

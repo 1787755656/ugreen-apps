@@ -35,19 +35,19 @@
     "assets": {
       "amd64_nasync_com.gdy666.lucky_2.27.2.0004.upk": 4,
       "amd64_nasync_com.gdy666.lucky_3.5.0.0012.upk": 7,
-      "amd64_nasync_com.gdy666.lucky_3.8.0.0013.upk": 0,
+      "amd64_nasync_com.gdy666.lucky_3.8.0.0013.upk": 1,
       "arm64_nasync_com.gdy666.lucky_2.27.2.0004.upk": 1,
       "arm64_nasync_com.gdy666.lucky_3.5.0.0012.upk": 2,
-      "arm64_nasync_com.gdy666.lucky_3.8.0.0013.upk": 0
+      "arm64_nasync_com.gdy666.lucky_3.8.0.0013.upk": 1
     },
     "baseline": 0
   },
   "com.koolcenter.fastnet": {
     "assets": {
       "amd64_nasync_com.koolcenter.fastnet_0.8.1.0006.upk": 4,
-      "amd64_nasync_com.koolcenter.fastnet_0.8.8.0007.upk": 0,
+      "amd64_nasync_com.koolcenter.fastnet_0.8.8.0007.upk": 1,
       "arm64_nasync_com.koolcenter.fastnet_0.8.1.0006.upk": 1,
-      "arm64_nasync_com.koolcenter.fastnet_0.8.8.0007.upk": 0
+      "arm64_nasync_com.koolcenter.fastnet_0.8.8.0007.upk": 1
     },
     "baseline": 33
   },
@@ -337,7 +337,9 @@
   "com.personal.randomvideo": {
     "assets": {
       "amd64_nasync_com.personal.randomvideo_0.1.0.0006.upk": 11,
-      "arm64_nasync_com.personal.randomvideo_0.1.0.0006.upk": 2
+      "amd64_nasync_com.personal.randomvideo_0.1.0.0010.upk": 0,
+      "arm64_nasync_com.personal.randomvideo_0.1.0.0006.upk": 2,
+      "arm64_nasync_com.personal.randomvideo_0.1.0.0010.upk": 0
     },
     "baseline": 0
   },
@@ -427,11 +429,11 @@
   "com.pymumu.smartdns.docker": {
     "assets": {
       "amd64_nasync_com.pymumu.smartdns.docker_48.4.0.0002.upk": 0,
-      "amd64_nasync_com.pymumu.smartdns.docker_48.5.0.0003.upk": 1,
+      "amd64_nasync_com.pymumu.smartdns.docker_48.5.0.0004.upk": 0,
       "arm64_nasync_com.pymumu.smartdns.docker_48.4.0.0002.upk": 1,
-      "arm64_nasync_com.pymumu.smartdns.docker_48.5.0.0003.upk": 2
+      "arm64_nasync_com.pymumu.smartdns.docker_48.5.0.0004.upk": 0
     },
-    "baseline": 2
+    "baseline": 5
   },
   "com.qbee.qbittorrent": {
     "assets": {
