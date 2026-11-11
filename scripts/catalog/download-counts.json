@@ -361,12 +361,12 @@
   },
   "com.personal.sub2api": {
     "assets": {
-      "amd64_nasync_com.personal.sub2api_0.2.19.0015.upk": 3,
       "amd64_nasync_com.personal.sub2api_0.2.20.0016.upk": 1,
-      "arm64_nasync_com.personal.sub2api_0.2.19.0015.upk": 2,
-      "arm64_nasync_com.personal.sub2api_0.2.20.0016.upk": 1
+      "amd64_nasync_com.personal.sub2api_0.2.21.0017.upk": 0,
+      "arm64_nasync_com.personal.sub2api_0.2.20.0016.upk": 1,
+      "arm64_nasync_com.personal.sub2api_0.2.21.0017.upk": 0
     },
-    "baseline": 4
+    "baseline": 9
   },
   "com.personal.supereditor": {
     "assets": {
@@ -478,12 +478,12 @@
   },
   "com.wushuo.anirss": {
     "assets": {
-      "amd64_nasync_com.wushuo.anirss_3.2.56.0015.upk": 1,
       "amd64_nasync_com.wushuo.anirss_3.2.57.0016.upk": 1,
-      "arm64_nasync_com.wushuo.anirss_3.2.56.0015.upk": 1,
-      "arm64_nasync_com.wushuo.anirss_3.2.57.0016.upk": 1
+      "amd64_nasync_com.wushuo.anirss_3.2.58.0017.upk": 0,
+      "arm64_nasync_com.wushuo.anirss_3.2.57.0016.upk": 1,
+      "arm64_nasync_com.wushuo.anirss_3.2.58.0017.upk": 0
     },
-    "baseline": 9
+    "baseline": 11
   },
   "com.xnkyn.p2peeproxy": {
     "assets": {
