@@ -225,7 +225,7 @@
       },
       "service_port": 23079,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/deepseek-harness/com.personal.deepseekharness/rootfs_common/icon.png",
-      "download_count": 40,
+      "download_count": 39,
       "app_type": "docker",
       "category": "system",
       "platforms": [
@@ -314,7 +314,7 @@
       },
       "service_port": 28190,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/fastnet/com.koolcenter.fastnet/rootfs_common/icon.png",
-      "download_count": 45,
+      "download_count": 40,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -476,7 +476,7 @@
       },
       "service_port": 16601,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/lucky/com.gdy666.lucky/rootfs_common/icon.png",
-      "download_count": 19,
+      "download_count": 16,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -650,7 +650,7 @@
       },
       "service_port": 28966,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/myip/com.personal.myip/rootfs_common/icon.png",
-      "download_count": 15,
+      "download_count": 13,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -758,7 +758,7 @@
       },
       "service_port": 28088,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/octop/com.tencent.octop/rootfs_common/icon.png",
-      "download_count": 22,
+      "download_count": 21,
       "app_type": "native",
       "category": "ai",
       "platforms": [
@@ -871,7 +871,7 @@
       },
       "service_port": 23010,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/piggybank/com.ashc776.piggybank/rootfs_common/icon.png",
-      "download_count": 9,
+      "download_count": 8,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -985,7 +985,7 @@
       },
       "service_port": 21166,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/randomvideo/com.personal.randomvideo/rootfs_common/icon.png",
-      "download_count": 19,
+      "download_count": 13,
       "app_type": "native",
       "category": "media",
       "platforms": [
@@ -1069,7 +1069,7 @@
       },
       "service_port": 6153,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/smartdns-docker/com.pymumu.smartdns.docker/rootfs_common/icon.png",
-      "download_count": 9,
+      "download_count": 6,
       "app_type": "docker",
       "category": "system",
       "platforms": [
@@ -1218,7 +1218,7 @@
       },
       "service_port": 21310,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/ugstore-icon.png",
-      "download_count": 247,
+      "download_count": 244,
       "app_type": "native",
       "category": "utility",
       "platforms": [
@@ -1240,7 +1240,7 @@
       },
       "service_port": 21120,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/liteparser-icon.png",
-      "download_count": 38,
+      "download_count": 37,
       "app_type": "native",
       "category": "download",
       "platforms": [
@@ -1595,6 +1595,29 @@
           "name": "文档文件夹",
           "description": "可添加多个；应用只能读取和写入这里选中的目录及其子目录，留空也可稍后在应用内添加。装好或改完请「停止 → 启动」一次。"
         }
+      ]
+    },
+    {
+      "appname": "com.personal.ugnasclub.mobile",
+      "display_name": "绿联社区",
+      "description": "在绿联云手机 App 内直接打开绿联社区论坛（club.ugnas.com）：浏览、登录、发帖、回复都是论坛自己的原页面，不改动任何内容、不做任何代理。\n仅手机端显示（PC 客户端不出现图标），以应用内嵌窗口打开；跳转即离开应用页面，所以也不需要任何额外权限（permissions 为空）。",
+      "homepage_url": "https://club.ugnas.com/",
+      "updated_at": "2026-11-11",
+      "version": "1.0.0",
+      "upk_version": "1.0.0.0004",
+      "release_tag": "ugnasclubmobile/1.0.0.0004",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/ugnasclubmobile/1.0.0.0004/amd64_nasync_com.personal.ugnasclub.mobile_1.0.0.0004.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/ugnasclubmobile/1.0.0.0004/arm64_nasync_com.personal.ugnasclub.mobile_1.0.0.0004.upk"
+      },
+      "service_port": 28914,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/ugnasclubmobile-icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "utility",
+      "platforms": [
+        "amd64",
+        "arm64"
       ]
     }
   ]
