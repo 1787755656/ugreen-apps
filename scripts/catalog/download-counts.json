@@ -9,7 +9,7 @@
   "com.ashc776.piggybank": {
     "assets": {
       "amd64_nasync_com.ashc776.piggybank_1.3.4.0010.upk": 2,
-      "amd64_nasync_com.ashc776.piggybank_1.5.5.0011.upk": 2,
+      "amd64_nasync_com.ashc776.piggybank_1.5.5.0011.upk": 3,
       "arm64_nasync_com.ashc776.piggybank_1.3.4.0010.upk": 1,
       "arm64_nasync_com.ashc776.piggybank_1.5.5.0011.upk": 3
     },
@@ -35,7 +35,7 @@
     "assets": {
       "amd64_nasync_com.gdy666.lucky_2.27.2.0004.upk": 4,
       "amd64_nasync_com.gdy666.lucky_3.5.0.0012.upk": 7,
-      "amd64_nasync_com.gdy666.lucky_3.8.0.0013.upk": 1,
+      "amd64_nasync_com.gdy666.lucky_3.8.0.0013.upk": 4,
       "arm64_nasync_com.gdy666.lucky_2.27.2.0004.upk": 1,
       "arm64_nasync_com.gdy666.lucky_3.5.0.0012.upk": 2,
       "arm64_nasync_com.gdy666.lucky_3.8.0.0013.upk": 1
@@ -45,7 +45,7 @@
   "com.koolcenter.fastnet": {
     "assets": {
       "amd64_nasync_com.koolcenter.fastnet_0.8.1.0006.upk": 4,
-      "amd64_nasync_com.koolcenter.fastnet_0.8.8.0007.upk": 1,
+      "amd64_nasync_com.koolcenter.fastnet_0.8.8.0007.upk": 6,
       "arm64_nasync_com.koolcenter.fastnet_0.8.1.0006.upk": 1,
       "arm64_nasync_com.koolcenter.fastnet_0.8.8.0007.upk": 1
     },
@@ -168,7 +168,7 @@
       "amd64_nasync_com.personal.deepseekharness_0.2.1.0005.upk": 6,
       "amd64_nasync_com.personal.deepseekharness_0.2.2.0006.upk": 4,
       "arm64_nasync_com.personal.deepseekharness_0.2.1.0005.upk": 6,
-      "arm64_nasync_com.personal.deepseekharness_0.2.2.0006.upk": 20
+      "arm64_nasync_com.personal.deepseekharness_0.2.2.0006.upk": 21
     },
     "baseline": 3
   },
@@ -227,7 +227,7 @@
   },
   "com.personal.liteparser": {
     "assets": {
-      "amd64_nasync_com.personal.liteparser_0.3.0.0010.upk": 30,
+      "amd64_nasync_com.personal.liteparser_0.3.0.0010.upk": 31,
       "arm64_nasync_com.personal.liteparser_0.3.0.0010.upk": 7
     },
     "baseline": 0
@@ -267,7 +267,7 @@
   "com.personal.myip": {
     "assets": {
       "amd64_nasync_com.personal.myip_8.0.0.0001.upk": 7,
-      "amd64_nasync_com.personal.myip_8.1.0.0002.upk": 3,
+      "amd64_nasync_com.personal.myip_8.1.0.0002.upk": 5,
       "arm64_nasync_com.personal.myip_8.0.0.0001.upk": 2,
       "arm64_nasync_com.personal.myip_8.1.0.0002.upk": 1
     },
@@ -337,9 +337,9 @@
   "com.personal.randomvideo": {
     "assets": {
       "amd64_nasync_com.personal.randomvideo_0.1.0.0006.upk": 11,
-      "amd64_nasync_com.personal.randomvideo_0.1.0.0010.upk": 0,
+      "amd64_nasync_com.personal.randomvideo_0.1.0.0010.upk": 4,
       "arm64_nasync_com.personal.randomvideo_0.1.0.0006.upk": 2,
-      "arm64_nasync_com.personal.randomvideo_0.1.0.0010.upk": 0
+      "arm64_nasync_com.personal.randomvideo_0.1.0.0010.upk": 2
     },
     "baseline": 0
   },
@@ -384,18 +384,25 @@
     },
     "baseline": 6
   },
+  "com.personal.ugnasclub.mobile": {
+    "assets": {
+      "amd64_nasync_com.personal.ugnasclub.mobile_1.0.0.0004.upk": 0,
+      "arm64_nasync_com.personal.ugnasclub.mobile_1.0.0.0004.upk": 0
+    },
+    "baseline": 0
+  },
   "com.personal.ugstore": {
     "assets": {
       "amd64_nasync_com.personal.ugstore_0.1.0.0028.upk": 22,
       "amd64_nasync_com.personal.ugstore_0.1.0.0029.upk": 2,
       "amd64_nasync_com.personal.ugstore_0.1.0.0030.upk": 12,
       "amd64_nasync_com.personal.ugstore_0.1.0.0031.upk": 15,
-      "amd64_nasync_com.personal.ugstore_0.1.0.0032.upk": 20,
+      "amd64_nasync_com.personal.ugstore_0.1.0.0032.upk": 21,
       "arm64_nasync_com.personal.ugstore_0.1.0.0028.upk": 7,
       "arm64_nasync_com.personal.ugstore_0.1.0.0029.upk": 3,
       "arm64_nasync_com.personal.ugstore_0.1.0.0030.upk": 5,
       "arm64_nasync_com.personal.ugstore_0.1.0.0031.upk": 9,
-      "arm64_nasync_com.personal.ugstore_0.1.0.0032.upk": 8
+      "arm64_nasync_com.personal.ugstore_0.1.0.0032.upk": 10
     },
     "baseline": 141
   },
@@ -429,9 +436,9 @@
   "com.pymumu.smartdns.docker": {
     "assets": {
       "amd64_nasync_com.pymumu.smartdns.docker_48.4.0.0002.upk": 0,
-      "amd64_nasync_com.pymumu.smartdns.docker_48.5.0.0004.upk": 0,
+      "amd64_nasync_com.pymumu.smartdns.docker_48.5.0.0004.upk": 1,
       "arm64_nasync_com.pymumu.smartdns.docker_48.4.0.0002.upk": 1,
-      "arm64_nasync_com.pymumu.smartdns.docker_48.5.0.0004.upk": 0
+      "arm64_nasync_com.pymumu.smartdns.docker_48.5.0.0004.upk": 2
     },
     "baseline": 5
   },
@@ -463,7 +470,7 @@
   "com.tencent.octop": {
     "assets": {
       "amd64_nasync_com.tencent.octop_1.0.3.0011.upk": 12,
-      "amd64_nasync_com.tencent.octop_1.0.3.0012.upk": 5,
+      "amd64_nasync_com.tencent.octop_1.0.3.0012.upk": 6,
       "arm64_nasync_com.tencent.octop_1.0.3.0011.upk": 2,
       "arm64_nasync_com.tencent.octop_1.0.3.0012.upk": 2
     },
