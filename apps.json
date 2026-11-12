@@ -75,7 +75,7 @@
       },
       "service_port": 7789,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/ani-rss/com.wushuo.anirss/rootfs_common/icon.png",
-      "download_count": 13,
+      "download_count": 16,
       "app_type": "native",
       "category": "download",
       "platforms": [
@@ -105,7 +105,7 @@
       },
       "service_port": 25900,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/chromium/com.personal.chromium/rootfs_common/icon.png",
-      "download_count": 14,
+      "download_count": 16,
       "app_type": "docker",
       "category": "system",
       "platforms": [
@@ -195,7 +195,7 @@
       },
       "service_port": 25400,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/deenmusic/com.personal.deenmusic/rootfs_common/icon.png",
-      "download_count": 29,
+      "download_count": 31,
       "app_type": "native",
       "category": "download",
       "platforms": [
@@ -225,7 +225,7 @@
       },
       "service_port": 23079,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/deepseek-harness/com.personal.deepseekharness/rootfs_common/icon.png",
-      "download_count": 40,
+      "download_count": 43,
       "app_type": "docker",
       "category": "system",
       "platforms": [
@@ -304,17 +304,17 @@
       "display_name": "FastNet",
       "description": "FastNet 是 KoolCenter（原 KoolShare）出品的全平台网络测速与诊断工具。 打开应用即可在浏览器里对 NAS 本机做一次完整体检：延迟、多源 CDN 下载/上传速度、NAT 类型检测（RFC 5780 STUN）以及 IPv6 可用性评分。 适合用来分辨\"是 NAS 的宽带慢\"还是\"只有这一个下载慢\"，也可以核对 运营商给的带宽有没有跑满。无需注册、无需配置，不向存储空间写入任何 文件，测试结果只显示在浏览器里。 注意：控制台监听 28190 端口，同局域网内的任何设备都能打开（页面本身 不含任何凭据或个人数据，但每跑一次测速都会真实消耗上下行带宽）。 本应用需要访问互联网才能工作。",
       "homepage_url": "https://www.koolcenter.com/t/topic/9148",
-      "updated_at": "2026-11-10",
-      "version": "0.8.8",
-      "upk_version": "0.8.8.0007",
-      "release_tag": "fastnet/v0.8.8",
+      "updated_at": "2026-11-12",
+      "version": "0.8.9",
+      "upk_version": "0.8.9.0008",
+      "release_tag": "fastnet/v0.8.9",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/fastnet/v0.8.8/amd64_nasync_com.koolcenter.fastnet_0.8.8.0007.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/fastnet/v0.8.8/arm64_nasync_com.koolcenter.fastnet_0.8.8.0007.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/fastnet/v0.8.9/amd64_nasync_com.koolcenter.fastnet_0.8.9.0008.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/fastnet/v0.8.9/arm64_nasync_com.koolcenter.fastnet_0.8.9.0008.upk"
       },
       "service_port": 28190,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/fastnet/com.koolcenter.fastnet/rootfs_common/icon.png",
-      "download_count": 45,
+      "download_count": 47,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -392,7 +392,7 @@
       },
       "service_port": 25180,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/it-tools/com.personal.ittools/rootfs_common/icon.png",
-      "download_count": 12,
+      "download_count": 13,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -446,7 +446,7 @@
       },
       "service_port": 25211,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/litepan/com.ponphil.litepan/rootfs_common/icon.png",
-      "download_count": 9,
+      "download_count": 10,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -476,7 +476,7 @@
       },
       "service_port": 16601,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/lucky/com.gdy666.lucky/rootfs_common/icon.png",
-      "download_count": 19,
+      "download_count": 21,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -500,7 +500,7 @@
       },
       "service_port": 28300,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/lunatv/com.personal.lunatv/rootfs_common/icon.png",
-      "download_count": 51,
+      "download_count": 52,
       "app_type": "native",
       "category": "media",
       "platforms": [
@@ -650,7 +650,7 @@
       },
       "service_port": 28966,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/myip/com.personal.myip/rootfs_common/icon.png",
-      "download_count": 15,
+      "download_count": 16,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -758,7 +758,7 @@
       },
       "service_port": 28088,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/octop/com.tencent.octop/rootfs_common/icon.png",
-      "download_count": 22,
+      "download_count": 35,
       "app_type": "native",
       "category": "ai",
       "platforms": [
@@ -823,7 +823,7 @@
       },
       "service_port": 21710,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/p2pee-proxy/com.xnkyn.p2peeproxy/rootfs_common/icon.png",
-      "download_count": 26,
+      "download_count": 28,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -895,7 +895,7 @@
       },
       "service_port": 25432,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/postgresql/com.personal.postgresql17/rootfs_common/icon.png",
-      "download_count": 6,
+      "download_count": 7,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -985,7 +985,7 @@
       },
       "service_port": 21166,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/randomvideo/com.personal.randomvideo/rootfs_common/icon.png",
-      "download_count": 19,
+      "download_count": 20,
       "app_type": "native",
       "category": "media",
       "platforms": [
@@ -1039,7 +1039,7 @@
       },
       "service_port": 26379,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/redis/com.personal.redis/rootfs_common/icon.png",
-      "download_count": 8,
+      "download_count": 9,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -1099,7 +1099,7 @@
       },
       "service_port": 25435,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/sub2api/com.personal.sub2api/rootfs_common/icon.png",
-      "download_count": 11,
+      "download_count": 15,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -1129,7 +1129,7 @@
       },
       "service_port": 28186,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/trilium/com.personal.trilium/rootfs_common/icon.png",
-      "download_count": 16,
+      "download_count": 17,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -1153,7 +1153,7 @@
       },
       "service_port": 28750,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/ugtheme/com.personal.ugtheme/rootfs_common/icon.png",
-      "download_count": 74,
+      "download_count": 76,
       "app_type": "docker",
       "category": "utility",
       "platforms": [
@@ -1218,7 +1218,7 @@
       },
       "service_port": 21310,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/ugstore-icon.png",
-      "download_count": 247,
+      "download_count": 251,
       "app_type": "native",
       "category": "utility",
       "platforms": [
@@ -1240,7 +1240,7 @@
       },
       "service_port": 21120,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/liteparser-icon.png",
-      "download_count": 38,
+      "download_count": 40,
       "app_type": "native",
       "category": "download",
       "platforms": [
@@ -1472,7 +1472,7 @@
       },
       "service_port": 25115,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/aellus-icon.png",
-      "download_count": 7,
+      "download_count": 8,
       "app_type": "native",
       "category": "utility",
       "platforms": [
@@ -1502,7 +1502,7 @@
       },
       "service_port": 28618,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/frpnet-icon.png",
-      "download_count": 11,
+      "download_count": 13,
       "app_type": "native",
       "category": "game",
       "platforms": [
@@ -1581,7 +1581,7 @@
       },
       "service_port": 21151,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/supereditor-icon.png",
-      "download_count": 6,
+      "download_count": 7,
       "app_type": "native",
       "category": "utility",
       "platforms": [
@@ -1612,7 +1612,7 @@
       },
       "service_port": 28914,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/ugnasclubmobile-icon.png",
-      "download_count": 0,
+      "download_count": 17,
       "app_type": "native",
       "category": "utility",
       "platforms": [

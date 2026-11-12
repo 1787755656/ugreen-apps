@@ -35,7 +35,7 @@
     "assets": {
       "amd64_nasync_com.gdy666.lucky_2.27.2.0004.upk": 4,
       "amd64_nasync_com.gdy666.lucky_3.5.0.0012.upk": 7,
-      "amd64_nasync_com.gdy666.lucky_3.8.0.0013.upk": 4,
+      "amd64_nasync_com.gdy666.lucky_3.8.0.0013.upk": 6,
       "arm64_nasync_com.gdy666.lucky_2.27.2.0004.upk": 1,
       "arm64_nasync_com.gdy666.lucky_3.5.0.0012.upk": 2,
       "arm64_nasync_com.gdy666.lucky_3.8.0.0013.upk": 1
@@ -44,12 +44,12 @@
   },
   "com.koolcenter.fastnet": {
     "assets": {
-      "amd64_nasync_com.koolcenter.fastnet_0.8.1.0006.upk": 4,
-      "amd64_nasync_com.koolcenter.fastnet_0.8.8.0007.upk": 6,
-      "arm64_nasync_com.koolcenter.fastnet_0.8.1.0006.upk": 1,
-      "arm64_nasync_com.koolcenter.fastnet_0.8.8.0007.upk": 1
+      "amd64_nasync_com.koolcenter.fastnet_0.8.8.0007.upk": 7,
+      "amd64_nasync_com.koolcenter.fastnet_0.8.9.0008.upk": 0,
+      "arm64_nasync_com.koolcenter.fastnet_0.8.8.0007.upk": 2,
+      "arm64_nasync_com.koolcenter.fastnet_0.8.9.0008.upk": 0
     },
-    "baseline": 33
+    "baseline": 38
   },
   "com.magiccode.magicmail": {
     "assets": {
@@ -112,7 +112,7 @@
   },
   "com.personal.aellus": {
     "assets": {
-      "amd64_nasync_com.personal.aellus_1.0.6.0001.upk": 5,
+      "amd64_nasync_com.personal.aellus_1.0.6.0001.upk": 6,
       "arm64_nasync_com.personal.aellus_1.0.6.0001.upk": 2
     },
     "baseline": 0
@@ -142,7 +142,7 @@
   },
   "com.personal.chromium": {
     "assets": {
-      "amd64_nasync_com.personal.chromium_26.10.1.0001.upk": 10,
+      "amd64_nasync_com.personal.chromium_26.10.1.0001.upk": 12,
       "arm64_nasync_com.personal.chromium_26.10.1.0001.upk": 4
     },
     "baseline": 0
@@ -158,7 +158,7 @@
   },
   "com.personal.deenmusic": {
     "assets": {
-      "amd64_nasync_com.personal.deenmusic_0.7.8.0014.upk": 15,
+      "amd64_nasync_com.personal.deenmusic_0.7.8.0014.upk": 17,
       "arm64_nasync_com.personal.deenmusic_0.7.8.0014.upk": 14
     },
     "baseline": 0
@@ -166,7 +166,7 @@
   "com.personal.deepseekharness": {
     "assets": {
       "amd64_nasync_com.personal.deepseekharness_0.2.1.0005.upk": 6,
-      "amd64_nasync_com.personal.deepseekharness_0.2.2.0006.upk": 4,
+      "amd64_nasync_com.personal.deepseekharness_0.2.2.0006.upk": 7,
       "arm64_nasync_com.personal.deepseekharness_0.2.1.0005.upk": 6,
       "arm64_nasync_com.personal.deepseekharness_0.2.2.0006.upk": 21
     },
@@ -190,7 +190,7 @@
   },
   "com.personal.frpnet": {
     "assets": {
-      "amd64_nasync_com.personal.frpnet_1.0.0.0002.upk": 4,
+      "amd64_nasync_com.personal.frpnet_1.0.0.0002.upk": 6,
       "arm64_nasync_com.personal.frpnet_1.0.0.0002.upk": 7
     },
     "baseline": 0
@@ -204,7 +204,7 @@
   },
   "com.personal.ittools": {
     "assets": {
-      "amd64_nasync_com.personal.ittools_2024.10.22.0001.upk": 10,
+      "amd64_nasync_com.personal.ittools_2024.10.22.0001.upk": 11,
       "arm64_nasync_com.personal.ittools_2024.10.22.0001.upk": 2
     },
     "baseline": 0
@@ -227,7 +227,7 @@
   },
   "com.personal.liteparser": {
     "assets": {
-      "amd64_nasync_com.personal.liteparser_0.3.0.0010.upk": 31,
+      "amd64_nasync_com.personal.liteparser_0.3.0.0010.upk": 33,
       "arm64_nasync_com.personal.liteparser_0.3.0.0010.upk": 7
     },
     "baseline": 0
@@ -242,7 +242,7 @@
   "com.personal.lunatv": {
     "assets": {
       "amd64_nasync_com.personal.lunatv_6.6.4.0002.upk": 1,
-      "amd64_nasync_com.personal.lunatv_6.6.5.0003.upk": 39,
+      "amd64_nasync_com.personal.lunatv_6.6.5.0003.upk": 40,
       "arm64_nasync_com.personal.lunatv_6.6.4.0002.upk": 1,
       "arm64_nasync_com.personal.lunatv_6.6.5.0003.upk": 10
     },
@@ -267,7 +267,7 @@
   "com.personal.myip": {
     "assets": {
       "amd64_nasync_com.personal.myip_8.0.0.0001.upk": 7,
-      "amd64_nasync_com.personal.myip_8.1.0.0002.upk": 5,
+      "amd64_nasync_com.personal.myip_8.1.0.0002.upk": 6,
       "arm64_nasync_com.personal.myip_8.0.0.0001.upk": 2,
       "arm64_nasync_com.personal.myip_8.1.0.0002.upk": 1
     },
@@ -329,7 +329,7 @@
   },
   "com.personal.postgresql17": {
     "assets": {
-      "amd64_nasync_com.personal.postgresql17_1.0.0.0001.upk": 5,
+      "amd64_nasync_com.personal.postgresql17_1.0.0.0001.upk": 6,
       "arm64_nasync_com.personal.postgresql17_1.0.0.0001.upk": 1
     },
     "baseline": 0
@@ -337,7 +337,7 @@
   "com.personal.randomvideo": {
     "assets": {
       "amd64_nasync_com.personal.randomvideo_0.1.0.0006.upk": 11,
-      "amd64_nasync_com.personal.randomvideo_0.1.0.0010.upk": 4,
+      "amd64_nasync_com.personal.randomvideo_0.1.0.0010.upk": 5,
       "arm64_nasync_com.personal.randomvideo_0.1.0.0006.upk": 2,
       "arm64_nasync_com.personal.randomvideo_0.1.0.0010.upk": 2
     },
@@ -354,7 +354,7 @@
   },
   "com.personal.redis": {
     "assets": {
-      "amd64_nasync_com.personal.redis_8.10.0.0001.upk": 6,
+      "amd64_nasync_com.personal.redis_8.10.0.0001.upk": 7,
       "arm64_nasync_com.personal.redis_8.10.0.0001.upk": 2
     },
     "baseline": 0
@@ -362,15 +362,15 @@
   "com.personal.sub2api": {
     "assets": {
       "amd64_nasync_com.personal.sub2api_0.2.20.0016.upk": 1,
-      "amd64_nasync_com.personal.sub2api_0.2.21.0017.upk": 0,
+      "amd64_nasync_com.personal.sub2api_0.2.21.0017.upk": 3,
       "arm64_nasync_com.personal.sub2api_0.2.20.0016.upk": 1,
-      "arm64_nasync_com.personal.sub2api_0.2.21.0017.upk": 0
+      "arm64_nasync_com.personal.sub2api_0.2.21.0017.upk": 1
     },
     "baseline": 9
   },
   "com.personal.supereditor": {
     "assets": {
-      "amd64_nasync_com.personal.supereditor_1.2.0.0004.upk": 2,
+      "amd64_nasync_com.personal.supereditor_1.2.0.0004.upk": 3,
       "arm64_nasync_com.personal.supereditor_1.2.0.0004.upk": 4
     },
     "baseline": 0
@@ -380,14 +380,14 @@
       "amd64_nasync_com.personal.trilium_106.1.0.0005.upk": 5,
       "amd64_nasync_com.personal.trilium_107.0.0.0006.upk": 1,
       "arm64_nasync_com.personal.trilium_106.1.0.0005.upk": 3,
-      "arm64_nasync_com.personal.trilium_107.0.0.0006.upk": 1
+      "arm64_nasync_com.personal.trilium_107.0.0.0006.upk": 2
     },
     "baseline": 6
   },
   "com.personal.ugnasclub.mobile": {
     "assets": {
-      "amd64_nasync_com.personal.ugnasclub.mobile_1.0.0.0004.upk": 0,
-      "arm64_nasync_com.personal.ugnasclub.mobile_1.0.0.0004.upk": 0
+      "amd64_nasync_com.personal.ugnasclub.mobile_1.0.0.0004.upk": 14,
+      "arm64_nasync_com.personal.ugnasclub.mobile_1.0.0.0004.upk": 3
     },
     "baseline": 0
   },
@@ -397,7 +397,7 @@
       "amd64_nasync_com.personal.ugstore_0.1.0.0029.upk": 2,
       "amd64_nasync_com.personal.ugstore_0.1.0.0030.upk": 12,
       "amd64_nasync_com.personal.ugstore_0.1.0.0031.upk": 15,
-      "amd64_nasync_com.personal.ugstore_0.1.0.0032.upk": 21,
+      "amd64_nasync_com.personal.ugstore_0.1.0.0032.upk": 25,
       "arm64_nasync_com.personal.ugstore_0.1.0.0028.upk": 7,
       "arm64_nasync_com.personal.ugstore_0.1.0.0029.upk": 3,
       "arm64_nasync_com.personal.ugstore_0.1.0.0030.upk": 5,
@@ -409,7 +409,7 @@
   "com.personal.ugtheme": {
     "assets": {
       "amd64_nasync_com.personal.ugtheme_1.1.1.0007.upk": 29,
-      "amd64_nasync_com.personal.ugtheme_1.2.2.0010.upk": 27,
+      "amd64_nasync_com.personal.ugtheme_1.2.2.0010.upk": 29,
       "arm64_nasync_com.personal.ugtheme_1.1.1.0007.upk": 10,
       "arm64_nasync_com.personal.ugtheme_1.2.2.0010.upk": 8
     },
@@ -427,7 +427,7 @@
   "com.ponphil.litepan": {
     "assets": {
       "amd64_nasync_com.ponphil.litepan_0.5.6.0003.upk": 1,
-      "amd64_nasync_com.ponphil.litepan_0.5.7.0004.upk": 4,
+      "amd64_nasync_com.ponphil.litepan_0.5.7.0004.upk": 5,
       "arm64_nasync_com.ponphil.litepan_0.5.6.0003.upk": 1,
       "arm64_nasync_com.ponphil.litepan_0.5.7.0004.upk": 3
     },
@@ -470,7 +470,7 @@
   "com.tencent.octop": {
     "assets": {
       "amd64_nasync_com.tencent.octop_1.0.3.0011.upk": 12,
-      "amd64_nasync_com.tencent.octop_1.0.3.0012.upk": 6,
+      "amd64_nasync_com.tencent.octop_1.0.3.0012.upk": 19,
       "arm64_nasync_com.tencent.octop_1.0.3.0011.upk": 2,
       "arm64_nasync_com.tencent.octop_1.0.3.0012.upk": 2
     },
@@ -479,15 +479,15 @@
   "com.wushuo.anirss": {
     "assets": {
       "amd64_nasync_com.wushuo.anirss_3.2.57.0016.upk": 1,
-      "amd64_nasync_com.wushuo.anirss_3.2.58.0017.upk": 0,
+      "amd64_nasync_com.wushuo.anirss_3.2.58.0017.upk": 2,
       "arm64_nasync_com.wushuo.anirss_3.2.57.0016.upk": 1,
-      "arm64_nasync_com.wushuo.anirss_3.2.58.0017.upk": 0
+      "arm64_nasync_com.wushuo.anirss_3.2.58.0017.upk": 1
     },
     "baseline": 11
   },
   "com.xnkyn.p2peeproxy": {
     "assets": {
-      "amd64_nasync_com.xnkyn.p2peeproxy_1.0.0.0003.upk": 23,
+      "amd64_nasync_com.xnkyn.p2peeproxy_1.0.0.0003.upk": 25,
       "arm64_nasync_com.xnkyn.p2peeproxy_1.0.0.0003.upk": 3
     },
     "baseline": 0
