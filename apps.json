@@ -15,7 +15,7 @@
       },
       "service_port": 28737,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/100zip/com.personal.100zip/rootfs_common/icon.png",
-      "download_count": 21,
+      "download_count": 23,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -65,17 +65,17 @@
       "display_name": "ass (ANI-RSS)",
       "description": "基于 RSS 自动追番、订阅、下载、刮削与洗版（上游 ANI-RSS）。应用内置 Eclipse Temurin JRE，无需 NAS 安装系统 Java。默认账号 admin / admin， 登录后请及时修改密码。请在应用设置中授权媒体/下载共享目录，并在 WebUI 中配置下载路径与下载器。",
       "homepage_url": "https://github.com/wushuo894/ani-rss",
-      "updated_at": "2026-11-11",
-      "version": "3.2.58",
-      "upk_version": "3.2.58.0017",
-      "release_tag": "ani-rss/v3.2.58",
+      "updated_at": "2026-11-13",
+      "version": "3.2.59",
+      "upk_version": "3.2.59.0018",
+      "release_tag": "ani-rss/v3.2.59",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/ani-rss/v3.2.58/amd64_nasync_com.wushuo.anirss_3.2.58.0017.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/ani-rss/v3.2.58/arm64_nasync_com.wushuo.anirss_3.2.58.0017.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/ani-rss/v3.2.59/amd64_nasync_com.wushuo.anirss_3.2.59.0018.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/ani-rss/v3.2.59/arm64_nasync_com.wushuo.anirss_3.2.59.0018.upk"
       },
       "service_port": 7789,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/ani-rss/com.wushuo.anirss/rootfs_common/icon.png",
-      "download_count": 16,
+      "download_count": 17,
       "app_type": "native",
       "category": "download",
       "platforms": [
@@ -105,7 +105,7 @@
       },
       "service_port": 25900,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/chromium/com.personal.chromium/rootfs_common/icon.png",
-      "download_count": 16,
+      "download_count": 17,
       "app_type": "docker",
       "category": "system",
       "platforms": [
@@ -225,7 +225,7 @@
       },
       "service_port": 23079,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/deepseek-harness/com.personal.deepseekharness/rootfs_common/icon.png",
-      "download_count": 43,
+      "download_count": 45,
       "app_type": "docker",
       "category": "system",
       "platforms": [
@@ -284,7 +284,7 @@
       },
       "service_port": 11211,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/easytier/com.personal.easytier/rootfs_common/icon.png",
-      "download_count": 4,
+      "download_count": 5,
       "app_type": "docker",
       "category": "system",
       "platforms": [
@@ -314,7 +314,7 @@
       },
       "service_port": 28190,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/fastnet/com.koolcenter.fastnet/rootfs_common/icon.png",
-      "download_count": 47,
+      "download_count": 54,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -392,7 +392,7 @@
       },
       "service_port": 25180,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/it-tools/com.personal.ittools/rootfs_common/icon.png",
-      "download_count": 13,
+      "download_count": 14,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -416,7 +416,7 @@
       },
       "service_port": 18083,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/liteclass/com.personal.liteclass/rootfs_common/icon.png",
-      "download_count": 12,
+      "download_count": 13,
       "app_type": "native",
       "category": "media",
       "platforms": [
@@ -626,7 +626,7 @@
       },
       "service_port": 5866,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/mook/com.personal.mook/rootfs_common/icon.png",
-      "download_count": 28,
+      "download_count": 29,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -985,7 +985,7 @@
       },
       "service_port": 21166,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/randomvideo/com.personal.randomvideo/rootfs_common/icon.png",
-      "download_count": 20,
+      "download_count": 22,
       "app_type": "native",
       "category": "media",
       "platforms": [
@@ -1099,7 +1099,7 @@
       },
       "service_port": 25435,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/sub2api/com.personal.sub2api/rootfs_common/icon.png",
-      "download_count": 15,
+      "download_count": 16,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -1129,7 +1129,7 @@
       },
       "service_port": 28186,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/trilium/com.personal.trilium/rootfs_common/icon.png",
-      "download_count": 17,
+      "download_count": 18,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -1153,7 +1153,7 @@
       },
       "service_port": 28750,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/ugtheme/com.personal.ugtheme/rootfs_common/icon.png",
-      "download_count": 76,
+      "download_count": 77,
       "app_type": "docker",
       "category": "utility",
       "platforms": [
@@ -1218,7 +1218,7 @@
       },
       "service_port": 21310,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/ugstore-icon.png",
-      "download_count": 251,
+      "download_count": 253,
       "app_type": "native",
       "category": "utility",
       "platforms": [
@@ -1240,7 +1240,7 @@
       },
       "service_port": 21120,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/liteparser-icon.png",
-      "download_count": 40,
+      "download_count": 41,
       "app_type": "native",
       "category": "download",
       "platforms": [
@@ -1612,7 +1612,7 @@
       },
       "service_port": 28914,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/ugnasclubmobile-icon.png",
-      "download_count": 17,
+      "download_count": 20,
       "app_type": "native",
       "category": "utility",
       "platforms": [
