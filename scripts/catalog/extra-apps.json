@@ -416,6 +416,37 @@
         "amd64",
         "arm64"
       ]
+    },
+    {
+      "appname": "com.personal.cadviewer.inner",
+      "display_name": "CAD 看图",
+      "description": "浏览器端 DXF / DWG 图纸查看与编辑器（上游 mlightcad/cad-viewer，DWG 解析组件为 LibreDWG / GPL-3.0），桌面内嵌窗口打开，不开新标签页，界面支持中文。\n图层管理、缩放平移、几何与文字查询，可导出 SVG / PDF / 自包含 HTML；所有解析与渲染都在浏览器本地完成（WebAssembly + WebGL），图纸不出内网、无需上传、无需账号。\n首页「从 NAS 文件夹打开」可直接浏览安装时授权的共享文件夹、打开 NAS 上的图纸，不必先下载到电脑；也可以继续从电脑本地选择文件。支持 amd64 / arm64 双架构。",
+      "homepage_url": "https://github.com/mlightcad/cad-viewer",
+      "updated_at": "2026-11-14",
+      "version": "1.7.7",
+      "upk_version": "1.7.7.0015",
+      "release_tag": "cadviewerinner/1.7.7.0015",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/cadviewerinner/1.7.7.0015/amd64_nasync_com.personal.cadviewer.inner_1.7.7.0015.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/cadviewerinner/1.7.7.0015/arm64_nasync_com.personal.cadviewer.inner_1.7.7.0015.upk"
+      },
+      "service_port": 25191,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/cadviewerinner-icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "system",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ],
+      "post_install_note": "装好后到应用中心「配置 / 设置」里选「图纸文件夹」（可多选，最多 8 个，选中即授权只读访问），再「停止 → 启动」一次——平台先起服务、几秒后才写参数并挂载，首次启动读到的授权目录一定是空的。之后首页「从 NAS 文件夹打开」即可直接浏览 NAS 上的 DWG / DXF。若要继续用文件管理器右键「打开方式」，需重跑应用工程里的 scripts/reinject-openhandlers.sh（appmgr 升级会清掉 openHandlers）。",
+      "install_params": [
+        {
+          "key": "CAD_DIRS",
+          "name": "图纸文件夹",
+          "description": "存放 DXF / DWG 图纸的文件夹（可多选，最多 8 个）。选中后应用就能在首页「从 NAS 文件夹打开」里直接浏览并打开图纸，不必先下载到电脑。这些目录对本应用只读，不会修改或删除任何文件。"
+        }
+      ]
     }
   ]
 }

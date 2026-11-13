@@ -5,6 +5,7 @@
   - scripts/apps/<slug>/meta.env        APP_ID / RELEASE_TITLE / HOMEPAGE_URL / SUPPORTED_ARCH / CATALOG_CATEGORY(可选)
   - apps/<slug>/<appid>/project.yaml    tag_types（分类缺省映射）、icon(rootfs_common/icon.png)
   - GitHub Releases（tag 形如 <slug>/vX.Y.Z[-rN]） 资产文件名给出真实的 upk_version（x.y.z.000N）
+  - scripts/catalog/extra-apps.json     独立打包应用的静态条目；同名时给生成条目补展示信息
 
 下载计数：CI 的 release 清理只保留每应用最近 2 个上游版本（reusable-build-app
 的 MAX_VERSIONS），旧 release 连同资产的 download_count 一起消失，纯靠 GitHub
@@ -33,6 +34,14 @@ TAG_TYPE_MAP = {
     "driver": "system", "backup": "system", "security": "system",
     "media": "media", "download": "download",
 }
+
+# extra-apps.json 里允许覆盖「release 自动生成条目」的展示字段白名单。
+# 故意不含 version / upk_version / release_tag / download_urls / updated_at /
+# download_count / platforms / service_port：这些必须跟着真实 release 走。
+CURATED_FIELDS = (
+    "display_name", "description", "homepage_url", "icon_url",
+    "category", "app_type", "install_params", "post_install_note",
+)
 
 
 def read_meta(path: Path) -> dict:
@@ -213,25 +222,36 @@ def main() -> None:
             ] or None,
         })
 
-    # 额外应用清单：不在 apps/ 下、由各应用自有仓库独立打包的应用（如商店本体
-    # com.personal.ugstore），以静态条目追加。不参与 build-apps 构建，也不被
-    # 目录刷新覆盖，从而实现商店自身的自更新。
+    # 额外应用清单有两类用途：
+    #   1) 静态条目：不在 apps/ 下、由各应用自有仓库独立打包的应用（如商店本体
+    #      com.personal.ugstore）。不参与 build-apps 构建，也不被目录刷新覆盖，
+    #      从而实现商店自身的自更新。
+    #   2) 展示信息覆盖：apps/ 下由 release 自动生成的条目，同名时把本清单里
+    #      人工维护的展示字段（描述 / 图标 / 安装参数 / 安装后提示等）合进去。
+    #      版本、资产地址、更新时间、下载量仍以 GitHub Release 为准 —— 发新版
+    #      只传资产即可，应用信息不会被刷新冲掉。
     extra_path = root / "scripts/catalog" / "extra-apps.json"
     if extra_path.exists():
         try:
             extra_apps = json.loads(extra_path.read_text(encoding="utf-8")).get("apps", [])
-            seen = {e.get("appname") for e in entries}
+            by_name = {e.get("appname"): e for e in entries}
             for e in extra_apps:
                 name = e.get("appname")
-                if name and name not in seen:
-                    e = dict(e)
-                    # 计数同样从本仓 release 资产累加；仓库里没有该 appid 的
-                    # 资产（release 托管在别处）时保留条目手填的值。
-                    total = downloads_by_appid.get(name, 0)
-                    if total:
-                        e["download_count"] = total
-                    entries.append(e)
-                    seen.add(name)
+                if not name:
+                    continue
+                if name in by_name:
+                    for key in CURATED_FIELDS:
+                        if key in e:
+                            by_name[name][key] = e[key]
+                    continue
+                e = dict(e)
+                # 计数同样从本仓 release 资产累加；仓库里没有该 appid 的
+                # 资产（release 托管在别处）时保留条目手填的值。
+                total = downloads_by_appid.get(name, 0)
+                if total:
+                    e["download_count"] = total
+                entries.append(e)
+                by_name[name] = e
         except Exception as e:  # noqa: BLE001
             print(f"warn: 读取 extra-apps.json 失败: {e}", file=sys.stderr)
 
