@@ -142,8 +142,8 @@
   },
   "com.personal.cadviewer.inner": {
     "assets": {
-      "amd64_nasync_com.personal.cadviewer.inner_1.7.7.0015.upk": 0,
-      "arm64_nasync_com.personal.cadviewer.inner_1.7.7.0015.upk": 0
+      "amd64_nasync_com.personal.cadviewer.inner_1.7.7.0015.upk": 1,
+      "arm64_nasync_com.personal.cadviewer.inner_1.7.7.0015.upk": 1
     },
     "baseline": 0
   },
