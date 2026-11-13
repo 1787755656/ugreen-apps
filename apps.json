@@ -91,6 +91,36 @@
       ]
     },
     {
+      "appname": "com.personal.cadviewer.inner",
+      "display_name": "CAD 看图",
+      "description": "浏览器端 CAD 图纸查看与编辑器（上游 mlightcad/cad-viewer）， 支持打开 DXF 与 DWG 图纸，提供图层管理、缩放平移、几何与 文字查询等看图能力，并可导出为 SVG、PDF 或自包含 HTML，界面支持 中文。可直接从 NAS 上已授权的文件夹打开图纸，也可以从电脑本地 选择文件；所有解析与渲染均在浏览器本地完成（WebAssembly 与 WebGL）， 图纸不出内网、无需上传、无需账号。从绿联桌面直接以窗口打开， 不开新标签页。装好后请在「应用中心 → 本应用 → 设置」里选择图纸 文件夹，并把应用「停止」再「启动」一次，之后首页的「从 NAS 文件夹 打开」就能直接浏览 NAS 上的图纸。",
+      "homepage_url": "https://github.com/mlightcad/cad-viewer",
+      "updated_at": "2026-11-13",
+      "version": "1.7.7",
+      "upk_version": "1.7.7.0015",
+      "release_tag": "cadviewerinner/1.7.7.0015",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/cadviewerinner/1.7.7.0015/amd64_nasync_com.personal.cadviewer.inner_1.7.7.0015.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/cadviewerinner/1.7.7.0015/arm64_nasync_com.personal.cadviewer.inner_1.7.7.0015.upk"
+      },
+      "service_port": 25191,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/cadviewerinner/com.personal.cadviewer.inner/rootfs_common/icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "system",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ],
+      "install_params": [
+        {
+          "key": "CAD_DIRS",
+          "name": "图纸文件夹",
+          "description": "存放 DXF / DWG 图纸的文件夹（可多选）。选中后应用就能在首页 「从 NAS 文件夹打开」里直接浏览并打开图纸，不必先下载到电脑。 这些目录只读，应用不会修改或删除其中任何文件。"
+        }
+      ]
+    },
+    {
       "appname": "com.personal.chromium",
       "display_name": "Chromium 浏览器",
       "description": "把完整的桌面版 Chromium 搬进 NAS:点开应用就是浏览器,书签、扩展、登录态都 存在 NAS 上,换台设备接着用。自带登录页保护(安装时设用户名密码),支持网页 声音、页面自带文件管理器,可映射 NAS 目录当下载盘,内置中文字体。可配置专属 窗口模式,把 NAS 变成某个 Web 应用的专用入口。基于 jlesage/docker-chromium 上游镜像打包。",

@@ -1,0 +1,124 @@
+# ============================================================
+# CAD Viewer（桌面内嵌版）—— UGOS Pro 原生应用配置
+#
+# 与 com.personal.cadviewer（tab 直连版）同源：同一份上游 v1.7.7 静态
+# dist + 同一个 Go 静态服务器，仅打开方式不同 —— 本包 open_type: inner，
+# 页面由系统网关从 www/ 直接提供，桌面内嵌窗口打开（不开新标签页）。
+#
+# inner 形态适配检查（四道全过）：
+#   - 上游为单页应用，无 vue-router 路由 → 无子路径刷新 404 问题
+#   - 无 WebSocket → 无需长连接反代
+#   - www/ 内不生成任何 .gz → 不会触发网关 gzip_static 旧包钉死
+#   - /api/ 走网关反代（proxy_path: api）到本应用端口：NAS 授权文件夹
+#     浏览（/api/fs/*）与打开方式取货（/api/open/*）都是同源请求
+# 后端 Go 服务器：静态兜底 + 探活（port 25191）+ 上面那组只读 API。
+# ⚠ 网关静态响应带 30 天浏览器缓存：升级后若仍见旧界面，强制刷新一次。
+# ============================================================
+
+spec_version: "2.1"
+
+app_id: com.personal.cadviewer.inner
+
+# 跟随上游 tag v1.7.7（最新稳定版）。
+version: 1.7.7
+
+support_arch:
+  - amd64
+  - arm64
+
+# 桌面内嵌窗口打开，手机端走网关 http 端口对。
+# supports 留空默认 app+pc。
+
+# 启动命令：Go 静态文件服务器（探活 + 只读文件 API）。
+start_cmd: bin/cadviewer-server --port=25191
+
+port: 25191
+
+# 桌面内嵌：网关从 www/ serve 静态（端口对自动分配）。
+# proxy_path 让 /api/* 反代到本应用端口 —— NAS 授权文件夹浏览与
+# 打开方式取货都靠它走同源（网关转发不剥前缀，后端注册的就是 /api/xxx）。
+open_type: inner
+
+proxy_path: api
+
+tag_types:
+  - utility
+
+depend_fw_version: 1.13.0.0000
+
+# 零出站、零系统命令：Go 服务器只读安装目录里的 www/ 并监听本机端口。
+# 授权文件夹的读取靠 path 参数的 BindPaths 挂载，不需要额外 permission。
+permissions: []
+
+# 用户也可以在应用中心「可访问文件夹」里手动加目录（服务器会从
+# mountinfo / unit BindPaths 里发现它们）。
+allow_add_access_path: true
+
+parameters:
+  # 安装弹窗里选目录 = 路径 + 沙箱只读访问一步到位（path 型参数会写进
+  # path_permissions 表 → unit 的 BindPaths=）。不设 required：装完/升级后的
+  # 第一次启动参数必为空（平台先起服务、几秒后才写 .env 和挂载），
+  # 界面会提示用户「停止→启动 一次」，不当错误处理。
+  - key: CAD_DIRS
+    type: path
+    multi: true
+    max_values_count: 8
+    changeable: true
+    required: false
+    i18n:
+      zh-CN:
+        name: 图纸文件夹
+        description: >-
+          存放 DXF / DWG 图纸的文件夹（可多选）。选中后应用就能在首页
+          「从 NAS 文件夹打开」里直接浏览并打开图纸，不必先下载到电脑。
+          这些目录只读，应用不会修改或删除其中任何文件。
+      en-US:
+        name: Drawing folders
+        description: >-
+          Folders that hold your DXF / DWG drawings (multiple allowed).
+          Picking them lets the app browse and open drawings straight from
+          the NAS home screen — no download to your computer first. These
+          folders are read-only for the app.
+
+# 合规字段：上游主仓库 MIT（DWG 解析组件 libredwg-web 为 GPL-3.0，源码链接可溯）。
+license_agreement_link:
+  - https://github.com/mlightcad/cad-viewer/blob/main/LICENSE
+source_code_link:
+  - https://github.com/mlightcad/cad-viewer
+technical_support_link:
+  - https://github.com/mlightcad/cad-viewer/issues
+
+i18n:
+  zh-CN:
+    name: CAD 看图
+    description: >-
+      浏览器端 CAD 图纸查看与编辑器（上游 mlightcad/cad-viewer），
+      支持打开 DXF 与 DWG 图纸，提供图层管理、缩放平移、几何与
+      文字查询等看图能力，并可导出为 SVG、PDF 或自包含 HTML，界面支持
+      中文。可直接从 NAS 上已授权的文件夹打开图纸，也可以从电脑本地
+      选择文件；所有解析与渲染均在浏览器本地完成（WebAssembly 与 WebGL），
+      图纸不出内网、无需上传、无需账号。从绿联桌面直接以窗口打开，
+      不开新标签页。装好后请在「应用中心 → 本应用 → 设置」里选择图纸
+      文件夹，并把应用「停止」再「启动」一次，之后首页的「从 NAS 文件夹
+      打开」就能直接浏览 NAS 上的图纸。
+    author: MLight Lee
+    official: https://mlightcad.com/cad-viewer/
+    publisher: 穿斯帕沃特
+    publisher_link: https://club.ugnas.com/home.php?mod=space&uid=10131
+  en-US:
+    name: CAD Viewer
+    description: >-
+      Browser-based CAD drawing viewer and editor (upstream
+      mlightcad/cad-viewer). Open DXF and DWG drawings with layer management,
+      zoom and pan, geometry and text queries, plus export to SVG, PDF or
+      self-contained HTML; the UI includes English and other languages.
+      Drawings can be opened straight from folders you authorize on the NAS,
+      or picked from your own computer. All parsing and rendering happens
+      locally in your browser via WebAssembly and WebGL — drawings never
+      leave your LAN, no upload, no account. DWG parsing is powered by
+      LibreDWG (GPL-3.0). Opens as an embedded window on the UGOS desktop
+      instead of a new browser tab.
+    author: MLight Lee
+    official: https://mlightcad.com/cad-viewer/
+    publisher: 穿斯帕沃特
+    publisher_link: https://club.ugnas.com/home.php?mod=space&uid=10131
