@@ -593,13 +593,13 @@
       "display_name": "MariaDB",
       "description": "MariaDB 11.4 LTS —— 开源关系型数据库的绿联原生应用版本， 为 NAS 上的其它应用（Halo、WordPress、Nextcloud 等）或局域网里的客户端 提供兼容 MySQL 的数据库服务。自带的管理页面用来查看运行状态与连接信息、 修改 root 密码；日常的建库建表请用你惯用的客户端 （Navicat、DBeaver、phpMyAdmin 等）。 运行库全部随包携带，不会往系统里装任何东西。",
       "homepage_url": "https://mariadb.org",
-      "updated_at": "2026-09-30",
+      "updated_at": "2026-11-14",
       "version": "11.4.12",
-      "upk_version": "11.4.12.0001",
-      "release_tag": "mariadb/v11.4.12",
+      "upk_version": "11.4.12.0011",
+      "release_tag": "mariadb/11.4.12.0011",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/mariadb/v11.4.12/amd64_nasync_com.personal.mariadb_11.4.12.0001.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/mariadb/v11.4.12/arm64_nasync_com.personal.mariadb_11.4.12.0001.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/mariadb/11.4.12.0011/amd64_nasync_com.personal.mariadb_11.4.12.0011.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/mariadb/11.4.12.0011/arm64_nasync_com.personal.mariadb_11.4.12.0011.upk"
       },
       "service_port": 23306,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/mariadb/com.personal.mariadb/rootfs_common/icon.png",
@@ -614,7 +614,7 @@
         {
           "key": "MARIADB_DATA_DIR",
           "name": "数据保存目录",
-          "description": "选择存放数据库文件的共享文件夹，选好即完成授权。数据会存到该目录下的 mariadb-data 子目录。留空也能安装，数据存到应用数据目录。 注意：这个目录只在【首次初始化】时生效，之后更换需要手动迁移数据。"
+          "description": "选择存放数据库文件的共享文件夹，选好即完成授权，首次安装即生效。 文件夹为空时，数据存到该目录下的 mariadb-data 子目录并初始化新库； 文件夹里已经有数据库文件时，应用会【直接读取并使用】它，不做版本兼容性预检： 能启动就正常用，版本不兼容时数据库会启动失败并在管理页显示错误， root 密码为该数据库原有的密码。应用不会覆盖、改名或删除任何已有数据； 迁移只往空目录复制，旧目录原样保留。留空也能安装，数据存到应用数据目录。"
         }
       ]
     },
