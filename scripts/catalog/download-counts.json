@@ -1,7 +1,7 @@
 {
   "com.adguard.home.docker": {
     "assets": {
-      "amd64_nasync_com.adguard.home.docker_107.80.0.0003.upk": 3,
+      "amd64_nasync_com.adguard.home.docker_107.80.0.0003.upk": 5,
       "arm64_nasync_com.adguard.home.docker_107.80.0.0003.upk": 6
     },
     "baseline": 4
@@ -35,10 +35,10 @@
     "assets": {
       "amd64_nasync_com.gdy666.lucky_2.27.2.0004.upk": 4,
       "amd64_nasync_com.gdy666.lucky_3.5.0.0012.upk": 7,
-      "amd64_nasync_com.gdy666.lucky_3.8.0.0013.upk": 6,
+      "amd64_nasync_com.gdy666.lucky_3.8.0.0013.upk": 7,
       "arm64_nasync_com.gdy666.lucky_2.27.2.0004.upk": 1,
       "arm64_nasync_com.gdy666.lucky_3.5.0.0012.upk": 2,
-      "arm64_nasync_com.gdy666.lucky_3.8.0.0013.upk": 1
+      "arm64_nasync_com.gdy666.lucky_3.8.0.0013.upk": 2
     },
     "baseline": 0
   },
@@ -47,7 +47,7 @@
       "amd64_nasync_com.koolcenter.fastnet_0.8.8.0007.upk": 7,
       "amd64_nasync_com.koolcenter.fastnet_0.8.9.0008.upk": 4,
       "arm64_nasync_com.koolcenter.fastnet_0.8.8.0007.upk": 2,
-      "arm64_nasync_com.koolcenter.fastnet_0.8.9.0008.upk": 3
+      "arm64_nasync_com.koolcenter.fastnet_0.8.9.0008.upk": 5
     },
     "baseline": 38
   },
@@ -63,7 +63,7 @@
   "com.magiccode.magicpush": {
     "assets": {
       "amd64_nasync_com.magiccode.magicpush_1.14.0.0007.upk": 3,
-      "amd64_nasync_com.magiccode.magicpush_1.15.0.0008.upk": 4,
+      "amd64_nasync_com.magiccode.magicpush_1.15.0.0008.upk": 5,
       "arm64_nasync_com.magiccode.magicpush_1.14.0.0007.upk": 3,
       "arm64_nasync_com.magiccode.magicpush_1.15.0.0008.upk": 4
     },
@@ -97,7 +97,7 @@
   "com.personal.100zip": {
     "assets": {
       "amd64_nasync_com.personal.100zip_0.5.20.0004.upk": 3,
-      "arm64_nasync_com.personal.100zip_0.5.20.0004.upk": 4
+      "arm64_nasync_com.personal.100zip_0.5.20.0004.upk": 8
     },
     "baseline": 16
   },
@@ -143,14 +143,14 @@
   "com.personal.cadviewer.inner": {
     "assets": {
       "amd64_nasync_com.personal.cadviewer.inner_1.7.7.0015.upk": 1,
-      "arm64_nasync_com.personal.cadviewer.inner_1.7.7.0015.upk": 1
+      "arm64_nasync_com.personal.cadviewer.inner_1.7.7.0015.upk": 2
     },
     "baseline": 0
   },
   "com.personal.chromium": {
     "assets": {
       "amd64_nasync_com.personal.chromium_26.10.1.0001.upk": 13,
-      "arm64_nasync_com.personal.chromium_26.10.1.0001.upk": 4
+      "arm64_nasync_com.personal.chromium_26.10.1.0001.upk": 8
     },
     "baseline": 0
   },
@@ -159,7 +159,7 @@
       "amd64_nasync_com.personal.clouddl_1.5.9.0004.upk": 1,
       "amd64_nasync_com.personal.clouddl_1.5.9.0010.upk": 15,
       "arm64_nasync_com.personal.clouddl_1.5.9.0004.upk": 1,
-      "arm64_nasync_com.personal.clouddl_1.5.9.0010.upk": 3
+      "arm64_nasync_com.personal.clouddl_1.5.9.0010.upk": 4
     },
     "baseline": 0
   },
@@ -257,7 +257,7 @@
   },
   "com.personal.mariadb": {
     "assets": {
-      "amd64_nasync_com.personal.mariadb_11.4.12.0001.upk": 5,
+      "amd64_nasync_com.personal.mariadb_11.4.12.0001.upk": 7,
       "arm64_nasync_com.personal.mariadb_11.4.12.0001.upk": 2
     },
     "baseline": 0
@@ -378,7 +378,7 @@
   "com.personal.supereditor": {
     "assets": {
       "amd64_nasync_com.personal.supereditor_1.2.0.0004.upk": 3,
-      "arm64_nasync_com.personal.supereditor_1.2.0.0004.upk": 4
+      "arm64_nasync_com.personal.supereditor_1.2.0.0004.upk": 5
     },
     "baseline": 0
   },
@@ -393,8 +393,8 @@
   },
   "com.personal.ugnasclub.mobile": {
     "assets": {
-      "amd64_nasync_com.personal.ugnasclub.mobile_1.0.0.0004.upk": 17,
-      "arm64_nasync_com.personal.ugnasclub.mobile_1.0.0.0004.upk": 3
+      "amd64_nasync_com.personal.ugnasclub.mobile_1.0.0.0004.upk": 18,
+      "arm64_nasync_com.personal.ugnasclub.mobile_1.0.0.0004.upk": 5
     },
     "baseline": 0
   },
@@ -418,7 +418,7 @@
       "amd64_nasync_com.personal.ugtheme_1.1.1.0007.upk": 29,
       "amd64_nasync_com.personal.ugtheme_1.2.2.0010.upk": 30,
       "arm64_nasync_com.personal.ugtheme_1.1.1.0007.upk": 10,
-      "arm64_nasync_com.personal.ugtheme_1.2.2.0010.upk": 8
+      "arm64_nasync_com.personal.ugtheme_1.2.2.0010.upk": 9
     },
     "baseline": 0
   },

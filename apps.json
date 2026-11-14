@@ -15,7 +15,7 @@
       },
       "service_port": 28737,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/100zip/com.personal.100zip/rootfs_common/icon.png",
-      "download_count": 23,
+      "download_count": 27,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -45,7 +45,7 @@
       },
       "service_port": 3080,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/adguardhome-docker/com.adguard.home.docker/rootfs_common/icon.png",
-      "download_count": 13,
+      "download_count": 15,
       "app_type": "docker",
       "category": "system",
       "platforms": [
@@ -105,7 +105,7 @@
       },
       "service_port": 25191,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/cadviewerinner-icon.png",
-      "download_count": 2,
+      "download_count": 3,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -136,7 +136,7 @@
       },
       "service_port": 25900,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/chromium/com.personal.chromium/rootfs_common/icon.png",
-      "download_count": 17,
+      "download_count": 21,
       "app_type": "docker",
       "category": "system",
       "platforms": [
@@ -166,7 +166,7 @@
       },
       "service_port": 28686,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/clouddl/com.personal.clouddl/rootfs_common/icon.png",
-      "download_count": 20,
+      "download_count": 21,
       "app_type": "native",
       "category": "download",
       "platforms": [
@@ -345,7 +345,7 @@
       },
       "service_port": 28190,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/fastnet/com.koolcenter.fastnet/rootfs_common/icon.png",
-      "download_count": 54,
+      "download_count": 56,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -507,7 +507,7 @@
       },
       "service_port": 16601,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/lucky/com.gdy666.lucky/rootfs_common/icon.png",
-      "download_count": 21,
+      "download_count": 23,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -579,7 +579,7 @@
       },
       "service_port": 23020,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/magicpush/com.magiccode.magicpush/rootfs_common/icon.png",
-      "download_count": 14,
+      "download_count": 15,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -603,7 +603,7 @@
       },
       "service_port": 23306,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/mariadb/com.personal.mariadb/rootfs_common/icon.png",
-      "download_count": 7,
+      "download_count": 9,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -1184,7 +1184,7 @@
       },
       "service_port": 28750,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/ugtheme/com.personal.ugtheme/rootfs_common/icon.png",
-      "download_count": 77,
+      "download_count": 78,
       "app_type": "docker",
       "category": "utility",
       "platforms": [
@@ -1612,7 +1612,7 @@
       },
       "service_port": 21151,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/supereditor-icon.png",
-      "download_count": 7,
+      "download_count": 8,
       "app_type": "native",
       "category": "utility",
       "platforms": [
@@ -1643,7 +1643,7 @@
       },
       "service_port": 28914,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/ugnasclubmobile-icon.png",
-      "download_count": 20,
+      "download_count": 23,
       "app_type": "native",
       "category": "utility",
       "platforms": [
