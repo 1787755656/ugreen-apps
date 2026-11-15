@@ -20,10 +20,13 @@ set -euo pipefail
 VERSION="${1:?VERSION is required}"
 ARCH="${2:?ARCH is required (amd64|arm64)}"
 
-# 钉死 Go 版本：上游 go.mod 要求 go 1.26.6，且我们用 GOTOOLCHAIN=local
-# 禁止 go 自己去拉工具链（网络抖动时会变成难懂的失败）。
+# 钉死 Go 版本：上游 v3.2.0 起 go.mod 要求 go 1.26.11，且我们用
+# GOTOOLCHAIN=local 禁止 go 自己去拉工具链（网络抖动时会变成难懂的失败）。
 # 升级时改这一处，同时确认 >= 上游 go.mod 的要求。
-GO_VERSION="1.26.6"
+# 注意别跳 1.27.x：固件给所有进程注入 GODEBUG=tlskyber=0，Go 1.27+ 的
+# 二进制在 UGOS 上启动即 fatal（1.26 线实证可活），而本应用 start_cmd
+# 直接是裸二进制不经 shell，没有 launcher 能帮它 unset。
+GO_VERSION="1.26.11"
 # 上游 tag 带 v 前缀
 UPSTREAM_TAG="v${VERSION}"
 

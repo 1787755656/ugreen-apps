@@ -18,6 +18,16 @@ set -euo pipefail
 #   一个 job——所以这里不看 ARCH 参数、一次把两个架构的 tar 都备齐；
 #   ARCH 参数只用于日志与断言（两个 job 产物等价，pack 各取所需）。
 #
+# 【按 digest 拉取，不按 --platform+tag】ubuntu-26.04 runner（2026-11-11 起，
+#   Docker Server 29.4.2）默认启用 containerd image store：同一个 tag 先后
+#   pull 两个平台后，tag 指向多平台 index，`docker image inspect` 恒返回
+#   宿主架构变体（v2.5.1 两连败实证），`docker save` 也会把已知全部平台
+#   导进同一个 tar（baota 本地 containerd 同款假失败）。按【单平台 manifest
+#   digest】拉取后 tag 与平台一一对应，classic/containerd 两种存储模式下
+#   inspect/save 行为都正确。产物 tar 格式随存储模式变化（classic 出
+#   docker-archive、containerd 出 OCI-layout），两者都有真机先例
+#   （1panel 2.4.2-r2 / ugtheme 1.0.0.0003）。
+#
 # 内容版本断言：镜像 label org.opencontainers.image.version（构建时从
 # 1Panel 版本参数烘焙，如 "v2.4.2"）。镜像里的 `1pctl version` 在面板未
 # 初始化前打印的 version 字段是空的（2026-11-04 实测 v2.4.2），用不了；
@@ -44,16 +54,40 @@ APPDIR="$REPO_ROOT/$PROJECT_DIR"
 
 echo "==> Bundling image ${IMAGE_SRC} as ${IMAGE_DST} (both archs)"
 
-# Docker Hub 匿名拉取限流重试
+# Docker Hub 匿名拉取限流重试（ref 可以是 name:tag 或 name@digest）
 pull_retry() {
-  local platform="$1"
+  local ref="$1"
   for i in 1 2 3; do
-    if docker pull --platform "linux/$platform" "$IMAGE_SRC"; then return 0; fi
-    echo "pull linux/$platform attempt $i failed, retrying in 20s..." >&2
+    if docker pull "$ref"; then return 0; fi
+    echo "pull $ref attempt $i failed, retrying in 20s..." >&2
     sleep 20
   done
-  echo "::error::docker pull --platform linux/$platform ${IMAGE_SRC} failed after retries" >&2
+  echo "::error::docker pull $ref failed after retries" >&2
   exit 1
+}
+
+# 从 IMAGE_SRC 的 manifest 列表里取 linux/<arch> 的单平台 manifest digest。
+# tag 本身就是单 manifest（无 manifests 键）时输出空串——调用方回退按原 ref 拉取。
+resolve_manifest_digest() {
+  local arch="$1" raw
+  raw=$(docker buildx imagetools inspect "$IMAGE_SRC" --raw) || {
+    echo "::error::docker buildx imagetools inspect 失败，无法解析 ${IMAGE_SRC} 的 manifest 列表" >&2
+    exit 1
+  }
+  printf '%s' "$raw" | python3 -c '
+import json, sys
+m = json.load(sys.stdin)
+arch, src = sys.argv[1], sys.argv[2]
+entries = m.get("manifests")
+if entries is None:  # 单 manifest，tag 本身即目标平台
+    sys.exit(0)
+hit = [x["digest"] for x in entries
+       if x.get("platform", {}).get("os") == "linux"
+       and x.get("platform", {}).get("architecture") == arch]
+if len(hit) != 1:
+    sys.exit(f"::error::{src} 的 manifest 列表里 linux/{arch} 期望 1 项，实际 {len(hit)} 项")
+print(hit[0])
+' "$arch" "$IMAGE_SRC"
 }
 
 # 内容版本断言（两个架构都做）：镜像 label 里的版本必须与目标版本一致——
@@ -68,22 +102,38 @@ assert_version_label() {
   }
 }
 
+assert_arch() {
+  local expected="$1" got
+  got=$(docker image inspect "$IMAGE_DST" --format '{{.Architecture}}')
+  [ "$got" = "$expected" ] || {
+    echo "::error::期望 ${expected} 镜像,实际 '${got}'" >&2
+    exit 1
+  }
+}
+
 mkdir -p "$APPDIR/rootfs_amd64/images" "$APPDIR/rootfs_arm64/images"
 
-# ---- amd64:runner 本机架构 ----
-pull_retry amd64
-docker tag "$IMAGE_SRC" "$IMAGE_DST"
+# 拉取指定平台并改标成 personal/1panel:<version>。
+# digest 指向单平台 manifest，tag 语义无歧义；pull 不需要 qemu（不运行容器）。
+pull_platform() {
+  local arch="$1" digest ref
+  digest=$(resolve_manifest_digest "$arch")
+  ref="$IMAGE_SRC"
+  [ -n "$digest" ] && ref="${IMAGE_SRC%:*}@${digest}"
+  echo "==> [$arch] pull $ref"
+  pull_retry "$ref"
+  docker tag "$ref" "$IMAGE_DST"
+}
+
+# ---- amd64 ----
+pull_platform amd64
+assert_arch amd64
 assert_version_label
 docker save -o "$APPDIR/rootfs_amd64/images/1panel-${VERSION}-amd64.tar" "$IMAGE_DST"
 
-# ---- arm64:manifest 拉取不需要 qemu;不能跑,断言架构字段 ----
-pull_retry arm64
-docker tag "$IMAGE_SRC" "$IMAGE_DST"
-ARCH_FIELD=$(docker image inspect "$IMAGE_DST" --format '{{.Architecture}}')
-[ "$ARCH_FIELD" = "arm64" ] || {
-  echo "::error::期望 arm64 镜像,实际 '${ARCH_FIELD}'" >&2
-  exit 1
-}
+# ---- arm64 ----
+pull_platform arm64
+assert_arch arm64
 assert_version_label
 docker save -o "$APPDIR/rootfs_arm64/images/1panel-${VERSION}-arm64.tar" "$IMAGE_DST"
 
