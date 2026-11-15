@@ -105,7 +105,7 @@
       },
       "service_port": 25191,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/cadviewerinner-icon.png",
-      "download_count": 3,
+      "download_count": 6,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -531,7 +531,7 @@
       },
       "service_port": 28300,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/lunatv/com.personal.lunatv/rootfs_common/icon.png",
-      "download_count": 52,
+      "download_count": 53,
       "app_type": "native",
       "category": "media",
       "platforms": [
@@ -593,17 +593,17 @@
       "display_name": "MariaDB",
       "description": "MariaDB 11.4 LTS —— 开源关系型数据库的绿联原生应用版本， 为 NAS 上的其它应用（Halo、WordPress、Nextcloud 等）或局域网里的客户端 提供兼容 MySQL 的数据库服务。自带的管理页面用来查看运行状态与连接信息、 修改 root 密码；日常的建库建表请用你惯用的客户端 （Navicat、DBeaver、phpMyAdmin 等）。 运行库全部随包携带，不会往系统里装任何东西。",
       "homepage_url": "https://mariadb.org",
-      "updated_at": "2026-11-14",
+      "updated_at": "2026-11-15",
       "version": "11.4.12",
-      "upk_version": "11.4.12.0011",
-      "release_tag": "mariadb/11.4.12.0011",
+      "upk_version": "11.4.12.0012",
+      "release_tag": "mariadb/11.4.12.0012",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/mariadb/11.4.12.0011/amd64_nasync_com.personal.mariadb_11.4.12.0011.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/mariadb/11.4.12.0011/arm64_nasync_com.personal.mariadb_11.4.12.0011.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/mariadb/11.4.12.0012/amd64_nasync_com.personal.mariadb_11.4.12.0012.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/mariadb/11.4.12.0012/arm64_nasync_com.personal.mariadb_11.4.12.0012.upk"
       },
       "service_port": 23306,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/mariadb/com.personal.mariadb/rootfs_common/icon.png",
-      "download_count": 9,
+      "download_count": 14,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -819,7 +819,7 @@
       },
       "service_port": 28244,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/openlist/com.oplist.openlist/rootfs_common/icon.png",
-      "download_count": 10,
+      "download_count": 13,
       "app_type": "native",
       "category": "system",
       "platforms": [
