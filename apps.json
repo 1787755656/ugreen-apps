@@ -434,8 +434,8 @@
     },
     {
       "appname": "com.personal.librespeed",
-      "display_name": "网速测试 LibreSpeed",
-      "description": "自托管测速（LibreSpeed）：在浏览器里实测 NAS 与本机之间的真实带宽， 验证 2.5G/万兆网口是否跑满、排查网线降速（如千兆线跑在 2.5G 口）、 多设备互测对比 Wi-Fi 与有线。单服务器模式零配置，打开即测，测速项： 下载/上传（Mbps）、延迟/抖动（ms），每轮约 30 秒。测速结果自动存入 NAS 本机历史库（boltdb 单文件落应用数据目录），历史页可查最近 100 条 与单条详情（下载/上传/延迟/抖动/测速编号/结果图），历史页查看密码 默认 LibreSpeed@2026（测速页面本身无任何认证），修改方法见数据目录 凭据说明.txt。本应用无账号体系、局域网开放，请勿将端口暴露公网； 测速点名称默认「绿联 NAS」，可在应用「配置」中改名。多设备互测时 各自浏览器打开同一地址即可，建议逐台串行测速避免互相挤占带宽。",
+      "display_name": "网速测试（LibreSpeed）",
+      "description": "自托管测速（LibreSpeed）：在浏览器里实测 NAS 与本机之间的真实带宽，验证 2.5G / 万兆网口是否跑满、排查网线降速（如千兆线插在 2.5G 口）、多设备互测对比 Wi-Fi 与有线。单服务器模式零配置，打开即测：下载 / 上传（Mbps）、延迟 / 抖动（ms），每轮约 30 秒。测速结果自动存入 NAS 本机历史库（boltdb 单文件，落应用数据目录），历史页可查最近 100 条与单条详情（含测速编号与结果图）。本应用无账号体系、局域网开放，请勿将端口暴露公网；测速点名称默认「绿联 NAS」，可在应用「配置」中改名。",
       "homepage_url": "https://github.com/librespeed/speedtest-go",
       "updated_at": "2026-11-15",
       "version": "1.1.6",
@@ -454,7 +454,8 @@
         "amd64",
         "arm64"
       ],
-      "install_params": null
+      "install_params": null,
+      "post_install_note": "打开应用即可开始测速，无需登录。历史记录页在地址后加 /stats，默认密码 LibreSpeed@2026——要改密码请编辑应用数据目录下的 settings.toml（statistics_password 一行），再在应用中心「停止 → 启动」一次生效（该文件此后不会被覆盖）。测速点名称可在应用中心「配置」里改（SERVER_NAME），同样是停止 → 启动后生效。本应用面向局域网使用，请勿把端口暴露到公网。"
     },
     {
       "appname": "com.personal.liteclass",
