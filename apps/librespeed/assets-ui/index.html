@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no" />
+<title>网速测试</title>
+<link rel="shortcut icon" href="favicon.ico">
+<script type="text/javascript" src="speedtest.js"></script>
+<script type="text/javascript">
+
+// LibreSpeed 中文测速页（绿联 UGOS Pro 打包版）
+// 底版：example-singleServer-pretty.html（LGPL-3.0，Federico Dossena）
+// 改造点：
+//   1. 全中文文案；服务器名称经 servername.json 注入（launcher 依 SERVER_NAME 参数生成）
+//   2. 遥测常开：telemetry_level=full（结果+时间线入库 boltdb，历史页 /stats 可查）
+//   3. test_order 显式含 P（上游默认 IP_D_U 不跑 Ping/Jitter 的坑）
+//   4. getIp_ispInfo=false：不出站查 ipinfo.io（NAS 工具零出站，白得沙箱私网过滤）
+//   5. 结束后展示测速编号 + 结果图/历史入口
+
+var s, lastTestId = "", serverName = "LibreSpeed";
+
+function I(id){return document.getElementById(id);}
+
+function initUI(){
+	I("dlText").textContent="";
+	I("ulText").textContent="";
+	I("pingText").textContent="";
+	I("jitText").textContent="";
+	I("resultArea").style.display="none";
+}
+
+function startStop(){
+	if(s.getState()==3){
+		s.abort();
+	}else{
+		I("resultArea").style.display="none";
+		s.start();
+		I("startStopBtn").className="running";
+	}
+}
+
+window.addEventListener("DOMContentLoaded", function(){
+	// 服务器名称注入（launcher 每次启动按 SERVER_NAME 参数改写本文件；失败回退默认）
+	fetch("servername.json?r="+Math.random()).then(function(r){return r.ok?r.json():null;}).then(function(j){
+		if(j && j.serverName){
+			serverName=j.serverName;
+			I("serverName").textContent=serverName;
+			document.title=serverName+" 网速测试";
+		}
+	}).catch(function(){});
+
+	s=new Speedtest();
+	// ---- 参数（与后端 settings.toml 配套，见打包工程开发文档）----
+	s.setParameter("test_order","IP_P_D_U");        // 显式跑 Ping/Jitter（默认 IP_D_U 不含 P）
+	s.setParameter("telemetry_level","full");       // 结果+时间线入库
+	s.setParameter("getIp_ispInfo",false);          // 不出站查 ISP（局域网工具属性）
+	s.setParameter("time_dl_max",15);
+	s.setParameter("time_ul_max",15);
+	s.onupdate=function(data){
+		I("ip").textContent=data.clientIp;
+		I("dlText").textContent=(data.testState==1&&data.dlStatus==0)?"…":data.dlStatus;
+		I("ulText").textContent=(data.testState==3&&data.ulStatus==0)?"…":data.ulStatus;
+		I("pingText").textContent=data.pingStatus;
+		I("jitText").textContent=data.jitterStatus;
+		if(data.testId) lastTestId=data.testId;
+	};
+	s.onend=function(aborted){
+		I("startStopBtn").className="";
+		if(aborted){
+			initUI();
+			return;
+		}
+		if(lastTestId){
+			I("testId").textContent=lastTestId;
+			I("shareLink").href="results/?id="+encodeURIComponent(lastTestId);
+			I("resultArea").style.display="";
+		}
+	};
+	initUI();
+});
+</script>
+
+<style type="text/css">
+	html,body{
+		border:none; padding:0; margin:0;
+		background:#FFFFFF;
+		color:#202020;
+	}
+	body{
+		text-align:center;
+		font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Roboto",sans-serif;
+		padding-bottom:3em;
+	}
+	h1{
+		color:#303030;
+		margin:0.6em 0 0.1em;
+		font-size:1.7em;
+	}
+	#subtitle{
+		color:#909090;
+		font-size:0.95em;
+		margin-bottom:1.2em;
+	}
+	#startStopBtn{
+		display:inline-block;
+		margin:0 auto;
+		color:#6060AA;
+		background-color:rgba(0,0,0,0);
+		border:0.15em solid #6060FF;
+		border-radius:0.3em;
+		transition:all 0.3s;
+		box-sizing:border-box;
+		width:8em; height:3em;
+		line-height:2.7em;
+		cursor:pointer;
+		box-shadow: 0 0 0 rgba(0,0,0,0.1), inset 0 0 0 rgba(0,0,0,0.1);
+		font-size:1.05em;
+		user-select:none;
+	}
+	#startStopBtn:hover{
+		box-shadow: 0 0 2em rgba(0,0,0,0.1), inset 0 0 1em rgba(0,0,0,0.1);
+	}
+	#startStopBtn.running{
+		background-color:#FF3030;
+		border-color:#FF6060;
+		color:#FFFFFF;
+	}
+	#startStopBtn:before{
+		content:"开始测速";
+	}
+	#startStopBtn.running:before{
+		content:"停止";
+	}
+	#test{
+		margin-top:1.5em;
+		margin-bottom:1em;
+	}
+	div.testArea{
+		display:inline-block;
+		width:14em;
+		height:9em;
+		position:relative;
+		box-sizing:border-box;
+	}
+	div.testName{
+		position:absolute;
+		top:0.1em; left:0;
+		width:100%;
+		font-size:1.4em;
+		z-index:9;
+	}
+	div.meterText{
+		position:absolute;
+		bottom:1.5em; left:0;
+		width:100%;
+		font-size:2.5em;
+		z-index:9;
+	}
+	#dlText{
+		color:#6060AA;
+	}
+	#ulText{
+		color:#309030;
+	}
+	#pingText,#jitText{
+		color:#AA6060;
+	}
+	div.meterText:empty:before{
+		color:#505050 !important;
+		content:"0.00";
+	}
+	div.unit{
+		position:absolute;
+		bottom:2em; left:0;
+		width:100%;
+		z-index:9;
+	}
+	div.testGroup{
+		display:inline-block;
+	}
+	#ipArea{
+		color:#707070;
+		margin:0.8em 0 1.2em;
+		font-size:0.95em;
+	}
+	#resultArea{
+		margin:0.5em auto 0;
+		max-width:34em;
+		background:#F5F7FB;
+		border:1px solid #DDE3EE;
+		border-radius:0.5em;
+		padding:1em 1.2em;
+		font-size:0.95em;
+		color:#404040;
+	}
+	#resultArea a{
+		color:#6060AA;
+		margin:0 0.6em;
+	}
+	#footNote{
+		margin-top:1.6em;
+		color:#A0A0A0;
+		font-size:0.8em;
+		line-height:1.7;
+	}
+	@media all and (max-width:65em){
+		body{
+			font-size:1.5vw;
+		}
+	}
+	@media all and (max-width:40em){
+		body{
+			font-size:0.8em;
+		}
+		div.testGroup{
+			display:block;
+			margin: 0 auto;
+		}
+	}
+</style>
+</head>
+<body>
+<h1 id="serverName">绿联 NAS</h1>
+<div id="subtitle">局域网测速 · LibreSpeed</div>
+<div id="startStopBtn" onclick="startStop()"></div>
+<div id="test">
+	<div class="testGroup">
+		<div class="testArea">
+			<div class="testName">下载</div>
+			<div id="dlText" class="meterText"></div>
+			<div class="unit">Mbps</div>
+		</div>
+		<div class="testArea">
+			<div class="testName">上传</div>
+			<div id="ulText" class="meterText"></div>
+			<div class="unit">Mbps</div>
+		</div>
+	</div>
+	<div class="testGroup">
+		<div class="testArea">
+			<div class="testName">延迟</div>
+			<div id="pingText" class="meterText"></div>
+			<div class="unit">ms</div>
+		</div>
+		<div class="testArea">
+			<div class="testName">抖动</div>
+			<div id="jitText" class="meterText"></div>
+			<div class="unit">ms</div>
+		</div>
+	</div>
+	<div id="ipArea">
+		客户端 IP：<span id="ip"></span>
+	</div>
+</div>
+<div id="resultArea" style="display:none">
+	测速编号：<span id="testId"></span><br/>
+	<a id="shareLink" href="#" target="_blank">结果图</a>·
+	<a href="stats" target="_blank">历史记录</a>（历史页密码见应用介绍/数据目录凭据说明.txt）
+</div>
+<div id="footNote">
+	本应用无账号体系，仅供局域网内使用，请勿将端口暴露到公网。<br/>
+	Powered by LibreSpeed（speedtest-go 后端 + LGPL 前端，结果保存于 NAS 本机）
+</div>
+<script type="text/javascript">
+    initUI();
+</script>
+</body>
+</html>

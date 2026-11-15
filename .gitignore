@@ -92,3 +92,13 @@ apps/trilium/com.personal.trilium/rootfs_common/app/
 apps/myip/com.personal.myip/rootfs_common/app/
 # Trilium build.sh 的本地下载缓存（上游 Server 独立包 tar.xz + 解压目录；CI 用 RUNNER_TEMP）。
 scripts/apps/trilium/.build-cache/
+
+# LibreSpeed 的共用树（www 占位页 / assets-ui / licenses / zoneinfo）由 build.sh
+# 现场从上游 tag 源码与 GOROOT zoneinfo.zip 生成，跟着上游版本走，不进 git；
+# 入库的只有 project.yaml、icon.png、launcher 源码与中文前端页。
+apps/librespeed/com.personal.librespeed/rootfs_common/www/
+apps/librespeed/com.personal.librespeed/rootfs_common/assets-ui/
+apps/librespeed/com.personal.librespeed/rootfs_common/licenses/
+apps/librespeed/com.personal.librespeed/rootfs_common/zoneinfo/
+# LibreSpeed build.sh 的本地缓存（上游源码 clone + Go 工具链；CI 用 RUNNER_TEMP）。
+scripts/apps/librespeed/.build-cache/
