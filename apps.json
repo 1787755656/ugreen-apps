@@ -281,13 +281,13 @@
       "display_name": "D-NET 动态网络管理",
       "description": "轻量级动态网络管理工具：CDN 源站自动跟随 IP 变化更新（DCDN）、 动态域名解析（DDNS）、TCP/UDP 端口转发（DPF），一个应用管完。\n动态 CDN：支持阿里云 CDN/DCDN/ESA、腾讯云 CDN/EdgeOne、百度云 CDN/DRCDN、Cloudflare、又拍云以及自定义回调，IP 变了源站自动跟上。 动态 DNS：支持 A/AAAA/CNAME/TXT 记录，覆盖阿里云、腾讯云、百度云、 Cloudflare、华为云、DNSPod、NameSilo、GoDaddy 与自定义回调。 端口转发：IPv4/IPv6 入口转发到指定 IP 或域名，支持来源白名单、 连接数限制、超时设置与运行日志。\n变更可实时通过 Webhook 推送通知。首次打开会进入初始设置页： 请在安装后 30 分钟内从内网完成账号密码设置（超时后在应用中心 停止再启动一次即可重新进入），配置保存在 NAS 本机。",
       "homepage_url": "https://github.com/cxbdasheng/dnet",
-      "updated_at": "2026-09-29",
-      "version": "3.1.0",
-      "upk_version": "3.1.0.0004",
-      "release_tag": "dnet/v3.1.0-r5",
+      "updated_at": "2026-11-15",
+      "version": "3.2.0",
+      "upk_version": "3.2.0.0005",
+      "release_tag": "dnet/v3.2.0",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/dnet/v3.1.0-r5/amd64_nasync_com.personal.dnet_3.1.0.0004.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/dnet/v3.1.0-r5/arm64_nasync_com.personal.dnet_3.1.0.0004.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/dnet/v3.2.0/amd64_nasync_com.personal.dnet_3.2.0.0005.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/dnet/v3.2.0/arm64_nasync_com.personal.dnet_3.2.0.0005.upk"
       },
       "service_port": 19877,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/dnet/com.personal.dnet/rootfs_common/icon.png",
@@ -345,7 +345,7 @@
       },
       "service_port": 28190,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/fastnet/com.koolcenter.fastnet/rootfs_common/icon.png",
-      "download_count": 56,
+      "download_count": 57,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -814,7 +814,7 @@
       },
       "service_port": 28088,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/octop/com.tencent.octop/rootfs_common/icon.png",
-      "download_count": 35,
+      "download_count": 36,
       "app_type": "native",
       "category": "ai",
       "platforms": [
@@ -951,7 +951,7 @@
       },
       "service_port": 25432,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/postgresql/com.personal.postgresql17/rootfs_common/icon.png",
-      "download_count": 7,
+      "download_count": 10,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -1095,7 +1095,7 @@
       },
       "service_port": 26379,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/redis/com.personal.redis/rootfs_common/icon.png",
-      "download_count": 9,
+      "download_count": 12,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -1668,7 +1668,7 @@
       },
       "service_port": 28914,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/ugnasclubmobile-icon.png",
-      "download_count": 23,
+      "download_count": 24,
       "app_type": "native",
       "category": "utility",
       "platforms": [

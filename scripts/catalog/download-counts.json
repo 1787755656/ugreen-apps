@@ -45,7 +45,7 @@
   "com.koolcenter.fastnet": {
     "assets": {
       "amd64_nasync_com.koolcenter.fastnet_0.8.8.0007.upk": 7,
-      "amd64_nasync_com.koolcenter.fastnet_0.8.9.0008.upk": 4,
+      "amd64_nasync_com.koolcenter.fastnet_0.8.9.0008.upk": 5,
       "arm64_nasync_com.koolcenter.fastnet_0.8.8.0007.upk": 2,
       "arm64_nasync_com.koolcenter.fastnet_0.8.9.0008.upk": 5
     },
@@ -105,8 +105,10 @@
     "assets": {
       "amd64_nasync_com.personal.1panel_2.4.1.0001.upk": 7,
       "amd64_nasync_com.personal.1panel_2.4.2.0004.upk": 1,
+      "amd64_nasync_com.personal.1panel_2.5.1.0005.upk": 0,
       "arm64_nasync_com.personal.1panel_2.4.1.0001.upk": 2,
-      "arm64_nasync_com.personal.1panel_2.4.2.0004.upk": 1
+      "arm64_nasync_com.personal.1panel_2.4.2.0004.upk": 1,
+      "arm64_nasync_com.personal.1panel_2.5.1.0005.upk": 0
     },
     "baseline": 11
   },
@@ -181,12 +183,12 @@
   },
   "com.personal.dnet": {
     "assets": {
-      "amd64_nasync_com.personal.dnet_3.0.1.0002.upk": 2,
       "amd64_nasync_com.personal.dnet_3.1.0.0004.upk": 1,
-      "arm64_nasync_com.personal.dnet_3.0.1.0002.upk": 2,
-      "arm64_nasync_com.personal.dnet_3.1.0.0004.upk": 1
+      "amd64_nasync_com.personal.dnet_3.2.0.0005.upk": 0,
+      "arm64_nasync_com.personal.dnet_3.1.0.0004.upk": 1,
+      "arm64_nasync_com.personal.dnet_3.2.0.0005.upk": 0
     },
-    "baseline": 0
+    "baseline": 4
   },
   "com.personal.easytier": {
     "assets": {
@@ -348,9 +350,9 @@
   "com.personal.postgresql17": {
     "assets": {
       "amd64_nasync_com.personal.postgresql17_1.0.0.0001.upk": 6,
-      "amd64_nasync_com.personal.postgresql17_1.0.0.0013.upk": 0,
+      "amd64_nasync_com.personal.postgresql17_1.0.0.0013.upk": 1,
       "arm64_nasync_com.personal.postgresql17_1.0.0.0001.upk": 1,
-      "arm64_nasync_com.personal.postgresql17_1.0.0.0013.upk": 0
+      "arm64_nasync_com.personal.postgresql17_1.0.0.0013.upk": 2
     },
     "baseline": 0
   },
@@ -375,9 +377,9 @@
   "com.personal.redis": {
     "assets": {
       "amd64_nasync_com.personal.redis_8.10.0.0001.upk": 7,
-      "amd64_nasync_com.personal.redis_8.10.0.0007.upk": 0,
+      "amd64_nasync_com.personal.redis_8.10.0.0007.upk": 2,
       "arm64_nasync_com.personal.redis_8.10.0.0001.upk": 2,
-      "arm64_nasync_com.personal.redis_8.10.0.0007.upk": 0
+      "arm64_nasync_com.personal.redis_8.10.0.0007.upk": 1
     },
     "baseline": 0
   },
@@ -408,7 +410,7 @@
   },
   "com.personal.ugnasclub.mobile": {
     "assets": {
-      "amd64_nasync_com.personal.ugnasclub.mobile_1.0.0.0004.upk": 18,
+      "amd64_nasync_com.personal.ugnasclub.mobile_1.0.0.0004.upk": 19,
       "arm64_nasync_com.personal.ugnasclub.mobile_1.0.0.0004.upk": 5
     },
     "baseline": 0
@@ -492,7 +494,7 @@
   "com.tencent.octop": {
     "assets": {
       "amd64_nasync_com.tencent.octop_1.0.3.0011.upk": 12,
-      "amd64_nasync_com.tencent.octop_1.0.3.0012.upk": 19,
+      "amd64_nasync_com.tencent.octop_1.0.3.0012.upk": 20,
       "arm64_nasync_com.tencent.octop_1.0.3.0011.upk": 2,
       "arm64_nasync_com.tencent.octop_1.0.3.0012.upk": 2
     },
