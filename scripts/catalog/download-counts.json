@@ -223,6 +223,13 @@
     },
     "baseline": 0
   },
+  "com.personal.librespeed": {
+    "assets": {
+      "amd64_nasync_com.personal.librespeed_1.1.6.0002.upk": 0,
+      "arm64_nasync_com.personal.librespeed_1.1.6.0002.upk": 0
+    },
+    "baseline": 0
+  },
   "com.personal.liteclass": {
     "assets": {
       "amd64_com.personal.liteclass_1.1.5.0001.upk": 1,
@@ -271,7 +278,7 @@
       "amd64_nasync_com.personal.mook_0.2.8.0004.upk": 7,
       "amd64_nasync_com.personal.mook_0.4.6.0005.upk": 16,
       "arm64_nasync_com.personal.mook_0.2.8.0004.upk": 3,
-      "arm64_nasync_com.personal.mook_0.4.6.0005.upk": 3
+      "arm64_nasync_com.personal.mook_0.4.6.0005.upk": 4
     },
     "baseline": 0
   },
