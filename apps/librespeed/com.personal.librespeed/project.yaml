@@ -1,0 +1,134 @@
+# ============================================================
+# LibreSpeed 网速测试 —— UGOS Pro 原生应用配置（tab 型）
+#
+# 上游（github.com/librespeed/speedtest-go，LGPL-3.0）：LibreSpeed 官方 Go 后端，
+#   自托管测速：内网/有线带宽自测（验 2.5G 网口实测、排查网线降速、多设备互测），
+#   单进程单端口自足（前端静态文件 + 测速 API + telemetry 全在一口）。
+#   后端按上游 v1.1.6 源码自建（官方 release 的 Linux 二进制经 goreleaser
+#   upx -9 压壳，沙箱自解压行为未验证；go.mod go 1.25 / 本机 go1.26.5 编译，
+#   CGO_ENABLED=0，天然免疫固件 GODEBUG=tlskyber=0 注入）。
+# 前端：speedtest-go 内嵌 web/assets 的 LGPL 原件（speedtest.js/speedtest_worker.js，
+#   来自 librespeed/speedtest，Federico Dossena，LGPLv3 头注释）+ 自写中文
+#   index.html（example-singleServer-pretty 底版：telemetry 常开、test_order 显式
+#   含 P——上游默认 IP_D_U 不跑 Ping/Jitter、getIp_ispInfo 关闭零出站）。
+# 形态决策：tab。后端自己就是完整 Web 应用（同源自托管），浏览器直连无网关限制；
+#   测速工具属性=局域网全员可用，无账号体系（历史页 /stats 上游强制口令，默认值
+#   公开见应用介绍；launcher 不反代不占口，测速路径零代理开销计量不失真）。
+# 端口：25340 唯一声明端口（探活+直连）。避开既有应用 25120/25121/25220/25230/
+#   25240/25250/25260/25280/25310/25320/25330/28888-28889；上游默认 8989。
+# telemetry：bolt（bbolt 纯 Go 单文件）落 @appdata/speedtest.db，历史页 /stats
+#   可查最近 100 条与单条详情；TZ/TZDIR 指包内 zoneinfo（后端另内嵌 time/tzdata
+#   双保险），历史时间戳北京时间。
+# ============================================================
+
+spec_version: "2.1"
+
+app_id: com.personal.librespeed
+
+# 跟随上游 speedtest-go release v1.1.6（2026-04-30），构建号 0001。
+# ugcli 对中段(minor)有"最多两位数"的隐藏限制，1.1.6 合法。
+version: 1.1.6
+
+support_arch:
+  - amd64
+  - arm64
+
+supports:
+  - pc
+  - app
+
+# 启动命令：Go 管理壳负责前端资源按版本戳同步到数据目录（assets_path 指向
+# data/www，安装树只读坑 19）、SERVER_NAME 参数改写 servername.json、首启生成
+# settings.toml（bolt 历史库落 @appdata）、消毒运行环境（GODEBUG 剥离/TZ/
+# TZDIR/TMPDIR）、守护 speedtest-backend。launcher fork 包内自带二进制，
+# 不需要 SYSTEM.EXEC_SYSTEM_COMMAND。
+start_cmd: bin/launcher --port=25340
+
+port: 25340
+
+# 浏览器直连后端端口（后端同源自托管前端+API；无账号体系——见应用介绍安全说明）。
+open_type: tab
+
+tag_types:
+  - utility
+
+depend_fw_version: 1.13.0.0000
+
+# 零权限起步：本应用是纯服务端（测速数据来自用户浏览器与 NAS 之间的传输），
+# 后端无出站调用（ISP 定位/GeoIP 已关闭）；不声明 NETWORK.ACCESS_INTERNET
+# 还白得一层网络过滤（仅私网放行）。
+permissions: []
+
+allow_add_access_path: true
+
+# SERVER_NAME：显示在测速页大标题的服务器名称（默认"绿联 NAS"）。
+# 留空回落默认；改完需在应用中心「停止→启动」生效。
+parameters:
+  - key: SERVER_NAME
+    type: string
+    multi: false
+    changeable: true
+    required: false
+    i18n:
+      zh-CN:
+        name: 服务器名称
+        description: >-
+          显示在测速页面大标题的名字，默认「绿联 NAS」。可改成如「书房 NAS
+          2.5G」便于多设备互测时区分测速点。改完请在应用中心对本应用执行
+          「停止→启动」生效；留空使用默认。
+      en-US:
+        name: Server name
+        description: >-
+          Display name shown as the page title of the speed test, defaults
+          to the NAS name. Change it to tell multiple test points apart.
+          Stop then start the app to apply; leave empty for the default.
+
+# LGPL-3.0 合规字段指向真实许可证与源码（后端 speedtest-go 与前端 js 同为
+# LGPL-3.0，GitHub License API + LICENSE 文件双实证；包内 licenses/ 附全文）。
+license_agreement_link:
+  - https://github.com/librespeed/speedtest-go/blob/master/LICENSE
+source_code_link:
+  - https://github.com/librespeed/speedtest-go
+technical_support_link:
+  - https://github.com/librespeed/speedtest-go/issues
+
+i18n:
+  zh-CN:
+    name: 网速测试
+    description: >-
+      自托管测速（LibreSpeed）：在浏览器里实测 NAS 与本机之间的真实带宽，
+      验证 2.5G/万兆网口是否跑满、排查网线降速（如千兆线跑在 2.5G 口）、
+      多设备互测对比 Wi-Fi 与有线。单服务器模式零配置，打开即测，测速项：
+      下载/上传（Mbps）、延迟/抖动（ms），每轮约 30 秒。测速结果自动存入
+      NAS 本机历史库（boltdb 单文件落应用数据目录），历史页可查最近 100 条
+      与单条详情（下载/上传/延迟/抖动/测速编号/结果图），历史页查看密码
+      默认 LibreSpeed@2026（测速页面本身无任何认证），修改方法见数据目录
+      凭据说明.txt。本应用无账号体系、局域网开放，请勿将端口暴露公网；
+      测速点名称默认「绿联 NAS」，可在应用「配置」中改名。多设备互测时
+      各自浏览器打开同一地址即可，建议逐台串行测速避免互相挤占带宽。
+    author: LibreSpeed
+    official: https://github.com/librespeed/speedtest-go
+    help: https://github.com/librespeed/speedtest-go/wiki
+    publisher: 穿斯帕沃特
+    publisher_link: https://club.ugnas.com/home.php?mod=space&uid=10131
+  en-US:
+    name: LibreSpeed Speedtest
+    description: >-
+      Self-hosted network speed test (LibreSpeed). Measure real throughput
+      between your NAS and any browser on the LAN: verify 2.5G/10G NICs,
+      diagnose cable downgrades, compare Wi-Fi vs wired across devices.
+      Single-server mode, zero configuration: open and start. Reports
+      download/upload (Mbps), ping/jitter (ms), each run about 30 seconds.
+      Results are stored in a local bolt database inside the app data
+      directory; the /stats page lists the last 100 runs with per-test
+      details and shareable result images. The stats page password defaults
+      to LibreSpeed@2026 (the test page itself requires no login); see
+      credentials.txt in the data directory to change it. No accounts by
+      design, LAN use only — never expose the port to the public internet.
+      The server name defaults to the NAS and can be changed in app
+      settings (SERVER_NAME).
+    author: LibreSpeed
+    official: https://github.com/librespeed/speedtest-go
+    help: https://github.com/librespeed/speedtest-go/wiki
+    publisher: 穿斯帕沃特
+    publisher_link: https://club.ugnas.com/home.php?mod=space&uid=10131
