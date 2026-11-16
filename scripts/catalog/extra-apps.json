@@ -17,7 +17,7 @@
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/ugstore-icon.png",
       "download_count": 0,
       "app_type": "native",
-      "category": "utility",
+      "category": "system",
       "platforms": [
         "amd64",
         "arm64"
@@ -94,7 +94,7 @@
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/litereader-icon.png",
       "download_count": 0,
       "app_type": "native",
-      "category": "media",
+      "category": "content",
       "platforms": [
         "amd64",
         "arm64"
@@ -271,7 +271,7 @@
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/aellus-icon.png",
       "download_count": 0,
       "app_type": "native",
-      "category": "utility",
+      "category": "download",
       "platforms": [
         "amd64",
         "arm64"
@@ -380,7 +380,7 @@
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/supereditor-icon.png",
       "download_count": 0,
       "app_type": "native",
-      "category": "utility",
+      "category": "content",
       "platforms": [
         "amd64",
         "arm64"
@@ -411,7 +411,7 @@
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/ugnasclubmobile-icon.png",
       "download_count": 0,
       "app_type": "native",
-      "category": "utility",
+      "category": "system",
       "platforms": [
         "amd64",
         "arm64"
@@ -484,8 +484,176 @@
       "description": "自托管测速（LibreSpeed）：在浏览器里实测 NAS 与本机之间的真实带宽，验证 2.5G / 万兆网口是否跑满、排查网线降速（如千兆线插在 2.5G 口）、多设备互测对比 Wi-Fi 与有线。单服务器模式零配置，打开即测：下载 / 上传（Mbps）、延迟 / 抖动（ms），每轮约 30 秒。测速结果自动存入 NAS 本机历史库（boltdb 单文件，落应用数据目录），历史页可查最近 100 条与单条详情（含测速编号与结果图）。本应用无账号体系、局域网开放，请勿将端口暴露公网；测速点名称默认「绿联 NAS」，可在应用「配置」中改名。",
       "homepage_url": "https://github.com/librespeed/speedtest-go",
       "app_type": "native",
-      "category": "utility",
+      "category": "network",
       "post_install_note": "打开应用即可开始测速，无需登录。历史记录页在地址后加 /stats，默认密码 LibreSpeed@2026——要改密码请编辑应用数据目录下的 settings.toml（statistics_password 一行），再在应用中心「停止 → 启动」一次生效（该文件此后不会被覆盖）。测速点名称可在应用中心「配置」里改（SERVER_NAME），同样是停止 → 启动后生效。本应用面向局域网使用，请勿把端口暴露到公网。"
+    },
+    {
+      "appname": "com.personal.100zip",
+      "category": "system"
+    },
+    {
+      "appname": "com.adguard.home.docker",
+      "category": "network"
+    },
+    {
+      "appname": "com.wushuo.anirss",
+      "category": "automation"
+    },
+    {
+      "appname": "com.personal.chromium",
+      "category": "browser"
+    },
+    {
+      "appname": "com.personal.clouddl",
+      "category": "download"
+    },
+    {
+      "appname": "com.cloudreve.cloudreve",
+      "category": "content"
+    },
+    {
+      "appname": "com.personal.deenmusic",
+      "category": "download"
+    },
+    {
+      "appname": "com.personal.deepseekharness",
+      "category": "ai"
+    },
+    {
+      "appname": "com.personal.dnet",
+      "category": "network"
+    },
+    {
+      "appname": "com.personal.easytier",
+      "category": "network"
+    },
+    {
+      "appname": "com.koolcenter.fastnet",
+      "category": "network"
+    },
+    {
+      "appname": "com.personal.atou.frp",
+      "category": "network"
+    },
+    {
+      "appname": "com.chuan.idphotos",
+      "category": "ai"
+    },
+    {
+      "appname": "com.personal.ittools",
+      "category": "system"
+    },
+    {
+      "appname": "com.personal.liteclass",
+      "category": "media"
+    },
+    {
+      "appname": "com.ponphil.litepan",
+      "category": "content"
+    },
+    {
+      "appname": "com.gdy666.lucky",
+      "category": "network"
+    },
+    {
+      "appname": "com.personal.lunatv",
+      "category": "media"
+    },
+    {
+      "appname": "com.magiccode.magicmail",
+      "category": "content"
+    },
+    {
+      "appname": "com.magiccode.magicpush",
+      "category": "system"
+    },
+    {
+      "appname": "com.metatube.server",
+      "category": "automation"
+    },
+    {
+      "appname": "com.personal.mook",
+      "category": "system"
+    },
+    {
+      "appname": "com.personal.myip",
+      "category": "network"
+    },
+    {
+      "appname": "com.natfrp.launcher",
+      "category": "network"
+    },
+    {
+      "appname": "com.personal.navidrome",
+      "category": "media"
+    },
+    {
+      "appname": "com.personal.nm3u8dlre",
+      "category": "download"
+    },
+    {
+      "appname": "com.tencent.octop",
+      "category": "ai"
+    },
+    {
+      "appname": "com.oplist.openlist",
+      "category": "content"
+    },
+    {
+      "appname": "com.xnkyn.p2peeproxy",
+      "category": "network"
+    },
+    {
+      "appname": "com.sipeed.picoclaw",
+      "category": "ai"
+    },
+    {
+      "appname": "com.ashc776.piggybank",
+      "category": "system"
+    },
+    {
+      "appname": "com.personal.postgresql17",
+      "category": "system"
+    },
+    {
+      "appname": "com.qbee.qbittorrent",
+      "category": "download"
+    },
+    {
+      "appname": "com.superng6.qbittorrent",
+      "category": "download"
+    },
+    {
+      "appname": "com.personal.randomvideo",
+      "category": "media"
+    },
+    {
+      "appname": "com.personal.readeck",
+      "category": "content"
+    },
+    {
+      "appname": "com.personal.redis",
+      "category": "system"
+    },
+    {
+      "appname": "com.pymumu.smartdns.docker",
+      "category": "network"
+    },
+    {
+      "appname": "com.personal.sub2api",
+      "category": "ai"
+    },
+    {
+      "appname": "com.personal.trilium",
+      "category": "content"
+    },
+    {
+      "appname": "com.personal.ugtheme",
+      "category": "system"
+    },
+    {
+      "appname": "com.personal.zhiyinmusic",
+      "category": "media"
     }
   ]
 }
