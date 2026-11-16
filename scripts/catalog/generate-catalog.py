@@ -227,9 +227,10 @@ def main() -> None:
     #      com.personal.ugstore）。不参与 build-apps 构建，也不被目录刷新覆盖，
     #      从而实现商店自身的自更新。
     #   2) 展示信息覆盖：apps/ 下由 release 自动生成的条目，同名时把本清单里
-    #      人工维护的展示字段（描述 / 图标 / 安装参数 / 安装后提示等）合进去。
-    #      版本、资产地址、更新时间、下载量仍以 GitHub Release 为准 —— 发新版
-    #      只传资产即可，应用信息不会被刷新冲掉。
+    #      人工维护的展示字段（描述 / 图标 / 分类 / 安装参数 / 安装后提示等）
+    #      合进去。版本、资产地址、更新时间、下载量仍以 GitHub Release 为准 ——
+    #      发新版只传资产即可，应用信息不会被刷新冲掉。只写 appname + 展示字段
+    #      的「纯覆盖条目」不会新增应用，只用于改分类等人工标注。
     extra_path = root / "scripts/catalog" / "extra-apps.json"
     if extra_path.exists():
         try:
@@ -243,6 +244,13 @@ def main() -> None:
                     for key in CURATED_FIELDS:
                         if key in e:
                             by_name[name][key] = e[key]
+                    continue
+                # 纯覆盖条目：只声明 appname + CURATED_FIELDS 里的展示字段
+                # （典型是用它改 category，如 apps/ 下自动生成的应用）。本次
+                # 没有对应生成条目（暂无可用 release）时直接跳过，绝不当成
+                # 静态条目塞进目录 —— 否则前端会拿到一条没有下载地址的残缺条目。
+                if not e.get("download_urls") and not e.get("download_url"):
+                    print(f"warn: 覆盖条目 {name} 本次无生成条目，跳过", file=sys.stderr)
                     continue
                 e = dict(e)
                 # 计数同样从本仓 release 资产累加；仓库里没有该 appid 的
