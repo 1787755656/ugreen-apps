@@ -654,6 +654,37 @@
     {
       "appname": "com.personal.zhiyinmusic",
       "category": "media"
+    },
+    {
+      "appname": "com.personal.workbuddy",
+      "display_name": "WorkBuddy",
+      "description": "在 NAS 上运行的 AI 工作台：可读写你授权的共享文件夹、在本机执行命令行任务、连接大模型与扩展市场。登录态、会话与工作区都保存在应用数据目录，拷走备份或换机恢复都带着。\n安装时选一个或几个共享文件夹作为「工作区文件夹」（可多选，最多 8 个，选中即授权读写）；留空则只能用应用数据目录。请勿同时选中父子目录，否则父目录不会被挂载。\n以应用内嵌窗口打开，走系统网关访问；需要联网登录和调用模型 API，并执行系统命令（git / rg / shell 等，均为非特权只读挂载，不给 root）。支持 amd64 / arm64 双架构。",
+      "homepage_url": "https://www.workbuddy.cn",
+      "updated_at": "2026-11-18",
+      "version": "5.6.2",
+      "upk_version": "5.6.2.0019",
+      "release_tag": "workbuddy/5.6.2.0019",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/workbuddy/5.6.2.0019/amd64_nasync_com.personal.workbuddy_5.6.2.0019.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/workbuddy/5.6.2.0019/arm64_nasync_com.personal.workbuddy_5.6.2.0019.upk"
+      },
+      "service_port": 28471,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/workbuddy-icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "ai",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ],
+      "post_install_note": "装好后到应用中心「配置 / 设置」里选「工作区文件夹」（可多选，最多 8 个，选中即授权读写），再「停止 → 启动」一次让授权目录生效——平台先起服务、几秒后才写参数并挂载，首次启动读到的授权目录一定是空的。然后在应用内登录；登录态保存在应用数据目录。请勿同时选中父子目录。",
+      "install_params": [
+        {
+          "key": "WORKSPACE_DIRS",
+          "name": "工作区文件夹",
+          "description": "WorkBuddy 可读写这里选中的目录（可多选，最多 8 个，选中即授权）；留空时使用应用数据目录。请勿同时选中父子目录，否则父目录不会被挂载。"
+        }
+      ]
     }
   ]
 }
