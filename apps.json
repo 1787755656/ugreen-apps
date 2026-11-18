@@ -15,7 +15,7 @@
       },
       "service_port": 28737,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/100zip/com.personal.100zip/rootfs_common/icon.png",
-      "download_count": 27,
+      "download_count": 28,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -136,7 +136,7 @@
       },
       "service_port": 25900,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/chromium/com.personal.chromium/rootfs_common/icon.png",
-      "download_count": 29,
+      "download_count": 52,
       "app_type": "docker",
       "category": "browser",
       "platforms": [
@@ -1274,7 +1274,7 @@
       },
       "service_port": 21310,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/ugstore-icon.png",
-      "download_count": 296,
+      "download_count": 299,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -1668,7 +1668,7 @@
       },
       "service_port": 28914,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/ugnasclubmobile-icon.png",
-      "download_count": 29,
+      "download_count": 30,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -1691,7 +1691,7 @@
       },
       "service_port": 28471,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/workbuddy-icon.png",
-      "download_count": 12,
+      "download_count": 16,
       "app_type": "native",
       "category": "ai",
       "platforms": [
@@ -1722,7 +1722,7 @@
       },
       "service_port": 19091,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/transmission-icon.png",
-      "download_count": 0,
+      "download_count": 2,
       "app_type": "native",
       "category": "download",
       "platforms": [
@@ -1735,6 +1735,29 @@
           "name": "下载目录",
           "description": "种子默认下载位置，选一个共享文件夹里的目录；不选则落在应用数据目录内。修改后需在应用中心停止再启动一次应用生效。"
         }
+      ]
+    },
+    {
+      "appname": "com.personal.ugmsgbot",
+      "display_name": "日志消息机器人",
+      "description": "监控绿联 NAS 并把重要事件推送到手机，覆盖四类数据源：日志中心（登录、SSH 暴力破解、硬盘异常、容量告警、应用崩溃）、Docker 容器（重启循环、意外退出、镜像更新）、应用中心（应用更新、商店上新）、系统资源（硬盘温度、CPU 温度、内存占用、风扇停转、上行带宽占满）。\n内置降噪：硬盘休眠与共享连接等高频噪音默认静音，同类事件在时间窗口内合并，资源类告警带迟滞与持续性判断防止抖动刷屏，支持勿扰时段。\n全程只读，通过官方接口获取数据，不挂载也不读写你的任何文件夹。",
+      "homepage_url": "https://club.ugnas.com/forum.php?mod=viewthread&tid=5500",
+      "updated_at": "2026-11-18",
+      "version": "0.2.9",
+      "upk_version": "0.2.9.0005",
+      "release_tag": "ugmsgbot/0.2.9.0005",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/ugmsgbot/0.2.9.0005/amd64_nasync_com.personal.ugmsgbot_0.2.9.0005.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/ugmsgbot/0.2.9.0005/arm64_nasync_com.personal.ugmsgbot_0.2.9.0005.upk"
+      },
+      "service_port": 21160,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/ugmsgbot-icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "system",
+      "platforms": [
+        "amd64",
+        "arm64"
       ]
     }
   ]
