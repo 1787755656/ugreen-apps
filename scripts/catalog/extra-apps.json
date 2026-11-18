@@ -685,6 +685,36 @@
           "description": "WorkBuddy 可读写这里选中的目录（可多选，最多 8 个，选中即授权）；留空时使用应用数据目录。请勿同时选中父子目录，否则父目录不会被挂载。"
         }
       ]
+    },
+    {
+      "appname": "com.personal.transmission",
+      "display_name": "Transmission 下载器",
+      "description": "PT 定制版 Transmission 下载器，基于 ChisBread 魔改构建（linuxserver.io transmission 3.00 ls124 + 快速 hash 校验补丁），自带 transmission-web-control 中文界面。\n快速 hash 校验：校验文件存在性、每个文件的头尾 pieces、每 N 片抽样校验，发现不一致自动回退普通校验；与现有种子完全一致时取消抽检（超快速）。另含去除文件数量限制、随机汇报、O3 优化。\n可切换五套 Web UI 主题（含官方原版）。默认 RPC 端口 19091、BT 连接端口 61413（避让上游默认 9091/51413，防止与 Docker 版冲突）。\n默认登录账号和密码均为 admin，端口对局域网开放，装好后请到应用中心「设置」里修改并重启应用。下载目录在设置里选择；安装或修改设置后，请在应用中心停止再启动一次应用使参数生效。\n风险提示：修改版客户端在部分 PT 站属于违规，使用可能导致账号被封禁，请自行评估。",
+      "homepage_url": "https://github.com/ChisBread/transmission_pt_edition",
+      "updated_at": "2026-11-18",
+      "version": "3.0.5",
+      "upk_version": "3.0.5.0002",
+      "release_tag": "transmission/3.0.5.0002",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/transmission/3.0.5.0002/amd64_nasync_com.personal.transmission_3.0.5.0002.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/transmission/3.0.5.0002/arm64_nasync_com.personal.transmission_3.0.5.0002.upk"
+      },
+      "service_port": 19091,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/transmission-icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "download",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ],
+      "install_params": [
+        {
+          "key": "DOWNLOAD_PATH",
+          "name": "下载目录",
+          "description": "种子默认下载位置，选一个共享文件夹里的目录；不选则落在应用数据目录内。修改后需在应用中心停止再启动一次应用生效。"
+        }
+      ]
     }
   ]
 }
