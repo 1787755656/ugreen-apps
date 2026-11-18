@@ -1027,30 +1027,6 @@
       ]
     },
     {
-      "appname": "com.personal.randomvideo",
-      "display_name": "随机视频 Random Video",
-      "description": "一个接一个随机刷短视频，支持进度拖动、静音切换与全屏。手机竖屏上滑换下一个，PC 以内嵌窗口打开。",
-      "homepage_url": "",
-      "updated_at": "2026-11-10",
-      "version": "0.1.0",
-      "upk_version": "0.1.0.0010",
-      "release_tag": "randomvideo/0.1.0.0010",
-      "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/randomvideo/0.1.0.0010/amd64_nasync_com.personal.randomvideo_0.1.0.0010.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/randomvideo/0.1.0.0010/arm64_nasync_com.personal.randomvideo_0.1.0.0010.upk"
-      },
-      "service_port": 21166,
-      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/randomvideo/com.personal.randomvideo/rootfs_common/icon.png",
-      "download_count": 25,
-      "app_type": "native",
-      "category": "media",
-      "platforms": [
-        "amd64",
-        "arm64"
-      ],
-      "install_params": null
-    },
-    {
       "appname": "com.personal.readeck",
       "display_name": "Readeck",
       "description": "Readeck 是一款开源自托管的书签与「稍后读」服务。保存文章、高亮、 打标签、归档并整理你的阅读列表，Web 界面清爽。数据保存在 安装时选择的目录中。",
@@ -1677,6 +1653,36 @@
       ]
     },
     {
+      "appname": "com.personal.randomvideo",
+      "display_name": "懂你",
+      "description": "一个接一个随机刷短视频，支持进度拖动、静音切换与全屏。手机竖屏上滑换下一个，PC 以内嵌窗口打开。收藏的视频可下载到你授权的 NAS 文件夹。",
+      "homepage_url": "https://club.ugnas.com/home.php?mod=space&uid=10131",
+      "updated_at": "2026-11-19",
+      "version": "0.1.0",
+      "upk_version": "0.1.0.0011",
+      "release_tag": "randomvideo/0.1.0.0011",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/randomvideo/0.1.0.0011/amd64_nasync_com.personal.randomvideo_0.1.0.0011.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/randomvideo/0.1.0.0011/arm64_nasync_com.personal.randomvideo_0.1.0.0011.upk"
+      },
+      "service_port": 21166,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/randomvideo-icon.png",
+      "download_count": 25,
+      "app_type": "native",
+      "category": "media",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ],
+      "install_params": [
+        {
+          "key": "DOWNLOAD_DIR",
+          "name": "视频下载文件夹",
+          "description": "收藏的视频会下载到这个文件夹；留空则存到应用数据目录。装好或改完请在应用中心「停止→启动」一次。"
+        }
+      ]
+    },
+    {
       "appname": "com.personal.workbuddy",
       "display_name": "WorkBuddy",
       "description": "在 NAS 上运行的 AI 工作台：可读写你授权的共享文件夹、在本机执行命令行任务、连接大模型与扩展市场。登录态、会话与工作区都保存在应用数据目录，拷走备份或换机恢复都带着。\n安装时选一个或几个共享文件夹作为「工作区文件夹」（可多选，最多 8 个，选中即授权读写）；留空则只能用应用数据目录。请勿同时选中父子目录，否则父目录不会被挂载。\n以应用内嵌窗口打开，走系统网关访问；需要联网登录和调用模型 API，并执行系统命令（git / rg / shell 等，均为非特权只读挂载，不给 root）。支持 amd64 / arm64 双架构。",
@@ -1752,7 +1758,7 @@
       },
       "service_port": 21160,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/ugmsgbot-icon.png",
-      "download_count": 0,
+      "download_count": 4,
       "app_type": "native",
       "category": "system",
       "platforms": [
