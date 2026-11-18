@@ -393,7 +393,7 @@
       },
       "service_port": 20858,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/idphotos/com.chuan.idphotos/rootfs_common/icon.png",
-      "download_count": 33,
+      "download_count": 35,
       "app_type": "docker",
       "category": "ai",
       "platforms": [
@@ -447,7 +447,7 @@
       },
       "service_port": 25340,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/librespeed/com.personal.librespeed/rootfs_common/icon.png",
-      "download_count": 10,
+      "download_count": 11,
       "app_type": "native",
       "category": "network",
       "platforms": [
@@ -1155,7 +1155,7 @@
       },
       "service_port": 25435,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/sub2api/com.personal.sub2api/rootfs_common/icon.png",
-      "download_count": 16,
+      "download_count": 18,
       "app_type": "native",
       "category": "ai",
       "platforms": [
@@ -1274,7 +1274,7 @@
       },
       "service_port": 21310,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/ugstore-icon.png",
-      "download_count": 279,
+      "download_count": 281,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -1668,7 +1668,7 @@
       },
       "service_port": 28914,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/ugnasclubmobile-icon.png",
-      "download_count": 27,
+      "download_count": 29,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -1691,7 +1691,7 @@
       },
       "service_port": 28471,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/workbuddy-icon.png",
-      "download_count": 4,
+      "download_count": 6,
       "app_type": "native",
       "category": "ai",
       "platforms": [
