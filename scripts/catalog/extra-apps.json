@@ -625,7 +625,33 @@
     },
     {
       "appname": "com.personal.randomvideo",
-      "category": "media"
+      "display_name": "懂你",
+      "description": "一个接一个随机刷短视频，支持进度拖动、静音切换与全屏。手机竖屏上滑换下一个，PC 以内嵌窗口打开。收藏的视频可下载到你授权的 NAS 文件夹。",
+      "homepage_url": "https://club.ugnas.com/home.php?mod=space&uid=10131",
+      "updated_at": "2026-11-19",
+      "version": "0.1.0",
+      "upk_version": "0.1.0.0011",
+      "release_tag": "randomvideo/0.1.0.0011",
+      "download_urls": {
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/randomvideo/0.1.0.0011/amd64_nasync_com.personal.randomvideo_0.1.0.0011.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/randomvideo/0.1.0.0011/arm64_nasync_com.personal.randomvideo_0.1.0.0011.upk"
+      },
+      "service_port": 21166,
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/randomvideo-icon.png",
+      "download_count": 0,
+      "app_type": "native",
+      "category": "media",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ],
+      "install_params": [
+        {
+          "key": "DOWNLOAD_DIR",
+          "name": "视频下载文件夹",
+          "description": "收藏的视频会下载到这个文件夹；留空则存到应用数据目录。装好或改完请在应用中心「停止→启动」一次。"
+        }
+      ]
     },
     {
       "appname": "com.personal.readeck",
