@@ -1,9 +1,7 @@
 {
   "com.adguard.home.docker": {
     "assets": {
-      "amd64_nasync_com.adguard.home.docker_1.0.0.0004.upk": 0,
       "amd64_nasync_com.adguard.home.docker_107.80.0.0003.upk": 5,
-      "arm64_nasync_com.adguard.home.docker_1.0.0.0004.upk": 0,
       "arm64_nasync_com.adguard.home.docker_107.80.0.0003.upk": 6
     },
     "baseline": 4
@@ -30,6 +28,13 @@
     "assets": {
       "amd64_nasync_com.cloudreve.cloudreve_4.19.1.0001.upk": 2,
       "arm64_nasync_com.cloudreve.cloudreve_4.19.1.0001.upk": 2
+    },
+    "baseline": 0
+  },
+  "com.docker.adguardhome": {
+    "assets": {
+      "amd64_nasync_com.docker.adguardhome_1.0.0.0002.upk": 0,
+      "arm64_nasync_com.docker.adguardhome_1.0.0.0002.upk": 0
     },
     "baseline": 0
   },
@@ -89,9 +94,9 @@
   },
   "com.oplist.openlist": {
     "assets": {
-      "amd64_nasync_com.oplist.openlist_4.2.10.0009.upk": 0,
+      "amd64_nasync_com.oplist.openlist_4.2.10.0009.upk": 1,
       "amd64_nasync_com.oplist.openlist_4.2.9.0008.upk": 8,
-      "arm64_nasync_com.oplist.openlist_4.2.10.0009.upk": 0,
+      "arm64_nasync_com.oplist.openlist_4.2.10.0009.upk": 1,
       "arm64_nasync_com.oplist.openlist_4.2.9.0008.upk": 2
     },
     "baseline": 3
@@ -289,9 +294,9 @@
   "com.personal.myip": {
     "assets": {
       "amd64_nasync_com.personal.myip_8.1.0.0002.upk": 6,
-      "amd64_nasync_com.personal.myip_8.2.0.0003.upk": 0,
+      "amd64_nasync_com.personal.myip_8.2.0.0003.upk": 1,
       "arm64_nasync_com.personal.myip_8.1.0.0002.upk": 1,
-      "arm64_nasync_com.personal.myip_8.2.0.0003.upk": 0
+      "arm64_nasync_com.personal.myip_8.2.0.0003.upk": 1
     },
     "baseline": 9
   },
@@ -536,9 +541,9 @@
   "com.wushuo.anirss": {
     "assets": {
       "amd64_nasync_com.wushuo.anirss_3.2.61.0019.upk": 2,
-      "amd64_nasync_com.wushuo.anirss_3.2.62.0020.upk": 0,
+      "amd64_nasync_com.wushuo.anirss_3.2.62.0020.upk": 1,
       "arm64_nasync_com.wushuo.anirss_3.2.61.0019.upk": 1,
-      "arm64_nasync_com.wushuo.anirss_3.2.62.0020.upk": 0
+      "arm64_nasync_com.wushuo.anirss_3.2.62.0020.upk": 1
     },
     "baseline": 19
   },
