@@ -492,7 +492,7 @@
       "category": "system"
     },
     {
-      "appname": "com.adguard.home.docker",
+      "appname": "com.docker.adguardhome",
       "category": "network"
     },
     {

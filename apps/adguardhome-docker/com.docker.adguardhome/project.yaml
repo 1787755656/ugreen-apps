@@ -8,10 +8,11 @@
 
 spec_version: "2.1"
 
-app_id: com.adguard.home.docker
+app_id: com.docker.adguardhome
 
-# 上游 v0.107.80 → 107.80.0（映射规则同原生版，见原生工程 scripts/get-latest-version.sh）
-version: 107.80.0
+# 上游版本直接对齐（v1.0.0 → 1.0.0；0.x 历史版本用 MINOR.PATCH.0 映射，
+# 规则见 scripts/apps/adguardhome-docker/get-latest-version.sh）
+version: 1.0.0
 
 product_series:
   - nasync

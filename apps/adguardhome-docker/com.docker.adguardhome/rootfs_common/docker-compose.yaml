@@ -2,6 +2,13 @@ name: adguardhome-ugreen
 services:
   adguardhome:
     image: "personal/adguardhome:v0.107.80"
+    # host 网络：容器直接用宿主网络栈，根治 appmgr 的"端口映射声明了却不激活"
+    # 坏状态（NetworkSettings.Ports={} 但 HostConfig.PortBindings 有值 → 宿主
+    # 3080 永不监听 → 桌面永远"正在启动"）。真机实测 v1.0.0 只 LISTEN
+    # 53/tcp、53/udp、3080/tcp 三个 socket，host 下穿透面就这三个，无多余端口。
+    network_mode: host
+    # ports 在 host 模式下会被 docker 丢弃（"Published ports are discarded"），
+    # 保留仅为声明意图/未来切回 bridge 免改，端口实际由容器直接监听宿主。
     ports:
       - "53:53/tcp"
       - "53:53/udp"
