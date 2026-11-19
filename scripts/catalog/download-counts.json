@@ -33,8 +33,8 @@
   },
   "com.docker.adguardhome": {
     "assets": {
-      "amd64_nasync_com.docker.adguardhome_1.0.0.0002.upk": 0,
-      "arm64_nasync_com.docker.adguardhome_1.0.0.0002.upk": 0
+      "amd64_nasync_com.docker.adguardhome_1.0.0.0003.upk": 0,
+      "arm64_nasync_com.docker.adguardhome_1.0.0.0003.upk": 0
     },
     "baseline": 0
   },
