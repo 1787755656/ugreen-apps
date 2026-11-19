@@ -1750,11 +1750,11 @@
       "homepage_url": "https://club.ugnas.com/forum.php?mod=viewthread&tid=5500",
       "updated_at": "2026-11-19",
       "version": "0.2.9",
-      "upk_version": "0.2.9.0006",
-      "release_tag": "ugmsgbot/0.2.9.0006",
+      "upk_version": "0.2.9.0007",
+      "release_tag": "ugmsgbot/0.2.9.0007",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/ugmsgbot/0.2.9.0006/amd64_nasync_com.personal.ugmsgbot_0.2.9.0006.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/ugmsgbot/0.2.9.0006/arm64_nasync_com.personal.ugmsgbot_0.2.9.0006.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/ugmsgbot/0.2.9.0007/amd64_nasync_com.personal.ugmsgbot_0.2.9.0007.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/ugmsgbot/0.2.9.0007/arm64_nasync_com.personal.ugmsgbot_0.2.9.0007.upk"
       },
       "service_port": 21160,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/ugmsgbot-icon.png",
