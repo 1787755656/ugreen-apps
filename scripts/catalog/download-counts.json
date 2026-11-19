@@ -1,7 +1,9 @@
 {
   "com.adguard.home.docker": {
     "assets": {
+      "amd64_nasync_com.adguard.home.docker_1.0.0.0004.upk": 0,
       "amd64_nasync_com.adguard.home.docker_107.80.0.0003.upk": 5,
+      "arm64_nasync_com.adguard.home.docker_1.0.0.0004.upk": 0,
       "arm64_nasync_com.adguard.home.docker_107.80.0.0003.upk": 6
     },
     "baseline": 4
