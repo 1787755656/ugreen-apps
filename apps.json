@@ -65,13 +65,13 @@
       "display_name": "ass (ANI-RSS)",
       "description": "基于 RSS 自动追番、订阅、下载、刮削与洗版（上游 ANI-RSS）。应用内置 Eclipse Temurin JRE，无需 NAS 安装系统 Java。默认账号 admin / admin， 登录后请及时修改密码。请在应用设置中授权媒体/下载共享目录，并在 WebUI 中配置下载路径与下载器。",
       "homepage_url": "https://github.com/wushuo894/ani-rss",
-      "updated_at": "2026-11-15",
-      "version": "3.2.61",
-      "upk_version": "3.2.61.0019",
-      "release_tag": "ani-rss/v3.2.61",
+      "updated_at": "2026-11-19",
+      "version": "3.2.62",
+      "upk_version": "3.2.62.0020",
+      "release_tag": "ani-rss/v3.2.62",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/ani-rss/v3.2.61/amd64_nasync_com.wushuo.anirss_3.2.61.0019.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/ani-rss/v3.2.61/arm64_nasync_com.wushuo.anirss_3.2.61.0019.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/ani-rss/v3.2.62/amd64_nasync_com.wushuo.anirss_3.2.62.0020.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/ani-rss/v3.2.62/arm64_nasync_com.wushuo.anirss_3.2.62.0020.upk"
       },
       "service_port": 7789,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/ani-rss/com.wushuo.anirss/rootfs_common/icon.png",
@@ -256,7 +256,7 @@
       },
       "service_port": 23079,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/deepseek-harness/com.personal.deepseekharness/rootfs_common/icon.png",
-      "download_count": 48,
+      "download_count": 50,
       "app_type": "docker",
       "category": "ai",
       "platforms": [
@@ -604,7 +604,7 @@
       },
       "service_port": 23020,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/magicpush/com.magiccode.magicpush/rootfs_common/icon.png",
-      "download_count": 17,
+      "download_count": 21,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -628,7 +628,7 @@
       },
       "service_port": 23306,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/mariadb/com.personal.mariadb/rootfs_common/icon.png",
-      "download_count": 21,
+      "download_count": 22,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -682,7 +682,7 @@
       },
       "service_port": 5866,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/mook/com.personal.mook/rootfs_common/icon.png",
-      "download_count": 31,
+      "download_count": 32,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -696,13 +696,13 @@
       "display_name": "MyIP (jason5ng32/MyIP)",
       "description": "开源 IP 工具箱 MyIP（ipcheck.ing）的绿联原生应用版本。查看本机 IP 与浏览器指纹，查询任意 IP 或域名的归属地、ASN、WHOIS、DNS 记录， 支持 DNS 泄漏检测、WebRTC 隐身测试和基于 Cloudflare 的网速测试。 免费数据源开箱即用。",
       "homepage_url": "https://ipcheck.ing",
-      "updated_at": "2026-11-08",
-      "version": "8.1.0",
-      "upk_version": "8.1.0.0002",
-      "release_tag": "myip/v8.1.0",
+      "updated_at": "2026-11-19",
+      "version": "8.2.0",
+      "upk_version": "8.2.0.0003",
+      "release_tag": "myip/v8.2.0",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/myip/v8.1.0/amd64_nasync_com.personal.myip_8.1.0.0002.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/myip/v8.1.0/arm64_nasync_com.personal.myip_8.1.0.0002.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/myip/v8.2.0/amd64_nasync_com.personal.myip_8.2.0.0003.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/myip/v8.2.0/arm64_nasync_com.personal.myip_8.2.0.0003.upk"
       },
       "service_port": 28966,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/myip/com.personal.myip/rootfs_common/icon.png",
@@ -834,13 +834,13 @@
       "display_name": "OpenList",
       "description": "OpenList 是一款开源的文件列表程序，把 NAS 本机目录、WebDAV、S3、 FTP/SFTP 以及几十家网盘统一挂进同一个网页界面，支持文档/图片/音视频在线 预览、生成分享链接，并可再通过 WebDAV 对外提供。AList 的社区接续分支。 安装时选好数据目录与要挂载的本机目录即可使用。",
       "homepage_url": "https://doc.oplist.org/",
-      "updated_at": "2026-10-25",
-      "version": "4.2.9",
-      "upk_version": "4.2.9.0008",
-      "release_tag": "openlist/v4.2.9",
+      "updated_at": "2026-11-19",
+      "version": "4.2.10",
+      "upk_version": "4.2.10.0009",
+      "release_tag": "openlist/v4.2.10",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/openlist/v4.2.9/amd64_nasync_com.oplist.openlist_4.2.9.0008.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/openlist/v4.2.9/arm64_nasync_com.oplist.openlist_4.2.9.0008.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/openlist/v4.2.10/amd64_nasync_com.oplist.openlist_4.2.10.0009.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/openlist/v4.2.10/arm64_nasync_com.oplist.openlist_4.2.10.0009.upk"
       },
       "service_port": 28244,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/openlist/com.oplist.openlist/rootfs_common/icon.png",
@@ -1250,7 +1250,7 @@
       },
       "service_port": 21310,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/ugstore-icon.png",
-      "download_count": 299,
+      "download_count": 311,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -1272,7 +1272,7 @@
       },
       "service_port": 21120,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/liteparser-icon.png",
-      "download_count": 43,
+      "download_count": 46,
       "app_type": "native",
       "category": "download",
       "platforms": [
@@ -1667,7 +1667,7 @@
       },
       "service_port": 21166,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/randomvideo-icon.png",
-      "download_count": 30,
+      "download_count": 38,
       "app_type": "native",
       "category": "media",
       "platforms": [
@@ -1697,7 +1697,7 @@
       },
       "service_port": 28471,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/workbuddy-icon.png",
-      "download_count": 16,
+      "download_count": 25,
       "app_type": "native",
       "category": "ai",
       "platforms": [
@@ -1758,7 +1758,7 @@
       },
       "service_port": 21160,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/ugmsgbot-icon.png",
-      "download_count": 4,
+      "download_count": 17,
       "app_type": "native",
       "category": "system",
       "platforms": [
