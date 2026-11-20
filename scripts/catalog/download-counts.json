@@ -33,8 +33,8 @@
   },
   "com.docker.adguardhome": {
     "assets": {
-      "amd64_nasync_com.docker.adguardhome_1.0.0.0003.upk": 0,
-      "arm64_nasync_com.docker.adguardhome_1.0.0.0003.upk": 0
+      "amd64_nasync_com.docker.adguardhome_1.0.0.0003.upk": 2,
+      "arm64_nasync_com.docker.adguardhome_1.0.0.0003.upk": 3
     },
     "baseline": 0
   },
@@ -45,14 +45,14 @@
       "amd64_nasync_com.gdy666.lucky_3.8.0.0013.upk": 7,
       "arm64_nasync_com.gdy666.lucky_2.27.2.0004.upk": 1,
       "arm64_nasync_com.gdy666.lucky_3.5.0.0012.upk": 2,
-      "arm64_nasync_com.gdy666.lucky_3.8.0.0013.upk": 2
+      "arm64_nasync_com.gdy666.lucky_3.8.0.0013.upk": 3
     },
     "baseline": 0
   },
   "com.koolcenter.fastnet": {
     "assets": {
       "amd64_nasync_com.koolcenter.fastnet_0.8.8.0007.upk": 7,
-      "amd64_nasync_com.koolcenter.fastnet_0.8.9.0008.upk": 7,
+      "amd64_nasync_com.koolcenter.fastnet_0.8.9.0008.upk": 8,
       "arm64_nasync_com.koolcenter.fastnet_0.8.8.0007.upk": 2,
       "arm64_nasync_com.koolcenter.fastnet_0.8.9.0008.upk": 5
     },
@@ -158,7 +158,7 @@
   },
   "com.personal.chromium": {
     "assets": {
-      "amd64_nasync_com.personal.chromium_26.10.1.0001.upk": 14,
+      "amd64_nasync_com.personal.chromium_26.10.1.0001.upk": 17,
       "arm64_nasync_com.personal.chromium_26.10.1.0001.upk": 38
     },
     "baseline": 0
@@ -220,21 +220,21 @@
   },
   "com.personal.ittools": {
     "assets": {
-      "amd64_nasync_com.personal.ittools_2024.10.22.0001.upk": 11,
+      "amd64_nasync_com.personal.ittools_2024.10.22.0001.upk": 12,
       "arm64_nasync_com.personal.ittools_2024.10.22.0001.upk": 3
     },
     "baseline": 0
   },
   "com.personal.junyaoktv": {
     "assets": {
-      "amd64_nasync_com.personal.junyaoktv_1.0.0.0004.upk": 9,
+      "amd64_nasync_com.personal.junyaoktv_1.0.0.0004.upk": 10,
       "arm64_nasync_com.personal.junyaoktv_1.0.0.0004.upk": 15
     },
     "baseline": 0
   },
   "com.personal.librespeed": {
     "assets": {
-      "amd64_nasync_com.personal.librespeed_1.1.6.0002.upk": 8,
+      "amd64_nasync_com.personal.librespeed_1.1.6.0002.upk": 9,
       "arm64_nasync_com.personal.librespeed_1.1.6.0002.upk": 4
     },
     "baseline": 0
@@ -242,7 +242,7 @@
   "com.personal.liteclass": {
     "assets": {
       "amd64_com.personal.liteclass_1.1.5.0001.upk": 1,
-      "amd64_nasync_com.personal.liteclass_1.1.6.0006.upk": 6,
+      "amd64_nasync_com.personal.liteclass_1.1.6.0006.upk": 10,
       "arm64_com.personal.liteclass_1.1.5.0001.upk": 3,
       "arm64_nasync_com.personal.liteclass_1.1.6.0006.upk": 3
     },
@@ -250,7 +250,7 @@
   },
   "com.personal.liteparser": {
     "assets": {
-      "amd64_nasync_com.personal.liteparser_0.3.0.0010.upk": 34,
+      "amd64_nasync_com.personal.liteparser_0.3.0.0010.upk": 36,
       "arm64_nasync_com.personal.liteparser_0.3.0.0010.upk": 12
     },
     "baseline": 0
@@ -265,7 +265,7 @@
   "com.personal.lunatv": {
     "assets": {
       "amd64_nasync_com.personal.lunatv_6.6.4.0002.upk": 1,
-      "amd64_nasync_com.personal.lunatv_6.6.5.0003.upk": 43,
+      "amd64_nasync_com.personal.lunatv_6.6.5.0003.upk": 46,
       "arm64_nasync_com.personal.lunatv_6.6.4.0002.upk": 1,
       "arm64_nasync_com.personal.lunatv_6.6.5.0003.upk": 10
     },
@@ -285,7 +285,7 @@
   "com.personal.mook": {
     "assets": {
       "amd64_nasync_com.personal.mook_0.2.8.0004.upk": 7,
-      "amd64_nasync_com.personal.mook_0.4.6.0005.upk": 17,
+      "amd64_nasync_com.personal.mook_0.4.6.0005.upk": 18,
       "arm64_nasync_com.personal.mook_0.2.8.0004.upk": 3,
       "arm64_nasync_com.personal.mook_0.4.6.0005.upk": 5
     },
@@ -294,7 +294,7 @@
   "com.personal.myip": {
     "assets": {
       "amd64_nasync_com.personal.myip_8.1.0.0002.upk": 6,
-      "amd64_nasync_com.personal.myip_8.2.0.0003.upk": 1,
+      "amd64_nasync_com.personal.myip_8.2.0.0003.upk": 6,
       "arm64_nasync_com.personal.myip_8.1.0.0002.upk": 1,
       "arm64_nasync_com.personal.myip_8.2.0.0003.upk": 1
     },
@@ -367,10 +367,10 @@
     "assets": {
       "amd64_nasync_com.personal.randomvideo_0.1.0.0006.upk": 11,
       "amd64_nasync_com.personal.randomvideo_0.1.0.0010.upk": 8,
-      "amd64_nasync_com.personal.randomvideo_0.1.0.0011.upk": 7,
+      "amd64_nasync_com.personal.randomvideo_0.1.0.0011.upk": 9,
       "arm64_nasync_com.personal.randomvideo_0.1.0.0006.upk": 2,
       "arm64_nasync_com.personal.randomvideo_0.1.0.0010.upk": 4,
-      "arm64_nasync_com.personal.randomvideo_0.1.0.0011.upk": 6
+      "arm64_nasync_com.personal.randomvideo_0.1.0.0011.upk": 7
     },
     "baseline": 0
   },
@@ -394,12 +394,12 @@
   },
   "com.personal.sub2api": {
     "assets": {
-      "amd64_nasync_com.personal.sub2api_0.2.22.0018.upk": 1,
       "amd64_nasync_com.personal.sub2api_0.2.23.0019.upk": 1,
-      "arm64_nasync_com.personal.sub2api_0.2.22.0018.upk": 1,
-      "arm64_nasync_com.personal.sub2api_0.2.23.0019.upk": 1
+      "amd64_nasync_com.personal.sub2api_0.2.24.0020.upk": 0,
+      "arm64_nasync_com.personal.sub2api_0.2.23.0019.upk": 1,
+      "arm64_nasync_com.personal.sub2api_0.2.24.0020.upk": 0
     },
-    "baseline": 16
+    "baseline": 18
   },
   "com.personal.supereditor": {
     "assets": {
@@ -418,7 +418,7 @@
   "com.personal.trilium": {
     "assets": {
       "amd64_nasync_com.personal.trilium_106.1.0.0005.upk": 5,
-      "amd64_nasync_com.personal.trilium_107.0.0.0006.upk": 1,
+      "amd64_nasync_com.personal.trilium_107.0.0.0006.upk": 2,
       "arm64_nasync_com.personal.trilium_106.1.0.0005.upk": 3,
       "arm64_nasync_com.personal.trilium_107.0.0.0006.upk": 3
     },
@@ -428,10 +428,10 @@
     "assets": {
       "amd64_nasync_com.personal.ugmsgbot_0.2.9.0005.upk": 2,
       "amd64_nasync_com.personal.ugmsgbot_0.2.9.0006.upk": 4,
-      "amd64_nasync_com.personal.ugmsgbot_0.2.9.0007.upk": 2,
+      "amd64_nasync_com.personal.ugmsgbot_0.2.9.0007.upk": 4,
       "arm64_nasync_com.personal.ugmsgbot_0.2.9.0005.upk": 2,
       "arm64_nasync_com.personal.ugmsgbot_0.2.9.0006.upk": 5,
-      "arm64_nasync_com.personal.ugmsgbot_0.2.9.0007.upk": 2
+      "arm64_nasync_com.personal.ugmsgbot_0.2.9.0007.upk": 4
     },
     "baseline": 0
   },
@@ -450,14 +450,14 @@
       "amd64_nasync_com.personal.ugstore_0.1.0.0031.upk": 15,
       "amd64_nasync_com.personal.ugstore_0.1.0.0032.upk": 26,
       "amd64_nasync_com.personal.ugstore_0.1.0.0034.upk": 15,
-      "amd64_nasync_com.personal.ugstore_0.1.0.0035.upk": 16,
+      "amd64_nasync_com.personal.ugstore_0.1.0.0035.upk": 20,
       "arm64_nasync_com.personal.ugstore_0.1.0.0028.upk": 7,
       "arm64_nasync_com.personal.ugstore_0.1.0.0029.upk": 3,
       "arm64_nasync_com.personal.ugstore_0.1.0.0030.upk": 5,
       "arm64_nasync_com.personal.ugstore_0.1.0.0031.upk": 9,
       "arm64_nasync_com.personal.ugstore_0.1.0.0032.upk": 13,
       "arm64_nasync_com.personal.ugstore_0.1.0.0034.upk": 11,
-      "arm64_nasync_com.personal.ugstore_0.1.0.0035.upk": 14
+      "arm64_nasync_com.personal.ugstore_0.1.0.0035.upk": 17
     },
     "baseline": 141
   },
@@ -472,8 +472,8 @@
   },
   "com.personal.workbuddy": {
     "assets": {
-      "amd64_nasync_com.personal.workbuddy_5.6.2.0019.upk": 12,
-      "arm64_nasync_com.personal.workbuddy_5.6.2.0019.upk": 13
+      "amd64_nasync_com.personal.workbuddy_5.6.2.0019.upk": 37,
+      "arm64_nasync_com.personal.workbuddy_5.6.2.0019.upk": 22
     },
     "baseline": 0
   },
@@ -497,12 +497,12 @@
   },
   "com.pymumu.smartdns.docker": {
     "assets": {
-      "amd64_nasync_com.pymumu.smartdns.docker_48.4.0.0002.upk": 0,
       "amd64_nasync_com.pymumu.smartdns.docker_48.5.0.0004.upk": 1,
-      "arm64_nasync_com.pymumu.smartdns.docker_48.4.0.0002.upk": 1,
-      "arm64_nasync_com.pymumu.smartdns.docker_48.5.0.0004.upk": 2
+      "amd64_nasync_com.pymumu.smartdns.docker_48.5.0.0005.upk": 0,
+      "arm64_nasync_com.pymumu.smartdns.docker_48.5.0.0004.upk": 2,
+      "arm64_nasync_com.pymumu.smartdns.docker_48.5.0.0005.upk": 0
     },
-    "baseline": 5
+    "baseline": 6
   },
   "com.qbee.qbittorrent": {
     "assets": {

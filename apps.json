@@ -45,7 +45,7 @@
       },
       "service_port": 3080,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/adguardhome-docker/com.docker.adguardhome/rootfs_common/icon.png",
-      "download_count": 0,
+      "download_count": 5,
       "app_type": "docker",
       "category": "network",
       "platforms": [
@@ -136,7 +136,7 @@
       },
       "service_port": 25900,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/chromium/com.personal.chromium/rootfs_common/icon.png",
-      "download_count": 52,
+      "download_count": 55,
       "app_type": "docker",
       "category": "browser",
       "platforms": [
@@ -345,7 +345,7 @@
       },
       "service_port": 28190,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/fastnet/com.koolcenter.fastnet/rootfs_common/icon.png",
-      "download_count": 59,
+      "download_count": 60,
       "app_type": "native",
       "category": "network",
       "platforms": [
@@ -423,7 +423,7 @@
       },
       "service_port": 25180,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/it-tools/com.personal.ittools/rootfs_common/icon.png",
-      "download_count": 14,
+      "download_count": 15,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -447,7 +447,7 @@
       },
       "service_port": 25340,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/librespeed/com.personal.librespeed/rootfs_common/icon.png",
-      "download_count": 12,
+      "download_count": 13,
       "app_type": "native",
       "category": "network",
       "platforms": [
@@ -472,7 +472,7 @@
       },
       "service_port": 18083,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/liteclass/com.personal.liteclass/rootfs_common/icon.png",
-      "download_count": 13,
+      "download_count": 17,
       "app_type": "native",
       "category": "media",
       "platforms": [
@@ -532,7 +532,7 @@
       },
       "service_port": 16601,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/lucky/com.gdy666.lucky/rootfs_common/icon.png",
-      "download_count": 23,
+      "download_count": 24,
       "app_type": "native",
       "category": "network",
       "platforms": [
@@ -556,7 +556,7 @@
       },
       "service_port": 28300,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/lunatv/com.personal.lunatv/rootfs_common/icon.png",
-      "download_count": 55,
+      "download_count": 58,
       "app_type": "native",
       "category": "media",
       "platforms": [
@@ -682,7 +682,7 @@
       },
       "service_port": 5866,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/mook/com.personal.mook/rootfs_common/icon.png",
-      "download_count": 32,
+      "download_count": 33,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -706,7 +706,7 @@
       },
       "service_port": 28966,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/myip/com.personal.myip/rootfs_common/icon.png",
-      "download_count": 18,
+      "download_count": 23,
       "app_type": "native",
       "category": "network",
       "platforms": [
@@ -1091,13 +1091,13 @@
       "display_name": "SmartDNS",
       "description": "SmartDNS —— 本地 DNS 服务器：并发查询多个上游并返回访问速度最快的 IP， 支持 DoT/DoH/DoQ 加密上游、广告拦截规则、双栈 IP 优选、测速优选， 自带 Web 管理界面（默认账号 admin，密码 password，首次登录后请及时修改）。 DNS 端口 53（UDP+TCP）装完即用，无需任何额外设置，把路由器或客户端 DNS 指向 本机IP 即可（dnsmasq 写法：server=本机IP）。需要已安装 Docker 套件。 53 端口全机唯一：启动本应用前请先停掉其它占用 53 的 DNS 服务（如 AdGuardHome）。管理界面端口 6153。安装时请选择数据文件夹（必选）： 配置、日志与缓存都落在里面，配置文件 所选文件夹/conf/smartdns.conf 首次启动自动生成，之后用文件管理器直接编辑，改完重启应用生效。",
       "homepage_url": "https://club.ugnas.com/home.php?mod=space&uid=10131",
-      "updated_at": "2026-11-10",
+      "updated_at": "2026-11-20",
       "version": "48.5.0",
-      "upk_version": "48.5.0.0004",
-      "release_tag": "smartdns-docker/v48.5-RC1-r1",
+      "upk_version": "48.5.0.0005",
+      "release_tag": "smartdns-docker/v48.5",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/smartdns-docker/v48.5-RC1-r1/amd64_nasync_com.pymumu.smartdns.docker_48.5.0.0004.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/smartdns-docker/v48.5-RC1-r1/arm64_nasync_com.pymumu.smartdns.docker_48.5.0.0004.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/smartdns-docker/v48.5/amd64_nasync_com.pymumu.smartdns.docker_48.5.0.0005.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/smartdns-docker/v48.5/arm64_nasync_com.pymumu.smartdns.docker_48.5.0.0005.upk"
       },
       "service_port": 6153,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/smartdns-docker/com.pymumu.smartdns.docker/rootfs_common/icon.png",
@@ -1121,13 +1121,13 @@
       "display_name": "Sub2API",
       "description": "AI 接口中转站（API Gateway）。把你的各大 LLM 服务商 key 统一管起来， 通过一个 OpenAI 兼容的地址对外提供接入，内置用量统计、配额限制、 多用户管理、WebAuthn 登录等。自带管理界面与账号体系。 需要本机已安装 PostgreSQL 15+ 与 Redis 7+。首次启动请在浏览器中完成初始化向导。",
       "homepage_url": "https://github.com/Wei-Shaw/sub2api",
-      "updated_at": "2026-11-18",
-      "version": "0.2.23",
-      "upk_version": "0.2.23.0019",
-      "release_tag": "sub2api/v0.2.23",
+      "updated_at": "2026-11-20",
+      "version": "0.2.24",
+      "upk_version": "0.2.24.0020",
+      "release_tag": "sub2api/v0.2.24",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/sub2api/v0.2.23/amd64_nasync_com.personal.sub2api_0.2.23.0019.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/sub2api/v0.2.23/arm64_nasync_com.personal.sub2api_0.2.23.0019.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/sub2api/v0.2.24/amd64_nasync_com.personal.sub2api_0.2.24.0020.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/sub2api/v0.2.24/arm64_nasync_com.personal.sub2api_0.2.24.0020.upk"
       },
       "service_port": 25435,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/sub2api/com.personal.sub2api/rootfs_common/icon.png",
@@ -1161,7 +1161,7 @@
       },
       "service_port": 28186,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/trilium/com.personal.trilium/rootfs_common/icon.png",
-      "download_count": 18,
+      "download_count": 19,
       "app_type": "native",
       "category": "content",
       "platforms": [
@@ -1250,7 +1250,7 @@
       },
       "service_port": 21310,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/ugstore-icon.png",
-      "download_count": 311,
+      "download_count": 318,
       "app_type": "native",
       "category": "system",
       "platforms": [
@@ -1272,7 +1272,7 @@
       },
       "service_port": 21120,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/liteparser-icon.png",
-      "download_count": 46,
+      "download_count": 48,
       "app_type": "native",
       "category": "download",
       "platforms": [
@@ -1296,7 +1296,7 @@
       },
       "service_port": 28083,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/junyaoktv-icon.png",
-      "download_count": 24,
+      "download_count": 25,
       "app_type": "native",
       "category": "media",
       "platforms": [
@@ -1667,7 +1667,7 @@
       },
       "service_port": 21166,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/randomvideo-icon.png",
-      "download_count": 38,
+      "download_count": 41,
       "app_type": "native",
       "category": "media",
       "platforms": [
@@ -1697,7 +1697,7 @@
       },
       "service_port": 28471,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/workbuddy-icon.png",
-      "download_count": 25,
+      "download_count": 59,
       "app_type": "native",
       "category": "ai",
       "platforms": [
@@ -1758,7 +1758,7 @@
       },
       "service_port": 21160,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/scripts/catalog/ugmsgbot-icon.png",
-      "download_count": 17,
+      "download_count": 21,
       "app_type": "native",
       "category": "system",
       "platforms": [
