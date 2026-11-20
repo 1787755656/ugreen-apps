@@ -41,6 +41,9 @@ TAG_TYPE_MAP = {
 CURATED_FIELDS = (
     "display_name", "description", "homepage_url", "icon_url",
     "category", "app_type", "install_params", "post_install_note",
+    # 用户视角的当前版本更新说明：人工从 Release 精简/翻译而来，
+    # 不放进 Release 自动字段，避免发版刷新冲掉策展内容。
+    "release_notes",
 )
 
 
@@ -208,6 +211,10 @@ def main() -> None:
             "download_count": downloads,
             "app_type": proj.get("app_type") or "native",
             "category": category,
+            # 来源标记：ci = 本仓 apps/<slug>/ 源码经 CI 自动构建出包；
+            # extra-apps.json 的静态条目会在下面标成 manual（各应用自有仓库
+            # 手工打包上传）。商店前端据此显示「自动构建」标签。
+            "build_source": "ci",
             "platforms": sorted(set(platforms)),
             # path 型参数提取：需要用户安装时填写的参数（如模型目录），
             # 商店前端据此在安装对话框收集路径后带参提交安装。
@@ -253,6 +260,10 @@ def main() -> None:
                     print(f"warn: 覆盖条目 {name} 本次无生成条目，跳过", file=sys.stderr)
                     continue
                 e = dict(e)
+                # 静态条目 = 各应用自有仓库手工打包上传（不在本仓 apps/ 下，
+                # 不参与 build-apps）。标记出来，商店前端据此显示「自动构建」
+                # 与否——忘了标记会让手工包被误当成自动构建。
+                e["build_source"] = "manual"
                 # 计数同样从本仓 release 资产累加；仓库里没有该 appid 的
                 # 资产（release 托管在别处）时保留条目手填的值。
                 total = downloads_by_appid.get(name, 0)
