@@ -38,6 +38,10 @@
     },
     "baseline": 0
   },
+  "com.docker.smartdns": {
+    "assets": {},
+    "baseline": 9
+  },
   "com.gdy666.lucky": {
     "assets": {
       "amd64_nasync_com.gdy666.lucky_2.27.2.0004.upk": 4,
