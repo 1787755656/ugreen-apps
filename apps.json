@@ -18,6 +18,7 @@
       "download_count": 28,
       "app_type": "native",
       "category": "system",
+      "build_source": "ci",
       "platforms": [
         "amd64",
         "arm64"
@@ -48,6 +49,7 @@
       "download_count": 5,
       "app_type": "docker",
       "category": "network",
+      "build_source": "ci",
       "platforms": [
         "amd64",
         "arm64"
@@ -78,6 +80,7 @@
       "download_count": 24,
       "app_type": "native",
       "category": "automation",
+      "build_source": "ci",
       "platforms": [
         "amd64",
         "arm64"
@@ -108,6 +111,7 @@
       "download_count": 11,
       "app_type": "native",
       "category": "system",
+      "build_source": "ci",
       "platforms": [
         "amd64",
         "arm64"
@@ -119,8 +123,7 @@
           "description": "存放 DXF / DWG 图纸的文件夹（可多选，最多 8 个）。选中后应用就能在首页「从 NAS 文件夹打开」里直接浏览并打开图纸，不必先下载到电脑。这些目录对本应用只读，不会修改或删除任何文件。"
         }
       ],
-      "post_install_note": "装好后到应用中心「配置 / 设置」里选「图纸文件夹」（可多选，最多 8 个，选中即授权只读访问），再「停止 → 启动」一次——平台先起服务、几秒后才写参数并挂载，首次启动读到的授权目录一定是空的。之后首页「从 NAS 文件夹打开」即可直接浏览 NAS 上的 DWG / DXF。若要继续用文件管理器右键「打开方式」，需重跑应用工程里的 scripts/reinject-openhandlers.sh（appmgr 升级会清掉 openHandlers）。",
-      "release_notes": "浏览器端 DXF/DWG 图纸查看与编辑器，解析渲染全部在浏览器本地完成，图纸不出内网。本版修复 0014 真机「NAS 接口返回非 JSON」导致图纸目录打不开的问题：inner 包与 tab 版改用同一份后端二进制并加 md5 校验；API 未知路径一律返回 JSON 404；前端多候选探测 API 地址，失败时弹窗可复制诊断。装完请停止→启动一次授权图纸目录。"
+      "post_install_note": "装好后到应用中心「配置 / 设置」里选「图纸文件夹」（可多选，最多 8 个，选中即授权只读访问），再「停止 → 启动」一次——平台先起服务、几秒后才写参数并挂载，首次启动读到的授权目录一定是空的。之后首页「从 NAS 文件夹打开」即可直接浏览 NAS 上的 DWG / DXF。若要继续用文件管理器右键「打开方式」，需重跑应用工程里的 scripts/reinject-openhandlers.sh（appmgr 升级会清掉 openHandlers）。"
     },
     {
       "appname": "com.personal.chromium",
@@ -140,6 +143,7 @@
       "download_count": 55,
       "app_type": "docker",
       "category": "browser",
+      "build_source": "ci",
       "platforms": [
         "amd64",
         "arm64"
@@ -170,6 +174,7 @@
       "download_count": 21,
       "app_type": "native",
       "category": "download",
+      "build_source": "ci",
       "platforms": [
         "amd64",
         "arm64"
@@ -200,6 +205,7 @@
       "download_count": 4,
       "app_type": "native",
       "category": "content",
+      "build_source": "ci",
       "platforms": [
         "amd64",
         "arm64"
@@ -230,6 +236,7 @@
       "download_count": 33,
       "app_type": "native",
       "category": "download",
+      "build_source": "ci",
       "platforms": [
         "amd64",
         "arm64"
@@ -260,6 +267,7 @@
       "download_count": 50,
       "app_type": "docker",
       "category": "ai",
+      "build_source": "ci",
       "platforms": [
         "amd64",
         "arm64"
@@ -295,6 +303,7 @@
       "download_count": 9,
       "app_type": "native",
       "category": "network",
+      "build_source": "ci",
       "platforms": [
         "amd64",
         "arm64"
@@ -319,6 +328,7 @@
       "download_count": 5,
       "app_type": "docker",
       "category": "network",
+      "build_source": "ci",
       "platforms": [
         "amd64",
         "arm64"
@@ -349,6 +359,7 @@
       "download_count": 60,
       "app_type": "native",
       "category": "network",
+      "build_source": "ci",
       "platforms": [
         "amd64",
         "arm64"
@@ -373,6 +384,7 @@
       "download_count": 16,
       "app_type": "native",
       "category": "network",
+      "build_source": "ci",
       "platforms": [
         "amd64",
         "arm64"
@@ -397,6 +409,7 @@
       "download_count": 35,
       "app_type": "docker",
       "category": "ai",
+      "build_source": "ci",
       "platforms": [
         "amd64",
         "arm64"
@@ -427,6 +440,7 @@
       "download_count": 15,
       "app_type": "native",
       "category": "system",
+      "build_source": "ci",
       "platforms": [
         "amd64",
         "arm64"
@@ -451,13 +465,13 @@
       "download_count": 13,
       "app_type": "native",
       "category": "network",
+      "build_source": "ci",
       "platforms": [
         "amd64",
         "arm64"
       ],
       "install_params": null,
-      "post_install_note": "打开应用即可开始测速，无需登录。历史记录页在地址后加 /stats，默认密码 LibreSpeed@2026——要改密码请编辑应用数据目录下的 settings.toml（statistics_password 一行），再在应用中心「停止 → 启动」一次生效（该文件此后不会被覆盖）。测速点名称可在应用中心「配置」里改（SERVER_NAME），同样是停止 → 启动后生效。本应用面向局域网使用，请勿把端口暴露到公网。",
-      "release_notes": "自托管测速：在浏览器里实测 NAS 与本机之间的真实带宽，验证 2.5G/万兆网口是否跑满、排查网线降速（如千兆线插在 2.5G 口）、多设备互测对比 Wi-Fi 与有线。单服务器模式零配置，打开即测下载/上传（Mbps）、延迟/抖动（ms）。"
+      "post_install_note": "打开应用即可开始测速，无需登录。历史记录页在地址后加 /stats，默认密码 LibreSpeed@2026——要改密码请编辑应用数据目录下的 settings.toml（statistics_password 一行），再在应用中心「停止 → 启动」一次生效（该文件此后不会被覆盖）。测速点名称可在应用中心「配置」里改（SERVER_NAME），同样是停止 → 启动后生效。本应用面向局域网使用，请勿把端口暴露到公网。"
     },
     {
       "appname": "com.personal.liteclass",
@@ -477,6 +491,7 @@
       "download_count": 17,
       "app_type": "native",
       "category": "media",
+      "build_source": "ci",
       "platforms": [
         "amd64",
         "arm64"
@@ -507,6 +522,7 @@
       "download_count": 11,
       "app_type": "native",
       "category": "content",
+      "build_source": "ci",
       "platforms": [
         "amd64",
         "arm64"
@@ -524,19 +540,20 @@
       "display_name": "Lucky",
       "description": "Lucky(v3) —— 软硬路由公网神器/网络工具箱：反向代理、DDNS 动态域名、 STUN 内网穿透、IPv6/IPv4 端口转发、计划任务、ACME 证书自动申请、 WebDAV/FTP/文件浏览、网页唤醒(WOL)、Cloudflare Tunnel、IP 防火墙等， v3 新增 Coraza WAF、存储管理、Web 终端等模块，自带 Web 管理界面。 默认登录账号 666，密码 666，首次登录后请及时修改。 注意：应用以普通用户运行，无法监听 1024 以下端口(SMB 445/DLNA 1900 等请改高位端口)； 请勿在 Lucky 后台修改管理端口(16601)，否则应用图标将无法打开管理页； v3 采用全新配置格式，与 v2 配置不互通，从 v2 升级后将以全新配置启动； 万吉版内置的 Docker 容器管理模块依赖 docker.sock，在应用沙箱中不可用。 总览页的主机级监控(CPU/内存/进程/连接/流量)因应用沙箱无法读取系统 /proc 而恒为 0，属平台限制，Lucky 各功能模块不受影响。",
       "homepage_url": "https://github.com/gdy666/lucky",
-      "updated_at": "2026-11-10",
-      "version": "3.8.0",
-      "upk_version": "3.8.0.0013",
-      "release_tag": "lucky/v3.8.0",
+      "updated_at": "2026-11-20",
+      "version": "3.5.0",
+      "upk_version": "3.5.0.0014",
+      "release_tag": "lucky/v3.5.0-r1",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/lucky/v3.8.0/amd64_nasync_com.gdy666.lucky_3.8.0.0013.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/lucky/v3.8.0/arm64_nasync_com.gdy666.lucky_3.8.0.0013.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/lucky/v3.5.0-r1/amd64_nasync_com.gdy666.lucky_3.5.0.0014.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/lucky/v3.5.0-r1/arm64_nasync_com.gdy666.lucky_3.5.0.0014.upk"
       },
       "service_port": 16601,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/lucky/com.gdy666.lucky/rootfs_common/icon.png",
       "download_count": 24,
       "app_type": "native",
       "category": "network",
+      "build_source": "ci",
       "platforms": [
         "amd64",
         "arm64"
@@ -561,6 +578,7 @@
       "download_count": 58,
       "app_type": "native",
       "category": "media",
+      "build_source": "ci",
       "platforms": [
         "amd64",
         "arm64"
@@ -585,6 +603,7 @@
       "download_count": 18,
       "app_type": "native",
       "category": "content",
+      "build_source": "ci",
       "platforms": [
         "amd64",
         "arm64"
@@ -609,6 +628,7 @@
       "download_count": 21,
       "app_type": "native",
       "category": "system",
+      "build_source": "ci",
       "platforms": [
         "amd64",
         "arm64"
@@ -633,6 +653,7 @@
       "download_count": 22,
       "app_type": "native",
       "category": "system",
+      "build_source": "ci",
       "platforms": [
         "amd64",
         "arm64"
@@ -643,8 +664,7 @@
           "name": "数据保存目录",
           "description": "选择存放数据库文件的共享文件夹，选好即完成授权，首次安装即生效。 文件夹为空时，数据存到该目录下的 mariadb-data 子目录并初始化新库； 文件夹里已经有数据库文件时，应用会【直接读取并使用】它，不做版本兼容性预检： 能启动就正常用，版本不兼容时数据库会启动失败并在管理页显示错误， root 密码为该数据库原有的密码。应用不会在已有数据的目录里初始化新库， 也不会覆盖、改名或删除任何已有数据；迁移只往空目录复制，旧目录原样保留。 若根目录与 mariadb-data 子目录各有一套数据（旧版布局错层）， 管理页会给出一键切换引导，无需手工搬移文件。留空也能安装，数据存到应用数据目录。"
         }
-      ],
-      "release_notes": "修复「初始化覆盖已有数据、启动失败后无出路、旧版布局无引导」三层问题：已有数据的目录一律拒绝初始化（本应用自己的半成品可自愈重试）；启动前自动识别并接管已有数据，不改密码、不升级；管理页新增数据目录诊断和一键重建（旧目录改名保留）、旧版布局一键切换。数据安全红线：迁移用 O_EXCL，目标非空拒绝，旧数据不删不改名。"
+      ]
     },
     {
       "appname": "com.metatube.server",
@@ -664,6 +684,7 @@
       "download_count": 9,
       "app_type": "native",
       "category": "automation",
+      "build_source": "ci",
       "platforms": [
         "amd64",
         "arm64"
@@ -688,6 +709,7 @@
       "download_count": 33,
       "app_type": "native",
       "category": "system",
+      "build_source": "ci",
       "platforms": [
         "amd64",
         "arm64"
@@ -709,9 +731,10 @@
       },
       "service_port": 28966,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/myip/com.personal.myip/rootfs_common/icon.png",
-      "download_count": 23,
+      "download_count": 24,
       "app_type": "native",
       "category": "network",
+      "build_source": "ci",
       "platforms": [
         "amd64",
         "arm64"
@@ -736,6 +759,7 @@
       "download_count": 14,
       "app_type": "native",
       "category": "network",
+      "build_source": "ci",
       "platforms": [
         "amd64",
         "arm64"
@@ -760,6 +784,7 @@
       "download_count": 12,
       "app_type": "native",
       "category": "media",
+      "build_source": "ci",
       "platforms": [
         "amd64",
         "arm64"
@@ -790,6 +815,7 @@
       "download_count": 10,
       "app_type": "native",
       "category": "download",
+      "build_source": "ci",
       "platforms": [
         "amd64",
         "arm64"
@@ -820,6 +846,7 @@
       "download_count": 36,
       "app_type": "native",
       "category": "ai",
+      "build_source": "ci",
       "platforms": [
         "amd64",
         "arm64"
@@ -850,6 +877,7 @@
       "download_count": 15,
       "app_type": "native",
       "category": "content",
+      "build_source": "ci",
       "platforms": [
         "amd64",
         "arm64"
@@ -885,6 +913,7 @@
       "download_count": 28,
       "app_type": "native",
       "category": "network",
+      "build_source": "ci",
       "platforms": [
         "amd64",
         "arm64"
@@ -909,6 +938,7 @@
       "download_count": 10,
       "app_type": "native",
       "category": "ai",
+      "build_source": "ci",
       "platforms": [
         "amd64",
         "arm64"
@@ -933,6 +963,7 @@
       "download_count": 9,
       "app_type": "native",
       "category": "system",
+      "build_source": "ci",
       "platforms": [
         "amd64",
         "arm64"
@@ -957,6 +988,7 @@
       "download_count": 11,
       "app_type": "native",
       "category": "system",
+      "build_source": "ci",
       "platforms": [
         "amd64",
         "arm64"
@@ -987,6 +1019,7 @@
       "download_count": 18,
       "app_type": "native",
       "category": "download",
+      "build_source": "ci",
       "platforms": [
         "amd64",
         "arm64"
@@ -1017,6 +1050,7 @@
       "download_count": 5,
       "app_type": "native",
       "category": "download",
+      "build_source": "ci",
       "platforms": [
         "amd64",
         "arm64"
@@ -1047,6 +1081,7 @@
       "download_count": 8,
       "app_type": "native",
       "category": "content",
+      "build_source": "ci",
       "platforms": [
         "amd64",
         "arm64"
@@ -1077,6 +1112,7 @@
       "download_count": 14,
       "app_type": "native",
       "category": "system",
+      "build_source": "ci",
       "platforms": [
         "amd64",
         "arm64"
@@ -1090,23 +1126,24 @@
       ]
     },
     {
-      "appname": "com.pymumu.smartdns.docker",
+      "appname": "com.docker.smartdns",
       "display_name": "SmartDNS",
       "description": "SmartDNS —— 本地 DNS 服务器：并发查询多个上游并返回访问速度最快的 IP， 支持 DoT/DoH/DoQ 加密上游、广告拦截规则、双栈 IP 优选、测速优选， 自带 Web 管理界面（默认账号 admin，密码 password，首次登录后请及时修改）。 DNS 端口 53（UDP+TCP）装完即用，无需任何额外设置，把路由器或客户端 DNS 指向 本机IP 即可（dnsmasq 写法：server=本机IP）。需要已安装 Docker 套件。 53 端口全机唯一：启动本应用前请先停掉其它占用 53 的 DNS 服务（如 AdGuardHome）。管理界面端口 6153。安装时请选择数据文件夹（必选）： 配置、日志与缓存都落在里面，配置文件 所选文件夹/conf/smartdns.conf 首次启动自动生成，之后用文件管理器直接编辑，改完重启应用生效。",
       "homepage_url": "https://club.ugnas.com/home.php?mod=space&uid=10131",
       "updated_at": "2026-11-20",
       "version": "48.5.0",
-      "upk_version": "48.5.0.0005",
-      "release_tag": "smartdns-docker/v48.5",
+      "upk_version": "48.5.0.0006",
+      "release_tag": "smartdns-docker/v48.5-r1",
       "download_urls": {
-        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/smartdns-docker/v48.5/amd64_nasync_com.pymumu.smartdns.docker_48.5.0.0005.upk",
-        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/smartdns-docker/v48.5/arm64_nasync_com.pymumu.smartdns.docker_48.5.0.0005.upk"
+        "amd64": "https://github.com/1787755656/ugreen-apps/releases/download/smartdns-docker/v48.5-r1/amd64_nasync_com.docker.smartdns_48.5.0.0006.upk",
+        "arm64": "https://github.com/1787755656/ugreen-apps/releases/download/smartdns-docker/v48.5-r1/arm64_nasync_com.docker.smartdns_48.5.0.0006.upk"
       },
       "service_port": 6153,
-      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/smartdns-docker/com.pymumu.smartdns.docker/rootfs_common/icon.png",
+      "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/smartdns-docker/com.docker.smartdns/rootfs_common/icon.png",
       "download_count": 9,
       "app_type": "docker",
-      "category": "network",
+      "category": "system",
+      "build_source": "ci",
       "platforms": [
         "amd64",
         "arm64"
@@ -1134,9 +1171,10 @@
       },
       "service_port": 25435,
       "icon_url": "https://raw.githubusercontent.com/1787755656/ugreen-apps/main/apps/sub2api/com.personal.sub2api/rootfs_common/icon.png",
-      "download_count": 20,
+      "download_count": 22,
       "app_type": "native",
       "category": "ai",
+      "build_source": "ci",
       "platforms": [
         "amd64",
         "arm64"
@@ -1167,6 +1205,7 @@
       "download_count": 19,
       "app_type": "native",
       "category": "content",
+      "build_source": "ci",
       "platforms": [
         "amd64",
         "arm64"
@@ -1191,6 +1230,7 @@
       "download_count": 78,
       "app_type": "docker",
       "category": "system",
+      "build_source": "ci",
       "platforms": [
         "amd64",
         "arm64"
@@ -1221,6 +1261,7 @@
       "download_count": 42,
       "app_type": "native",
       "category": "media",
+      "build_source": "ci",
       "platforms": [
         "amd64",
         "arm64"
@@ -1260,7 +1301,7 @@
         "amd64",
         "arm64"
       ],
-      "release_notes": "设置页网关地址改造：主机固定为 https://127.0.0.1，仅端口可改（默认 9443，留空恢复默认）。修复填写任意网关地址都回落到 127.0.0.1:9443 的问题；保存后运行中的网关客户端立即切换到新端口并清空旧令牌，无需重启。"
+      "build_source": "manual"
     },
     {
       "appname": "com.personal.liteparser",
@@ -1284,7 +1325,7 @@
         "arm64"
       ],
       "post_install_note": "装好后请在「设置」页填写 NAS 保存目录；解析抖音需在「设置」粘贴抖音网页版 Cookie。",
-      "release_notes": "支持抖音、快手、B站、微博、小红书、腾讯视频等 26 个平台的分享链接解析，无水印视频按平台分目录下载到 NAS；带浏览器直下通道和下载任务管理（并发、断电恢复、历史记录）。本版适配抖音新版签名风控，小红书增加移动通道与稳定图片地址。"
+      "build_source": "manual"
     },
     {
       "appname": "com.personal.junyaoktv",
@@ -1316,7 +1357,7 @@
           "description": "存放 MV 歌曲文件（.mp4/.mkv/.avi/.flv/.mov/.webm/.mpg）的共享文件夹，选好即完成授权，曲库扫描就是扫它。文件名格式：\"歌手 - 歌名.mp4\" 或 \"歌名.mp4\"；多音轨文件自动启用原唱/伴唱切换。留空则用应用数据目录下的 mv 子目录。装好或改完请在应用中心「停止 → 启动」一次才生效。"
         }
       ],
-      "release_notes": "首次上架：局域网家庭 KTV 点歌系统，电视大屏播放、手机扫码点歌、网页曲库管理三端一体。非 H.264 片源自动调用本机硬件转码（RK3588），不可用时回退内置 ffmpeg；支持多音轨原唱/伴唱切换。包内自带运行时与 ffmpeg，零外部依赖。"
+      "build_source": "manual"
     },
     {
       "appname": "com.personal.litereader",
@@ -1341,7 +1382,7 @@
         "arm64"
       ],
       "post_install_note": "装好后请选好书库文件夹，并在应用中心「停止 → 启动」一次使其生效；初始账号 admin / admin123，登录后请修改密码。",
-      "release_notes": "把 NAS 变成自己的电子书库：支持 EPUB/MOBI/AZW3/PDF/TXT/FB2/CBZ/CBR，浏览器阅读，进度、书签、笔记、高亮都保存在 NAS；支持多用户分书库、离线与在线朗读，可选 AI 助手。初始账号 admin / admin123，登录后请修改密码。"
+      "build_source": "manual"
     },
     {
       "appname": "com.personal.php56",
@@ -1373,7 +1414,7 @@
           "description": "选一个共享文件夹，本应用会在它下面建一个 php56 子目录， 里面放 php.ini、进程池配置和日志。选好即完成授权，之后你可以直接用 文件管理器打开这些文件来改。三个 PHP 版本可以放心选同一个文件夹， 它们各自在自己的子目录里互不干扰。留空也能装，配置会放在应用数据 目录里（那个目录在文件管理器里看不到，所以推荐选一个）。"
         }
       ],
-      "release_notes": "安全更新：修复两个可未认证远程代码执行漏洞（CVE-2026-109618 / CVE-2026-109619）。因官方已停止维护，采用宝塔按官方 7.4 修法回移的补丁并逐行核验。注意：内存超出限制时进程会直接结束，该请求当场断开（补丁既定取舍）。"
+      "build_source": "manual"
     },
     {
       "appname": "com.personal.php74",
@@ -1405,7 +1446,7 @@
           "description": "选一个共享文件夹，本应用会在它下面建一个 php74 子目录， 里面放 php.ini、进程池配置和日志。选好即完成授权，之后你可以直接用 文件管理器打开这些文件来改。三个 PHP 版本可以放心选同一个文件夹， 它们各自在自己的子目录里互不干扰。留空也能装，配置会放在应用数据 目录里（那个目录在文件管理器里看不到，所以推荐选一个）。"
         }
       ],
-      "release_notes": "安全更新：修复两个可未认证远程代码执行漏洞（CVE-2026-109618 / CVE-2026-109619），源码与 php.net 官方回补分支逐文件核验一致。注意：内存超出限制时进程会直接结束，该请求当场断开（补丁既定取舍）。"
+      "build_source": "manual"
     },
     {
       "appname": "com.personal.php83",
@@ -1437,7 +1478,7 @@
           "description": "选一个共享文件夹，本应用会在它下面建一个 php83 子目录， 里面放 php.ini、进程池配置和日志。选好即完成授权，之后你可以直接用 文件管理器打开这些文件来改。三个 PHP 版本可以放心选同一个文件夹， 它们各自在自己的子目录里互不干扰。留空也能装，配置会放在应用数据 目录里（那个目录在文件管理器里看不到，所以推荐选一个）。"
         }
       ],
-      "release_notes": "PHP 8.3.36 官方安全修复版，修复两个可未认证远程代码执行漏洞（CVE-2026-109618 / CVE-2026-109619）；全静态二进制、零系统依赖，扩展集与官方 bulk 一致。首次上架。注意：未申请互联网权限，PHP 脚本访问公网会超时，仅能访问局域网和本机。"
+      "build_source": "manual"
     },
     {
       "appname": "com.personal.nginx",
@@ -1469,7 +1510,7 @@
           "description": "选一个共享文件夹，nginx 会在它下面建一个 nginx 子目录， 里面放配置文件（conf/nginx.conf、conf/conf.d/）、网站文件（html/） 和日志（logs/）。选好即完成授权，之后你可以直接用文件管理器打开 这些文件来改，也可以在应用里改。留空也能装，配置会放在应用数据目录里 （那个目录在文件管理器里看不到，所以推荐选一个）。"
         }
       ],
-      "release_notes": "修复 0004 升级后「原配置读取不到」的问题：安装参数为空时不再提示迁移配置，工作目录保持不变；管理页新增「前往」按钮直达工作目录/网站目录，网站目录加「复制」按钮。若升级到 0004 后配置列表变空，配置文件并未丢失，停止再启动一次应用即可恢复。"
+      "build_source": "manual"
     },
     {
       "appname": "com.personal.handbrakerk",
@@ -1499,7 +1540,7 @@
           "description": "存放待转码视频的共享文件夹，选好即完成授权；之后可在应用中心「配置」里追加更多目录（最多 8 个）。目录会以完全相同的路径挂进容器，HandBrake 界面里看到的路径和文件管理器里一致。"
         }
       ],
-      "release_notes": "无功能变化版本：仅清理了 compose 编排模板里的说明性注释，应用本体、镜像与参数声明均未改动。"
+      "build_source": "manual"
     },
     {
       "appname": "com.personal.aellus",
@@ -1531,7 +1572,7 @@
           "description": "上传的文件存到这个共享文件夹（会在里面按设备名建子目录），选中即授权本应用读写。留空则存到应用私有目录，文件管理器里看不到。装好或改完请「停止 → 启动」一次。"
         }
       ],
-      "release_notes": "首次上架：浏览器直连上传、浏览、下载，图片视频在线预览，支持多选或整目录打包 zip、单文件二维码扫码下载。双架构，端口 25115（避开同机 Docker 版）。安装参数「文件保存目录」可选，留空则用应用私有目录。"
+      "build_source": "manual"
     },
     {
       "appname": "com.personal.frpnet",
@@ -1555,7 +1596,7 @@
         "arm64"
       ],
       "post_install_note": "点开即在浏览器新标签进入游戏；目标站点为自签证书，浏览器首次打开出现证书提示时点「高级 → 继续前往」即可。",
-      "release_notes": "Splatoon 风格 4v4 涂地射击游戏，浏览器直接运行；应用中心点开即在新标签进入游戏。不存储数据、不中转流量，双架构。首次打开如出现证书提示，点「高级 → 继续前往」即可。"
+      "build_source": "manual"
     },
     {
       "appname": "com.personal.atou.musicsub",
@@ -1580,7 +1621,7 @@
         "arm64"
       ],
       "post_install_note": "首装默认管理账号 musicsub/musicsub，登录后请立即修改。",
-      "release_notes": "把官方「音乐」应用的曲库以标准 Subsonic/Navidrome API 暴露给第三方客户端，支持浏览、搜索、无损原文件直播（可拖动进度）、封面、歌词、收藏、播放记录、歌单，且不直接读写官方数据库。本版更新了应用目录元数据（开发者/发布者链接指向绿联社区），应用本体与上一版一致。默认账号 musicsub / musicsub，登录后请立即修改。"
+      "build_source": "manual"
     },
     {
       "appname": "com.kasbuky.frognas",
@@ -1612,7 +1653,7 @@
         }
       ],
       "post_install_note": "安装后打开 http://<NAS_IP>:8980 游玩；管理/推送页 /admin；外网走 UGREENlink 域名 + /frog/",
-      "release_notes": "网页原生版《旅行青蛙·中国之旅》，包内自带运行时、不依赖 Docker。游戏引擎只在 NAS 上跑一份，手机/电脑/平板打开同一地址就是同一个世界；时间轴在服务端，关掉浏览器青蛙照常出门、回家、寄明信片。存档在系统数据目录，升级不丢档。"
+      "build_source": "manual"
     },
     {
       "appname": "com.personal.supereditor",
@@ -1644,7 +1685,7 @@
           "description": "可添加多个；应用只能读取和写入这里选中的目录及其子目录，留空也可稍后在应用内添加。装好或改完请「停止 → 启动」一次。"
         }
       ],
-      "release_notes": "本地优先的 Markdown 编辑器，支持 Markdown/Word/PDF/PPT 导入导出与演示，可直接浏览 NAS 授权目录、写回文档。本版：目录入口只保留真正授权且可写的文件夹；读写按内容去重，索引文件不再带时间戳；inner 环境禁用 File System Access API，服务未就绪时自动重连。选好文档文件夹后请停止→启动一次。"
+      "build_source": "manual"
     },
     {
       "appname": "com.personal.ugnasclub.mobile",
@@ -1667,7 +1708,8 @@
       "platforms": [
         "amd64",
         "arm64"
-      ]
+      ],
+      "build_source": "manual"
     },
     {
       "appname": "com.personal.randomvideo",
@@ -1697,7 +1739,8 @@
           "name": "视频下载文件夹",
           "description": "收藏的视频会下载到这个文件夹；留空则存到应用数据目录。装好或改完请在应用中心「停止→启动」一次。"
         }
-      ]
+      ],
+      "build_source": "manual"
     },
     {
       "appname": "com.personal.workbuddy",
@@ -1728,7 +1771,8 @@
           "name": "工作区文件夹",
           "description": "WorkBuddy 可读写这里选中的目录（可多选，最多 8 个，选中即授权）；留空时使用应用数据目录。请勿同时选中父子目录，否则父目录不会被挂载。"
         }
-      ]
+      ],
+      "build_source": "manual"
     },
     {
       "appname": "com.personal.transmission",
@@ -1758,7 +1802,8 @@
           "name": "下载目录",
           "description": "种子默认下载位置，选一个共享文件夹里的目录；不选则落在应用数据目录内。修改后需在应用中心停止再启动一次应用生效。"
         }
-      ]
+      ],
+      "build_source": "manual"
     },
     {
       "appname": "com.personal.ugmsgbot",
@@ -1782,7 +1827,7 @@
         "amd64",
         "arm64"
       ],
-      "release_notes": "绿联社区手机版入口：在绿联云手机 App 内直接打开 club.ugnas.com，浏览、登录、发帖全是论坛原页面，仅手机端显示、无任何页面改写。无权限申请，双架构。"
+      "build_source": "manual"
     }
   ]
 }
