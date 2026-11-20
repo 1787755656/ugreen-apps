@@ -65,11 +65,15 @@ GH_AUTH=()
 asset_url() {
   local sd_arch="$1"
   for i in 1 2 3; do
-    URL=$(curl -sL ${GH_AUTH[@]+"${GH_AUTH[@]}"} "https://api.github.com/repos/pymumu/smartdns/releases/tags/${UPSTREAM_TAG}" | \
-      jq -r --arg suffix "${sd_arch}-linux-all.tar.gz" \
-        '.assets[] | select(.name | endswith($suffix)) | .browser_download_url' | head -1)
+    local resp api_msg
+    resp=$(curl -sL ${GH_AUTH[@]+"${GH_AUTH[@]}"} "https://api.github.com/repos/pymumu/smartdns/releases/tags/${UPSTREAM_TAG}")
+    URL=$(printf '%s' "$resp" | jq -r --arg suffix "${sd_arch}-linux-all.tar.gz" \
+        '.assets[]? | select(.name | endswith($suffix)) | .browser_download_url' | head -1)
     [ -n "$URL" ] && [ "$URL" != "null" ] && { echo "$URL"; return 0; }
-    echo "asset resolve attempt $i failed for ${sd_arch}, retrying in 20s..." >&2
+    # tag 不存在或 API 限流时返回的是 {"message": ...}，没有 assets 字段，
+    # 原样打出来定位问题——否则日志里只剩 jq 的 "Cannot iterate over null"。
+    api_msg=$(printf '%s' "$resp" | jq -r '.message // empty' 2>/dev/null || true)
+    echo "asset resolve attempt $i failed for ${sd_arch}${api_msg:+ — API 返回: ${api_msg}}, retrying in 20s..." >&2
     sleep 20
   done
   echo "::error::no ${sd_arch}-linux-all.tar.gz asset found in ${UPSTREAM_TAG}" >&2

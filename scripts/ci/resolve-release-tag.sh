@@ -96,7 +96,17 @@ if [ -f "${META_FILE}" ]; then
 fi
 # Escape dots for grep -E; empty APP_ID (no meta.env) degrades to matching
 # every .upk in the repo — an over-count, which is the safe direction.
-APP_ID_RE=$(printf '%s' "${APP_ID}" | sed 's/\./\\./g')
+#
+# APP_ID_ALIASES：应用改过包名时，历史 release 资产里带的是旧 app_id。
+# 只按当前 APP_ID 匹配会让 MAX_ASSET_BUILD 恒为 0，BUILD_NUM 退化成 tag 数
+# （tag 又被 --cleanup-tag 删过），改名后的首包会打出比历史更低的构建号。
+# meta.env 里用空格分隔列出旧 id 即可，匹配时按"当前 + 历史"取并集。
+APP_ID_PAT=""
+for _app_id in ${APP_ID} ${APP_ID_ALIASES:-}; do
+  _esc=$(printf '%s' "${_app_id}" | sed 's/\./\\./g')
+  APP_ID_PAT="${APP_ID_PAT:+${APP_ID_PAT}|}${_esc}"
+done
+[ -n "${APP_ID_PAT}" ] || APP_ID_PAT=".+"   # 没有 APP_ID 时匹配全部（过计安全）
 # ⚠ 这里【不能】把 `--paginate` 和 `--jq` 一起用：
 #   · gh 的 `--slurp` 与 `--jq` 互斥（直接报 "not supported with --jq"）；
 #   · 而 `--paginate ... --jq '.[].assets[].name'` 实测恒输出 0 行
@@ -108,7 +118,7 @@ APP_ID_RE=$(printf '%s' "${APP_ID}" | sed 's/\./\\./g')
 #   正确姿势：gh 只输出原始 JSON（每页一个数组），交给 jq 逐页处理再合并。
 MAX_ASSET_BUILD=$(gh api --paginate "repos/{owner}/{repo}/releases?per_page=100" 2>/dev/null \
   | jq -r '.[].assets[]?.name' 2>/dev/null \
-  | grep -E "${APP_ID_RE}.*\.upk$" \
+  | grep -E "(${APP_ID_PAT}).*\.upk$" \
   | sed -E 's/.*\.([0-9]+)\.upk$/\1/' \
   | sort -n | tail -1 || true)
 # 10# forces base-10: asset names zero-pad ("0003"), and $(( )) would read

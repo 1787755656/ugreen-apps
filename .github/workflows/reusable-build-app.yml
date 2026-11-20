@@ -122,6 +122,13 @@ jobs:
           ugcli --version
 
       - name: Run app build.sh
+        env:
+          # build.sh 普遍要打 GitHub API 解析上游资产名。匿名调用是 IP 级
+          # 60/h 限流，runner 出口 IP 被别的任务用满就 403，jq 侧只会报
+          # "Cannot iterate over null"（smartdns-docker 改包名那次 amd64
+          # job 连试三次都这样挂掉，arm64 同时间却是好的）。给 token 后
+          # 上限 5000/h，且与 check-version 步的鉴权口径一致。
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           bash "scripts/apps/${{ inputs.app }}/build.sh" \
             "${{ needs.check-version.outputs.version }}" \

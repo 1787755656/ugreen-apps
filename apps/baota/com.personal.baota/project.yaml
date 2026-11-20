@@ -94,8 +94,8 @@ i18n:
     author: 堡塔安全
     official: https://www.bt.cn
     help: https://www.bt.cn/bbs/
-    publisher: xw
-    publisher_link: https://github.com/1787755656
+    publisher: 穿斯帕沃特
+    publisher_link: https://club.ugnas.com/home.php?mod=space&uid=10131
   en-US:
     name: BaoTa Panel
     description: >-
@@ -116,8 +116,8 @@ i18n:
     author: BaoTa Security
     official: https://www.bt.cn
     help: https://www.bt.cn/bbs/
-    publisher: xw
-    publisher_link: https://github.com/1787755656
+    publisher: 穿斯帕沃特
+    publisher_link: https://club.ugnas.com/home.php?mod=space&uid=10131
 
 # 宝塔面板为专有软件（免费使用），不配置开源许可/源码链接（natfrp 先例）
 technical_support_link:
