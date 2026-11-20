@@ -25,6 +25,21 @@ apps/<app>/com.xxx.xxx/
   rootfs_amd64/, rootfs_arm64/   # 由 build.sh 在CI里现场生成，不提交进git（见.gitignore）
 ```
 
+### 包名（app_id）约定
+
+- **Docker 型应用（`is_docker_app: true`）统一 `com.docker.<应用名>`**，例如
+  `com.docker.smartdns`。不再跟上游域名倒序走——镜像本来就不是我们构建的，
+  套 `com.<上游作者>.<项目>` 只会让人误以为是上游发布的应用。
+- 原生 / 自研应用仍用上游域名倒序（`com.personal.*`、`com.koolcenter.fastnet` 等），
+  与上游仓库保持一致。
+- 目录名 `apps/<app>/<app_id>/` 必须与 `project.yaml` 的 `app_id` 逐字一致；
+  `scripts/apps/<app>/meta.env` 的 `PROJECT_DIR` 同步改。
+- 改 `app_id` = 换应用身份：平台不认作同一应用的升级，老用户需卸载重装；
+  商店条目、静态图标路径（`/ugreen/static/icons/<app_id>.png`）随之改变，
+  `apps.json` 由 catalog 工作流按新包名重新生成。
+- 历史先例：`smartdns-docker` 于 2026-11-21 由 `com.pymumu.smartdns.docker`
+  改为 `com.docker.smartdns`（版本号不重置，构建号继续沿用该 app slug 的 tag 计数）。
+
 ## 各应用的版本探测方式（已用真实网络请求验证过）
 
 | 应用 | 上游 | 探测方式 | 备注 |

@@ -11,7 +11,11 @@
 
 spec_version: "2.1"
 
-app_id: com.pymumu.smartdns.docker
+# 包名约定（2026-11-21 起）：Docker 型应用统一 com.docker.<应用名>，
+# 不再跟上游域名倒序走（旧值 com.pymumu.smartdns.docker）。目录名必须与
+# app_id 逐字一致。改 app_id = 新应用身份，平台不认作同应用升级，
+# 老用户需卸载重装（商店条目、静态图标路径也随之变成 com.docker.smartdns.png）。
+app_id: com.docker.smartdns
 
 # 跟上游 Release 版本：ReleaseX.Y → x.y.0；预发布后缀（-RC1 等）不进版本号，
 # 由 scripts/apps/smartdns-docker/get-latest-version.sh 归一化，RC/正式版靠
