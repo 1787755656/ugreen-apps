@@ -75,7 +75,7 @@
   "com.magiccode.magicpush": {
     "assets": {
       "amd64_nasync_com.magiccode.magicpush_1.14.0.0007.upk": 3,
-      "amd64_nasync_com.magiccode.magicpush_1.15.0.0008.upk": 12,
+      "amd64_nasync_com.magiccode.magicpush_1.15.0.0008.upk": 13,
       "arm64_nasync_com.magiccode.magicpush_1.14.0.0007.upk": 3,
       "arm64_nasync_com.magiccode.magicpush_1.15.0.0008.upk": 5
     },
@@ -164,7 +164,7 @@
   "com.personal.chromium": {
     "assets": {
       "amd64_nasync_com.personal.chromium_26.10.1.0001.upk": 20,
-      "arm64_nasync_com.personal.chromium_26.10.1.0001.upk": 38
+      "arm64_nasync_com.personal.chromium_26.10.1.0001.upk": 45
     },
     "baseline": 0
   },
@@ -255,7 +255,7 @@
   },
   "com.personal.liteparser": {
     "assets": {
-      "amd64_nasync_com.personal.liteparser_0.3.0.0010.upk": 38,
+      "amd64_nasync_com.personal.liteparser_0.3.0.0010.upk": 41,
       "arm64_nasync_com.personal.liteparser_0.3.0.0010.upk": 14
     },
     "baseline": 0
@@ -290,7 +290,7 @@
   "com.personal.mook": {
     "assets": {
       "amd64_nasync_com.personal.mook_0.2.8.0004.upk": 7,
-      "amd64_nasync_com.personal.mook_0.4.6.0005.upk": 20,
+      "amd64_nasync_com.personal.mook_0.4.6.0005.upk": 21,
       "arm64_nasync_com.personal.mook_0.2.8.0004.upk": 3,
       "arm64_nasync_com.personal.mook_0.4.6.0005.upk": 5
     },
@@ -308,7 +308,7 @@
   "com.personal.navidrome": {
     "assets": {
       "amd64_nasync_com.personal.navidrome_0.64.2.0004.upk": 2,
-      "amd64_nasync_com.personal.navidrome_0.64.2.0005.upk": 2,
+      "amd64_nasync_com.personal.navidrome_0.64.2.0005.upk": 3,
       "arm64_nasync_com.personal.navidrome_0.64.2.0004.upk": 1,
       "arm64_nasync_com.personal.navidrome_0.64.2.0005.upk": 7
     },
@@ -400,7 +400,7 @@
   "com.personal.sub2api": {
     "assets": {
       "amd64_nasync_com.personal.sub2api_0.2.24.0020.upk": 5,
-      "amd64_nasync_com.personal.sub2api_0.2.25.0021.upk": 1,
+      "amd64_nasync_com.personal.sub2api_0.2.25.0021.upk": 2,
       "arm64_nasync_com.personal.sub2api_0.2.24.0020.upk": 1,
       "arm64_nasync_com.personal.sub2api_0.2.25.0021.upk": 1
     },
@@ -408,7 +408,7 @@
   },
   "com.personal.supereditor": {
     "assets": {
-      "amd64_nasync_com.personal.supereditor_1.2.0.0004.upk": 3,
+      "amd64_nasync_com.personal.supereditor_1.2.0.0004.upk": 4,
       "arm64_nasync_com.personal.supereditor_1.2.0.0004.upk": 5
     },
     "baseline": 0
@@ -433,7 +433,7 @@
     "assets": {
       "amd64_nasync_com.personal.ugmsgbot_0.2.9.0005.upk": 2,
       "amd64_nasync_com.personal.ugmsgbot_0.2.9.0006.upk": 4,
-      "amd64_nasync_com.personal.ugmsgbot_0.2.9.0007.upk": 11,
+      "amd64_nasync_com.personal.ugmsgbot_0.2.9.0007.upk": 12,
       "arm64_nasync_com.personal.ugmsgbot_0.2.9.0005.upk": 2,
       "arm64_nasync_com.personal.ugmsgbot_0.2.9.0006.upk": 5,
       "arm64_nasync_com.personal.ugmsgbot_0.2.9.0007.upk": 7
@@ -455,7 +455,7 @@
       "amd64_nasync_com.personal.ugstore_0.1.0.0031.upk": 15,
       "amd64_nasync_com.personal.ugstore_0.1.0.0032.upk": 26,
       "amd64_nasync_com.personal.ugstore_0.1.0.0034.upk": 15,
-      "amd64_nasync_com.personal.ugstore_0.1.0.0035.upk": 41,
+      "amd64_nasync_com.personal.ugstore_0.1.0.0035.upk": 43,
       "arm64_nasync_com.personal.ugstore_0.1.0.0028.upk": 7,
       "arm64_nasync_com.personal.ugstore_0.1.0.0029.upk": 3,
       "arm64_nasync_com.personal.ugstore_0.1.0.0030.upk": 5,
@@ -471,13 +471,13 @@
       "amd64_nasync_com.personal.ugtheme_1.1.1.0007.upk": 29,
       "amd64_nasync_com.personal.ugtheme_1.2.2.0010.upk": 34,
       "arm64_nasync_com.personal.ugtheme_1.1.1.0007.upk": 10,
-      "arm64_nasync_com.personal.ugtheme_1.2.2.0010.upk": 11
+      "arm64_nasync_com.personal.ugtheme_1.2.2.0010.upk": 12
     },
     "baseline": 0
   },
   "com.personal.workbuddy": {
     "assets": {
-      "amd64_nasync_com.personal.workbuddy_5.6.2.0019.upk": 58,
+      "amd64_nasync_com.personal.workbuddy_5.6.2.0019.upk": 66,
       "arm64_nasync_com.personal.workbuddy_5.6.2.0019.upk": 24
     },
     "baseline": 0
@@ -527,10 +527,10 @@
     "assets": {
       "amd64_nasync_com.superng6.qbittorrent_5.2.4.0004.upk": 2,
       "amd64_nasync_com.superng6.qbittorrent_5.3.0.0006.upk": 1,
-      "amd64_nasync_com.superng6.qbittorrent_5.3.1.0007.upk": 0,
+      "amd64_nasync_com.superng6.qbittorrent_5.3.1.0007.upk": 1,
       "arm64_nasync_com.superng6.qbittorrent_5.2.4.0004.upk": 1,
       "arm64_nasync_com.superng6.qbittorrent_5.3.0.0006.upk": 1,
-      "arm64_nasync_com.superng6.qbittorrent_5.3.1.0007.upk": 0
+      "arm64_nasync_com.superng6.qbittorrent_5.3.1.0007.upk": 2
     },
     "baseline": 4
   },
@@ -545,12 +545,12 @@
   },
   "com.wushuo.anirss": {
     "assets": {
-      "amd64_nasync_com.wushuo.anirss_3.2.62.0020.upk": 1,
       "amd64_nasync_com.wushuo.anirss_3.2.63.0021.upk": 1,
-      "arm64_nasync_com.wushuo.anirss_3.2.62.0020.upk": 1,
-      "arm64_nasync_com.wushuo.anirss_3.2.63.0021.upk": 2
+      "amd64_nasync_com.wushuo.anirss_3.3.1.0022.upk": 0,
+      "arm64_nasync_com.wushuo.anirss_3.2.63.0021.upk": 2,
+      "arm64_nasync_com.wushuo.anirss_3.3.1.0022.upk": 0
     },
-    "baseline": 22
+    "baseline": 24
   },
   "com.xnkyn.p2peeproxy": {
     "assets": {
